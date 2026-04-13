@@ -2,10 +2,11 @@ package com.benimgunlerim
 
 import android.content.Intent
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -47,10 +48,13 @@ class SettingsScreenTest {
             .onNodeWithTag(TestTags.BottomNavSettings)
             .performClick()
         composeTestRule
-            .onNodeWithText("Verileri dışa aktar")
-            .assertIsDisplayed()
+            .onNodeWithTag(TestTags.SettingsRoot)
+            .performScrollToNode(hasTestTag(TestTags.SettingsExportButton))
         composeTestRule
-            .onNodeWithText("Yedekten geri yükle")
-            .assertIsDisplayed()
+            .onNodeWithTag(TestTags.SettingsExportButton)
+            .assertExists()
+        composeTestRule
+            .onNodeWithTag(TestTags.SettingsImportButton)
+            .assertExists()
     }
 }

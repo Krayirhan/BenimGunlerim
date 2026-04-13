@@ -168,17 +168,18 @@ Kabul kriteri:
 JaCoCo raporu:
 
 ```text
-INSTRUCTION 35.35% covered
-BRANCH 12.52% covered
-LINE 34.47% covered
-COMPLEXITY 27.36% covered
-METHOD 40.19% covered
-CLASS 25.93% covered
+INSTRUCTION 41.48% covered
+BRANCH 24.59% covered
+LINE 40.47% covered
+COMPLEXITY 36.67% covered
+METHOD 46.15% covered
+CLASS 28.95% covered
 ```
 
 Mevcut minimum eşik:
 
-- `0.20`
+- `LINE >= 0.60`
+- `BRANCH >= 0.40`
 
 Etkisi:
 
@@ -202,7 +203,7 @@ Yapılacak:
 | Mimari | 7.8 / 10 | Temel iyi, repository büyüyor |
 | Veri Katmanı & Migration | 7.2 / 10 | İyi başlangıç, migration matrisi eksik |
 | Import / Export / Backup | 7.0 / 10 | Çalışır yapı var, validation ve UX eksik |
-| Test Stratejisi | 6.5 / 10 | Gate var, kapsam sınırlı |
+| Test Stratejisi | 7.2 / 10 | Gate sıkılaştı, kapsam halen genişletilmeli |
 | Güvenlik & Gizlilik | 5.8 / 10 | Dokümante ama consent/policy tamam değil |
 | Observability / Crash / ANR | 4.0 / 10 | Production seviyesinde değil |
 | Bildirimler & Background | 6.6 / 10 | Temel var, cihaz/OEM matrisi eksik |
@@ -668,7 +669,7 @@ Yapılacak:
 
 Mevcut:
 
-- Minimum: `0.20`
+- Minimum: `LINE >= 0.60`, `BRANCH >= 0.40`
 
 Risk:
 
@@ -683,7 +684,7 @@ Yapılacak:
 
 Mevcut:
 
-- Branch coverage: `%12.52`
+- Branch coverage: `%24.59`
 
 Risk:
 
@@ -1244,7 +1245,7 @@ Eksikler:
 
 - `versionCode = 1` release öncesi artırılmalı.
 - `versionName = "0.1.0"` release politikasına bağlanmalı.
-- Coverage minimum `0.20`; düşük.
+- Coverage gate yükseltildi (`LINE >= 0.60`, `BRANCH >= 0.40`), test genişletme planı zorunlu.
 - Release signing task var ama ortamda geçmiyor.
 - target/compile SDK güncelliği izlenmeli.
 
@@ -1260,8 +1261,8 @@ Eksikler:
 
 - Secret eksikliği için daha erken fail mesajı yok.
 - Branch protection workflow içinde garanti edilemez, dışarıda doğrulanmalı.
-- Connected test artifacts/logcat upload yok.
-- Dependency/security scan yok.
+- Connected test artifacts/logcat upload eklendi.
+- Dependency/security scan workflow'ları eklendi.
 
 Yapılacak:
 

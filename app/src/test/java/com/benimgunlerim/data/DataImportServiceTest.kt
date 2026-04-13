@@ -341,6 +341,208 @@ class DataImportServiceTest {
         assertEquals(1, errors.size)
     }
 
+    @Test
+    fun importFromJson_rejectsPayloadLargerThanFiveMb() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val oversizedJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "dailyStates",
+                JSONArray().put(
+                    JSONObject().apply {
+                        put("date", "2026-04-13")
+                        put("completionRate", 1.0)
+                        put("dailyScore", 100)
+                        put("reflection", "a".repeat(5 * 1024 * 1024))
+                    },
+                ),
+            )
+        }.toString()
+
+        val result = service.importFromJson(oversizedJson)
+
+        assertNull(result)
+        assertEquals(1, errors.size)
+        assertEquals("Import payload exceeds 5 MB limit", errors.single().message)
+    }
+
+    @Test
+    fun importFromJson_rejectsDuplicateTaskIds() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "tasks",
+                JSONArray()
+                    .put(sampleTaskJson("task-1", "2026-04-13"))
+                    .put(sampleTaskJson("task-1", "2026-04-14")),
+            )
+        }.toString()
+
+        val result = service.importFromJson(invalidJson)
+
+        assertNull(result)
+        assertEquals("Duplicate task ids are not allowed", errors.single().message)
+    }
+
+    @Test
+    fun importFromJson_rejectsTaskTitleThatExceedsLimit() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "tasks",
+                JSONArray().put(
+                    sampleTaskJson(
+                        id = "task-1",
+                        plannedDate = "2026-04-13",
+                        title = "T".repeat(201),
+                    ),
+                ),
+            )
+        }.toString()
+
+        val result = service.importFromJson(invalidJson)
+
+        assertNull(result)
+        assertEquals("task.title exceeds max length of 200", errors.single().message)
+    }
+
+    @Test
+    fun importFromJson_rejectsTooManyDailyStates() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val states = JSONArray().apply {
+            repeat(3651) { index ->
+                put(
+                    JSONObject().apply {
+                        put("date", "2026-01-01")
+                        put("completionRate", 0.5)
+                        put("dailyScore", index)
+                    },
+                )
+            }
+        }
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put("dailyStates", states)
+        }.toString()
+
+        val result = service.importFromJson(invalidJson)
+
+        assertNull(result)
+        assertEquals("Daily state import exceeds limit: 3651", errors.single().message)
+    }
+
+    @Test
+    fun previewImport_rejectsDuplicateDailyStateDates() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "dailyStates",
+                JSONArray()
+                    .put(sampleDailyStateJson("2026-04-13"))
+                    .put(sampleDailyStateJson("2026-04-13")),
+            )
+        }.toString()
+
+        val preview = service.previewImport(invalidJson)
+
+        assertNull(preview)
+        assertEquals("Duplicate dailyState dates are not allowed", errors.single().message)
+    }
+
+    @Test
+    fun previewImport_rejectsDuplicateAchievementIds() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "achievements",
+                JSONArray()
+                    .put(sampleAchievementJson("ach-1"))
+                    .put(sampleAchievementJson("ach-1")),
+            )
+        }.toString()
+
+        val preview = service.previewImport(invalidJson)
+
+        assertNull(preview)
+        assertEquals("Duplicate achievement ids are not allowed", errors.single().message)
+    }
+
+    @Test
+    fun previewImport_rejectsPreferenceFieldThatExceedsLimit() = runTest {
+        val errors = mutableListOf<Throwable>()
+        val service = makeService(errorReporter = object : ErrorReporter {
+            override fun recordNonFatal(error: Throwable, context: Map<String, String>) {
+                errors.add(error)
+            }
+
+            override fun setUserProperty(key: String, value: String) = Unit
+        })
+
+        val invalidJson = JSONObject(sampleImportJson()).apply {
+            put(
+                "preferences",
+                JSONObject().apply {
+                    put("selectedGoalProfile", "g".repeat(201))
+                    put("dailySummaryTime", "21:00")
+                    put("morningPlannerTime", "08:00")
+                    put("quietHoursStart", "22:00")
+                    put("quietHoursEnd", "07:00")
+                },
+            )
+        }.toString()
+
+        val preview = service.previewImport(invalidJson)
+
+        assertNull(preview)
+        assertEquals("preferences.selectedGoalProfile exceeds max length of 200", errors.single().message)
+    }
+
     private fun makeService(
         taskDao: FakeTaskDao = FakeTaskDao(),
         routineDao: FakeRoutineDao = FakeRoutineDao(),
@@ -367,14 +569,7 @@ class DataImportServiceTest {
 
     private fun sampleImportJson(): String = JSONObject().apply {
         put("version", DataExportService.EXPORT_VERSION)
-        put("tasks", JSONArray().put(JSONObject().apply {
-            put("id", "task-1")
-            put("title", "Task")
-            put("plannedDate", "2026-04-13")
-            put("completionState", "pending")
-            put("createdAt", 1L)
-            put("updatedAt", 2L)
-        }))
+        put("tasks", JSONArray().put(sampleTaskJson("task-1", "2026-04-13")))
         put("subTasks", JSONArray().put(JSONObject().apply {
             put("id", "sub-1")
             put("taskId", "task-1")
@@ -410,6 +605,26 @@ class DataImportServiceTest {
             put("totalXp", 42)
         })
     }.toString()
+
+    private fun sampleTaskJson(id: String, plannedDate: String, title: String = "Task") = JSONObject().apply {
+        put("id", id)
+        put("title", title)
+        put("plannedDate", plannedDate)
+        put("completionState", "pending")
+        put("createdAt", 1L)
+        put("updatedAt", 2L)
+    }
+
+    private fun sampleDailyStateJson(date: String) = JSONObject().apply {
+        put("date", date)
+        put("completionRate", 1.0)
+        put("dailyScore", 100)
+    }
+
+    private fun sampleAchievementJson(id: String) = JSONObject().apply {
+        put("id", id)
+        put("unlockedAt", 6L)
+    }
 
     private fun sampleTask(id: String) = TaskEntity(
         id = id,

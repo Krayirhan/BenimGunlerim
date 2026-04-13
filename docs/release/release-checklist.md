@@ -108,3 +108,12 @@ Fiziksel cihaz veya emülatörde:
 ## 8. Güvenlik Kuralı
 
 `keystore.properties`, `.jks` ve secret değerleri repoya asla commit edilmez. `.gitignore` içinde bu dosyalar korunmalıdır.
+
+## 9. Supply Chain ve Repo Kontrolleri
+
+- [ ] GitHub secret scanning veya eşdeğer secret scan job'ı yeşil.
+- [ ] Dependency review job'ı pull request üzerinde yeşil.
+- [ ] Dependabot veya eşdeğer dependency update otomasyonu aktif.
+- [ ] `master` ve release tag'leri için required checks tanımlı.
+- [ ] Direct push ve force-push politikası repo ayarlarında doğrulandı.
+- [ ] Release workflow artifact'leri incelendi: unit test, coverage, lint, connected test, logcat.

@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - master
     tags:
       - "v*"
   workflow_dispatch:
@@ -31,6 +32,13 @@ jobs:
       - name: Unit tests
         run: ./gradlew testDebugUnitTest
 
+      - name: Upload unit test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-unit-test-report
+          path: app/build/reports/tests/testDebugUnitTest/
+
       - name: Unit test coverage
         run: ./gradlew jacocoDebugUnitTestCoverageVerification
 
@@ -50,7 +58,7 @@ jobs:
   release-quality:
     name: Release quality gate
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout
@@ -83,6 +91,13 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: ./gradlew verifyReleaseSigning testDebugUnitTest jacocoDebugUnitTestCoverageVerification lintRelease assembleRelease bundleRelease
 
+      - name: Upload release unit test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-unit-test-report
+          path: app/build/reports/tests/testDebugUnitTest/
+
       - name: Upload release coverage report
         if: always()
         uses: actions/upload-artifact@v4
@@ -107,7 +122,7 @@ jobs:
   connected-ui-tests:
     name: Connected UI tests
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Checkout
@@ -129,4 +144,20 @@ jobs:
           api-level: 35
           target: google_apis
           arch: x86_64
-          script: ./gradlew connectedDebugAndroidTest
+          script: |
+            mkdir -p artifacts
+            set +e
+            ./gradlew connectedDebugAndroidTest
+            status=$?
+            adb logcat -d > artifacts/connected-logcat.txt
+            exit $status
+
+      - name: Upload connected test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: connected-test-report
+          path: |
+            app/build/reports/androidTests/connected/
+            app/build/outputs/androidTest-results/connected/
+            artifacts/connected-logcat.txt

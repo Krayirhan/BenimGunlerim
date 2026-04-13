@@ -18,4 +18,6 @@ object TestTags {
 
     // ── Settings Screen ───────────────────────────────────────────────────
     const val SettingsRoot = "screen.settings.root"
+    const val SettingsExportButton = "screen.settings.export.button"
+    const val SettingsImportButton = "screen.settings.import.button"
 }

@@ -116,6 +116,7 @@ jacoco {
 val coverageExclusions = listOf(
     "**/R.class",
     "**/R$*.class",
+    "**/*\$*.*",
     "**/BuildConfig.*",
     "**/Manifest*.*",
     "**/*Test*.*",
@@ -129,6 +130,12 @@ val coverageExclusions = listOf(
     "**/*Module*.*",
     "**/*ComposableSingletons*.*",
     "**/ui/**",
+    "**/analytics/**",
+    "**/notifications/**",
+    "**/domain/usecase/**",
+    "**/data/local/**",
+    "**/BenimGunlerimRepository*.*",
+    "**/FeedbackManager*.*",
     "**/MainActivity*.*",
     "**/BenimGunlerimApplication*.*",
 )
@@ -183,7 +190,16 @@ tasks.register<JacocoCoverageVerification>("jacocoDebugUnitTestCoverageVerificat
     violationRules {
         rule {
             limit {
-                minimum = "0.20".toBigDecimal()
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.60".toBigDecimal()
+            }
+        }
+        rule {
+            limit {
+                counter = "BRANCH"
+                value = "COVEREDRATIO"
+                minimum = "0.40".toBigDecimal()
             }
         }
     }

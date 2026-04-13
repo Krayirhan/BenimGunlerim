@@ -663,6 +663,11 @@ private fun LocalDataCard(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        StatusMessage(
+            text = "Dışa aktarılan JSON dosyası görev başlığı, rutin adı, not ve günlük içerik taşıyabilir. Dosyayı yalnızca güvendiğin yerde sakla veya paylaş.",
+            container = AccentSkySoft,
+            content = AccentSky,
+        )
         dataOperationMessage?.let { message ->
             StatusMessage(
                 text = message,
@@ -697,7 +702,8 @@ private fun LocalDataCard(
             onClick = onExportData,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(50.dp)
+                .testTag(TestTags.SettingsExportButton),
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = AccentSky),
         ) {
@@ -709,7 +715,8 @@ private fun LocalDataCard(
             onClick = onImportData,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(50.dp)
+                .testTag(TestTags.SettingsImportButton),
             shape = RoundedCornerShape(16.dp),
             border = BorderStroke(1.dp, AccentSky),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentSky),
