@@ -18,10 +18,16 @@ import com.benimgunlerim.domain.usecase.ObserveTodaySnapshotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
+import java.time.Duration
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -54,7 +60,16 @@ class TodayViewModel @Inject constructor(
     private val feedbackManager: FeedbackManager,
     observeTodaySnapshot: ObserveTodaySnapshotUseCase,
 ) : ViewModel() {
-    private val today = LocalDate.now()
+    // Re-emits current date every midnight so uiState auto-switches to the new day.
+    private val currentDateFlow = flow {
+        while (true) {
+            val now = LocalDate.now()
+            emit(now)
+            val midnight = now.plusDays(1).atStartOfDay(ZoneId.systemDefault())
+            val delayMs = Duration.between(ZonedDateTime.now(), midnight).toMillis()
+            delay(delayMs.coerceAtLeast(0L) + 500L)
+        }
+    }
 
     private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
     val gameEvents = _gameEvents.asSharedFlow()
@@ -67,21 +82,22 @@ class TodayViewModel @Inject constructor(
         }
     }
 
-    val uiState: StateFlow<TodayUiState> = observeTodaySnapshot(today)
+    val uiState: StateFlow<TodayUiState> = currentDateFlow
+        .flatMapLatest { date -> observeTodaySnapshot(date) }
         .map { snapshot ->
-        TodayUiState(
-            tasks = snapshot.tasks,
-            routines = snapshot.routines,
-            completionLogs = snapshot.completionLogs,
-            completedRoutineIds = snapshot.completedRoutineIds,
-            progress = snapshot.progress,
-            currentStreak = snapshot.currentStreak,
-            gameState = snapshot.gameState,
-            todayState = snapshot.todayState,
-            overdueTasks = snapshot.overdueTasks,
-            isLoading = false,
-        )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
+            TodayUiState(
+                tasks = snapshot.tasks,
+                routines = snapshot.routines,
+                completionLogs = snapshot.completionLogs,
+                completedRoutineIds = snapshot.completedRoutineIds,
+                progress = snapshot.progress,
+                currentStreak = snapshot.currentStreak,
+                gameState = snapshot.gameState,
+                todayState = snapshot.todayState,
+                overdueTasks = snapshot.overdueTasks,
+                isLoading = false,
+            )
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
 
     fun addTask(
         title: String,
@@ -151,7 +167,7 @@ class TodayViewModel @Inject constructor(
     }
 
     fun moveTaskToTomorrow(task: TaskEntity) {
-        viewModelScope.launch { repository.moveTaskToDate(task, today.plusDays(1)) }
+        viewModelScope.launch { repository.moveTaskToDate(task, LocalDate.now().plusDays(1)) }
     }
 
     fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
@@ -195,7 +211,7 @@ class TodayViewModel @Inject constructor(
                 val oldXp = uiState.value.gameState.totalXp
                 val routineXp = GameEngine.xpForRoutine(routine.targetType ?: "check")
                 val granted = prefsRepository.grantRewardOnce(
-                    eventKey = "routine:${routine.id}:$today",
+                    eventKey = "routine:${routine.id}:${LocalDate.now()}",
                     xp = routineXp,
                     gold = GameEngine.GOLD_ROUTINE_COMPLETE,
                     happinessDelta = GameEngine.HAPPINESS_ROUTINE,
@@ -226,7 +242,7 @@ class TodayViewModel @Inject constructor(
                 val oldXp = uiState.value.gameState.totalXp
                 val routineXp = GameEngine.xpForRoutine(routine.targetType ?: "check")
                 val granted = prefsRepository.grantRewardOnce(
-                    eventKey = "routine:${routine.id}:$today",
+                    eventKey = "routine:${routine.id}:${LocalDate.now()}",
                     xp = routineXp,
                     gold = GameEngine.GOLD_ROUTINE_COMPLETE,
                     happinessDelta = GameEngine.HAPPINESS_ROUTINE,
@@ -273,7 +289,7 @@ class TodayViewModel @Inject constructor(
             feedbackManager.celebrationBurst()
             val oldXp = state.gameState.totalXp
             val dayCloseGranted = prefsRepository.grantRewardOnce(
-                eventKey = "dayClose:$today",
+                eventKey = "dayClose:${LocalDate.now()}",
                 xp = GameEngine.XP_DAY_CLOSE,
             )
             if (dayCloseGranted) {
@@ -286,7 +302,7 @@ class TodayViewModel @Inject constructor(
             if (state.progress >= 1f) {
                 val xpBeforePerfect = oldXp + if (dayCloseGranted) GameEngine.XP_DAY_CLOSE else 0
                 val perfectGranted = prefsRepository.grantRewardOnce(
-                    eventKey = "perfectDay:$today",
+                    eventKey = "perfectDay:${LocalDate.now()}",
                     xp = GameEngine.XP_ALL_TASKS_BONUS + GameEngine.XP_ALL_ROUTINES_BONUS,
                     gold = GameEngine.GOLD_PERFECT_DAY,
                     happinessDelta = GameEngine.HAPPINESS_STREAK,
@@ -326,7 +342,7 @@ class TodayViewModel @Inject constructor(
         } && state.tasks.isNotEmpty()
         if (allDone) {
             val granted = prefsRepository.grantRewardOnce(
-                eventKey = "allTasks:$today",
+                eventKey = "allTasks:${LocalDate.now()}",
                 xp = GameEngine.XP_ALL_TASKS_BONUS,
             )
             if (granted) {
@@ -342,7 +358,7 @@ class TodayViewModel @Inject constructor(
             state.routines.all { it.id in state.completedRoutineIds || it.id == toggledRoutineId }
         if (allDone) {
             val granted = prefsRepository.grantRewardOnce(
-                eventKey = "allRoutines:$today",
+                eventKey = "allRoutines:${LocalDate.now()}",
                 xp = GameEngine.XP_ALL_ROUTINES_BONUS,
             )
             if (granted) {

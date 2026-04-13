@@ -60,6 +60,7 @@ class DataImportService @Inject constructor(
     suspend fun importFromJson(json: String): DataImportResult? = runCatching {
         val payload = parseAndValidate(json)
 
+        // Phase 1: DB restore — atomic within Room transaction.
         transactionRunner.runInTransaction {
             completionLogDao.deleteAll()
             subTaskDao.deleteAll()
@@ -76,6 +77,10 @@ class DataImportService @Inject constructor(
             achievementDao.insertAll(payload.achievements)
         }
 
+        // Phase 2: DataStore preferences — separate persistence layer, cannot join Room transaction.
+        // If this throws, runCatching reports the failure and returns null to the caller.
+        // Known limitation: DB is restored but preferences are not on partial failure; this is
+        // unavoidable without full two-phase-commit infrastructure.
         payload.preferences?.let { preferencesWriter.replacePreferences(it) }
         payload.toResult()
     }.onFailure { e ->

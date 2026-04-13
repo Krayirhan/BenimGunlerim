@@ -130,13 +130,6 @@ val coverageExclusions = listOf(
     "**/*_MembersInjector*.*",
     "**/*Module*.*",
     "**/*ComposableSingletons*.*",
-    "**/ui/**",
-    "**/analytics/**",
-    "**/notifications/**",
-    "**/domain/usecase/**",
-    "**/data/local/**",
-    "**/BenimGunlerimRepository*.*",
-    "**/FeedbackManager*.*",
     "**/MainActivity*.*",
     "**/BenimGunlerimApplication*.*",
 )
@@ -189,18 +182,21 @@ tasks.register<JacocoCoverageVerification>("jacocoDebugUnitTestCoverageVerificat
     )
 
     violationRules {
+        // TODO: Real coverage without wide exclusions is ~16% line / ~4% branch (2026-04-14).
+        // These thresholds enforce the current honest baseline and should be raised as tests are added.
+        // Target: LINE >= 0.40, BRANCH >= 0.20 by end of next sprint.
         rule {
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
-                minimum = "0.60".toBigDecimal()
+                minimum = "0.14".toBigDecimal()
             }
         }
         rule {
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                minimum = "0.40".toBigDecimal()
+                minimum = "0.03".toBigDecimal()
             }
         }
     }
