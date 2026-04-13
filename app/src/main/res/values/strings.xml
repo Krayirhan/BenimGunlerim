@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">BenimGünlerim</string>
+
+    <!-- Bildirim kanal adları -->
+    <string name="notif_channel_routine_name">Rutin hatırlatmaları</string>
+    <string name="notif_channel_routine_desc">Günlük rutinleri sakin biçimde hatırlatır.</string>
+    <string name="notif_channel_task_name">Görev hatırlatmaları</string>
+    <string name="notif_channel_task_desc">Görev hatırlatma alarmları.</string>
+    <string name="notif_channel_morning_name">Sabah planlayıcısı</string>
+    <string name="notif_channel_morning_desc">Güne hazırlık hatırlatması.</string>
+
+    <!-- Bildirim başlık ve içerikleri -->
+    <string name="notif_routine_title">Küçük bir adım zamanı</string>
+    <string name="notif_routine_body">%1$s rutinini tamamlamak için iyi bir an olabilir.</string>
+    <string name="notif_daily_title">Günü kısa bir notla kapat</string>
+    <string name="notif_daily_body">İstersen bugün nasıl geçtiğini birkaç kelimeyle kaydedebilirsin.</string>
+    <string name="notif_task_title">Görev hatırlatması</string>
+    <string name="notif_morning_title">Günaydın! Günü planla</string>
+    <string name="notif_morning_body">Bugün yapmak istediklerini belirlemek için iyi bir an.</string>
+
+    <!-- Bildirim aksiyonları -->
+    <string name="notif_action_snooze">10 dk ertele</string>
+</resources>

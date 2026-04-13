@@ -1,0 +1,28 @@
+# Gradle
+.gradle/
+build/
+app/build/
+
+# IDE
+.idea/
+.kotlin/
+*.iml
+
+# Android local config
+local.properties
+
+# Keystore (asla repoya girmesin)
+*.jks
+*.keystore
+keystore.properties
+
+# Build artifacts
+captures/
+externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+# Build log dosyaları (geçici)
+build*.txt
+build_*.txt
