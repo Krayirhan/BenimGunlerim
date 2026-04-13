@@ -19,13 +19,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
 import java.time.Duration
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -43,6 +46,9 @@ data class TodayUiState(
     val todayState: DailyStateEntity? = null,
     val overdueTasks: List<TaskEntity> = emptyList(),
     val isLoading: Boolean = true,
+    val missedDay: LocalDate? = null,
+    val canCloseDay: Boolean = false,
+    val dailySummaryTime: String = "21:00",
 )
 
 sealed class GameEvent {
@@ -71,6 +77,18 @@ class TodayViewModel @Inject constructor(
         }
     }
 
+    // Fires every minute to re-evaluate canCloseDay when the summary time threshold is crossed.
+    private val minuteTickerFlow = flow<Unit> {
+        while (true) { emit(Unit); delay(60_000L) }
+    }
+
+    // Emits yesterday if the user hasn't closed that day yet.
+    private val missedDayFlow: Flow<LocalDate?> = currentDateFlow.flatMapLatest { today ->
+        repository.observeDailyState(today.minusDays(1)).map { state ->
+            if (state?.closedAt == null) today.minusDays(1) else null
+        }
+    }
+
     private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
     val gameEvents = _gameEvents.asSharedFlow()
 
@@ -82,22 +100,29 @@ class TodayViewModel @Inject constructor(
         }
     }
 
-    val uiState: StateFlow<TodayUiState> = currentDateFlow
-        .flatMapLatest { date -> observeTodaySnapshot(date) }
-        .map { snapshot ->
-            TodayUiState(
-                tasks = snapshot.tasks,
-                routines = snapshot.routines,
-                completionLogs = snapshot.completionLogs,
-                completedRoutineIds = snapshot.completedRoutineIds,
-                progress = snapshot.progress,
-                currentStreak = snapshot.currentStreak,
-                gameState = snapshot.gameState,
-                todayState = snapshot.todayState,
-                overdueTasks = snapshot.overdueTasks,
-                isLoading = false,
-            )
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
+    val uiState: StateFlow<TodayUiState> = combine(
+        currentDateFlow.flatMapLatest { date -> observeTodaySnapshot(date) },
+        missedDayFlow,
+        minuteTickerFlow,
+    ) { snapshot, missedDay, _ ->
+        val summaryTime = snapshot.gameState.dailySummaryTime
+        val canClose = runCatching { LocalTime.now() >= LocalTime.parse(summaryTime) }.getOrDefault(false)
+        TodayUiState(
+            tasks = snapshot.tasks,
+            routines = snapshot.routines,
+            completionLogs = snapshot.completionLogs,
+            completedRoutineIds = snapshot.completedRoutineIds,
+            progress = snapshot.progress,
+            currentStreak = snapshot.currentStreak,
+            gameState = snapshot.gameState,
+            todayState = snapshot.todayState,
+            overdueTasks = snapshot.overdueTasks,
+            isLoading = false,
+            missedDay = missedDay,
+            canCloseDay = canClose && snapshot.todayState?.closedAt == null,
+            dailySummaryTime = summaryTime,
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
 
     fun addTask(
         title: String,
@@ -323,6 +348,34 @@ class TodayViewModel @Inject constructor(
 
     fun carryTasksToTomorrow() {
         viewModelScope.launch { repository.carryPendingTasksToTomorrow() }
+    }
+
+    fun autoSaveMissedDay(date: LocalDate) {
+        viewModelScope.launch { repository.autoCloseMissedDay(date) }
+    }
+
+    fun saveMissedDaySummary(
+        date: LocalDate,
+        note: String,
+        mood: Int,
+        energy: Int,
+        bestMoment: String = "",
+        challenge: String = "",
+        tomorrowIntention: String = "",
+    ) {
+        viewModelScope.launch {
+            val moodLabels = listOf("cok_kotu", "kotu", "normal", "iyi", "harika")
+            repository.saveDailySummary(
+                date = date,
+                mood = moodLabels.getOrElse(mood) { "normal" },
+                note = note,
+                completionRate = 0f,
+                energyLevel = energy.coerceIn(1, 5),
+                bestMoment = bestMoment.ifBlank { null },
+                challenge = challenge.ifBlank { null },
+                tomorrowIntention = tomorrowIntention.ifBlank { null },
+            )
+        }
     }
 
     private fun checkLevelUp(oldXp: Int, newXp: Int) {

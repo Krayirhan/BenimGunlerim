@@ -64,6 +64,9 @@ class BenimGunlerimRepository @Inject constructor(
     fun observeTodayState(): Flow<DailyStateEntity?> =
         dailyStateDao.observeByDate(LocalDate.now().toString())
 
+    fun observeDailyState(date: LocalDate): Flow<DailyStateEntity?> =
+        dailyStateDao.observeByDate(date.toString())
+
     suspend fun addTask(
         title: String,
         date: LocalDate = LocalDate.now(),
@@ -340,6 +343,7 @@ class BenimGunlerimRepository @Inject constructor(
     }
 
     suspend fun saveDailySummary(
+        date: LocalDate = LocalDate.now(),
         mood: String,
         note: String,
         completionRate: Float,
@@ -349,11 +353,11 @@ class BenimGunlerimRepository @Inject constructor(
         tomorrowIntention: String? = null,
         carriedTaskCount: Int = 0,
     ) {
-        val today = LocalDate.now().toString()
-        val existing = dailyStateDao.getByDate(today)
+        val dateStr = date.toString()
+        val existing = dailyStateDao.getByDate(dateStr)
         dailyStateDao.upsert(
             DailyStateEntity(
-                date = today,
+                date = dateStr,
                 mood = mood,
                 energyLevel = energyLevel,
                 completionRate = completionRate,
@@ -365,6 +369,24 @@ class BenimGunlerimRepository @Inject constructor(
                 tomorrowIntention = tomorrowIntention?.ifBlank { null },
                 closedAt = existing?.closedAt ?: System.currentTimeMillis(),
                 carriedTaskCount = carriedTaskCount,
+            ),
+        )
+    }
+
+    suspend fun autoCloseMissedDay(date: LocalDate) {
+        val dateStr = date.toString()
+        val existing = dailyStateDao.getByDate(dateStr)
+        if (existing?.closedAt != null) return
+        dailyStateDao.upsert(
+            DailyStateEntity(
+                date = dateStr,
+                mood = "normal",
+                energyLevel = 3,
+                completionRate = 0f,
+                note = null,
+                reflection = null,
+                dailyScore = 0,
+                closedAt = System.currentTimeMillis(),
             ),
         )
     }

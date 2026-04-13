@@ -119,6 +119,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     var addDateOffset by remember { mutableStateOf(0) }
     var showAddSheet by remember { mutableStateOf(false) }
     var showCloseSheet by remember { mutableStateOf(false) }
+    var showMissedDaySheet by remember { mutableStateOf(false) }
     var selectedTask by remember { mutableStateOf<TaskEntity?>(null) }
 
     var lastDeletedTask by remember { mutableStateOf<TaskEntity?>(null) }
@@ -257,6 +258,23 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
         }
     }
 
+    if (showMissedDaySheet && state.missedDay != null) {
+        val missedDate = state.missedDay!!
+        ModalBottomSheet(onDismissRequest = { showMissedDaySheet = false }) {
+            CloseDaySheet(
+                completedCount = 0,
+                totalCount = 0,
+                progress = 0f,
+                overdueCount = 0,
+                onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, _ ->
+                    viewModel.saveMissedDaySummary(missedDate, note, mood, energy, bestMoment, challenge, tomorrowIntention)
+                    showMissedDaySheet = false
+                    scope.launch { snackbarHost.showSnackbar("Gün kaydedildi") }
+                },
+            )
+        }
+    }
+
     val completedTasks = state.tasks.count { it.completionState == "completed" }
     val completedRoutines = state.routines.count { it.id in state.completedRoutineIds }
     val total = state.tasks.size + state.routines.size
@@ -359,6 +377,16 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                         )
                     }
                 }
+                val capturedMissedDay = state.missedDay
+                if (capturedMissedDay != null) {
+                    item(key = "missedDay") {
+                        MissedDayBanner(
+                            date = capturedMissedDay,
+                            onReview = { showMissedDaySheet = true },
+                            onDismiss = { viewModel.autoSaveMissedDay(capturedMissedDay) },
+                        )
+                    }
+                }
                 item(key = "rewards") { RewardsCard(state.currentStreak, completed, state.progress) }
                 item(key = "closeDay") {
                     CloseDayCard(
@@ -367,6 +395,8 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                         progress = state.progress,
                         isClosed = dayIsClosed,
                         mood = state.todayState?.mood,
+                        canCloseDay = state.canCloseDay,
+                        dailySummaryTime = state.dailySummaryTime,
                     ) { showCloseSheet = true }
                 }
             }
@@ -788,7 +818,16 @@ private fun RewardTile(value: String, label: String, color: Color, modifier: Mod
 }
 
 @Composable
-private fun CloseDayCard(completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, onClick: () -> Unit) {
+private fun CloseDayCard(
+    completed: Int,
+    total: Int,
+    progress: Float,
+    isClosed: Boolean,
+    mood: String?,
+    canCloseDay: Boolean,
+    dailySummaryTime: String,
+    onClick: () -> Unit,
+) {
     if (isClosed) {
         // Day is closed — show summary state
         val moodColor = when (mood) {
@@ -814,6 +853,27 @@ private fun CloseDayCard(completed: Int, total: Int, progress: Float, isClosed: 
                 }
             }
         }
+    } else if (!canCloseDay) {
+        // Before summary time — show locked state
+        Box(
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant.copy(.6f))
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(.12f), RoundedCornerShape(28.dp)).padding(20.dp),
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Pill("Gün sonu", MaterialTheme.colorScheme.onSurfaceVariant.copy(.5f))
+                Text("Günü kapat", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.45f))
+                Text("Aktif olacak: $dailySummaryTime'dan sonra", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.6f))
+                Button(
+                    onClick = {},
+                    enabled = false,
+                    modifier = Modifier.fillMaxWidth().height(44.dp),
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text("Günü değerlendir", maxLines = 1)
+                }
+            }
+        }
     } else {
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
@@ -831,6 +891,32 @@ private fun CloseDayCard(completed: Int, total: Int, progress: Float, isClosed: 
                     Text("Günü değerlendir", maxLines = 1)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun MissedDayBanner(
+    date: LocalDate,
+    onReview: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val label = remember(date) {
+        date.format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale("tr", "TR")))
+    }
+    Box(
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
+            .background(StreakCoral.copy(.08f))
+            .border(1.dp, StreakCoral.copy(.22f), RoundedCornerShape(20.dp))
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text("Değerlendirilmemiş gün", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = StreakCoral)
+                Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            TextButton(onClick = onReview) { Text("Değerlendir", color = StreakCoral, style = MaterialTheme.typography.labelLarge) }
+            TextButton(onClick = onDismiss) { Text("Geç", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge) }
         }
     }
 }
