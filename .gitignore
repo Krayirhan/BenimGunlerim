@@ -12,6 +12,7 @@ app/build/
 
 # Android local config
 local.properties
+app/google-services.json
 
 # Keystore (asla repoya girmesin)
 *.jks
@@ -20,6 +21,10 @@ local.properties
 *.pem
 *.key
 keystore.properties
+.env
+.env.*
+*.secret
+*.secrets
 
 # Build artifacts
 captures/
@@ -34,10 +39,18 @@ build*.txt
 build_*.txt
 *_build.txt
 build_connected_tests*.txt
+*.log
 
 # Local evidence / measurement outputs
 build_perf/
 build_notification_matrix/
+
+# Temp / patch leftovers
+*.tmp
+*.temp
+*.bak
+*.orig
+*.rej
 
 # OS
 .DS_Store
