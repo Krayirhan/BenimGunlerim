@@ -60,6 +60,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -117,7 +118,7 @@ fun RoutinesScreen(
                 containerColor = CandyPrimary,
                 contentColor = Color.White,
                 shape = CircleShape,
-                modifier = Modifier.size(58.dp),
+                modifier = Modifier.size(58.dp).testTag(com.benimgunlerim.ui.TestTags.RoutinesFab),
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = "Rutin ekle")
             }
@@ -126,6 +127,7 @@ fun RoutinesScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .testTag(com.benimgunlerim.ui.TestTags.RoutinesRoot)
                 .background(RoutinesBackground())
                 .padding(innerPadding),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(

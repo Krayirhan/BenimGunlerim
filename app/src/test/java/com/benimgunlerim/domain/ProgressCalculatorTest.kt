@@ -32,4 +32,37 @@ class ProgressCalculatorTest {
 
         assertEquals(1f, progress, 0.001f)
     }
+
+    @Test
+    fun dailyProgress_onlyTasks_noRoutines() {
+        val progress = ProgressCalculator.dailyProgress(
+            totalTasks = 4,
+            completedTasks = 1,
+            totalRoutines = 0,
+            completedRoutines = 0,
+        )
+        assertEquals(0.25f, progress, 0.001f)
+    }
+
+    @Test
+    fun dailyProgress_onlyRoutines_noTasks() {
+        val progress = ProgressCalculator.dailyProgress(
+            totalTasks = 0,
+            completedTasks = 0,
+            totalRoutines = 2,
+            completedRoutines = 1,
+        )
+        assertEquals(0.5f, progress, 0.001f)
+    }
+
+    @Test
+    fun dailyProgress_nothingCompleted_returnsZero() {
+        val progress = ProgressCalculator.dailyProgress(
+            totalTasks = 5,
+            completedTasks = 0,
+            totalRoutines = 3,
+            completedRoutines = 0,
+        )
+        assertEquals(0f, progress, 0.001f)
+    }
 }

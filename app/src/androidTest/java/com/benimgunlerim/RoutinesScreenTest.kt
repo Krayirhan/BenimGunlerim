@@ -2,10 +2,11 @@ package com.benimgunlerim
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.benimgunlerim.ui.TestTags
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,29 +18,33 @@ class RoutinesScreenTest {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun routines_fab_is_visible_on_routines_tab() {
-        // Navigate to Routines tab
+    fun routines_root_is_visible_after_nav() {
         composeTestRule
-            .onNodeWithText("Rutinler")
+            .onNodeWithTag(TestTags.BottomNavRoutines)
             .performClick()
-
-        // FAB should be visible (contentDescription set on FAB)
         composeTestRule
-            .onNodeWithContentDescription("Rutin ekle")
+            .onNodeWithTag(TestTags.RoutinesRoot)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun routines_fab_is_visible_on_routines_tab() {
+        composeTestRule
+            .onNodeWithTag(TestTags.BottomNavRoutines)
+            .performClick()
+        composeTestRule
+            .onNodeWithTag(TestTags.RoutinesFab)
             .assertIsDisplayed()
     }
 
     @Test
     fun routines_add_sheet_opens_on_fab_click() {
         composeTestRule
-            .onNodeWithText("Rutinler")
+            .onNodeWithTag(TestTags.BottomNavRoutines)
             .performClick()
-
         composeTestRule
-            .onNodeWithContentDescription("Rutin ekle")
+            .onNodeWithTag(TestTags.RoutinesFab)
             .performClick()
-
-        // Bottom sheet title should appear
         composeTestRule
             .onNodeWithText("Yeni rutin")
             .assertIsDisplayed()

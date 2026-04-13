@@ -76,15 +76,21 @@ class ReminderPolicy @Inject constructor(
         if (!enabled) return false
         val startStr = prefs.getString(KEY_QH_START, DEFAULT_QH_START) ?: DEFAULT_QH_START
         val endStr = prefs.getString(KEY_QH_END, DEFAULT_QH_END) ?: DEFAULT_QH_END
-        return try {
-            val fmt = java.time.format.DateTimeFormatter.ofPattern("HH:mm")
-            val now = java.time.LocalTime.now()
-            val start = java.time.LocalTime.parse(startStr, fmt)
-            val end = java.time.LocalTime.parse(endStr, fmt)
-            // Geceyi geçen aralık: 22:00 – 07:00
-            if (start.isBefore(end)) now in start..end else now >= start || now <= end
-        } catch (_: Exception) {
-            false
-        }
+        return quietHoursActive(java.time.LocalTime.now(), startStr, endStr)
     }
+}
+
+/** Pure function — testable without Android Context. */
+internal fun quietHoursActive(
+    now: java.time.LocalTime,
+    startStr: String,
+    endStr: String,
+): Boolean = try {
+    val fmt = java.time.format.DateTimeFormatter.ofPattern("HH:mm")
+    val start = java.time.LocalTime.parse(startStr, fmt)
+    val end = java.time.LocalTime.parse(endStr, fmt)
+    // Geceyi geçen aralık: 22:00 – 07:00
+    if (start.isBefore(end)) now >= start && now <= end else now >= start || now <= end
+} catch (_: Exception) {
+    false
 }

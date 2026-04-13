@@ -39,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -111,6 +112,15 @@ fun BenimGunlerimApp(
                         )
                         NavigationBarItem(
                             selected = selected,
+                            modifier = Modifier.testTag(
+                                when (destination) {
+                                    Destination.Today    -> TestTags.BottomNavToday
+                                    Destination.Plan     -> TestTags.BottomNavPlan
+                                    Destination.Routines -> TestTags.BottomNavRoutines
+                                    Destination.Progress -> TestTags.BottomNavProgress
+                                    Destination.Settings -> TestTags.BottomNavSettings
+                                },
+                            ),
                             onClick = {
                                 navController.navigate(destination.route) {
                                     popUpTo(Destination.Today.route) { saveState = true }

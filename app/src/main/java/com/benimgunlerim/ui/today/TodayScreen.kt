@@ -75,6 +75,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -260,7 +261,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     val completedRoutines = state.routines.count { it.id in state.completedRoutineIds }
     val total = state.tasks.size + state.routines.size
     val completed = completedTasks + completedRoutines
-    Box(Modifier.fillMaxSize()) {
+    Box(Modifier.fillMaxSize().testTag(com.benimgunlerim.ui.TestTags.TodayRoot)) {
         Scaffold(
             contentWindowInsets = WindowInsets(0),
             containerColor = MaterialTheme.colorScheme.background,
@@ -271,6 +272,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     containerColor = CandyPrimary,
                     contentColor = Color.White,
                     shape = CircleShape,
+                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayFab),
                 ) {
                     Icon(Icons.Rounded.Add, contentDescription = "Ekle")
                 }
