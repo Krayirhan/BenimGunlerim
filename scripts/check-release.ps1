@@ -1,6 +1,10 @@
 #!/usr/bin/env pwsh
 # Release öncesi tam kalite kapısı.
 
+param(
+    [switch]$RequirePerformanceGate
+)
+
 Set-Location (Split-Path $PSScriptRoot)
 
 $ErrorActionPreference = "Stop"
@@ -36,6 +40,13 @@ Write-Host "`n[6/6] Bundle release (AAB)..." -ForegroundColor Yellow
 .\gradlew.bat bundleRelease
 if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Bundle release" -ForegroundColor Red; exit 1 }
 Write-Host "PASS: Bundle release" -ForegroundColor Green
+
+if ($RequirePerformanceGate) {
+	Write-Host "`n[7/7] Startup performance gate..." -ForegroundColor Yellow
+	.\check-performance-gate.ps1
+	if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Startup performance gate" -ForegroundColor Red; exit 1 }
+	Write-Host "PASS: Startup performance gate" -ForegroundColor Green
+}
 
 Write-Host "`n=== TÜM RELEASE KAPILARI GEÇTİ ===" -ForegroundColor Green
 Write-Host "AAB konumu: app\build\outputs\bundle\release\" -ForegroundColor Cyan

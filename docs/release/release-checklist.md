@@ -105,11 +105,21 @@ Fiziksel cihaz veya emülatörde:
 - [ ] 24/48 saat release health sorumlusu atandı.
 - [ ] Bir sonraki release için version planı açıldı.
 
-## 8. Güvenlik Kuralı
+## 8. Performans Kapısı
+
+- [ ] `scripts/check-performance-gate.ps1` en az bir fiziksel cihazda başarılı.
+- [ ] Cold startup median < 2000 ms.
+- [ ] Cold startup p90 < 3000 ms.
+- [ ] Warm startup median < 900 ms.
+- [ ] Startup max spike < 4000 ms.
+- [ ] Ölçüm raporu ve cihaz bilgisi release artifact/dokümanına eklendi.
+- [ ] Startup sırasında çalışan restore işlemleri main thread blokajı üretmüyor.
+
+## 9. Güvenlik Kuralı
 
 `keystore.properties`, `.jks` ve secret değerleri repoya asla commit edilmez. `.gitignore` içinde bu dosyalar korunmalıdır.
 
-## 9. Supply Chain ve Repo Kontrolleri
+## 10. Supply Chain ve Repo Kontrolleri
 
 - [ ] GitHub secret scanning veya eşdeğer secret scan job'ı yeşil.
 - [ ] Dependency review job'ı pull request üzerinde yeşil.

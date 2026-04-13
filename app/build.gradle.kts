@@ -71,6 +71,7 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isProfileable = true
             if (hasReleaseSigningConfig) {
                 signingConfig = signingConfigs.getByName("release")
             }

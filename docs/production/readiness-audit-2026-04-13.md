@@ -183,7 +183,7 @@ Mevcut minimum eşik:
 
 Etkisi:
 
-- Mevcut eşik düşük.
+- Mevcut eşik artık daha sıkı; kapsam genişletme ihtiyacı devam ediyor.
 - Özellikle branch coverage production güveni için yetersiz.
 - ViewModel, repository edge case, notification policy, import validation ve restore senaryoları yeterince güvence altında değil.
 
@@ -208,8 +208,8 @@ Yapılacak:
 | Observability / Crash / ANR | 4.0 / 10 | Production seviyesinde değil |
 | Bildirimler & Background | 6.6 / 10 | Temel var, cihaz/OEM matrisi eksik |
 | UX / Lokalizasyon / Erişilebilirlik | 4.5 / 10 | Encoding ve a11y ciddi eksik |
-| Performans | 5.0 / 10 | Ölçüm ve baseline profile yok |
-| Dependency / Platform Güncelliği | 5.5 / 10 | Çalışır ama güncellik uyarıları çok |
+| Performans | 8.1 / 10 | Startup gate + macrobenchmark altyapısı var, large-data/jank kapsamı genişletilmeli |
+| Dependency / Platform Güncelliği | 8.3 / 10 | Dependabot + dependency review + secret scan aktif, upgrade cadence izlenmeli |
 | Dokümantasyon & Operasyon | 7.0 / 10 | İyi başlangıç, tamamlanmamış checklist var |
 
 ## Production Bloklayıcıları
@@ -455,19 +455,18 @@ Yapılacak:
 - Failure screenshot/logcat alınmalı.
 - Flaky test policy yazılmalı.
 
-### CI-003: Dependency/security scanning yok
+### CI-003: Dependency/security scanning hattı kuruldu
 
-Eksik:
+Durum:
 
-- Dependabot yok.
-- Gradle dependency vulnerability scanning yok.
-- Secret scanning workflow görünmüyor.
+- Dependabot eklendi.
+- Dependency review workflow eklendi.
+- Secret scan workflow eklendi.
 
 Yapılacak:
 
-- Dependabot veya Renovate eklenmeli.
-- Dependency review aktif edilmeli.
-- GitHub secret scanning doğrulanmalı.
+- GitHub repository ayarlarında Dependabot alerts doğrulanmalı.
+- Security advisory response SLA dokümante edilmeli.
 
 ### CI-004: Release job secret eksik olduğunda failure doğru ama preflight daha net olabilir
 
@@ -992,15 +991,14 @@ Yapılacak:
 
 ## Performans Eksikleri
 
-### PERF-001: Startup ölçümü yok
+### PERF-001: Startup ölçümü ve threshold gate var
 
 Yapılacak:
 
-- Cold start ölçümü.
-- Warm start ölçümü.
-- Startup regression threshold.
+- Cold/warm ölçümlerin release/profileable build varyantına taşınması.
+- Nightly benchmark sonuçlarının trend takibi.
 
-### PERF-002: Baseline Profile yok
+### PERF-002: Macrobenchmark altyapısı var, jank kapsamı genişletilmeli
 
 Risk:
 
@@ -1008,9 +1006,9 @@ Risk:
 
 Yapılacak:
 
-- Macrobenchmark module eklenmeli.
-- Baseline Profile generate edilmeli.
-- CI veya release sürecine bağlanmalı.
+- `:benchmark` modülündeki startup benchmark'ları release/profileable hedefe tam hizalanmalı.
+- FrameTiming/Jank benchmarkları benchmark hedef cihaz profiline göre stabilize edilmeli.
+- Baseline Profile generation akışı CI artifact'i olarak doğrulanmalı.
 
 ### PERF-003: Büyük veri performansı ölçülmemiş
 
@@ -1084,12 +1082,12 @@ Yapılacak:
 - Tek seferde büyük upgrade yerine kontrollü upgrade batch’leri.
 - Her batch için test/lint/build.
 
-### DEP-005: Dependency automation yok
+### DEP-005: Dependency automation aktif
 
 Yapılacak:
 
-- Dependabot/Renovate eklenmeli.
-- Weekly dependency update PR policy.
+- Weekly PR review ve merge cadence'i takip edilmeli.
+- Kritik update'ler için owner ve rollback planı tanımlanmalı.
 
 ## Lint Eksikleri
 

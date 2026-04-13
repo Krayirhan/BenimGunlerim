@@ -63,6 +63,8 @@ Release için signing bilgileri `keystore.properties` veya CI secret'ları ile s
 - [Production readiness özeti](docs/production/production-readiness.md)
 - [Tarihli audit snapshot](docs/production/readiness-audit-2026-04-13.md)
 - [Kalite kapıları](docs/production/quality-gates.md)
+- [Performans politikası](docs/production/performance-policy.md)
+- [Dependency/platform politikası](docs/production/dependency-platform-policy.md)
 - [Release checklist](docs/release/release-checklist.md)
 
 Eski sprint planları ve tarihsel çalışma notları `docs/archive/` altında tutulur.
