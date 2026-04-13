@@ -36,7 +36,7 @@ jobs:
 
       - name: Upload unit test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pr-unit-test-report
           path: app/build/reports/tests/testDebugUnitTest/
@@ -46,7 +46,7 @@ jobs:
 
       - name: Upload coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: pr-coverage-report
           path: app/build/reports/jacoco/jacocoDebugUnitTestReport/
@@ -95,28 +95,28 @@ jobs:
 
       - name: Upload release unit test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-unit-test-report
           path: app/build/reports/tests/testDebugUnitTest/
 
       - name: Upload release coverage report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-coverage-report
           path: app/build/reports/jacoco/jacocoDebugUnitTestReport/
 
       - name: Upload lint report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: release-lint-report
           path: app/build/reports/lint-results-release.html
 
       - name: Upload release bundle
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: benimgunlerim-release-aab
           path: app/build/outputs/bundle/release/app-release.aab
@@ -156,7 +156,7 @@ jobs:
 
       - name: Upload connected test report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: connected-test-report
           path: |
@@ -193,7 +193,7 @@ jobs:
 
       - name: Upload benchmark report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: macrobenchmark-report
           path: |
