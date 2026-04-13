@@ -51,10 +51,28 @@ interface UserPreferencesSource {
     val preferences: Flow<UserPreferences>
 }
 
+interface UserPreferencesWriter {
+    suspend fun replacePreferences(preferences: UserPreferences)
+}
+
+/** Combined interface for SettingsViewModel — testable without Android context. */
+interface UserPreferencesAccess : UserPreferencesSource {
+    suspend fun setNotificationMode(mode: String)
+    suspend fun setDailySummaryTime(time: String)
+    suspend fun setAnalyticsEnabled(enabled: Boolean)
+    suspend fun setThemeMode(mode: String)
+    suspend fun resetOnboarding()
+    suspend fun setMorningPlannerEnabled(enabled: Boolean)
+    suspend fun setMorningPlannerTime(time: String)
+    suspend fun setQuietHoursEnabled(enabled: Boolean)
+    suspend fun setQuietHoursStart(time: String)
+    suspend fun setQuietHoursEnd(time: String)
+}
+
 @Singleton
 class UserPreferencesRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-) : UserPreferencesSource {
+) : UserPreferencesAccess, UserPreferencesSource, UserPreferencesWriter {
     private object Keys {
         val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
         val selectedGoalProfile = stringPreferencesKey("selected_goal_profile")
@@ -118,31 +136,31 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
-    suspend fun setNotificationMode(mode: String) {
+    override suspend fun setNotificationMode(mode: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.notificationMode] = mode
         }
     }
 
-    suspend fun setDailySummaryTime(time: String) {
+    override suspend fun setDailySummaryTime(time: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.dailySummaryTime] = time
         }
     }
 
-    suspend fun setAnalyticsEnabled(enabled: Boolean) {
+    override suspend fun setAnalyticsEnabled(enabled: Boolean) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.analyticsEnabled] = enabled
         }
     }
 
-    suspend fun setThemeMode(mode: String) {
+    override suspend fun setThemeMode(mode: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.themeMode] = mode
         }
     }
 
-    suspend fun resetOnboarding() {
+    override suspend fun resetOnboarding() {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.onboardingCompleted] = false
         }
@@ -255,33 +273,63 @@ class UserPreferencesRepository @Inject constructor(
         return success
     }
 
-    suspend fun setMorningPlannerEnabled(enabled: Boolean) {
+    override suspend fun setMorningPlannerEnabled(enabled: Boolean) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.morningPlannerEnabled] = enabled
         }
     }
 
-    suspend fun setMorningPlannerTime(time: String) {
+    override suspend fun setMorningPlannerTime(time: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.morningPlannerTime] = time
         }
     }
 
-    suspend fun setQuietHoursEnabled(enabled: Boolean) {
+    override suspend fun setQuietHoursEnabled(enabled: Boolean) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.quietHoursEnabled] = enabled
         }
     }
 
-    suspend fun setQuietHoursStart(time: String) {
+    override suspend fun setQuietHoursStart(time: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.quietHoursStart] = time
         }
     }
 
-    suspend fun setQuietHoursEnd(time: String) {
+    override suspend fun setQuietHoursEnd(time: String) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.quietHoursEnd] = time
+        }
+    }
+
+    override suspend fun replacePreferences(preferences: UserPreferences) {
+        context.userPreferencesDataStore.edit { prefs ->
+            prefs[Keys.onboardingCompleted] = preferences.onboardingCompleted
+            preferences.selectedGoalProfile?.let { prefs[Keys.selectedGoalProfile] = it }
+                ?: prefs.remove(Keys.selectedGoalProfile)
+            prefs[Keys.notificationMode] = preferences.notificationMode
+            prefs[Keys.dailySummaryTime] = preferences.dailySummaryTime
+            prefs[Keys.analyticsEnabled] = preferences.analyticsEnabled
+            prefs[Keys.themeMode] = preferences.themeMode
+            prefs[Keys.totalXp] = preferences.totalXp
+            prefs[Keys.gold] = preferences.gold
+            prefs[Keys.happiness] = preferences.happiness
+            prefs[Keys.companionType] = preferences.companionType
+            prefs[Keys.companionName] = preferences.companionName
+            prefs[Keys.lastDailyRewardDate] = preferences.lastDailyRewardDate
+            prefs[Keys.totalTasksCompleted] = preferences.totalTasksCompleted
+            prefs[Keys.totalRoutinesCompleted] = preferences.totalRoutinesCompleted
+            prefs[Keys.totalPerfectDays] = preferences.totalPerfectDays
+            prefs[Keys.totalDaysClosed] = preferences.totalDaysClosed
+            prefs[Keys.happyMoodCount] = preferences.happyMoodCount
+            prefs[Keys.ownedItems] = preferences.ownedItems
+            prefs[Keys.rewardedEvents] = preferences.rewardedEvents
+            prefs[Keys.morningPlannerEnabled] = preferences.morningPlannerEnabled
+            prefs[Keys.morningPlannerTime] = preferences.morningPlannerTime
+            prefs[Keys.quietHoursEnabled] = preferences.quietHoursEnabled
+            prefs[Keys.quietHoursStart] = preferences.quietHoursStart
+            prefs[Keys.quietHoursEnd] = preferences.quietHoursEnd
         }
     }
 }

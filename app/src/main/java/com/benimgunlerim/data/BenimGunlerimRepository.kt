@@ -1,4 +1,4 @@
-package com.benimgunlerim.data
+﻿package com.benimgunlerim.data
 
 import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.data.local.CompletionLogDao
@@ -23,6 +23,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 
+/** Thin interface so SettingsViewModel can be tested without the full repository. */
+interface LocalDataClearer {
+    suspend fun clearAllLocalData()
+}
+
 @Singleton
 class BenimGunlerimRepository @Inject constructor(
     private val taskDao: TaskDao,
@@ -33,7 +38,7 @@ class BenimGunlerimRepository @Inject constructor(
     private val routineReminderScheduler: RoutineReminderScheduler,
     private val taskReminderScheduler: TaskReminderScheduler,
     private val errorReporter: ErrorReporter,
-) {
+) : LocalDataClearer {
     fun observeTasks(date: LocalDate = LocalDate.now()): Flow<List<TaskEntity>> =
         taskDao.observeByDate(date.toString())
 
@@ -91,7 +96,7 @@ class BenimGunlerimRepository @Inject constructor(
             runCatching {
                 taskReminderScheduler.schedule(newTask.id, newTask.title, date, LocalTime.parse(reminderTime))
             }.onFailure { e ->
-                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_schedule", "taskId" to newTask.id))
+                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_schedule"))
             }
         }
     }
@@ -163,7 +168,7 @@ class BenimGunlerimRepository @Inject constructor(
                 val date = LocalDate.parse(updatedTask.plannedDate)
                 taskReminderScheduler.schedule(updatedTask.id, updatedTask.title, date, LocalTime.parse(updatedTask.reminderTime))
             }.onFailure { e ->
-                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_reschedule", "taskId" to updatedTask.id))
+                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_reschedule"))
             }
         }
     }
@@ -387,7 +392,7 @@ class BenimGunlerimRepository @Inject constructor(
         return count
     }
 
-    suspend fun clearAllLocalData() {
+    override suspend fun clearAllLocalData() {
         completionLogDao.deleteAll()
         taskDao.deleteAll()
         subTaskDao.deleteAll()
@@ -404,18 +409,16 @@ class BenimGunlerimRepository @Inject constructor(
                 "5 dk nefes egzersizi",
                 "2 dk esneme",
                 "Su iç",
-                "1 bardak su iÃ§",
-                "5 dk yÃ¼rÃ¼yÃ¼ÅŸ yap",
+                "1 bardak su iç",
+                "5 dk yürüyüş yap",
                 "5 dk nefes egzersizi",
                 "2 dk esneme",
-                "Su iÃ§",
+                "Su iç",
             ),
         )
     }
 
     suspend fun seedTemplateIfEmpty(needId: String, intensityId: String) {
-        deleteSeededTemplateData()
-        return
         if (taskDao.count() > 0 || routineDao.count() > 0) return
 
         val today = LocalDate.now()

@@ -1,8 +1,11 @@
 package com.benimgunlerim.notifications
 
+import com.benimgunlerim.data.local.TaskDao
 import com.benimgunlerim.data.local.RoutineDao
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.di.ApplicationScope
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.CoroutineScope
@@ -10,25 +13,46 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
+/** Thin interface so SettingsViewModel can be tested without the full bootstrapper. */
+fun interface ReminderRestorer {
+    fun rescheduleReminders()
+}
+
+
 @Singleton
 class ReminderBootstrapper @Inject constructor(
+    private val taskDao: TaskDao,
     private val routineDao: RoutineDao,
+    private val taskReminderScheduler: TaskReminderScheduler,
     private val routineReminderScheduler: RoutineReminderScheduler,
     private val dailySummaryScheduler: DailySummaryScheduler,
     private val userPreferencesRepository: UserPreferencesRepository,
     @ApplicationScope private val applicationScope: CoroutineScope,
-) {
-    fun rescheduleRoutineReminders() {
+) : ReminderRestorer {
+    override fun rescheduleReminders() {
         applicationScope.launch(Dispatchers.IO) {
+            val today = LocalDate.now()
+            taskDao.getPendingRemindersFrom(today.toString()).forEach { task ->
+                val date = runCatching { LocalDate.parse(task.plannedDate) }.getOrNull()
+                val time = task.reminderTime?.let { runCatching { LocalTime.parse(it) }.getOrNull() }
+                if (date != null && time != null) {
+                    taskReminderScheduler.schedule(task.id, task.title, date, time)
+                }
+            }
+
             routineDao.getActiveWithReminder().forEach { routine ->
                 routineReminderScheduler.schedule(routine)
             }
             val preferences = userPreferencesRepository.preferences.first()
             if (preferences.notificationMode != "off") {
-                val time = runCatching { java.time.LocalTime.parse(preferences.dailySummaryTime) }
-                    .getOrDefault(java.time.LocalTime.of(21, 0))
+                val time = runCatching { LocalTime.parse(preferences.dailySummaryTime) }
+                    .getOrDefault(LocalTime.of(21, 0))
                 dailySummaryScheduler.schedule(time)
             }
         }
+    }
+
+    fun rescheduleRoutineReminders() {
+        rescheduleReminders()
     }
 }

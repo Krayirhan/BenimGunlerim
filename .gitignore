@@ -2,9 +2,11 @@
 .gradle/
 build/
 app/build/
+*/build/
 
 # IDE
 .idea/
+.vscode/
 .kotlin/
 *.iml
 
@@ -14,10 +16,14 @@ local.properties
 # Keystore (asla repoya girmesin)
 *.jks
 *.keystore
+*.p12
+*.pem
+*.key
 keystore.properties
 
 # Build artifacts
 captures/
+.externalNativeBuild/
 externalNativeBuild/
 .cxx/
 *.apk
@@ -26,3 +32,13 @@ externalNativeBuild/
 # Build log dosyaları (geçici)
 build*.txt
 build_*.txt
+*_build.txt
+build_connected_tests*.txt
+
+# Local evidence / measurement outputs
+build_perf/
+build_notification_matrix/
+
+# OS
+.DS_Store
+Thumbs.db

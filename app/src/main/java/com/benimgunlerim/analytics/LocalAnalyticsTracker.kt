@@ -1,6 +1,7 @@
 package com.benimgunlerim.analytics
 
 import android.util.Log
+import com.benimgunlerim.BuildConfig
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.di.ApplicationScope
 import javax.inject.Inject
@@ -19,7 +20,9 @@ class LocalAnalyticsTracker @Inject constructor(
     override fun track(event: AnalyticsEvent) {
         scope.launch(Dispatchers.IO) {
             if (!preferencesRepository.preferences.first().analyticsEnabled) return@launch
-            Log.d("BenimGunlerimAnalytics", "${event.name} ${event.properties}")
+            if (BuildConfig.DEBUG) {
+                Log.d("BenimGunlerimAnalytics", "${event.name} ${event.properties}")
+            }
         }
     }
 }

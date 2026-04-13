@@ -1,13 +1,17 @@
 package com.benimgunlerim.data
 
 import com.benimgunlerim.analytics.ErrorReporter
+import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.CompletionLogDao
 import com.benimgunlerim.data.local.DailyStateDao
 import com.benimgunlerim.data.local.RoutineDao
+import com.benimgunlerim.data.local.SubTaskDao
 import com.benimgunlerim.data.local.TaskDao
+import com.benimgunlerim.data.local.entity.AchievementEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -29,6 +33,7 @@ class DataExportServiceTest {
         override fun observeRange(from: String, to: String): Flow<List<TaskEntity>> = error("stub")
         override suspend fun count(): Int = records.size
         override suspend fun getPendingBefore(before: String): List<TaskEntity> = error("stub")
+        override suspend fun getPendingRemindersFrom(fromDate: String): List<TaskEntity> = error("stub")
         override suspend fun insert(task: TaskEntity) = error("stub")
         override suspend fun insertAll(tasks: List<TaskEntity>) = error("stub")
         override suspend fun update(task: TaskEntity) = error("stub")
@@ -57,6 +62,7 @@ class DataExportServiceTest {
         override fun observeAll(): Flow<List<CompletionLogEntity>> = error("stub")
         override fun observeBetween(from: String, to: String): Flow<List<CompletionLogEntity>> = error("stub")
         override suspend fun upsert(log: CompletionLogEntity) = error("stub")
+        override suspend fun insertAll(logs: List<CompletionLogEntity>) = error("stub")
         override suspend fun deleteForDate(entityType: String, entityId: String, date: String) = error("stub")
         override suspend fun deleteForEntity(entityType: String, entityId: String) = error("stub")
         override suspend fun deleteAll() = error("stub")
@@ -68,6 +74,29 @@ class DataExportServiceTest {
         override suspend fun getByDate(date: String): DailyStateEntity? = error("stub")
         override fun observeRecent(limit: Int): Flow<List<DailyStateEntity>> = error("stub")
         override suspend fun upsert(state: DailyStateEntity) = error("stub")
+        override suspend fun insertAll(states: List<DailyStateEntity>) = error("stub")
+        override suspend fun deleteAll() = error("stub")
+    }
+
+    private class StubSubTaskDao(private val records: List<SubTaskEntity>) : SubTaskDao {
+        override suspend fun getAll() = records
+        override fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>> = error("stub")
+        override suspend fun insert(subTask: SubTaskEntity) = error("stub")
+        override suspend fun insertAll(subTasks: List<SubTaskEntity>) = error("stub")
+        override suspend fun update(subTask: SubTaskEntity) = error("stub")
+        override suspend fun deleteById(id: String) = error("stub")
+        override suspend fun deleteByTaskId(taskId: String) = error("stub")
+        override suspend fun deleteAll() = error("stub")
+    }
+
+    private class StubAchievementDao(private val records: List<AchievementEntity>) : AchievementDao {
+        override suspend fun getAll() = records
+        override fun observeUnlocked(): Flow<List<AchievementEntity>> = error("stub")
+        override fun observeAll(): Flow<List<AchievementEntity>> = error("stub")
+        override suspend fun getById(id: String): AchievementEntity? = error("stub")
+        override suspend fun insert(achievement: AchievementEntity) = error("stub")
+        override suspend fun insertAll(achievements: List<AchievementEntity>) = error("stub")
+        override suspend fun unlock(id: String, time: Long): Int = error("stub")
         override suspend fun deleteAll() = error("stub")
     }
 
@@ -84,15 +113,19 @@ class DataExportServiceTest {
 
     private fun makeService(
         tasks: List<TaskEntity> = emptyList(),
+        subTasks: List<SubTaskEntity> = emptyList(),
         routines: List<RoutineEntity> = emptyList(),
         logs: List<CompletionLogEntity> = emptyList(),
         states: List<DailyStateEntity> = emptyList(),
+        achievements: List<AchievementEntity> = emptyList(),
         prefs: UserPreferences = UserPreferences(),
     ) = DataExportService(
         taskDao = StubTaskDao(tasks),
         routineDao = StubRoutineDao(routines),
+        subTaskDao = StubSubTaskDao(subTasks),
         completionLogDao = StubCompletionLogDao(logs),
         dailyStateDao = StubDailyStateDao(states),
+        achievementDao = StubAchievementDao(achievements),
         preferencesRepository = StubPreferencesRepository(prefs),
         errorReporter = noopErrorReporter,
     )
@@ -135,6 +168,20 @@ class DataExportServiceTest {
         reminderEnabled = true,
         sortOrder = 0,
         bestStreak = 3,
+    )
+
+    private fun sampleSubTask() = SubTaskEntity(
+        id = "sub-1",
+        taskId = "task-1",
+        title = "Sub task",
+        isCompleted = true,
+        sortOrder = 1,
+        createdAt = 1_000_001L,
+    )
+
+    private fun sampleAchievement() = AchievementEntity(
+        id = "ach-1",
+        unlockedAt = 1_000_002L,
     )
 
     private fun sampleLog() = CompletionLogEntity(
@@ -198,6 +245,16 @@ class DataExportServiceTest {
     }
 
     @Test
+    fun exportToJson_subTaskObjectHasRequiredFields() = runTest {
+        val json = makeService(subTasks = listOf(sampleSubTask())).exportToJson()
+        val subTask = JSONObject(json!!).getJSONArray("subTasks").getJSONObject(0)
+        assertEquals("sub-1", subTask.getString("id"))
+        assertEquals("task-1", subTask.getString("taskId"))
+        assertEquals("Sub task", subTask.getString("title"))
+        assertEquals(true, subTask.getBoolean("isCompleted"))
+    }
+
+    @Test
     fun exportToJson_routineObjectHasRequiredFields() = runTest {
         val json = makeService(routines = listOf(sampleRoutine())).exportToJson()
         val routine = JSONObject(json!!).getJSONArray("routines").getJSONObject(0)
@@ -223,6 +280,14 @@ class DataExportServiceTest {
         assertEquals("2024-01-01", state.getString("date"))
         assertEquals("happy", state.getString("mood"))
         assertEquals(80, state.getInt("dailyScore"))
+    }
+
+    @Test
+    fun exportToJson_achievementObjectHasRequiredFields() = runTest {
+        val json = makeService(achievements = listOf(sampleAchievement())).exportToJson()
+        val achievement = JSONObject(json!!).getJSONArray("achievements").getJSONObject(0)
+        assertEquals("ach-1", achievement.getString("id"))
+        assertEquals(1_000_002L, achievement.getLong("unlockedAt"))
     }
 
     @Test
@@ -253,8 +318,10 @@ class DataExportServiceTest {
         val service = DataExportService(
             taskDao = StubTaskDao(emptyList()),
             routineDao = StubRoutineDao(emptyList()),
+            subTaskDao = StubSubTaskDao(emptyList()),
             completionLogDao = StubCompletionLogDao(emptyList()),
             dailyStateDao = StubDailyStateDao(emptyList()),
+            achievementDao = StubAchievementDao(emptyList()),
             preferencesRepository = crashingRepo,
             errorReporter = object : ErrorReporter {
                 override fun recordNonFatal(error: Throwable, context: Map<String, String>) {

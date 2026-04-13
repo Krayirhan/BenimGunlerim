@@ -72,11 +72,12 @@ private enum class Destination(
 @Composable
 fun BenimGunlerimApp(
     requestedStartRoute: String? = null,
+    forceOnboardingCompleted: Boolean = false,
     viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val preferences by viewModel.preferences.collectAsState()
     val navController = rememberNavController()
-    val startDestination = if (preferences.onboardingCompleted) Destination.Today.route else "onboarding"
+    val startDestination = if (forceOnboardingCompleted || preferences.onboardingCompleted) Destination.Today.route else "onboarding"
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val showBottomBar = Destination.entries.any { it.route == currentRoute }

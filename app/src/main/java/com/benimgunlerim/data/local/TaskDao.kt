@@ -25,6 +25,9 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE plannedDate < :before AND completionState = 'pending' AND (isArchived = 0 OR isArchived IS NULL)")
     suspend fun getPendingBefore(before: String): List<TaskEntity>
 
+    @Query("SELECT * FROM tasks WHERE plannedDate >= :fromDate AND completionState = 'pending' AND reminderTime IS NOT NULL AND reminderTime != '' AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, reminderTime ASC")
+    suspend fun getPendingRemindersFrom(fromDate: String): List<TaskEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(task: TaskEntity)
 

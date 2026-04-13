@@ -13,8 +13,14 @@ interface SubTaskDao {
     @Query("SELECT * FROM subtasks WHERE taskId = :taskId ORDER BY sortOrder ASC, createdAt ASC")
     fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>>
 
+    @Query("SELECT * FROM subtasks ORDER BY taskId ASC, sortOrder ASC, createdAt ASC")
+    suspend fun getAll(): List<SubTaskEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(subTask: SubTaskEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(subTasks: List<SubTaskEntity>)
 
     @Update
     suspend fun update(subTask: SubTaskEntity)

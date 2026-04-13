@@ -9,6 +9,16 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/** Thin interface so SettingsViewModel can be tested without Android SharedPreferences. */
+fun interface NotificationPolicyCache {
+    fun updateCache(
+        notificationMode: String,
+        quietHoursEnabled: Boolean,
+        quietHoursStart: String,
+        quietHoursEnd: String,
+    )
+}
+
 /**
  * Bir bildirimin gösterilip gösterilmeyeceğine karar veren merkezi politika sınıfı.
  *
@@ -23,7 +33,7 @@ import javax.inject.Singleton
 @Singleton
 class ReminderPolicy @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : NotificationPolicyCache {
     companion object {
         private const val PREFS_NAME = "reminder_policy_cache"
         private const val KEY_NOTIFICATION_MODE = "notification_mode"
@@ -39,7 +49,7 @@ class ReminderPolicy @Inject constructor(
     }
 
     /** SettingsViewModel tarafından tercihler değiştiğinde çağrılır. */
-    fun updateCache(
+    override fun updateCache(
         notificationMode: String,
         quietHoursEnabled: Boolean,
         quietHoursStart: String,

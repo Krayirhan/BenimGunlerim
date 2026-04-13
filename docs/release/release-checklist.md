@@ -1,18 +1,19 @@
-# Release Checklist — BenimGunlerim
+# Release Checklist - BenimGünlerim
 
-Bu döküman, her Play Store release için tekrarlanacak adımları içerir.
+Bu checklist her Play Store release'i için tekrarlanır. Tüm maddeler tamamlanmadan production track'e geçilmez.
 
-## 1. Signing Setup (İlk Kez)
+## 1. Signing Kurulumu
+
+Keystore bir kez üretilir ve güvenli bir yerde saklanır:
 
 ```powershell
-# Keystore üret (bir kez yapılır, sonucu güvenli sakla)
 keytool -genkey -v -keystore benimgunlerim-release.jks `
   -alias benimgunlerim `
   -keyalg RSA -keysize 2048 `
   -validity 10000
 ```
 
-Ardından proje kökünde **keystore.properties** dosyası oluştur (repoya girmiyor):
+Lokal release için proje kökünde `keystore.properties` oluşturulur. Bu dosya repoya girmez.
 
 ```properties
 storeFile=/path/to/benimgunlerim-release.jks
@@ -21,74 +22,89 @@ keyAlias=benimgunlerim
 keyPassword=<keyPassword>
 ```
 
-`app/build.gradle.kts` içindeki `signingConfigs.release` bloğuna bu dosyayı oku:
+CI release için GitHub Actions secret'ları:
 
-```kotlin
-val keystoreProps = Properties().also { props ->
-    val f = rootProject.file("keystore.properties")
-    if (f.exists()) props.load(f.inputStream())
-}
-signingConfigs {
-    create("release") {
-        storeFile = file(keystoreProps["storeFile"] as String)
-        storePassword = keystoreProps["storePassword"] as String
-        keyAlias = keystoreProps["keyAlias"] as String
-        keyPassword = keystoreProps["keyPassword"] as String
-    }
-}
-```
+- `KEYSTORE_BASE64`
+- `KEYSTORE_PASSWORD`
+- `KEY_ALIAS`
+- `KEY_PASSWORD`
 
-> **CI:** `KEYSTORE_PATH`, `KEYSTORE_PASSWORD`, `KEY_ALIAS`, `KEY_PASSWORD`
-> env var'larını GitHub Actions secret'a yükle ve build.gradle.kts'te bunları oku.
-
----
-
-## 2. Her Release Öncesi Kontrol
-
-- [ ] `versionCode` bir arttırıldı (`app/build.gradle.kts` → `versionCode`).
-- [ ] `versionName` semantic: `MAJOR.MINOR.PATCH`.
-- [ ] `CHANGELOG.md` veya `docs/release/YYYYMMDD.md` güncellendi.
-- [ ] `git status` temiz (commit/tag yapılmadan önce).
-
-## 3. Kalite Kapıları
+`KEYSTORE_BASE64` üretmek için:
 
 ```powershell
-.\gradlew.bat testDebugUnitTest   # unit testler yeşil
-.\gradlew.bat lintDebug           # lint yeşil
-.\gradlew.bat lintRelease         # release lint yeşil
-.\gradlew.bat assembleRelease     # APK üretildi
-.\gradlew.bat bundleRelease       # AAB üretildi (Play Store)
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("benimgunlerim-release.jks"))
 ```
 
-APK yolu: `app/build/outputs/apk/release/app-release.apk`  
-AAB yolu: `app/build/outputs/bundle/release/app-release.aab`
+## 2. Versioning
 
-## 4. Smoke Test (Her Release)
+- [ ] `versionCode` artırıldı.
+- [ ] `versionName` semantic versioning ile güncellendi.
+- [ ] Release notu hazırlandı.
+- [ ] `git status` temiz.
+
+## 3. Zorunlu Kalite Kapısı
+
+```powershell
+.\scripts\check-release.ps1
+```
+
+Bu komut şunları doğrular:
+
+- Release signing yapılandırılmış.
+- Unit testler geçiyor.
+- Release lint geçiyor.
+- Release APK build ediliyor.
+- Release AAB build ediliyor.
+
+`verifyReleaseSigning` başarısızsa release durur.
+
+## 4. Cihaz Smoke Test
 
 Fiziksel cihaz veya emülatörde:
 
-- [ ] Uygulama açılıyor (crash yok).
+- [ ] Uygulama açılıyor, crash yok.
+- [ ] Onboarding tamamlanıyor.
 - [ ] Bugün ekranı yükleniyor.
-- [ ] Görev ekle → tamamla akışı çalışıyor.
-- [ ] Rutin ekle → rutinler sekmesi açılıyor.
-- [ ] Bildirim izni verilince bildirim geliyor.
-- [ ] Ayarlar ekranı açılıyor, sessiz saatler toggle çalışıyor.
-- [ ] Uygulama kapat → yeniden aç → veri kayıp yok.
+- [ ] Görev ekleme, düzenleme, tamamlama ve silme çalışıyor.
+- [ ] Alt görev ekleme ve tamamlama çalışıyor.
+- [ ] Rutin ekleme, düzenleme ve arşivleme çalışıyor.
+- [ ] Bildirim izni verilince görev bildirimi geliyor.
+- [ ] Sessiz saatlerde bildirim gösterilmiyor.
+- [ ] Cihaz yeniden başlatıldıktan sonra task/routine/daily reminder'lar tekrar planlanıyor.
+- [ ] Ayarlar ekranı ve tema seçimi çalışıyor.
+- [ ] Uygulama kapatılıp açıldığında veri kaybı yok.
 
-## 5. Play Store Yükleme
+## 5. Backup ve Gizlilik Kontrolü
 
-1. **Internal Testing**: AAB'yi Play Console → Internal Testing → Create release ekranına yükle.
-2. Sürüm notlarını Türkçe gir.
-3. İnceleme gerektirmez, test cihazlarına hemen push edilir.
-4. Smoke test geçtikten sonra Production track'e tanıt.
+- [ ] `android:allowBackup` kararı ürün ve gizlilik politikasıyla uyumlu.
+- [ ] Kullanıcıya görev, rutin ve günlük verilerinin yedekleme davranışı açıklanıyor.
+- [ ] Export edilen JSON dosyasının kişisel içerik taşıdığı kullanıcıya bildiriliyor.
+- [ ] JSON import/restore test verisiyle doğrulandı.
+- [ ] Veri silme akışı confirmation ile korunuyor.
 
-## 6. Post-Release
+## 6. Play Store Akışı
 
-- [ ] Git tag: `git tag -a v0.1.0 -m "Release 0.1.0" ; git push origin v0.1.0`
-- [ ] `docs/release/YYYYMMDD.md` commit'lendi.
-- [ ] Bir sonraki sprint için `versionCode`/`versionName` draft'ı yapıldı.
+1. Signed AAB dosyasını Internal Testing track'e yükle.
+2. Türkçe release notlarını gir.
+3. Internal tester cihazında smoke test çalıştır.
+4. Crash/ANR sinyallerini kontrol et.
+5. Firebase Crashlytics içinde test non-fatal event'in düştüğünü doğrula.
+6. Firebase Crashlytics içinde test crash event'inin düştüğünü doğrula.
+7. Play Console Android Vitals içinden ANR rate'i kontrol et.
+8. Crash-free users oranının ilk 24 saatte %99.5 üstünde kaldığını doğrula.
+9. Aynı startup/import/data-loss stack trace'i 3+ kullanıcı etkiliyorsa rollout pause et.
+10. Sorun yoksa staged rollout ile production'a ilerle.
 
----
+## 7. Post-Release
 
-> **Güvenlik:** `keystore.properties` ve `.jks` dosyaları asla repoya commit edilmez.
-> `.gitignore` içinde `*.jks` ve `keystore.properties` olduğunu doğrula.
+- [ ] Git tag oluşturuldu: `vX.Y.Z`.
+- [ ] Release notu commit'lendi.
+- [ ] Play Console vitals kontrol edildi.
+- [ ] Crash-free users / sessions ilk 24 saatte takip edildi.
+- [ ] ANR rate bad behavior threshold altında kaldı.
+- [ ] 24/48 saat release health sorumlusu atandı.
+- [ ] Bir sonraki release için version planı açıldı.
+
+## 8. Güvenlik Kuralı
+
+`keystore.properties`, `.jks` ve secret değerleri repoya asla commit edilmez. `.gitignore` içinde bu dosyalar korunmalıdır.

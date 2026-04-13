@@ -582,7 +582,7 @@ private fun TaskRow(task: TaskEntity, onToggle: (TaskEntity) -> Unit, onOpen: (T
             )
             Text("${task.startTime ?: "bugün"} · tek seferlik görev", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         }
-        Icon(Icons.Rounded.MoreHoriz, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })
+        Icon(Icons.Rounded.MoreHoriz, contentDescription = "Görev detayını aç", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })
     }
 }
 
@@ -698,7 +698,15 @@ private fun ItemRow(done: Boolean, color: Color, content: @Composable RowScope.(
 @Composable
 private fun CheckCircle(done: Boolean, color: Color, onClick: () -> Unit) {
     Box(
-        Modifier.size(32.dp).clip(CircleShape).background(if (done) color else color.copy(.10f)).border(2.dp, color.copy(if (done) 1f else .45f), CircleShape).clickable(onClick = onClick),
+        Modifier
+            .size(32.dp)
+            .clip(CircleShape)
+            .background(if (done) color else color.copy(.10f))
+            .border(2.dp, color.copy(if (done) 1f else .45f), CircleShape)
+            .clickable(
+                onClickLabel = if (done) "Tamamlandı olarak işaretlendi — geri al" else "Tamamlandı olarak işaretle",
+                onClick = onClick,
+            ),
         contentAlignment = Alignment.Center,
     ) {
         if (done) Icon(Icons.Rounded.Check, contentDescription = "Tamamlandı", tint = Color.White, modifier = Modifier.size(19.dp))

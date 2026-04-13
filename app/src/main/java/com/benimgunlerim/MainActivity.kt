@@ -15,15 +15,22 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private companion object {
+        const val EXTRA_FORCE_ONBOARDING_COMPLETED = "force_onboarding_completed"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             val onboardingViewModel: OnboardingViewModel = hiltViewModel()
             val preferences by onboardingViewModel.preferences.collectAsState()
+            val forceOnboardingCompleted = BuildConfig.DEBUG &&
+                intent.getBooleanExtra(EXTRA_FORCE_ONBOARDING_COMPLETED, false)
             BenimGunlerimTheme(themeMode = preferences.themeMode) {
                 BenimGunlerimApp(
                     requestedStartRoute = intent.getStringExtra(NotificationConstants.EXTRA_START_ROUTE),
+                    forceOnboardingCompleted = forceOnboardingCompleted,
                 )
             }
         }

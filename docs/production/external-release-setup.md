@@ -1,0 +1,66 @@
+# Dış Release Kurulum Kontrolü
+
+Bu dosya repo dışındaki production ayarlarını tamamlamak için kullanılır. Bu ayarlar kodla otomatik uygulanamaz; GitHub ve Play Console üzerinde yetkili kullanıcı tarafından yapılmalıdır.
+
+## GitHub Secrets
+
+Repository secrets:
+
+- `KEYSTORE_BASE64`
+- `KEYSTORE_PASSWORD`
+- `KEY_ALIAS`
+- `KEY_PASSWORD`
+
+`KEYSTORE_BASE64` üretimi:
+
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("benimgunlerim-release.jks"))
+```
+
+## Branch Protection
+
+`main` branch için required status checks:
+
+- `PR quality gate`
+- `Release quality gate`
+- `Connected UI tests`
+
+Ek kurallar:
+
+- Direct push kapalı.
+- PR review zorunlu.
+- Stale approval dismiss açık.
+- Force push kapalı.
+
+## Tag Protection
+
+Release tag formatı:
+
+- `v*`
+
+Release tag oluşturulunca release-quality job signed AAB üretmelidir.
+
+## Play Console
+
+Internal testing release kontrolü:
+
+- Signed AAB yüklendi.
+- Version code önceki release'ten büyük.
+- Türkçe release notes girildi.
+- Data Safety formu privacy policy ile uyumlu.
+- Internal tester smoke test tamamlandı.
+
+## Monitoring
+
+Repo içinde `ErrorReporter` ve uncaught exception hook hazırdır. Production'da şu kararlardan biri uygulanmalıdır:
+
+- Crashlytics entegrasyonu
+- Sentry entegrasyonu
+- Tamamen lokal/offline tanı modeli
+
+Seçilen provider için görevler:
+
+- Crash-free users takip edilir.
+- ANR oranı takip edilir.
+- Version bazlı release health izlenir.
+- Kritik artışlarda rollback veya rollout pause uygulanır.

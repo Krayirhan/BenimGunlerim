@@ -1,10 +1,42 @@
+import java.util.Properties
+import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
+import org.gradle.testing.jacoco.tasks.JacocoReport
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    jacoco
 }
+
+if (file("google-services.json").exists()) {
+    apply(plugin = "com.google.gms.google-services")
+    apply(plugin = "com.google.firebase.crashlytics")
+}
+
+val keystoreProperties = Properties().also { props ->
+    val localKeystoreFile = rootProject.file("keystore.properties")
+    if (localKeystoreFile.exists()) {
+        localKeystoreFile.inputStream().use(props::load)
+    }
+}
+
+fun releaseSigningValue(propertyName: String, environmentName: String): String? =
+    (keystoreProperties[propertyName] as String?)
+        ?: providers.environmentVariable(environmentName).orNull
+
+val releaseStoreFile = releaseSigningValue("storeFile", "KEYSTORE_PATH")
+val releaseStorePassword = releaseSigningValue("storePassword", "KEYSTORE_PASSWORD")
+val releaseKeyAlias = releaseSigningValue("keyAlias", "KEY_ALIAS")
+val releaseKeyPassword = releaseSigningValue("keyPassword", "KEY_PASSWORD")
+val hasReleaseSigningConfig = listOf(
+    releaseStoreFile,
+    releaseStorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+).all { !it.isNullOrBlank() }
 
 android {
     namespace = "com.benimgunlerim"
@@ -21,9 +53,14 @@ android {
     }
 
     signingConfigs {
-        // Release signing is configured via keystore.properties (not committed to repo).
-        // See docs/release/release-checklist.md for setup instructions.
-        // CI injects KEYSTORE_PATH, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD as env vars.
+        if (hasReleaseSigningConfig) {
+            create("release") {
+                storeFile = file(requireNotNull(releaseStoreFile))
+                storePassword = requireNotNull(releaseStorePassword)
+                keyAlias = requireNotNull(releaseKeyAlias)
+                keyPassword = requireNotNull(releaseKeyPassword)
+            }
+        }
     }
 
     buildTypes {
@@ -34,6 +71,9 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            if (hasReleaseSigningConfig) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -52,6 +92,100 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+}
+
+tasks.register("verifyReleaseSigning") {
+    group = "verification"
+    description = "Fails when release signing credentials are not configured."
+    doLast {
+        check(hasReleaseSigningConfig) {
+            "Release signing is not configured. Provide keystore.properties or KEYSTORE_PATH, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD."
+        }
+        check(file(requireNotNull(releaseStoreFile)).exists()) {
+            "Release keystore file does not exist: $releaseStoreFile"
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+val coverageExclusions = listOf(
+    "**/R.class",
+    "**/R$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+    "**/*Test*.*",
+    "**/*_Impl*.*",
+    "**/*Dao_Impl*.*",
+    "**/*Database_Impl*.*",
+    "**/*Hilt*.*",
+    "**/Hilt_*.*",
+    "**/*_Factory*.*",
+    "**/*_MembersInjector*.*",
+    "**/*Module*.*",
+    "**/*ComposableSingletons*.*",
+    "**/ui/**",
+    "**/MainActivity*.*",
+    "**/BenimGunlerimApplication*.*",
+)
+
+tasks.register<JacocoReport>("jacocoDebugUnitTestReport") {
+    group = "verification"
+    description = "Generates JaCoCo coverage report for debug unit tests."
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+            exclude(coverageExclusions)
+        },
+    )
+    sourceDirectories.setFrom(files("src/main/java"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include(
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                "jacoco/testDebugUnitTest.exec",
+            )
+        },
+    )
+}
+
+tasks.register<JacocoCoverageVerification>("jacocoDebugUnitTestCoverageVerification") {
+    group = "verification"
+    description = "Fails when debug unit test coverage is below the configured threshold."
+    dependsOn("jacocoDebugUnitTestReport")
+
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("tmp/kotlin-classes/debug")) {
+            exclude(coverageExclusions)
+        },
+    )
+    sourceDirectories.setFrom(files("src/main/java"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include(
+                "outputs/unit_test_code_coverage/debugUnitTest/testDebugUnitTest.exec",
+                "jacoco/testDebugUnitTest.exec",
+            )
+        },
+    )
+
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.20".toBigDecimal()
+            }
+        }
     }
 }
 
@@ -87,13 +221,17 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation("org.json:json:20231013")
+    testImplementation(libs.json)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.room.testing)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }

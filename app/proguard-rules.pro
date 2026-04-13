@@ -79,3 +79,7 @@
 # ── Navigation ───────────────────────────────────────────────────────────────
 -keep class * extends androidx.navigation.NavArgs { *; }
 
+# ── Analytics / diagnostics ──────────────────────────────────────────────────
+# StoredErrorReport is accessed via getStoredReports() at runtime
+-keep class com.benimgunlerim.analytics.StoredErrorReport { *; }
+

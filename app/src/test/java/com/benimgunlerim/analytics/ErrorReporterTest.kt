@@ -59,10 +59,38 @@ class ErrorReporterTest {
         assertEquals("dark", reporter.properties["theme"])
     }
 
+    @Test
+    fun contextPolicy_filtersDisallowedKeys() {
+        val sanitized = ErrorReporterContextPolicy.sanitize(
+            mapOf(
+                "action" to "data_import",
+                "screen" to "settings",
+                "taskTitle" to "secret user content",
+                "note" to "another secret",
+            ),
+        )
+
+        assertEquals(mapOf("action" to "data_import", "screen" to "settings"), sanitized)
+    }
+
+    @Test
+    fun contextPolicy_truncatesLongValues() {
+        val longValue = "x".repeat(ErrorReporterContextPolicy.MAX_VALUE_LENGTH + 50)
+        val sanitized = ErrorReporterContextPolicy.sanitize(mapOf("action" to longValue))
+
+        assertEquals(ErrorReporterContextPolicy.MAX_VALUE_LENGTH, sanitized.getValue("action").length)
+    }
+
+    @Test
+    fun contextPolicy_acceptsOnlyWhitelistedKeys() {
+        assertTrue(ErrorReporterContextPolicy.isAllowedKey("theme"))
+        assertTrue(!ErrorReporterContextPolicy.isAllowedKey("taskTitle"))
+    }
+
     @Ignore("LocalErrorReporter calls android.util.Log which is a stub in JVM unit tests. Covered by instrumented tests.")
     @Test
     fun localErrorReporter_recordNonFatal_doesNotThrow() {
-        val reporter = LocalErrorReporter()
+        val reporter = LocalErrorReporter(null)
         // Should log to Logcat without throwing even on a severe exception
         reporter.recordNonFatal(OutOfMemoryError("simulated"), mapOf("action" to "test"))
     }
@@ -70,7 +98,7 @@ class ErrorReporterTest {
     @Ignore("LocalErrorReporter calls android.util.Log which is a stub in JVM unit tests. Covered by instrumented tests.")
     @Test
     fun localErrorReporter_setUserProperty_doesNotThrow() {
-        val reporter = LocalErrorReporter()
+        val reporter = LocalErrorReporter(null)
         reporter.setUserProperty("build_type", "debug")
     }
 }

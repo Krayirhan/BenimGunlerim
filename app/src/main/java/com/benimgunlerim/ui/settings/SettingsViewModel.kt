@@ -2,30 +2,41 @@
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benimgunlerim.data.BenimGunlerimRepository
+import com.benimgunlerim.data.DataExportService
+import com.benimgunlerim.data.DataImportService
+import com.benimgunlerim.data.LocalDataClearer
 import com.benimgunlerim.data.UserPreferences
-import com.benimgunlerim.data.UserPreferencesRepository
-import com.benimgunlerim.notifications.DailySummaryScheduler
-import com.benimgunlerim.notifications.MorningPlannerScheduler
-import com.benimgunlerim.notifications.ReminderPolicy
+import com.benimgunlerim.data.UserPreferencesAccess
+import com.benimgunlerim.notifications.DailySummarySchedule
+import com.benimgunlerim.notifications.MorningPlannerSchedule
+import com.benimgunlerim.notifications.NotificationPolicyCache
+import com.benimgunlerim.notifications.ReminderRestorer
 import com.benimgunlerim.domain.normalizedTimeOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalTime
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val preferencesRepository: UserPreferencesRepository,
-    private val repository: BenimGunlerimRepository,
-    private val dailySummaryScheduler: DailySummaryScheduler,
-    private val morningPlannerScheduler: MorningPlannerScheduler,
-    private val reminderPolicy: ReminderPolicy,
+    private val preferencesRepository: UserPreferencesAccess,
+    private val localDataClearer: LocalDataClearer,
+    private val dataExportService: DataExportService,
+    private val dataImportService: DataImportService,
+    private val dailySummaryScheduler: DailySummarySchedule,
+    private val morningPlannerScheduler: MorningPlannerSchedule,
+    private val reminderBootstrapper: ReminderRestorer,
+    private val reminderPolicy: NotificationPolicyCache,
 ) : ViewModel() {
+    private val _dataOperationMessage = MutableStateFlow<String?>(null)
+    val dataOperationMessage: StateFlow<String?> = _dataOperationMessage.asStateFlow()
+
     val preferences: StateFlow<UserPreferences> = preferencesRepository.preferences.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -64,9 +75,42 @@ class SettingsViewModel @Inject constructor(
 
     fun clearLocalData() {
         viewModelScope.launch {
-            repository.clearAllLocalData()
+            localDataClearer.clearAllLocalData()
             preferencesRepository.resetOnboarding()
+            _dataOperationMessage.value = "Yerel veriler temizlendi."
         }
+    }
+
+    fun exportData(onReady: (String) -> Unit) {
+        viewModelScope.launch {
+            val json = dataExportService.exportToJson()
+            if (json == null) {
+                _dataOperationMessage.value = "Veriler dışa aktarılamadı."
+            } else {
+                onReady(json)
+            }
+        }
+    }
+
+    fun importData(json: String) {
+        viewModelScope.launch {
+            val result = dataImportService.importFromJson(json)
+            if (result == null) {
+                _dataOperationMessage.value = "Yedek dosyası içe aktarılamadı."
+                return@launch
+            }
+            syncReminderPolicyCache()
+            reminderBootstrapper.rescheduleReminders()
+            _dataOperationMessage.value = "Yedek geri yüklendi: ${result.tasks} görev, ${result.routines} rutin."
+        }
+    }
+
+    fun setDataOperationMessage(message: String) {
+        _dataOperationMessage.value = message
+    }
+
+    fun clearDataOperationMessage() {
+        _dataOperationMessage.value = null
     }
 
     private fun scheduleDailySummary(time: String) {
@@ -133,4 +177,3 @@ class SettingsViewModel @Inject constructor(
         morningPlannerScheduler.schedule(parsed)
     }
 }
-

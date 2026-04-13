@@ -12,13 +12,18 @@ import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface MorningPlannerSchedule {
+    fun schedule(time: LocalTime)
+    fun cancel()
+}
+
 @Singleton
 class MorningPlannerScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : MorningPlannerSchedule {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedule(time: LocalTime = LocalTime.of(8, 0)) {
+    override fun schedule(time: LocalTime) {
         val now = LocalDateTime.now()
         var next = LocalDate.now().atTime(time)
         if (!next.isAfter(now)) {
@@ -33,7 +38,7 @@ class MorningPlannerScheduler @Inject constructor(
         )
     }
 
-    fun cancel() {
+    override fun cancel() {
         alarmManager.cancel(morningPendingIntent())
     }
 

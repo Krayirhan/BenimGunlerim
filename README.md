@@ -1,24 +1,26 @@
-# BenimGunlerim
+# BenimGünlerim
 
-BenimGunlerim, kullanıcının gününü küçük görevler, basit rutinler ve görünür ilerleme hissiyle yönetmesine yardımcı olan offline-first Android uygulamasıdır.
+BenimGünlerim, kullanıcının gününü küçük görevler, basit rutinler ve görünür ilerleme hissiyle yönetmesine yardımcı olan offline-first Android uygulamasıdır.
 
-## Başlangıç
+## Teknoloji
 
-Bu repo, `BenimGunlerim_Proje_Detay_Raporu.md` ve `BenimGunlerim_Sprint_Plani.md` dosyaları referans alınarak başlatıldı.
+- Kotlin
+- Jetpack Compose
+- Room
+- DataStore
+- Hilt
+- Navigation Compose
+- Offline-first yerel veri mimarisi
 
-İlk teknik kapsam:
+## Geliştirme Ortamı
 
-* Kotlin
-* Jetpack Compose
-* Room
-* DataStore
-* Hilt
-* Navigation Compose
-* Offline-first yerel veri temeli
+Gereksinimler:
 
-## Derleme
+- JDK 17
+- Android SDK 35
+- Gradle Wrapper
 
-JDK 17 ve Android SDK gereklidir.
+Windows örneği:
 
 ```powershell
 $env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-17.0.16.8-hotspot'
@@ -26,21 +28,41 @@ $env:ANDROID_HOME='C:\Users\Acer\AppData\Local\Android\Sdk'
 .\gradlew.bat assembleDebug
 ```
 
-## Mevcut Durum
+## Hızlı Kontrol
 
-Çalışan başlangıç iskeleti:
+```powershell
+.\scripts\check-local.ps1
+```
 
-* Onboarding
-* Şablon seed
-* Bugün ekranı
-* Görev ekleme ve tamamlama
-* Basit rutin ekleme ve tamamlama
-* CompletionLog
-* Günlük progress
-* Akşam özeti kaydı
-* İlerlemen ekranı
-* Ayarlar başlangıç ekranı
+## Release Kontrolü
 
-## Sonraki Sprint
+```powershell
+.\scripts\check-release.ps1
+```
 
-Sprint planına göre sıradaki öncelik, mevcut temel akışı daha sağlam hale getirip rutin düzenleme, bildirim ayarları ve test katmanını genişletmektir.
+Release için signing bilgileri `keystore.properties` veya CI secret'ları ile sağlanmalıdır. Signing doğrulaması geçmeyen artifact production release sayılmaz.
+
+## Mevcut Ürün Kapsamı
+
+- Onboarding
+- Şablon veri oluşturma
+- Bugün ekranı
+- Görev ekleme, düzenleme, tamamlama ve silme
+- Alt görevler
+- Rutin ekleme, düzenleme, tamamlama ve arşivleme
+- Completion log
+- Günlük ilerleme
+- Akşam özeti
+- İlerlemen ekranı
+- Ayarlar
+- Bildirimler ve sessiz saatler
+- Yerel veri export akışı
+
+## Production Dokümanları
+
+- [Production readiness özeti](docs/production/production-readiness.md)
+- [Tarihli audit snapshot](docs/production/readiness-audit-2026-04-13.md)
+- [Kalite kapıları](docs/production/quality-gates.md)
+- [Release checklist](docs/release/release-checklist.md)
+
+Eski sprint planları ve tarihsel çalışma notları `docs/archive/` altında tutulur.

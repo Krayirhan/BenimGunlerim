@@ -27,6 +27,9 @@ interface CompletionLogDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(log: CompletionLogEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(logs: List<CompletionLogEntity>)
+
     @Query("DELETE FROM completion_logs WHERE entityType = :entityType AND entityId = :entityId AND date = :date")
     suspend fun deleteForDate(entityType: String, entityId: String, date: String)
 

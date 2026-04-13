@@ -1,43 +1,104 @@
 # Kalite Kapıları
 
-Bu dokümanda BenimGünlerim projesinin production kalite kapıları açıklanmaktadır.
+Bu doküman BenimGünlerim için zorunlu production kalite kapılarını tanımlar. Release adayı, aşağıdaki kapıların tamamı yeşil olmadan Play Store'a yüklenmez.
 
-## Zorunlu Kapılar
+## Lokal Geliştirme Kapısı
 
-Her PR ve release öncesinde aşağıdaki komutların tümü yeşil olmalıdır:
-
-```powershell
-.\gradlew.bat testDebugUnitTest   # Unit testler
-.\gradlew.bat lintDebug           # Lint (debug)
-.\gradlew.bat lintRelease         # Lint (release)
-.\gradlew.bat assembleRelease     # Release build
-.\gradlew.bat bundleRelease       # AAB (Play Store)
-.\gradlew.bat connectedDebugAndroidTest  # UI testler (emülatör gerekli)
-```
-
-## Hızlı Komutlar
+Her PR öncesinde hızlı lokal kontrol:
 
 ```powershell
-# Lokal geliştirme kapısı (hızlı)
 .\scripts\check-local.ps1
-
-# Release öncesi tam kapi
-.\scripts\check-release.ps1
-
-# Build temizliği
-.\scripts\clean-build-artifacts.ps1
 ```
 
-## Geliştirme Ortamı
+Bu script şu adımları çalıştırır:
 
-- JDK 17 gereklidir
-- Android SDK 35 (targetSdk)
-- Gradle Wrapper: `gradlew.bat` kullanın, sistem Gradle değil
+- `testDebugUnitTest`
+- `jacocoDebugUnitTestCoverageVerification`
+- `lintDebug`
+- `assembleDebug`
+
+## Release Kapısı
+
+Release öncesi tam kontrol:
+
+```powershell
+.\scripts\check-release.ps1
+```
+
+Bu script şu adımları çalıştırır:
+
+- `verifyReleaseSigning`
+- `testDebugUnitTest`
+- `jacocoDebugUnitTestCoverageVerification`
+- `lintRelease`
+- `assembleRelease`
+- `bundleRelease`
+
+`verifyReleaseSigning` başarısızsa üretilen APK/AAB production artifact sayılmaz.
+
+## Cihaz Test Kapısı
+
+Release adayında fiziksel cihaz veya emülatör üzerinde:
+
+```powershell
+.\gradlew.bat connectedDebugAndroidTest
+```
+
+GitHub Actions içinde `connected-ui-tests` job'u aynı komutu emülatörde çalıştırır. Lokal release öncesinde ayrıca fiziksel cihaz smoke testi yapılır.
 
 ## CI Kapıları
 
-| Tetikleyici | Komutlar |
+| Tetikleyici | Zorunlu komutlar |
 |---|---|
-| Pull Request | `testDebugUnitTest` + `lintDebug` + `assembleDebug` |
-| main branch merge | `testDebugUnitTest` + `lintRelease` + `assembleRelease` |
-| Release tag | `bundleRelease` + imzalı artifact |
+| Pull request | `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintDebug` + `assembleDebug` |
+| `main` push | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintRelease` + `assembleRelease` + `bundleRelease` |
+| `v*` release tag | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintRelease` + `assembleRelease` + `bundleRelease` + signed AAB artifact |
+| Manual workflow | Release kapısı ile aynı |
+
+`connected-ui-tests` job'u PR, `main`, `v*` tag ve manual workflow çalıştırmalarında `connectedDebugAndroidTest` kapısını yürütür.
+
+## CI Secret Gereksinimleri
+
+GitHub Actions release job için şu secret'lar tanımlı olmalıdır:
+
+- `KEYSTORE_BASE64`: release keystore dosyasının base64 karşılığı
+- `KEYSTORE_PASSWORD`
+- `KEY_ALIAS`
+- `KEY_PASSWORD`
+
+Bu secret'lar eksikse `verifyReleaseSigning` fail eder ve release durur.
+
+## Ortam Gereksinimleri
+
+- JDK 17
+- Android SDK 35
+- Gradle Wrapper: `gradlew` / `gradlew.bat`
+- Sistem Gradle kullanılmaz.
+
+## Release Artifact Kuralı
+
+Production için tek kabul edilen artifact:
+
+- `app/build/outputs/bundle/release/app-release.aab`
+
+`app-release-unsigned.apk` veya signing doğrulaması geçmemiş herhangi bir çıktı release artifact değildir.
+
+## Coverage Kuralı
+
+Unit test coverage kapısı JaCoCo ile çalışır:
+
+```powershell
+.\gradlew.bat jacocoDebugUnitTestCoverageVerification
+```
+
+Başlangıç eşiği `0.20` olarak belirlenmiştir. UI, generated Room/Hilt sınıfları ve Android giriş noktaları coverage hesabından hariç tutulur. Yeni domain/data testleri eklendikçe eşik kademeli olarak yükseltilmelidir.
+
+## Dış Release Kontrolü
+
+Repo dışı ayarları kontrol etmek için:
+
+```powershell
+.\scripts\check-external-release-readiness.ps1
+```
+
+Bu script lokal release signing değişkenlerini kontrol eder ve GitHub/Play Console tarafında manuel doğrulanması gereken adımları listeler.

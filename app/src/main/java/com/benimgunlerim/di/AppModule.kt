@@ -2,12 +2,28 @@ package com.benimgunlerim.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.withTransaction
+import com.benimgunlerim.BuildConfig
+import com.benimgunlerim.data.DatabaseTransactionRunner
 import com.benimgunlerim.analytics.AnalyticsTracker
+import com.benimgunlerim.analytics.CrashlyticsErrorReporter
 import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.analytics.LocalAnalyticsTracker
 import com.benimgunlerim.analytics.LocalErrorReporter
+import com.benimgunlerim.data.BenimGunlerimRepository
+import com.benimgunlerim.data.LocalDataClearer
+import com.benimgunlerim.data.UserPreferencesAccess
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.UserPreferencesSource
+import com.benimgunlerim.data.UserPreferencesWriter
+import com.benimgunlerim.notifications.DailySummarySchedule
+import com.benimgunlerim.notifications.DailySummaryScheduler
+import com.benimgunlerim.notifications.MorningPlannerSchedule
+import com.benimgunlerim.notifications.MorningPlannerScheduler
+import com.benimgunlerim.notifications.NotificationPolicyCache
+import com.benimgunlerim.notifications.ReminderBootstrapper
+import com.benimgunlerim.notifications.ReminderPolicy
+import com.benimgunlerim.notifications.ReminderRestorer
 import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.AppDatabase
 import com.benimgunlerim.data.local.CompletionLogDao
@@ -57,15 +73,54 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDatabaseTransactionRunner(database: AppDatabase): DatabaseTransactionRunner =
+        object : DatabaseTransactionRunner {
+            override suspend fun <T> runInTransaction(block: suspend () -> T): T =
+                database.withTransaction { block() }
+        }
+
+    @Provides
+    @Singleton
     fun provideAnalyticsTracker(tracker: LocalAnalyticsTracker): AnalyticsTracker = tracker
 
     @Provides
     @Singleton
-    fun provideErrorReporter(reporter: LocalErrorReporter): ErrorReporter = reporter
+    fun provideErrorReporter(
+        local: LocalErrorReporter,
+        crashlytics: CrashlyticsErrorReporter,
+    ): ErrorReporter = if (BuildConfig.DEBUG) local else crashlytics
 
     @Provides
     @Singleton
     fun provideUserPreferencesSource(repo: UserPreferencesRepository): UserPreferencesSource = repo
+
+    @Provides
+    @Singleton
+    fun provideUserPreferencesWriter(repo: UserPreferencesRepository): UserPreferencesWriter = repo
+
+    @Provides
+    @Singleton
+    fun provideUserPreferencesAccess(repo: UserPreferencesRepository): UserPreferencesAccess = repo
+
+    @Provides
+    @Singleton
+    fun provideLocalDataClearer(repo: BenimGunlerimRepository): LocalDataClearer = repo
+
+    @Provides
+    @Singleton
+    fun provideDailySummarySchedule(scheduler: DailySummaryScheduler): DailySummarySchedule = scheduler
+
+    @Provides
+    @Singleton
+    fun provideMorningPlannerSchedule(scheduler: MorningPlannerScheduler): MorningPlannerSchedule = scheduler
+
+    @Provides
+    @Singleton
+    fun provideReminderRestorer(bootstrapper: ReminderBootstrapper): ReminderRestorer = bootstrapper
+
+    @Provides
+    @Singleton
+    fun provideNotificationPolicyCache(policy: ReminderPolicy): NotificationPolicyCache = policy
 
     @Provides
     @Singleton

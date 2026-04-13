@@ -24,6 +24,9 @@ interface DailyStateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(state: DailyStateEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(states: List<DailyStateEntity>)
+
     @Query("DELETE FROM daily_states")
     suspend fun deleteAll()
 }

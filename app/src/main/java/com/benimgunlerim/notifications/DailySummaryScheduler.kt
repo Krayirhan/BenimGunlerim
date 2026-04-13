@@ -12,13 +12,18 @@ import java.time.ZoneId
 import javax.inject.Inject
 import javax.inject.Singleton
 
+interface DailySummarySchedule {
+    fun schedule(time: LocalTime)
+    fun cancel()
+}
+
 @Singleton
 class DailySummaryScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : DailySummarySchedule {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedule(time: LocalTime = LocalTime.of(21, 0)) {
+    override fun schedule(time: LocalTime) {
         alarmManager.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             nextTriggerMillis(time),
@@ -27,7 +32,7 @@ class DailySummaryScheduler @Inject constructor(
         )
     }
 
-    fun cancel() {
+    override fun cancel() {
         alarmManager.cancel(pendingIntent())
     }
 

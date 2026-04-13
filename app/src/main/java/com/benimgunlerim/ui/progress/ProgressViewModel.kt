@@ -2,21 +2,16 @@
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benimgunlerim.data.BenimGunlerimRepository
 import com.benimgunlerim.data.UserPreferences
-import com.benimgunlerim.data.UserPreferencesRepository
-import com.benimgunlerim.data.currentStreak
-import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.domain.AchievementDef
-import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.ALL_ACHIEVEMENTS
+import com.benimgunlerim.domain.usecase.ObserveProgressSnapshotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 data class ProgressUiState(
@@ -36,52 +31,25 @@ data class ProgressUiState(
 
 @HiltViewModel
 class ProgressViewModel @Inject constructor(
-    repository: BenimGunlerimRepository,
-    prefsRepository: UserPreferencesRepository,
-    achievementTracker: AchievementTracker,
+    observeProgressSnapshot: ObserveProgressSnapshotUseCase,
 ) : ViewModel() {
-    val uiState: StateFlow<ProgressUiState> = combine(
-        repository.observeRecentDailyStates(limit = 30),
-        repository.observeAllCompletionLogs(),
-        prefsRepository.preferences,
-        achievementTracker.unlockedAchievements,
-    ) { last30Days, allLogs, prefs, unlocked ->
-        val weekDays = last30Days.take(7)
+    val uiState: StateFlow<ProgressUiState> = observeProgressSnapshot()
+        .map { snapshot ->
         ProgressUiState(
-            last30Days = last30Days,
-            currentStreak = allLogs.currentStreak(),
-            bestStreak = last30Days.bestStreak(),
-            averageScore = if (last30Days.isEmpty()) 0 else last30Days.map { it.dailyScore }.average().toInt(),
-            weeklyScore = if (weekDays.isEmpty()) 0 else weekDays.map { it.dailyScore }.average().toInt(),
-            moodTrend = last30Days.take(14).map { it.date to it.mood },
-            energyTrend = last30Days.take(14).map { it.date to it.energyLevel },
-            routineHitRate = allLogs.hitRate("routine"),
-            taskHitRate = allLogs.hitRate("task"),
-            gameState = prefs,
-            unlockedAchievements = unlocked,
+            last30Days = snapshot.last30Days,
+            currentStreak = snapshot.currentStreak,
+            bestStreak = snapshot.bestStreak,
+            averageScore = snapshot.averageScore,
+            weeklyScore = snapshot.weeklyScore,
+            moodTrend = snapshot.moodTrend,
+            energyTrend = snapshot.energyTrend,
+            routineHitRate = snapshot.routineHitRate,
+            taskHitRate = snapshot.taskHitRate,
+            gameState = snapshot.gameState,
+            unlockedAchievements = snapshot.unlockedAchievements,
+            totalAchievements = snapshot.totalAchievements,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProgressUiState())
-}
-
-private fun List<DailyStateEntity>.bestStreak(): Int {
-    if (isEmpty()) return 0
-    val sorted = sortedBy { it.date }
-    var best = 0
-    var current = 0
-    var prevDate: LocalDate? = null
-    for (state in sorted) {
-        val date = runCatching { LocalDate.parse(state.date) }.getOrNull() ?: continue
-        current = if (prevDate != null && date == prevDate!!.plusDays(1)) current + 1 else 1
-        if (current > best) best = current
-        prevDate = date
     }
-    return best
-}
-
-private fun List<CompletionLogEntity>.hitRate(entityType: String): Float {
-    val filtered = filter { it.entityType == entityType }
-    if (filtered.isEmpty()) return 0f
-    val completed = filtered.count { it.status == "completed" }
-    return completed.toFloat() / filtered.size
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ProgressUiState())
 }
 

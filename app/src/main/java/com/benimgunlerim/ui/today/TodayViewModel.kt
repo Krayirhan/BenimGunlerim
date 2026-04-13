@@ -7,8 +7,6 @@ import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.data.BenimGunlerimRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
-import com.benimgunlerim.data.currentStreak
-import com.benimgunlerim.data.isScheduledFor
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
@@ -16,7 +14,7 @@ import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.GameEngine
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.FeedbackManager
-import com.benimgunlerim.domain.ProgressCalculator
+import com.benimgunlerim.domain.usecase.ObserveTodaySnapshotUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -24,7 +22,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -54,6 +52,7 @@ class TodayViewModel @Inject constructor(
     private val analyticsTracker: AnalyticsTracker,
     private val achievementTracker: AchievementTracker,
     private val feedbackManager: FeedbackManager,
+    observeTodaySnapshot: ObserveTodaySnapshotUseCase,
 ) : ViewModel() {
     private val today = LocalDate.now()
 
@@ -62,41 +61,24 @@ class TodayViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            repository.deleteSeededTemplateData()
-        }
-        viewModelScope.launch {
             achievementTracker.newUnlock.collect { def ->
                 _gameEvents.tryEmit(GameEvent.AchievementUnlocked(def.emoji, def.title))
             }
         }
     }
 
-    val uiState: StateFlow<TodayUiState> = combine(
-        repository.observeTasks(today),
-        repository.observeActiveRoutines(),
-        repository.observeCompletionLogs(today),
-        prefsRepository.preferences,
-        combine(repository.observeTodayState(), repository.observeOverdueTasks()) { ds, ov -> ds to ov },
-    ) { tasks, routines, logs, prefs, (todayState, overdue) ->
-        val todaysRoutines = routines.filter { it.isScheduledFor(today.dayOfWeek) }
-        val completedRoutineIds = logs.completedRoutineIds()
-        val completedTasks = tasks.count { it.completionState == "completed" }
-        val completedRoutines = todaysRoutines.count { it.id in completedRoutineIds }
+    val uiState: StateFlow<TodayUiState> = observeTodaySnapshot(today)
+        .map { snapshot ->
         TodayUiState(
-            tasks = tasks,
-            routines = todaysRoutines,
-            completionLogs = logs,
-            completedRoutineIds = completedRoutineIds,
-            progress = ProgressCalculator.dailyProgress(
-                totalTasks = tasks.size,
-                completedTasks = completedTasks,
-                totalRoutines = todaysRoutines.size,
-                completedRoutines = completedRoutines,
-            ),
-            currentStreak = logs.currentStreak(today),
-            gameState = prefs,
-            todayState = todayState,
-            overdueTasks = overdue,
+            tasks = snapshot.tasks,
+            routines = snapshot.routines,
+            completionLogs = snapshot.completionLogs,
+            completedRoutineIds = snapshot.completedRoutineIds,
+            progress = snapshot.progress,
+            currentStreak = snapshot.currentStreak,
+            gameState = snapshot.gameState,
+            todayState = snapshot.todayState,
+            overdueTasks = snapshot.overdueTasks,
             isLoading = false,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
@@ -370,6 +352,3 @@ class TodayViewModel @Inject constructor(
         }
     }
 }
-
-private fun List<CompletionLogEntity>.completedRoutineIds(): Set<String> =
-    filter { it.entityType == "routine" && it.status == "completed" }.map { it.entityId }.toSet()

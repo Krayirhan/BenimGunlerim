@@ -15,12 +15,21 @@ interface AchievementDao {
     @Query("SELECT * FROM achievements")
     fun observeAll(): Flow<List<AchievementEntity>>
 
+    @Query("SELECT * FROM achievements ORDER BY id ASC")
+    suspend fun getAll(): List<AchievementEntity>
+
     @Query("SELECT * FROM achievements WHERE id = :id")
     suspend fun getById(id: String): AchievementEntity?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(achievement: AchievementEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(achievements: List<AchievementEntity>)
+
     @Query("UPDATE achievements SET unlockedAt = :time WHERE id = :id AND unlockedAt IS NULL")
     suspend fun unlock(id: String, time: Long): Int
+
+    @Query("DELETE FROM achievements")
+    suspend fun deleteAll()
 }

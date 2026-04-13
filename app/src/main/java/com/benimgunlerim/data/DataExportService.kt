@@ -1,13 +1,17 @@
 package com.benimgunlerim.data
 
 import com.benimgunlerim.analytics.ErrorReporter
+import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.CompletionLogDao
 import com.benimgunlerim.data.local.DailyStateDao
 import com.benimgunlerim.data.local.RoutineDao
+import com.benimgunlerim.data.local.SubTaskDao
 import com.benimgunlerim.data.local.TaskDao
+import com.benimgunlerim.data.local.entity.AchievementEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import java.time.Instant
 import java.time.ZoneId
@@ -19,28 +23,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 
 /**
- * Produces a portable JSON snapshot of all user data.
- *
- * Export schema v1:
- * {
- *   "version": 1,
- *   "exportedAt": "<ISO-8601>",
- *   "tasks": [...],
- *   "routines": [...],
- *   "completionLogs": [...],
- *   "dailyStates": [...],
- *   "preferences": { ... }
- * }
- *
- * No PII beyond what the user explicitly typed is included.
- * Analytics properties (totalXp, level, etc.) are included as they are game progress.
+ * Produces a portable JSON snapshot of user data.
  */
 @Singleton
-class DataExportService @Inject constructor(
+open class DataExportService @Inject constructor(
     private val taskDao: TaskDao,
     private val routineDao: RoutineDao,
+    private val subTaskDao: SubTaskDao,
     private val completionLogDao: CompletionLogDao,
     private val dailyStateDao: DailyStateDao,
+    private val achievementDao: AchievementDao,
     private val preferencesRepository: UserPreferencesSource,
     private val errorReporter: ErrorReporter,
 ) {
@@ -49,31 +41,22 @@ class DataExportService @Inject constructor(
         private val ISO_FMT = DateTimeFormatter.ISO_OFFSET_DATE_TIME.withZone(ZoneId.systemDefault())
     }
 
-    /**
-     * Builds a full-data JSON export string.
-     * Returns null and reports the error if anything fails.
-     */
-    suspend fun exportToJson(): String? = runCatching {
-        val tasks = taskDao.getAll()
-        val routines = routineDao.getAll()
-        val logs = completionLogDao.getAll()
-        val states = dailyStateDao.getAll()
+    open suspend fun exportToJson(): String? = runCatching {
         val prefs = preferencesRepository.preferences.first()
-
         JSONObject().apply {
             put("version", EXPORT_VERSION)
             put("exportedAt", ISO_FMT.format(Instant.now()))
-            put("tasks", tasks.toJsonArray())
-            put("routines", routines.toJsonArray())
-            put("completionLogs", logs.toJsonArray())
-            put("dailyStates", states.toJsonArray())
+            put("tasks", taskDao.getAll().toJsonArray())
+            put("subTasks", subTaskDao.getAll().toJsonArray())
+            put("routines", routineDao.getAll().toJsonArray())
+            put("completionLogs", completionLogDao.getAll().toJsonArray())
+            put("dailyStates", dailyStateDao.getAll().toJsonArray())
+            put("achievements", achievementDao.getAll().toJsonArray())
             put("preferences", prefs.toJson())
         }.toString(2)
     }.onFailure { e ->
         errorReporter.recordNonFatal(e, mapOf("action" to "data_export"))
     }.getOrNull()
-
-    // ── Entity serialisers ────────────────────────────────────────────────
 
     @JvmName("tasksToJsonArray")
     private fun List<TaskEntity>.toJsonArray(): JSONArray = JSONArray().also { arr ->
@@ -84,14 +67,33 @@ class DataExportService @Inject constructor(
                 putOpt("note", t.note)
                 put("plannedDate", t.plannedDate)
                 putOpt("startTime", t.startTime)
+                putOpt("endTime", t.endTime)
                 putOpt("category", t.category)
+                putOpt("color", t.color)
                 put("completionState", t.completionState)
                 putOpt("completedAt", t.completedAt)
-                put("priority", t.priority)
-                putOpt("reminderTime", t.reminderTime)
-                put("isArchived", t.isArchived)
+                putOpt("sourceTemplateId", t.sourceTemplateId)
                 put("createdAt", t.createdAt)
                 put("updatedAt", t.updatedAt)
+                put("priority", t.priority)
+                putOpt("reminderTime", t.reminderTime)
+                put("sortOrder", t.sortOrder)
+                put("isArchived", t.isArchived)
+                putOpt("postponedFromDate", t.postponedFromDate)
+            })
+        }
+    }
+
+    @JvmName("subTasksToJsonArray")
+    private fun List<SubTaskEntity>.toJsonArray(): JSONArray = JSONArray().also { arr ->
+        forEach { s ->
+            arr.put(JSONObject().apply {
+                put("id", s.id)
+                put("taskId", s.taskId)
+                put("title", s.title)
+                put("isCompleted", s.isCompleted)
+                put("sortOrder", s.sortOrder)
+                put("createdAt", s.createdAt)
             })
         }
     }
@@ -105,15 +107,17 @@ class DataExportService @Inject constructor(
                 putOpt("description", r.description)
                 put("targetDays", r.targetDays)
                 putOpt("preferredTime", r.preferredTime)
+                putOpt("color", r.color)
+                put("isArchived", r.isArchived)
+                put("createdAt", r.createdAt)
+                put("updatedAt", r.updatedAt)
                 put("targetType", r.targetType)
                 putOpt("targetValue", r.targetValue)
                 putOpt("targetUnit", r.targetUnit)
                 putOpt("category", r.category)
                 put("reminderEnabled", r.reminderEnabled)
-                put("isArchived", r.isArchived)
+                put("sortOrder", r.sortOrder)
                 put("bestStreak", r.bestStreak)
-                put("createdAt", r.createdAt)
-                put("updatedAt", r.updatedAt)
             })
         }
     }
@@ -156,7 +160,19 @@ class DataExportService @Inject constructor(
         }
     }
 
+    @JvmName("achievementsToJsonArray")
+    private fun List<AchievementEntity>.toJsonArray(): JSONArray = JSONArray().also { arr ->
+        forEach { a ->
+            arr.put(JSONObject().apply {
+                put("id", a.id)
+                putOpt("unlockedAt", a.unlockedAt)
+            })
+        }
+    }
+
     private fun UserPreferences.toJson(): JSONObject = JSONObject().apply {
+        put("onboardingCompleted", onboardingCompleted)
+        putOpt("selectedGoalProfile", selectedGoalProfile)
         put("notificationMode", notificationMode)
         put("dailySummaryTime", dailySummaryTime)
         put("analyticsEnabled", analyticsEnabled)
@@ -173,6 +189,7 @@ class DataExportService @Inject constructor(
         put("totalDaysClosed", totalDaysClosed)
         put("happyMoodCount", happyMoodCount)
         put("ownedItems", ownedItems)
+        put("rewardedEvents", rewardedEvents)
         put("morningPlannerEnabled", morningPlannerEnabled)
         put("morningPlannerTime", morningPlannerTime)
         put("quietHoursEnabled", quietHoursEnabled)

@@ -1,7 +1,9 @@
 package com.benimgunlerim.ui.settings
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -61,11 +63,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.data.UserPreferences
+import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.theme.AccentCoral
 import com.benimgunlerim.ui.theme.AccentCoralSoft
 import com.benimgunlerim.ui.theme.AccentPurple
@@ -80,6 +84,7 @@ import com.benimgunlerim.ui.theme.CandyPrimaryLight
 fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val preferences by viewModel.preferences.collectAsState()
+    val dataOperationMessage by viewModel.dataOperationMessage.collectAsState()
     var dailySummaryTime by remember(preferences.dailySummaryTime) {
         mutableStateOf(preferences.dailySummaryTime)
     }
@@ -93,6 +98,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         mutableStateOf(preferences.quietHoursEnd)
     }
     var showClearDataDialog by remember { mutableStateOf(false) }
+    var showImportDataDialog by remember { mutableStateOf(false) }
     var notificationsGranted by remember {
         mutableStateOf(
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
@@ -107,6 +113,34 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     ) { granted ->
         notificationsGranted = granted
     }
+    val exportLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json"),
+    ) { uri ->
+        if (uri != null) {
+            viewModel.exportData { json ->
+                val exported = context.writeTextToUri(uri, json)
+                viewModel.setDataOperationMessage(
+                    if (exported) {
+                        "Yedek dosyası kaydedildi."
+                    } else {
+                        "Yedek dosyası yazılamadı."
+                    },
+                )
+            }
+        }
+    }
+    val importLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.OpenDocument(),
+    ) { uri ->
+        if (uri != null) {
+            val json = context.readTextFromUri(uri)
+            if (json == null) {
+                viewModel.setDataOperationMessage("Yedek dosyası okunamadı.")
+            } else {
+                viewModel.importData(json)
+            }
+        }
+    }
 
     if (showClearDataDialog) {
         ClearDataDialog(
@@ -117,11 +151,21 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             },
         )
     }
+    if (showImportDataDialog) {
+        ImportDataDialog(
+            onDismiss = { showImportDataDialog = false },
+            onConfirm = {
+                showImportDataDialog = false
+                importLauncher.launch(arrayOf("application/json", "text/*", "*/*"))
+            },
+        )
+    }
 
     Scaffold(contentWindowInsets = WindowInsets(0)) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .testTag(TestTags.SettingsRoot)
                 .background(SettingsBackground())
                 .padding(innerPadding),
             contentPadding = androidx.compose.foundation.layout.PaddingValues(
@@ -201,7 +245,13 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             item {
                 LocalDataCard(
                     preferences = preferences,
+                    dataOperationMessage = dataOperationMessage,
+                    onExportData = {
+                        exportLauncher.launch("benimgunlerim-yedek.json")
+                    },
+                    onImportData = { showImportDataDialog = true },
                     onClearData = { showClearDataDialog = true },
+                    onDismissMessage = viewModel::clearDataOperationMessage,
                 )
             }
 
@@ -593,7 +643,11 @@ private fun PrivacySettingsCard(
 @Composable
 private fun LocalDataCard(
     preferences: UserPreferences,
+    dataOperationMessage: String?,
+    onExportData: () -> Unit,
+    onImportData: () -> Unit,
     onClearData: () -> Unit,
+    onDismissMessage: () -> Unit,
 ) {
     SettingsCard(
         accent = AccentSky,
@@ -609,6 +663,16 @@ private fun LocalDataCard(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        dataOperationMessage?.let { message ->
+            StatusMessage(
+                text = message,
+                container = AccentSkySoft,
+                content = AccentSky,
+            )
+            TextButton(onClick = onDismissMessage) {
+                Text("Mesajı kapat")
+            }
+        }
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -628,6 +692,31 @@ private fun LocalDataCard(
                 value = preferences.totalRoutinesCompleted.toString(),
                 modifier = Modifier.weight(1f),
             )
+        }
+        Button(
+            onClick = onExportData,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            shape = RoundedCornerShape(16.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = AccentSky),
+        ) {
+            Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text("Verileri dışa aktar")
+        }
+        OutlinedButton(
+            onClick = onImportData,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            shape = RoundedCornerShape(16.dp),
+            border = BorderStroke(1.dp, AccentSky),
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = AccentSky),
+        ) {
+            Icon(Icons.Rounded.Storage, contentDescription = null, modifier = Modifier.size(18.dp))
+            Spacer(Modifier.width(8.dp))
+            Text("Yedekten geri yükle")
         }
         OutlinedButton(
             onClick = onClearData,
@@ -831,6 +920,29 @@ private fun ClearDataDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     )
 }
 
+@Composable
+private fun ImportDataDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Yedek geri yüklensin mi?") },
+        text = {
+            Text(
+                text = "Seçilen yedek dosyası mevcut görevleri, rutinleri, ilerleme kayıtlarını ve ayarları değiştirir. Bu işlemden önce güncel verilerini dışa aktarman önerilir.",
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text("Dosya seç")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Vazgeç")
+            }
+        },
+    )
+}
+
 private fun notificationModeLabel(mode: String): String = when (mode) {
     "off" -> "Kapalı"
     "normal" -> "Normal"
@@ -844,3 +956,15 @@ private fun notificationModeDescription(mode: String): String = when (mode) {
 }
 
 private fun String.sanitizedTimeInput(): String = filter { it.isDigit() || it == ':' }.take(5)
+
+private fun Context.writeTextToUri(uri: Uri, text: String): Boolean =
+    runCatching {
+        contentResolver.openOutputStream(uri)?.use { output ->
+            output.write(text.toByteArray(Charsets.UTF_8))
+        } ?: error("No output stream")
+    }.isSuccess
+
+private fun Context.readTextFromUri(uri: Uri): String? =
+    runCatching {
+        contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { it.readText() }
+    }.getOrNull()

@@ -43,31 +43,38 @@ val MIGRATION_6_7 = object : Migration(6, 7) {
         )
 
         // tasks tablosuna yeni sütunlar (v6'da yoktu)
-        runCatching { db.execSQL("ALTER TABLE `tasks` ADD COLUMN `priority` INTEGER NOT NULL DEFAULT 2") }
-        runCatching { db.execSQL("ALTER TABLE `tasks` ADD COLUMN `reminderTime` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `tasks` ADD COLUMN `sortOrder` INTEGER NOT NULL DEFAULT 0") }
-        runCatching { db.execSQL("ALTER TABLE `tasks` ADD COLUMN `isArchived` INTEGER NOT NULL DEFAULT 0") }
-        runCatching { db.execSQL("ALTER TABLE `tasks` ADD COLUMN `postponedFromDate` TEXT") }
+        db.execSQL("ALTER TABLE `tasks` ADD COLUMN `priority` INTEGER NOT NULL DEFAULT 2")
+        db.execSQL("ALTER TABLE `tasks` ADD COLUMN `reminderTime` TEXT")
+        db.execSQL("ALTER TABLE `tasks` ADD COLUMN `sortOrder` INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE `tasks` ADD COLUMN `isArchived` INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE `tasks` ADD COLUMN `postponedFromDate` TEXT")
 
         // routines tablosuna yeni sütunlar
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetType` TEXT NOT NULL DEFAULT 'check'") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetValue` INTEGER") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetUnit` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `category` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `reminderEnabled` INTEGER NOT NULL DEFAULT 0") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `sortOrder` INTEGER NOT NULL DEFAULT 0") }
-        runCatching { db.execSQL("ALTER TABLE `routines` ADD COLUMN `bestStreak` INTEGER NOT NULL DEFAULT 0") }
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetType` TEXT NOT NULL DEFAULT 'check'")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetValue` INTEGER")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `targetUnit` TEXT")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `category` TEXT")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `reminderEnabled` INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `sortOrder` INTEGER NOT NULL DEFAULT 0")
+        db.execSQL("ALTER TABLE `routines` ADD COLUMN `bestStreak` INTEGER NOT NULL DEFAULT 0")
 
         // completion_logs tablosuna yeni sütunlar
-        runCatching { db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `value` REAL") }
-        runCatching { db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `targetValue` REAL") }
-        runCatching { db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `skipReason` TEXT") }
+        db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `value` REAL")
+        db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `targetValue` REAL")
+        db.execSQL("ALTER TABLE `completion_logs` ADD COLUMN `skipReason` TEXT")
 
         // daily_states tablosuna yeni sütunlar
-        runCatching { db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `bestMoment` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `challenge` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `tomorrowIntention` TEXT") }
-        runCatching { db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `closedAt` INTEGER") }
-        runCatching { db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `carriedTaskCount` INTEGER NOT NULL DEFAULT 0") }
+        db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `bestMoment` TEXT")
+        db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `challenge` TEXT")
+        db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `tomorrowIntention` TEXT")
+        db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `closedAt` INTEGER")
+        db.execSQL("ALTER TABLE `daily_states` ADD COLUMN `carriedTaskCount` INTEGER NOT NULL DEFAULT 0")
+
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_tasks_plannedDate_completionState` ON `tasks` (`plannedDate`, `completionState`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_tasks_plannedDate_isArchived` ON `tasks` (`plannedDate`, `isArchived`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_routines_isArchived_preferredTime` ON `routines` (`isArchived`, `preferredTime`)")
+        db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_completion_logs_entityType_entityId_date` ON `completion_logs` (`entityType`, `entityId`, `date`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_completion_logs_date` ON `completion_logs` (`date`)")
+        db.execSQL("CREATE INDEX IF NOT EXISTS `index_completion_logs_entityId` ON `completion_logs` (`entityId`)")
     }
 }
