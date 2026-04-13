@@ -46,10 +46,15 @@ data class UserPreferences(
     val quietHoursEnd: String = "07:00",
 )
 
+/** Exposes user preferences as a [Flow]. Exists to keep [DataExportService] testable without Android context. */
+interface UserPreferencesSource {
+    val preferences: Flow<UserPreferences>
+}
+
 @Singleton
 class UserPreferencesRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : UserPreferencesSource {
     private object Keys {
         val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
         val selectedGoalProfile = stringPreferencesKey("selected_goal_profile")
@@ -77,7 +82,7 @@ class UserPreferencesRepository @Inject constructor(
         val quietHoursEnd = stringPreferencesKey("quiet_hours_end")
     }
 
-    val preferences: Flow<UserPreferences> = context.userPreferencesDataStore.data.map { prefs ->
+    override val preferences: Flow<UserPreferences> = context.userPreferencesDataStore.data.map { prefs ->
         UserPreferences(
             onboardingCompleted = prefs[Keys.onboardingCompleted] ?: false,
             selectedGoalProfile = prefs[Keys.selectedGoalProfile],

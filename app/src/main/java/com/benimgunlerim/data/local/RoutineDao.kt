@@ -28,6 +28,9 @@ interface RoutineDao {
     @Update
     suspend fun update(routine: RoutineEntity)
 
+    @Query("SELECT * FROM routines ORDER BY createdAt ASC")
+    suspend fun getAll(): List<RoutineEntity>
+
     @Query("DELETE FROM routines WHERE name IN (:names)")
     suspend fun deleteByNames(names: List<String>)
 

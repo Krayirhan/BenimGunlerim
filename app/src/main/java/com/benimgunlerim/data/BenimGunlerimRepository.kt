@@ -1,5 +1,6 @@
 package com.benimgunlerim.data
 
+import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.data.local.CompletionLogDao
 import com.benimgunlerim.data.local.DailyStateDao
 import com.benimgunlerim.data.local.RoutineDao
@@ -31,6 +32,7 @@ class BenimGunlerimRepository @Inject constructor(
     private val subTaskDao: SubTaskDao,
     private val routineReminderScheduler: RoutineReminderScheduler,
     private val taskReminderScheduler: TaskReminderScheduler,
+    private val errorReporter: ErrorReporter,
 ) {
     fun observeTasks(date: LocalDate = LocalDate.now()): Flow<List<TaskEntity>> =
         taskDao.observeByDate(date.toString())
@@ -88,6 +90,8 @@ class BenimGunlerimRepository @Inject constructor(
         if (reminderTime != null) {
             runCatching {
                 taskReminderScheduler.schedule(newTask.id, newTask.title, date, LocalTime.parse(reminderTime))
+            }.onFailure { e ->
+                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_schedule", "taskId" to newTask.id))
             }
         }
     }
@@ -158,6 +162,8 @@ class BenimGunlerimRepository @Inject constructor(
             runCatching {
                 val date = LocalDate.parse(updatedTask.plannedDate)
                 taskReminderScheduler.schedule(updatedTask.id, updatedTask.title, date, LocalTime.parse(updatedTask.reminderTime))
+            }.onFailure { e ->
+                errorReporter.recordNonFatal(e, mapOf("action" to "reminder_reschedule", "taskId" to updatedTask.id))
             }
         }
     }

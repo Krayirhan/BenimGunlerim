@@ -138,7 +138,7 @@ fun RoutinesScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            item {
+            item(key = "header") {
                 RoutineHeaderCard(
                     routineCount = routines.size,
                     todayRoutineCount = todayRoutineCount,
@@ -146,16 +146,16 @@ fun RoutinesScreen(
                 )
             }
 
-            item {
+            item(key = "definition") {
                 RoutineDefinitionCard()
             }
 
             if (routines.isEmpty()) {
-                item {
+                item(key = "empty") {
                     EmptyRoutinesCard(onAddRoutine = { showAddSheet = true })
                 }
             } else {
-                item {
+                item(key = "section_header") {
                     SectionHeader(
                         title = "Aktif rutinler",
                         subtitle = "Her rutin kendi günlerinde takip edilir.",

@@ -40,6 +40,9 @@ interface TaskDao {
     @Query("UPDATE tasks SET completionState = :state, completedAt = :completedAt WHERE id = :id")
     suspend fun setCompletionStateById(id: String, state: String, completedAt: Long?)
 
+    @Query("SELECT * FROM tasks ORDER BY plannedDate ASC, createdAt ASC")
+    suspend fun getAll(): List<TaskEntity>
+
     @Query("DELETE FROM tasks WHERE sourceTemplateId IS NOT NULL")
     suspend fun deleteTemplateTasks()
 

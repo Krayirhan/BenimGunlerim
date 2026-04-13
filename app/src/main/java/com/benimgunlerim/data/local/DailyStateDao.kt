@@ -18,6 +18,9 @@ interface DailyStateDao {
     @Query("SELECT * FROM daily_states ORDER BY date DESC LIMIT :limit")
     fun observeRecent(limit: Int): Flow<List<DailyStateEntity>>
 
+    @Query("SELECT * FROM daily_states ORDER BY date DESC")
+    suspend fun getAll(): List<DailyStateEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(state: DailyStateEntity)
 

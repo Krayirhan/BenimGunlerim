@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    dataExtractionRules — Android 12+ (API 31+) backup/restore policy.
+
+    Strategy:
+    - User preferences (DataStore): INCLUDED — contains notification settings, theme,
+      game state. Losing this on re-install would reset progress.
+    - Room database: INCLUDED — all task, routine, completion log data.
+    - SharedPreferences (reminder_policy_cache): EXCLUDED — cache only; rebuilt at runtime.
+    - External cache / temp files: EXCLUDED by default.
+
+    For cloud backup (allowBackup=true) the same files are backed up.
+    For data transfer (device-to-device) the same policy applies.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="file" path="datastore/" />
+        <include domain="database" path="benim_gunlerim.db" />
+        <!-- SharedPrefs (reminder_policy_cache) and cache dirs are not included above,
+             so they are excluded from backup by default. -->
+    </cloud-backup>
+    <device-transfer>
+        <include domain="file" path="datastore/" />
+        <include domain="database" path="benim_gunlerim.db" />
+        <!-- Same policy: SharedPrefs rebuild at runtime, so no need to transfer. -->
+    </device-transfer>
+</data-extraction-rules>

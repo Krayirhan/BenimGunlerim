@@ -3,7 +3,11 @@ package com.benimgunlerim.di
 import android.content.Context
 import androidx.room.Room
 import com.benimgunlerim.analytics.AnalyticsTracker
+import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.analytics.LocalAnalyticsTracker
+import com.benimgunlerim.analytics.LocalErrorReporter
+import com.benimgunlerim.data.UserPreferencesRepository
+import com.benimgunlerim.data.UserPreferencesSource
 import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.AppDatabase
 import com.benimgunlerim.data.local.CompletionLogDao
@@ -54,6 +58,14 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAnalyticsTracker(tracker: LocalAnalyticsTracker): AnalyticsTracker = tracker
+
+    @Provides
+    @Singleton
+    fun provideErrorReporter(reporter: LocalErrorReporter): ErrorReporter = reporter
+
+    @Provides
+    @Singleton
+    fun provideUserPreferencesSource(repo: UserPreferencesRepository): UserPreferencesSource = repo
 
     @Provides
     @Singleton
