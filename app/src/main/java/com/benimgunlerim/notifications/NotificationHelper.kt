@@ -1,6 +1,5 @@
 package com.benimgunlerim.notifications
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Notification
@@ -9,22 +8,28 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.SystemClock
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.stringPreferencesKey
 import com.benimgunlerim.MainActivity
 import com.benimgunlerim.R
-import com.benimgunlerim.data.userPreferencesDataStore
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import java.util.concurrent.TimeUnit
+
+/** Hilt EntryPoint — extension function'lardan ReminderPolicy'ye erişim. */
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface NotificationHelperEntryPoint {
+    fun reminderPolicy(): ReminderPolicy
+}
+
+private fun Context.reminderPolicy(): ReminderPolicy =
+    EntryPointAccessors.fromApplication(applicationContext, NotificationHelperEntryPoint::class.java)
+        .reminderPolicy()
 
 fun Context.ensureRoutineNotificationChannel() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
@@ -40,8 +45,7 @@ fun Context.ensureRoutineNotificationChannel() {
 }
 
 fun Context.showRoutineReminder(routineId: String, routineName: String) {
-    if (!canPostNotifications()) return
-    if (isInQuietHours()) return
+    if (!reminderPolicy().canShowNotification()) return
     ensureRoutineNotificationChannel()
     val notification = NotificationCompat.Builder(this, NotificationConstants.ROUTINE_CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -57,8 +61,7 @@ fun Context.showRoutineReminder(routineId: String, routineName: String) {
 }
 
 fun Context.showDailySummaryReminder() {
-    if (!canPostNotifications()) return
-    if (isInQuietHours()) return
+    if (!reminderPolicy().canShowNotification()) return
     ensureRoutineNotificationChannel()
     val notification = NotificationCompat.Builder(this, NotificationConstants.ROUTINE_CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -73,17 +76,13 @@ fun Context.showDailySummaryReminder() {
     safeNotify(21_000, notification)
 }
 
-private fun Context.canPostNotifications(): Boolean =
-    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-        ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
-
 /**
  * Permission kontrolü ve SecurityException koruması olan merkezi bildirim gönderici.
  * Lint [MissingPermission] uyarısını bu tek noktada bastırarak tüm çağrı yerlerini temiz tutar.
  */
 @SuppressLint("MissingPermission")
 internal fun Context.safeNotify(notificationId: Int, notification: Notification): Boolean {
-    if (!canPostNotifications()) return false
+    if (!reminderPolicy().hasPostNotificationsPermission()) return false
     return try {
         NotificationManagerCompat.from(this).notify(notificationId, notification)
         true
@@ -119,8 +118,7 @@ fun Context.ensureTaskNotificationChannel() {
 }
 
 fun Context.showTaskReminder(taskId: String, taskTitle: String) {
-    if (!canPostNotifications()) return
-    if (isInQuietHours()) return
+    if (!reminderPolicy().canShowNotification()) return
     ensureTaskNotificationChannel()
     val notification = NotificationCompat.Builder(this, NotificationConstants.TASK_CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -148,8 +146,7 @@ fun Context.ensureMorningNotificationChannel() {
 }
 
 fun Context.showMorningPlannerReminder() {
-    if (!canPostNotifications()) return
-    if (isInQuietHours()) return
+    if (!reminderPolicy().canShowNotification()) return
     ensureMorningNotificationChannel()
     val notification = NotificationCompat.Builder(this, NotificationConstants.MORNING_CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -163,25 +160,9 @@ fun Context.showMorningPlannerReminder() {
     safeNotify(NotificationConstants.MORNING_PLANNER_REQUEST_CODE, notification)
 }
 
-// ─── Quiet Hours ──────────────────────────────────────────────────────────────
-
-internal fun Context.isInQuietHours(): Boolean {
-    return try {
-        val prefs = runBlocking { applicationContext.userPreferencesDataStore.data.first() }
-        val enabled = prefs[booleanPreferencesKey("quiet_hours_enabled")] ?: false
-        if (!enabled) return false
-        val startStr = prefs[stringPreferencesKey("quiet_hours_start")] ?: "22:00"
-        val endStr = prefs[stringPreferencesKey("quiet_hours_end")] ?: "07:00"
-        val fmt = DateTimeFormatter.ofPattern("HH:mm")
-        val now = LocalTime.now()
-        val start = LocalTime.parse(startStr, fmt)
-        val end = LocalTime.parse(endStr, fmt)
-        // Handles overnight ranges (e.g. 22:00 – 07:00)
-        if (start.isBefore(end)) now in start..end else now >= start || now <= end
-    } catch (_: Exception) {
-        false
-    }
-}
+// ─── Quiet Hours — ReminderPolicy'ye devredildi ──────────────────────────────
+// isInQuietHours() artık ReminderPolicy.isInQuietHours() aracılığıyla çalışır.
+// DataStore runBlocking yerine SharedPreferences cache kullanılır.
 
 // ─── Snooze ───────────────────────────────────────────────────────────────────
 
