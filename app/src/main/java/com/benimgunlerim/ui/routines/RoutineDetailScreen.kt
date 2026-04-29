@@ -46,7 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
-import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandySecondary
 import com.benimgunlerim.ui.theme.CompletedGreen
@@ -242,7 +241,7 @@ fun RoutineDetailScreen(
                             java.time.DayOfWeek.SATURDAY to stringResource(R.string.routine_detail_day_sat),
                             java.time.DayOfWeek.SUNDAY to stringResource(R.string.routine_detail_day_sun),
                         )
-                        val scheduledDays = routine.targetDaySet()
+                        val scheduledDays = routine.targetDays
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             dayNames.forEach { (dow, label) ->
                                 val active = dow in scheduledDays

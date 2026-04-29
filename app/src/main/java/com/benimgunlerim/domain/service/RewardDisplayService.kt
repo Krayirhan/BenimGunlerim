@@ -2,7 +2,7 @@ package com.benimgunlerim.domain.service
 
 import android.util.Log
 import com.benimgunlerim.domain.FeedbackManager
-import com.benimgunlerim.ui.today.GameEvent
+import com.benimgunlerim.domain.model.GameEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

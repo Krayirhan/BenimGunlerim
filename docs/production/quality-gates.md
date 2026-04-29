@@ -15,6 +15,7 @@ Bu script şu adımları çalıştırır:
 - `testDebugUnitTest`
 - `jacocoDebugUnitTestCoverageVerification`
 - `lintDebug`
+- `detekt`
 - `assembleDebug`
 
 ## Release Kapısı
@@ -30,6 +31,7 @@ Bu script şu adımları çalıştırır:
 - `verifyReleaseSigning`
 - `testDebugUnitTest`
 - `jacocoDebugUnitTestCoverageVerification`
+- `detekt`
 - `lintRelease`
 - `assembleRelease`
 - `bundleRelease`
@@ -50,9 +52,9 @@ GitHub Actions içinde `connected-ui-tests` job'u aynı komutu emülatörde çal
 
 | Tetikleyici | Zorunlu komutlar |
 |---|---|
-| Pull request | `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintDebug` + `assembleDebug` |
-| `main` push | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintRelease` + `assembleRelease` + `bundleRelease` |
-| `v*` release tag | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `lintRelease` + `assembleRelease` + `bundleRelease` + signed AAB artifact |
+| Pull request | `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `detekt` + `lintDebug` + `assembleDebug` |
+| `main` push | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `detekt` + `lintRelease` + `assembleRelease` + `bundleRelease` |
+| `v*` release tag | `verifyReleaseSigning` + `testDebugUnitTest` + `jacocoDebugUnitTestCoverageVerification` + `detekt` + `lintRelease` + `assembleRelease` + `bundleRelease` + signed AAB artifact |
 | Manual workflow | Release kapısı ile aynı |
 
 `connected-ui-tests` job'u PR, `main`, `v*` tag ve manual workflow çalıştırmalarında `connectedDebugAndroidTest` kapısını yürütür.
@@ -92,6 +94,7 @@ Unit test coverage kapısı JaCoCo ile çalışır:
 ```
 
 Başlangıç eşiği `0.20` olarak belirlenmiştir. UI, generated Room/Hilt sınıfları ve Android giriş noktaları coverage hesabından hariç tutulur. Yeni domain/data testleri eklendikçe eşik kademeli olarak yükseltilmelidir.
+Güncel eşik: `LINE >= 0.42` ve `BRANCH >= 0.22`.
 
 ## Dış Release Kontrolü
 

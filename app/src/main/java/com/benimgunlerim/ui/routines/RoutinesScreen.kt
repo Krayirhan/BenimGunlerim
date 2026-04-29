@@ -65,9 +65,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.shortTr
-import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.domain.normalizedTimeOrNull
 import com.benimgunlerim.ui.theme.AccentPurple
@@ -89,7 +87,7 @@ fun RoutinesScreen(
 ) {
     val routines by viewModel.routines.collectAsState()
     val today = viewModel.todayDayOfWeek()
-    val todayRoutineCount = routines.count { today in it.routine.targetDaySet() }
+    val todayRoutineCount = routines.count { today in it.targetDays }
     val weeklyCompletion = routines
         .flatMap { it.last7Days }
         .takeIf { it.isNotEmpty() }
@@ -165,19 +163,19 @@ fun RoutinesScreen(
                 }
                 items(
                     items = routines,
-                    key = { it.routine.id },
+                    key = { it.id },
                 ) { item ->
                     RoutineItemCard(
                         item = item,
-                        isEditing = editingRoutineId == item.routine.id,
+                        isEditing = editingRoutineId == item.id,
                         editedName = editedRoutineName,
                         editedDays = editedRoutineDays,
                         editedTime = editedRoutineTime,
                         onEdit = {
-                            editingRoutineId = item.routine.id
-                            editedRoutineName = item.routine.name
-                            editedRoutineDays = item.routine.targetDaySet()
-                            editedRoutineTime = item.routine.preferredTime.orEmpty()
+                            editingRoutineId = item.id
+                            editedRoutineName = item.name
+                            editedRoutineDays = item.targetDays
+                            editedRoutineTime = item.preferredTime.orEmpty()
                         },
                         onEditedNameChange = { editedRoutineName = it },
                         onEditedDaysChange = { editedRoutineDays = it },
@@ -185,7 +183,7 @@ fun RoutinesScreen(
                         onCancelEdit = { editingRoutineId = null },
                         onSaveEdit = {
                             viewModel.updateRoutine(
-                                routine = item.routine,
+                                routineId = item.id,
                                 name = editedRoutineName,
                                 targetDays = editedRoutineDays,
                                 preferredTime = editedRoutineTime.normalizedTimeOrNull(),
@@ -193,11 +191,11 @@ fun RoutinesScreen(
                             editingRoutineId = null
                         },
                         onArchive = {
-                            viewModel.archiveRoutine(item.routine)
-                            if (editingRoutineId == item.routine.id) editingRoutineId = null
+                            viewModel.archiveRoutine(item.id)
+                            if (editingRoutineId == item.id) editingRoutineId = null
                         },
-                        onSkip = { viewModel.skipRoutine(item.routine) },
-                        onDetail = { onNavigateToDetail(item.routine.id) },
+                        onSkip = { viewModel.skipRoutine(item.id) },
+                        onDetail = { onNavigateToDetail(item.id) },
                     )
                 }
             }
@@ -422,8 +420,9 @@ private fun SectionHeader(title: String, subtitle: String) {
 }
 
 @Composable
+@Suppress("LongParameterList")
 private fun RoutineItemCard(
-    item: RoutineListItem,
+    item: RoutineCardUi,
     isEditing: Boolean,
     editedName: String,
     editedDays: Set<DayOfWeek>,
@@ -478,15 +477,15 @@ private fun RoutineItemCard(
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun RoutineViewContent(
-    item: RoutineListItem,
+    item: RoutineCardUi,
     onEdit: () -> Unit,
     onArchive: () -> Unit,
     onSkip: () -> Unit,
     onDetail: () -> Unit,
 ) {
-    val routine = item.routine
-    val daysText = formatRoutineDays(routine.targetDaySet())
+    val daysText = formatRoutineDays(item.targetDays)
 
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Row(
@@ -499,7 +498,7 @@ private fun RoutineViewContent(
                 verticalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 Text(
-                    text = routine.name,
+                    text = item.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
@@ -521,15 +520,19 @@ private fun RoutineViewContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (!routine.preferredTime.isNullOrBlank()) {
+            if (!item.preferredTime.isNullOrBlank()) {
                 InfoPill(
-                    text = stringResource(R.string.routines_time_label, routine.preferredTime!!),
+                    text = stringResource(R.string.routines_time_label, item.preferredTime!!),
                     container = AccentSkySoft,
                     content = AccentSky,
                 )
             }
             InfoPill(
-                text = if (routine.targetDaySet().size == 7) stringResource(R.string.routines_every_day) else stringResource(R.string.routines_days_count, routine.targetDaySet().size),
+                text = if (item.targetDays.size == 7) {
+                    stringResource(R.string.routines_every_day)
+                } else {
+                    stringResource(R.string.routines_days_count, item.targetDays.size)
+                },
                 container = CandyPrimaryLight,
                 content = CandyPrimary,
             )

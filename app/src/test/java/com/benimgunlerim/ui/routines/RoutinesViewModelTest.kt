@@ -73,12 +73,12 @@ class RoutinesViewModelTest {
         val job = launch { viewModel.routines.collect {} }
         advanceUntilIdle()
 
-        assertEquals(emptyList<RoutineListItem>(), viewModel.routines.value)
+        assertEquals(emptyList<RoutineCardUi>(), viewModel.routines.value)
         job.cancel()
     }
 
     @Test
-    fun routines_mapsToRoutineListItems() = runTest {
+    fun routines_mapsToRoutineCardUiItems() = runTest {
         val routine = makeRoutine("r1", "Morning Run")
         every { routineRepository.observeActive() } returns flowOf(listOf(routine))
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
@@ -97,7 +97,7 @@ class RoutinesViewModelTest {
         advanceUntilIdle()
 
         assertEquals(1, vm.routines.value.size)
-        assertEquals("Morning Run", vm.routines.value.first().routine.name)
+        assertEquals("Morning Run", vm.routines.value.first().name)
         job.cancel()
     }
 
@@ -177,10 +177,25 @@ class RoutinesViewModelTest {
     @Test
     fun archiveRoutine_callsRepository() = runTest {
         val routine = makeRoutine("r1", "Run")
-        viewModel.archiveRoutine(routine)
+        every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        val vm = RoutinesViewModel(
+            routineRepository = routineRepository,
+            completionLogRepository = completionLogRepository,
+            dateTimeProvider = dateTimeProvider,
+            addRoutineUseCase = addRoutineUseCase,
+            updateRoutineUseCase = updateRoutineUseCase,
+            archiveRoutineUseCase = archiveRoutineUseCase,
+            skipRoutineUseCase = skipRoutineUseCase,
+            analyticsTracker = analyticsTracker,
+        )
+        val job = launch { vm.routines.collect {} }
+        advanceUntilIdle()
+
+        vm.archiveRoutine(routine.id)
         advanceUntilIdle()
 
         coVerify { archiveRoutineUseCase(routine) }
+        job.cancel()
     }
 
     // ── skipRoutine ───────────────────────────────────────────────────────────
@@ -188,10 +203,25 @@ class RoutinesViewModelTest {
     @Test
     fun skipRoutine_callsRepository() = runTest {
         val routine = makeRoutine("r1", "Run")
-        viewModel.skipRoutine(routine)
+        every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        val vm = RoutinesViewModel(
+            routineRepository = routineRepository,
+            completionLogRepository = completionLogRepository,
+            dateTimeProvider = dateTimeProvider,
+            addRoutineUseCase = addRoutineUseCase,
+            updateRoutineUseCase = updateRoutineUseCase,
+            archiveRoutineUseCase = archiveRoutineUseCase,
+            skipRoutineUseCase = skipRoutineUseCase,
+            analyticsTracker = analyticsTracker,
+        )
+        val job = launch { vm.routines.collect {} }
+        advanceUntilIdle()
+
+        vm.skipRoutine(routine.id)
         advanceUntilIdle()
 
         coVerify { skipRoutineUseCase(routine, any()) }
+        job.cancel()
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────

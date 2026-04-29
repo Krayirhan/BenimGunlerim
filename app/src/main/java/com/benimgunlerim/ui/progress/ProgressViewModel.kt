@@ -3,7 +3,6 @@
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benimgunlerim.data.UserPreferences
-import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.ALL_ACHIEVEMENTS
 import com.benimgunlerim.domain.usecase.ObserveProgressSnapshotUseCase
@@ -15,7 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 data class ProgressUiState(
-    val last30Days: List<DailyStateEntity> = emptyList(),
+    val last30Days: List<ProgressDayUi> = emptyList(),
     val currentStreak: Int = 0,
     val bestStreak: Int = 0,
     val averageScore: Int = 0,
@@ -36,7 +35,14 @@ class ProgressViewModel @Inject constructor(
     val uiState: StateFlow<ProgressUiState> = observeProgressSnapshot()
         .map { snapshot ->
         ProgressUiState(
-            last30Days = snapshot.last30Days,
+            last30Days = snapshot.last30Days.map {
+                ProgressDayUi(
+                    date = it.date,
+                    dailyScore = it.dailyScore,
+                    completionRate = it.completionRate,
+                    note = it.note,
+                )
+            },
             currentStreak = snapshot.currentStreak,
             bestStreak = snapshot.bestStreak,
             averageScore = snapshot.averageScore,

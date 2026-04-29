@@ -64,8 +64,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.benimgunlerim.data.local.entity.TaskEntity
-import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandySecondary
 import com.benimgunlerim.ui.theme.LevelSky
@@ -167,7 +165,6 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         viewModel.toggleTask(it)
                     },
-                    onMoveToday = { viewModel.moveTaskToDate(it, today) },
                     onDelete = {
                         viewModel.deleteTask(it)
                         scope.launch { snackbarHost.showSnackbar(taskDeleted) }
@@ -289,10 +286,9 @@ private fun WeekDatePicker(
 @Composable
 private fun DayTasksCard(
     date: LocalDate,
-    tasks: List<TaskEntity>,
-    onToggle: (TaskEntity) -> Unit,
-    onMoveToday: (TaskEntity) -> Unit,
-    onDelete: (TaskEntity) -> Unit,
+    tasks: List<PlanTaskUi>,
+    onToggle: (String) -> Unit,
+    onDelete: (String) -> Unit,
     onAdd: () -> Unit,
 ) {
     val dateLabel = date.format(DateTimeFormatter.ofPattern("d MMM", Locale("tr", "TR")))
@@ -332,10 +328,10 @@ private fun DayTasksCard(
 
 @Composable
 private fun PlanOverdueCard(
-    tasks: List<TaskEntity>,
-    onToggle: (TaskEntity) -> Unit,
-    onMoveToSelected: (TaskEntity) -> Unit,
-    onDelete: (TaskEntity) -> Unit,
+    tasks: List<PlanTaskUi>,
+    onToggle: (String) -> Unit,
+    onMoveToSelected: (String) -> Unit,
+    onDelete: (String) -> Unit,
 ) {
     val overdueTitle = stringResource(R.string.plan_overdue_title)
     val overdueCount = stringResource(R.string.plan_overdue_count, tasks.size)
@@ -352,7 +348,7 @@ private fun PlanOverdueCard(
                 accentColor = StreakCoral,
                 onToggle = onToggle,
                 onDelete = onDelete,
-                secondaryAction = { onMoveToSelected(task) },
+                secondaryAction = { onMoveToSelected(task.id) },
             )
         }
     }
@@ -360,13 +356,13 @@ private fun PlanOverdueCard(
 
 @Composable
 private fun PlanTaskRow(
-    task: TaskEntity,
+    task: PlanTaskUi,
     accentColor: Color,
-    onToggle: (TaskEntity) -> Unit,
-    onDelete: (TaskEntity) -> Unit,
+    onToggle: (String) -> Unit,
+    onDelete: (String) -> Unit,
     secondaryAction: (() -> Unit)?,
 ) {
-    val done = task.completionState == TaskCompletionState.COMPLETED.value
+    val done = task.isCompleted
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -380,7 +376,7 @@ private fun PlanTaskRow(
                 .clip(CircleShape)
                 .background(if (done) accentColor else accentColor.copy(.10f))
                 .border(1.5.dp, accentColor.copy(if (done) 0f else .40f), CircleShape)
-                .clickable { onToggle(task) },
+                .clickable { onToggle(task.id) },
             contentAlignment = Alignment.Center,
         ) {
             if (done) Icon(Icons.Rounded.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(16.dp))
@@ -411,7 +407,7 @@ private fun PlanTaskRow(
                 Icon(Icons.Outlined.CalendarToday, contentDescription = stringResource(R.string.plan_move_to_selected_day_cd), tint = accentColor, modifier = Modifier.size(18.dp))
             }
         }
-        IconButton(onClick = { onDelete(task) }, modifier = Modifier.size(34.dp)) {
+        IconButton(onClick = { onDelete(task.id) }, modifier = Modifier.size(34.dp)) {
             Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.action_delete), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
         }
     }

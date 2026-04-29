@@ -196,19 +196,19 @@ tasks.register<JacocoCoverageVerification>("jacocoDebugUnitTestCoverageVerificat
         // DAO tests (TaskDaoTest, CompletionLogDaoTest, DailyStateDaoTest) run as
         // androidTest with Room.inMemoryDatabaseBuilder and are NOT counted by the
         // JVM JaCoCo report; the thresholds below apply only to JVM unit tests.
-        // Target: LINE >= 0.40, BRANCH >= 0.20 (requires instrumented coverage tool).
+        // Sprint D tightening: raise JVM gate to LINE >= 0.42, BRANCH >= 0.22.
         rule {
             limit {
                 counter = "LINE"
                 value = "COVEREDRATIO"
-                minimum = "0.40".toBigDecimal()
+                minimum = "0.42".toBigDecimal()
             }
         }
         rule {
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                minimum = "0.20".toBigDecimal()
+                minimum = "0.22".toBigDecimal()
             }
         }
     }

@@ -9,6 +9,7 @@ import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
 import com.benimgunlerim.domain.TickerProvider
+import com.benimgunlerim.domain.model.GameEvent
 import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.domain.service.GrantResult
 import com.benimgunlerim.domain.service.RewardDisplayService

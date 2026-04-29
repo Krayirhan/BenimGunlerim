@@ -53,7 +53,6 @@ import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.R
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.GameEngine
 import com.benimgunlerim.ui.theme.CandyPrimary
@@ -275,7 +274,7 @@ private fun MetricCard(title: String, value: String, subtitle: String, icon: Ima
 }
 
 @Composable
-private fun WeeklyChartCard(days: List<DailyStateEntity>, average: Int) {
+private fun WeeklyChartCard(days: List<ProgressDayUi>, average: Int) {
     SurfaceCard(radius = 28.dp, padding = 18.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
@@ -327,7 +326,7 @@ private fun WeeklyChartCard(days: List<DailyStateEntity>, average: Int) {
 }
 
 @Composable
-private fun ConsistencyCard(streak: Int, bestStreak: Int, bestDay: DailyStateEntity?, averageScore: Int) {
+private fun ConsistencyCard(streak: Int, bestStreak: Int, bestDay: ProgressDayUi?, averageScore: Int) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.progress_consistency_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
@@ -610,7 +609,7 @@ private fun AchievementItem(achievement: AchievementDef) {
 }
 
 @Composable
-private fun RecentDaysCard(days: List<DailyStateEntity>) {
+private fun RecentDaysCard(days: List<ProgressDayUi>) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.progress_recent_days_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
@@ -626,7 +625,7 @@ private fun RecentDaysCard(days: List<DailyStateEntity>) {
 }
 
 @Composable
-private fun DayRow(day: DailyStateEntity) {
+private fun DayRow(day: ProgressDayUi) {
     val score = day.dailyScore.coerceIn(0, 100)
     val color = when {
         score >= 80 -> CandyPrimary

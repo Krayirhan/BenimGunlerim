@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -48,6 +49,8 @@ data class ShopUiState(
     val items: List<ShopItem> = ALL_SHOP_ITEMS,
     val ownedItemIds: Set<String> = emptySet(),
     val dailyRewardAvailable: Boolean = false,
+    val isClaimingDailyReward: Boolean = false,
+    val purchasingItemId: String? = null,
     val purchaseMessage: String? = null,
 )
 
@@ -59,37 +62,64 @@ class ShopViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _purchaseMessage = MutableStateFlow<String?>(null)
+    private val _isClaimingDailyReward = MutableStateFlow(false)
+    private val _purchasingItemId = MutableStateFlow<String?>(null)
 
     val uiState: StateFlow<ShopUiState> = combine(
         prefsRepository.preferences,
         _purchaseMessage,
-    ) { prefs, msg ->
+        _isClaimingDailyReward,
+        _purchasingItemId,
+    ) { prefs, msg, isClaimingDailyReward, purchasingItemId ->
         val todayStr = dateTimeProvider.today().toString()
         ShopUiState(
             gold = prefs.gold,
             items = ALL_SHOP_ITEMS,
             ownedItemIds = prefs.ownedItems.split(",").filter { it.isNotBlank() }.toSet(),
             dailyRewardAvailable = prefs.lastDailyRewardDate != todayStr,
+            isClaimingDailyReward = isClaimingDailyReward,
+            purchasingItemId = purchasingItemId,
             purchaseMessage = msg,
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShopUiState())
 
     fun claimDailyReward() {
+        if (_isClaimingDailyReward.value) return
         viewModelScope.launch {
-            val todayStr = dateTimeProvider.today().toString()
-            prefsRepository.claimDailyReward(todayStr, 25)
-            _purchaseMessage.value = "+25 🪙 Günlük hediye alındı!"
+            _isClaimingDailyReward.value = true
+            try {
+                val todayStr = dateTimeProvider.today().toString()
+                val dailyRewardAvailable = prefsRepository.preferences.first().lastDailyRewardDate != todayStr
+                if (!dailyRewardAvailable) {
+                    _purchaseMessage.value = "Günlük hediye zaten alındı."
+                    return@launch
+                }
+                prefsRepository.claimDailyReward(todayStr, 25)
+                _purchaseMessage.value = "+25 🪙 Günlük hediye alındı!"
+            } finally {
+                _isClaimingDailyReward.value = false
+            }
         }
     }
 
     fun purchaseItem(item: ShopItem) {
+        if (_purchasingItemId.value != null) return
+        if (item.id in uiState.value.ownedItemIds) {
+            _purchaseMessage.value = "Bu urune zaten sahipsin."
+            return
+        }
         viewModelScope.launch {
-            val success = prefsRepository.purchaseItem(item.id, item.cost)
-            _purchaseMessage.value = if (success) {
-                achievementTracker.tryUnlock("first_buy")
-                "${item.name} satın alındı! ✨"
-            } else {
-                "Yeterli altın yok 😢"
+            _purchasingItemId.value = item.id
+            try {
+                val success = prefsRepository.purchaseItem(item.id, item.cost)
+                _purchaseMessage.value = if (success) {
+                    achievementTracker.tryUnlock("first_buy")
+                    "${item.name} satın alındı! ✨"
+                } else {
+                    "Yeterli altın yok 😢"
+                }
+            } finally {
+                _purchasingItemId.value = null
             }
         }
     }

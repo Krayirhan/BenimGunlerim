@@ -91,6 +91,23 @@ class ShopViewModelTest {
         job.cancel()
     }
 
+    @Test
+    fun claimDailyReward_whenAlreadyClaimed_setsAlreadyClaimedMessage() = runTest {
+        every { prefsRepository.preferences } returns flowOf(
+            UserPreferences(lastDailyRewardDate = fixedDate.toString()),
+        )
+        val vm = ShopViewModel(prefsRepository, achievementTracker, dateTimeProvider)
+        val job = launch { vm.uiState.collect {} }
+        advanceUntilIdle()
+
+        vm.claimDailyReward()
+        advanceUntilIdle()
+
+        assertEquals("Günlük hediye zaten alındı.", vm.uiState.value.purchaseMessage)
+        coVerify(exactly = 0) { prefsRepository.claimDailyReward(any(), any()) }
+        job.cancel()
+    }
+
     // ── purchaseItem ──────────────────────────────────────────────────────────
 
     @Test
@@ -150,6 +167,24 @@ class ShopViewModelTest {
         advanceUntilIdle()
 
         coVerify(exactly = 0) { achievementTracker.tryUnlock(any()) }
+    }
+
+    @Test
+    fun purchaseItem_whenAlreadyOwned_setsOwnedMessageAndSkipsRepository() = runTest {
+        val item = ALL_SHOP_ITEMS.first()
+        every { prefsRepository.preferences } returns flowOf(
+            UserPreferences(ownedItems = item.id),
+        )
+        val vm = ShopViewModel(prefsRepository, achievementTracker, dateTimeProvider)
+        val job = launch { vm.uiState.collect {} }
+        advanceUntilIdle()
+
+        vm.purchaseItem(item)
+        advanceUntilIdle()
+
+        assertEquals("Bu urune zaten sahipsin.", vm.uiState.value.purchaseMessage)
+        coVerify(exactly = 0) { prefsRepository.purchaseItem(any(), any()) }
+        job.cancel()
     }
 
     // ── clearMessage ──────────────────────────────────────────────────────────

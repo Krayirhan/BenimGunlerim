@@ -113,9 +113,38 @@ class ReminderBootstrapperTest {
     }
 
     @Test
+    fun rescheduleReminders_usesDefaultDailySummaryTime_whenInvalidTime() = testScope.runTest {
+        every { dateTimeProvider.today() } returns fixedDate
+        coEvery { taskDao.getPendingRemindersFrom(any()) } returns emptyList()
+        coEvery { routineDao.getActiveWithReminder() } returns emptyList()
+        coEvery { prefsRepository.preferences } returns flowOf(
+            UserPreferences(notificationMode = "on", dailySummaryTime = "invalid"),
+        )
+
+        makeBootstrapper().rescheduleReminders()
+        advanceUntilIdle()
+
+        coVerify { dailySummaryScheduler.schedule(LocalTime.of(21, 0)) }
+    }
+
+    @Test
     fun rescheduleReminders_skipsTask_withNullReminderTime() = testScope.runTest {
         every { dateTimeProvider.today() } returns fixedDate
         val task = makeTask("t1", "No reminder", fixedDate.plusDays(1).toString(), null)
+        coEvery { taskDao.getPendingRemindersFrom(any()) } returns listOf(task)
+        coEvery { routineDao.getActiveWithReminder() } returns emptyList()
+        coEvery { prefsRepository.preferences } returns flowOf(UserPreferences(notificationMode = "on"))
+
+        makeBootstrapper().rescheduleReminders()
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { taskReminderScheduler.schedule(any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun rescheduleReminders_skipsTask_withInvalidPlannedDate() = testScope.runTest {
+        every { dateTimeProvider.today() } returns fixedDate
+        val task = makeTask("t1", "Broken date", "not-a-date", "09:00")
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns listOf(task)
         coEvery { routineDao.getActiveWithReminder() } returns emptyList()
         coEvery { prefsRepository.preferences } returns flowOf(UserPreferences(notificationMode = "on"))

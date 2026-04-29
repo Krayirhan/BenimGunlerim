@@ -15,6 +15,7 @@ import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
 import com.benimgunlerim.domain.TickerProvider
+import com.benimgunlerim.domain.model.GameEvent
 import com.benimgunlerim.domain.service.RewardDisplayService
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
 import com.benimgunlerim.domain.usecase.AddSubTaskUseCase
@@ -45,8 +46,10 @@ import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -70,10 +73,11 @@ data class TodayUiState(
     val dailySummaryTime: String = "21:00",
 )
 
-sealed class GameEvent {
-    data class RewardEarned(val xp: Int, val gold: Int) : GameEvent()
-    data class LevelUp(val level: Int, val title: String) : GameEvent()
-    data class AchievementUnlocked(val emoji: String, val title: String) : GameEvent()
+sealed class TodayUiEffect {
+    data class TaskMovedTomorrow(val message: String) : TodayUiEffect()
+    data class TaskDeleted(val task: TaskEntity) : TodayUiEffect()
+    data class TaskCompletedUndo(val taskId: String) : TodayUiEffect()
+    data class DaySaved(val message: String) : TodayUiEffect()
 }
 
 @HiltViewModel
@@ -107,6 +111,9 @@ class TodayViewModel @Inject constructor(
     private val tickerProvider: TickerProvider,
     observeTodaySnapshot: ObserveTodaySnapshotUseCase,
 ) : ViewModel() {
+    private val _uiEffects = MutableSharedFlow<TodayUiEffect>(extraBufferCapacity = 16)
+    val uiEffects = _uiEffects.asSharedFlow()
+
     fun today(): LocalDate = dateTimeProvider.today()
 
     // Emits current date, advances at midnight.
@@ -185,6 +192,7 @@ class TodayViewModel @Inject constructor(
 
     fun toggleTask(task: TaskEntity) {
         viewModelScope.launch {
+            val wasPending = task.completionState != com.benimgunlerim.domain.model.TaskCompletionState.COMPLETED.value
             analyticsTracker.track(AnalyticsEvent("task_completed"))
             feedbackManager.tapMedium()
             val result = toggleTaskUseCase(task) ?: return@launch
@@ -193,6 +201,9 @@ class TodayViewModel @Inject constructor(
                 taskReward = result.taskReward,
                 allTasksBonus = result.allTasksBonus,
             )
+            if (wasPending) {
+                _uiEffects.tryEmit(TodayUiEffect.TaskCompletedUndo(task.id))
+            }
         }
     }
 
@@ -216,7 +227,10 @@ class TodayViewModel @Inject constructor(
     }
 
     fun moveTaskToTomorrow(task: TaskEntity) {
-        viewModelScope.launch { moveTaskToDateUseCase(task, dateTimeProvider.today().plusDays(1)) }
+        viewModelScope.launch {
+            moveTaskToDateUseCase(task, dateTimeProvider.today().plusDays(1))
+            _uiEffects.tryEmit(TodayUiEffect.TaskMovedTomorrow("task_moved_tomorrow"))
+        }
     }
 
     fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
@@ -224,7 +238,10 @@ class TodayViewModel @Inject constructor(
     }
 
     fun deleteTask(task: TaskEntity) {
-        viewModelScope.launch { deleteTaskUseCase(task) }
+        viewModelScope.launch {
+            deleteTaskUseCase(task)
+            _uiEffects.tryEmit(TodayUiEffect.TaskDeleted(task))
+        }
     }
 
     fun restoreTask(task: TaskEntity) {
@@ -342,6 +359,7 @@ class TodayViewModel @Inject constructor(
                     gold = result.perfectDayReward.goldGranted,
                 )
             }
+            _uiEffects.tryEmit(TodayUiEffect.DaySaved("day_saved"))
         }
     }
 
@@ -362,6 +380,9 @@ class TodayViewModel @Inject constructor(
         challenge: String = "",
         tomorrowIntention: String = "",
     ) {
-        viewModelScope.launch { saveMissedDaySummaryUseCase(date, note, mood, energy, bestMoment, challenge, tomorrowIntention) }
+        viewModelScope.launch {
+            saveMissedDaySummaryUseCase(date, note, mood, energy, bestMoment, challenge, tomorrowIntention)
+            _uiEffects.tryEmit(TodayUiEffect.DaySaved("day_saved"))
+        }
     }
 }

@@ -27,6 +27,7 @@ import com.benimgunlerim.notifications.NotificationPolicyCache
 import com.benimgunlerim.notifications.ReminderRestorer
 import java.time.LocalDate
 import java.time.LocalTime
+import kotlinx.coroutines.async
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -314,6 +315,20 @@ class SettingsViewModelTest {
         assertEquals(SettingsEvent.ExportFailed, vm.dataOperationMessage.value)
     }
 
+    @Test
+    fun exportDataToFile_whenServiceReturnsJson_emitsSaveEffect() = runTest {
+        val vm = makeViewModel(exportService = makeExportService("{\"version\":1}"))
+        val effectDeferred = backgroundScope.async { vm.uiEffects.first() }
+
+        vm.exportDataToFile()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val effect = effectDeferred.await()
+        assert(effect is SettingsUiEffect.SaveExportJson) {
+            "Expected SaveExportJson effect, got: $effect"
+        }
+    }
+
     // ── Tests: importData ──────────────────────────────────────────────────
 
     @Test
@@ -364,6 +379,28 @@ class SettingsViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(SettingsEvent.ImportParseFailed, vm.dataOperationMessage.value)
+    }
+
+    @Test
+    fun requestImportFromFile_emitsRequestImportEffect() = runTest {
+        val vm = makeViewModel()
+        val effectDeferred = backgroundScope.async { vm.uiEffects.first() }
+        testDispatcher.scheduler.runCurrent()
+
+        vm.requestImportFromFile()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val effect = effectDeferred.await()
+        assertEquals(SettingsUiEffect.RequestImportJson, effect)
+    }
+
+    @Test
+    fun importDataFromFileContent_whenContentIsNull_setsReadFailedMessage() {
+        val vm = makeViewModel()
+
+        vm.importDataFromFileContent(null)
+
+        assertEquals(SettingsEvent.ImportReadFailed, vm.dataOperationMessage.value)
     }
 
     // ── Tests: preferences setter delegation ──────────────────────────────

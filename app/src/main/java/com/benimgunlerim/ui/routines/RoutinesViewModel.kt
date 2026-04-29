@@ -6,8 +6,9 @@ import com.benimgunlerim.analytics.AnalyticsEvent
 import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.RoutineRepository
-import com.benimgunlerim.data.local.entity.CompletionLogEntity
+import com.benimgunlerim.data.currentStreakForEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.model.CompletionStatus
@@ -18,19 +19,13 @@ import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
 import com.benimgunlerim.domain.usecase.UpdateRoutineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
-import java.time.LocalDate
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-data class RoutineListItem(
-    val routine: RoutineEntity,
-    val currentStreak: Int,
-    val last7Days: List<Boolean> = emptyList(), // Mon..Sun: true if completed
-)
 
 @HiltViewModel
 class RoutinesViewModel @Inject constructor(
@@ -45,10 +40,13 @@ class RoutinesViewModel @Inject constructor(
 ) : ViewModel() {
     fun todayDayOfWeek(): DayOfWeek = dateTimeProvider.today().dayOfWeek
 
-    val routines: StateFlow<List<RoutineListItem>> = combine(
+    private val routineEntitiesById = MutableStateFlow<Map<String, RoutineEntity>>(emptyMap())
+
+    val routines: StateFlow<List<RoutineCardUi>> = combine(
         routineRepository.observeActive(),
         completionLogRepository.observeAll(),
     ) { routines, logs ->
+        routineEntitiesById.value = routines.associateBy { it.id }
         val today = dateTimeProvider.today()
         val weekStart = today.minusDays(6)
         routines.map { routine ->
@@ -61,9 +59,19 @@ class RoutinesViewModel @Inject constructor(
                 val date = weekStart.plusDays(offset.toLong()).toString()
                 routineLogs.any { it.date == date }
             }
-            RoutineListItem(
-                routine = routine,
-                currentStreak = currentStreakForEntity(logs, CompletionEntityType.ROUTINE.value, routine.id, today),
+            RoutineCardUi(
+                id = routine.id,
+                name = routine.name,
+                targetDays = routine.targetDaySet(),
+                preferredTime = routine.preferredTime,
+                targetType = routine.targetType,
+                targetValue = routine.targetValue,
+                targetUnit = routine.targetUnit,
+                currentStreak = logs.currentStreakForEntity(
+                    entityType = CompletionEntityType.ROUTINE.value,
+                    entityId = routine.id,
+                    today = today,
+                ),
                 last7Days = last7,
             )
         }
@@ -90,43 +98,32 @@ class RoutinesViewModel @Inject constructor(
     }
 
     fun updateRoutine(
-        routine: RoutineEntity,
+        routineId: String,
         name: String,
         targetDays: Set<DayOfWeek>,
         preferredTime: String?,
-        targetType: String = routine.targetType,
-        targetValue: Int? = routine.targetValue,
-        targetUnit: String? = routine.targetUnit,
     ) {
-        viewModelScope.launch { updateRoutineUseCase(routine, name, targetDays, preferredTime, targetType, targetValue, targetUnit) }
+        val routine = routineEntitiesById.value[routineId] ?: return
+        viewModelScope.launch {
+            updateRoutineUseCase(
+                routine = routine,
+                name = name,
+                targetDays = targetDays,
+                preferredTime = preferredTime,
+                targetType = routine.targetType,
+                targetValue = routine.targetValue,
+                targetUnit = routine.targetUnit,
+            )
+        }
     }
 
-    fun archiveRoutine(routine: RoutineEntity) {
+    fun archiveRoutine(routineId: String) {
+        val routine = routineEntitiesById.value[routineId] ?: return
         viewModelScope.launch { archiveRoutineUseCase(routine) }
     }
 
-    fun skipRoutine(routine: RoutineEntity) {
+    fun skipRoutine(routineId: String) {
+        val routine = routineEntitiesById.value[routineId] ?: return
         viewModelScope.launch { skipRoutineUseCase(routine, dateTimeProvider.today()) }
-    }
-
-    private fun currentStreakForEntity(
-        logs: List<CompletionLogEntity>,
-        entityType: String,
-        entityId: String,
-        today: LocalDate,
-    ): Int {
-        val completedDates = logs
-            .asSequence()
-            .filter { it.entityType == entityType && it.entityId == entityId }
-            .filter { it.status == CompletionStatus.COMPLETED.value }
-            .mapNotNull { runCatching { LocalDate.parse(it.date) }.getOrNull() }
-            .toSet()
-        var streak = 0
-        var cursor = today
-        while (cursor in completedDates) {
-            streak += 1
-            cursor = cursor.minusDays(1)
-        }
-        return streak
     }
 }

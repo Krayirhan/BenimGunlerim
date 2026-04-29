@@ -36,13 +36,13 @@ if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Coverage" -ForegroundColor Red; exi
 Write-Host "PASS: Coverage" -ForegroundColor Green
 
 Write-Host ""
-Write-Host "[3/5] Lint debug..." -ForegroundColor Yellow
+Write-Host "[3/6] Lint debug..." -ForegroundColor Yellow
 .\gradlew.bat lintDebug
 if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Lint debug" -ForegroundColor Red; exit 1 }
 Write-Host "PASS: Lint debug" -ForegroundColor Green
 
 Write-Host ""
-Write-Host "[4/5] Static analysis (detekt)..." -ForegroundColor Yellow
+Write-Host "[4/6] Static analysis (detekt)..." -ForegroundColor Yellow
 .\gradlew.bat detekt
 if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Detekt" -ForegroundColor Red; exit 1 }
 Write-Host "PASS: Detekt" -ForegroundColor Green

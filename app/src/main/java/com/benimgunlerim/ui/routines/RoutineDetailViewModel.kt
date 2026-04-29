@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.RoutineRepository
+import com.benimgunlerim.data.currentStreakForEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.model.CompletionStatus
@@ -22,7 +24,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class RoutineDetailUiState(
-    val routine: RoutineEntity? = null,
+    val routine: RoutineDetailRoutineUi? = null,
     val currentStreak: Int = 0,
     val bestStreak: Int = 0,
     val successRate: Int = 0,
@@ -42,12 +44,14 @@ class RoutineDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val routineId: String = checkNotNull(savedStateHandle["routineId"])
+    private var currentRoutine: RoutineEntity? = null
 
     val uiState: StateFlow<RoutineDetailUiState> = combine(
         routineRepository.observeActive(),
         completionLogRepository.observeAll(),
     ) { routines, allLogs ->
         val routine = routines.firstOrNull { it.id == routineId }
+        currentRoutine = routine
         if (routine == null) return@combine RoutineDetailUiState(isLoading = false)
 
         val routineLogs = allLogs.filter {
@@ -84,8 +88,20 @@ class RoutineDetailViewModel @Inject constructor(
         val bestStreak = calculateBestStreak(completedLogs)
 
         RoutineDetailUiState(
-            routine = routine,
-            currentStreak = currentStreakForEntity(allLogs, CompletionEntityType.ROUTINE.value, routineId, today),
+            routine = RoutineDetailRoutineUi(
+                id = routine.id,
+                name = routine.name,
+                targetDays = routine.targetDaySet(),
+                preferredTime = routine.preferredTime,
+                targetType = routine.targetType,
+                targetValue = routine.targetValue,
+                targetUnit = routine.targetUnit,
+            ),
+            currentStreak = allLogs.currentStreakForEntity(
+                entityType = CompletionEntityType.ROUTINE.value,
+                entityId = routineId,
+                today = today,
+            ),
             bestStreak = bestStreak,
             successRate = successRate,
             last7Days = last7,
@@ -95,12 +111,12 @@ class RoutineDetailViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), RoutineDetailUiState())
 
     fun archiveRoutine() {
-        val routine = uiState.value.routine ?: return
+        val routine = currentRoutine ?: return
         viewModelScope.launch { archiveRoutineUseCase(routine) }
     }
 
     fun skipToday() {
-        val routine = uiState.value.routine ?: return
+        val routine = currentRoutine ?: return
         viewModelScope.launch { skipRoutineUseCase(routine, dateTimeProvider.today()) }
     }
 
@@ -124,24 +140,4 @@ class RoutineDetailViewModel @Inject constructor(
         return best
     }
 
-    private fun currentStreakForEntity(
-        logs: List<CompletionLogEntity>,
-        entityType: String,
-        entityId: String,
-        today: LocalDate,
-    ): Int {
-        val completedDates = logs
-            .asSequence()
-            .filter { it.entityType == entityType && it.entityId == entityId }
-            .filter { it.status == CompletionStatus.COMPLETED.value }
-            .mapNotNull { runCatching { LocalDate.parse(it.date) }.getOrNull() }
-            .toSet()
-        var streak = 0
-        var cursor = today
-        while (cursor in completedDates) {
-            streak += 1
-            cursor = cursor.minusDays(1)
-        }
-        return streak
-    }
 }

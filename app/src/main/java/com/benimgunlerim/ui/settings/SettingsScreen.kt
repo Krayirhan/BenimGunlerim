@@ -52,6 +52,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,6 +102,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     }
     var showClearDataDialog by remember { mutableStateOf(false) }
     var showImportDataDialog by remember { mutableStateOf(false) }
+    var pendingExportJson by remember { mutableStateOf<String?>(null) }
     var notificationsGranted by remember {
         mutableStateOf(
             Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
@@ -118,28 +120,38 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val exportLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/json"),
     ) { uri ->
-        if (uri != null) {
-            viewModel.exportData { json ->
-                val exported = context.writeTextToUri(uri, json)
-                viewModel.setDataOperationMessage(
-                    if (exported) {
-                        SettingsEvent.ExportSaved
-                    } else {
-                        SettingsEvent.ExportWriteFailed
-                    },
-                )
-            }
+        val pendingJson = pendingExportJson
+        if (uri != null && pendingJson != null) {
+            val exported = context.writeTextToUri(uri, pendingJson)
+            viewModel.setDataOperationMessage(
+                if (exported) {
+                    SettingsEvent.ExportSaved
+                } else {
+                    SettingsEvent.ExportWriteFailed
+                },
+            )
         }
+        pendingExportJson = null
     }
     val importLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument(),
     ) { uri ->
         if (uri != null) {
-            val json = context.readTextFromUri(uri)
-            if (json == null) {
-                viewModel.setDataOperationMessage(SettingsEvent.ImportReadFailed)
-            } else {
-                viewModel.importData(json)
+            viewModel.importDataFromFileContent(context.readTextFromUri(uri))
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffects.collect { effect ->
+            when (effect) {
+                is SettingsUiEffect.SaveExportJson -> {
+                    pendingExportJson = effect.content
+                    exportLauncher.launch(effect.fileName)
+                }
+
+                SettingsUiEffect.RequestImportJson -> {
+                    importLauncher.launch(arrayOf("application/json", "text/*", "*/*"))
+                }
             }
         }
     }
@@ -158,7 +170,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             onDismiss = { showImportDataDialog = false },
             onConfirm = {
                 showImportDataDialog = false
-                importLauncher.launch(arrayOf("application/json", "text/*", "*/*"))
+                viewModel.requestImportFromFile()
             },
         )
     }
@@ -249,7 +261,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                     preferences = preferences,
                     dataOperationMessage = dataOperationMessage,
                     onExportData = {
-                        exportLauncher.launch("benimgunlerim-yedek.json")
+                        viewModel.exportDataToFile()
                     },
                     onImportData = { showImportDataDialog = true },
                     onClearData = { showClearDataDialog = true },

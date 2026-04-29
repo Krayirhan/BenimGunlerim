@@ -15,13 +15,20 @@ import com.benimgunlerim.domain.normalizedTimeOrNull
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalTime
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+sealed class SettingsUiEffect {
+    data class SaveExportJson(val fileName: String, val content: String) : SettingsUiEffect()
+    data object RequestImportJson : SettingsUiEffect()
+}
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
@@ -36,6 +43,8 @@ class SettingsViewModel @Inject constructor(
 ) : ViewModel() {
     private val _dataOperationMessage = MutableStateFlow<SettingsEvent?>(null)
     val dataOperationMessage: StateFlow<SettingsEvent?> = _dataOperationMessage.asStateFlow()
+    private val _uiEffects = MutableSharedFlow<SettingsUiEffect>(extraBufferCapacity = 4)
+    val uiEffects = _uiEffects.asSharedFlow()
 
     val preferences: StateFlow<UserPreferences> = preferencesRepository.preferences.stateIn(
         scope = viewModelScope,
@@ -91,6 +100,34 @@ class SettingsViewModel @Inject constructor(
                 onReady(json)
             }
         }
+    }
+
+    fun exportDataToFile() {
+        viewModelScope.launch {
+            val json = dataExportService.exportToJson()
+            if (json == null) {
+                _dataOperationMessage.value = SettingsEvent.ExportFailed
+            } else {
+                _uiEffects.tryEmit(
+                    SettingsUiEffect.SaveExportJson(
+                        fileName = "benimgunlerim-yedek.json",
+                        content = json,
+                    ),
+                )
+            }
+        }
+    }
+
+    fun requestImportFromFile() {
+        _uiEffects.tryEmit(SettingsUiEffect.RequestImportJson)
+    }
+
+    fun importDataFromFileContent(content: String?) {
+        if (content == null) {
+            _dataOperationMessage.value = SettingsEvent.ImportReadFailed
+            return
+        }
+        importData(content)
     }
 
     fun importData(json: String) {

@@ -63,11 +63,11 @@ private enum class Destination(
     val icon: ImageVector,
     val selectedIcon: ImageVector,
 ) {
-    Today("today", "Bugün", Icons.Outlined.CheckCircle, Icons.Filled.CheckCircle),
-    Plan("plan", "Plan", Icons.Outlined.CalendarMonth, Icons.Filled.CalendarMonth),
-    Routines("routines", "Rutinler", Icons.Outlined.LocalFireDepartment, Icons.Filled.LocalFireDepartment),
-    Progress("progress", "İlerlemen", Icons.Outlined.BarChart, Icons.Filled.BarChart),
-    Settings("settings", "Ayarlar", Icons.Outlined.Settings, Icons.Filled.Settings),
+    Today(AppDestination.Today.route, "Bugün", Icons.Outlined.CheckCircle, Icons.Filled.CheckCircle),
+    Plan(AppDestination.Plan.route, "Plan", Icons.Outlined.CalendarMonth, Icons.Filled.CalendarMonth),
+    Routines(AppDestination.Routines.route, "Rutinler", Icons.Outlined.LocalFireDepartment, Icons.Filled.LocalFireDepartment),
+    Progress(AppDestination.Progress.route, "İlerlemen", Icons.Outlined.BarChart, Icons.Filled.BarChart),
+    Settings(AppDestination.Settings.route, "Ayarlar", Icons.Outlined.Settings, Icons.Filled.Settings),
 }
 
 @Composable
@@ -78,7 +78,11 @@ fun BenimGunlerimApp(
 ) {
     val preferences by viewModel.preferences.collectAsState()
     val navController = rememberNavController()
-    val startDestination = if (forceOnboardingCompleted || preferences.onboardingCompleted) Destination.Today.route else "onboarding"
+    val startDestination = if (forceOnboardingCompleted || preferences.onboardingCompleted) {
+        Destination.Today.route
+    } else {
+        AppDestination.Onboarding.route
+    }
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     val showBottomBar = Destination.entries.any { it.route == currentRoute }
@@ -177,12 +181,12 @@ fun BenimGunlerimApp(
             popEnterTransition = { fadeIn(tween(200)) },
             popExitTransition = { fadeOut(tween(200)) },
         ) {
-            composable("onboarding") {
+            composable(AppDestination.Onboarding.route) {
                 OnboardingScreen(
                     onComplete = { needId, intensityId, routineNames, taskTitle ->
                         viewModel.completeOnboarding(needId, intensityId, routineNames, taskTitle)
                         navController.navigate(Destination.Today.route) {
-                            popUpTo("onboarding") { inclusive = true }
+                            popUpTo(AppDestination.Onboarding.route) { inclusive = true }
                         }
                     },
                 )
@@ -191,11 +195,13 @@ fun BenimGunlerimApp(
             composable(Destination.Plan.route) { PlanScreen() }
             composable(Destination.Routines.route) {
                 RoutinesScreen(onNavigateToDetail = { routineId ->
-                    navController.navigate("routine_detail/$routineId")
+                    navController.navigate(AppDestination.RoutineDetailPattern.createRoute(routineId))
                 })
             }
-            composable("routine_detail/{routineId}") { backStackEntry ->
-                val routineId = backStackEntry.arguments?.getString("routineId") ?: return@composable
+            composable(AppDestination.RoutineDetailPattern.route) { backStackEntry ->
+                val routineId = backStackEntry.arguments?.getString(
+                    AppDestination.RoutineDetailPattern.ARG_ROUTINE_ID,
+                ) ?: return@composable
                 RoutineDetailScreen(
                     routineId = routineId,
                     onBack = { navController.popBackStack() },
@@ -203,10 +209,10 @@ fun BenimGunlerimApp(
             }
             composable(Destination.Progress.route) {
                 ProgressScreen(
-                    onOpenAchievements = { navController.navigate("achievements") },
+                    onOpenAchievements = { navController.navigate(AppDestination.Achievements.route) },
                 )
             }
-            composable("achievements") {
+            composable(AppDestination.Achievements.route) {
                 AchievementsScreen(onBack = { navController.popBackStack() })
             }
             composable(Destination.Settings.route) { SettingsScreen() }

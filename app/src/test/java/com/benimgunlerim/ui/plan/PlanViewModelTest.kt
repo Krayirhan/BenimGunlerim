@@ -1,11 +1,12 @@
 package com.benimgunlerim.ui.plan
 
-import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
 import com.benimgunlerim.domain.usecase.DeleteTaskUseCase
 import com.benimgunlerim.domain.usecase.MoveTaskToDateUseCase
+import com.benimgunlerim.domain.usecase.ObservePlanSnapshotUseCase
+import com.benimgunlerim.domain.usecase.PlanSnapshot
 import com.benimgunlerim.domain.usecase.ToggleTaskUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,8 +31,8 @@ import org.junit.Test
 class PlanViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
-    private val taskRepository: TaskRepository = mockk(relaxed = true)
     private val dateTimeProvider: DateTimeProvider = mockk(relaxed = true)
+    private val observePlanSnapshotUseCase: ObservePlanSnapshotUseCase = mockk(relaxed = true)
     private val addTaskUseCase: AddTaskUseCase = mockk(relaxed = true)
     private val toggleTaskUseCase: ToggleTaskUseCase = mockk(relaxed = true)
     private val deleteTaskUseCase: DeleteTaskUseCase = mockk(relaxed = true)
@@ -44,12 +45,13 @@ class PlanViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { dateTimeProvider.today() } returns fixedDate
-        every { taskRepository.observeRange(any(), any()) } returns flowOf(emptyList())
-        every { taskRepository.observeOverdue(any()) } returns flowOf(emptyList())
+        every { observePlanSnapshotUseCase(any(), any()) } returns flowOf(
+            PlanSnapshot(tasksForDay = emptyList(), overdueTasks = emptyList()),
+        )
         coEvery { addTaskUseCase(any(), any(), any(), any(), any(), any(), any()) } returns makeTask("added", "x")
         viewModel = PlanViewModel(
-            taskRepository = taskRepository,
             dateTimeProvider = dateTimeProvider,
+            observePlanSnapshotUseCase = observePlanSnapshotUseCase,
             addTaskUseCase = addTaskUseCase,
             toggleTaskUseCase = toggleTaskUseCase,
             deleteTaskUseCase = deleteTaskUseCase,
@@ -113,10 +115,17 @@ class PlanViewModelTest {
     @Test
     fun toggleTask_callsRepository() = runTest {
         val task = makeTask("t1", "Buy milk")
-        viewModel.toggleTask(task)
+        every { observePlanSnapshotUseCase(any(), any()) } returns flowOf(
+            PlanSnapshot(tasksForDay = listOf(task), overdueTasks = emptyList()),
+        )
+        val job = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.toggleTask(task.id)
         advanceUntilIdle()
 
         coVerify { toggleTaskUseCase(task) }
+        job.cancel()
     }
 
     // ── deleteTask ────────────────────────────────────────────────────────────
@@ -124,10 +133,17 @@ class PlanViewModelTest {
     @Test
     fun deleteTask_callsRepository() = runTest {
         val task = makeTask("t1", "Buy milk")
-        viewModel.deleteTask(task)
+        every { observePlanSnapshotUseCase(any(), any()) } returns flowOf(
+            PlanSnapshot(tasksForDay = listOf(task), overdueTasks = emptyList()),
+        )
+        val job = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.deleteTask(task.id)
         advanceUntilIdle()
 
         coVerify { deleteTaskUseCase(task) }
+        job.cancel()
     }
 
     // ── moveTaskToDate ────────────────────────────────────────────────────────
@@ -136,10 +152,17 @@ class PlanViewModelTest {
     fun moveTaskToDate_callsRepository() = runTest {
         val task = makeTask("t1", "Buy milk")
         val newDate = fixedDate.plusDays(1)
-        viewModel.moveTaskToDate(task, newDate)
+        every { observePlanSnapshotUseCase(any(), any()) } returns flowOf(
+            PlanSnapshot(tasksForDay = listOf(task), overdueTasks = emptyList()),
+        )
+        val job = launch { viewModel.uiState.collect {} }
+        advanceUntilIdle()
+
+        viewModel.moveTaskToDate(task.id, newDate)
         advanceUntilIdle()
 
         coVerify { moveTaskToDateUseCase(task, newDate) }
+        job.cancel()
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────

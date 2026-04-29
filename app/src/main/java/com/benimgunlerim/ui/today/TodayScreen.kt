@@ -64,7 +64,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,6 +86,7 @@ import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.domain.model.CompletionEntityType
+import com.benimgunlerim.domain.model.GameEvent
 import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.ui.components.AchievementUnlockOverlay
@@ -106,7 +106,6 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +113,6 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
     val today = viewModel.today()
     val snackbarHost = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
 
     val msgTaskMovedTomorrow = stringResource(R.string.today_task_moved_tomorrow)
@@ -133,8 +131,6 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     var showCloseSheet by remember { mutableStateOf(false) }
     var showMissedDaySheet by remember { mutableStateOf(false) }
     var selectedTask by remember { mutableStateOf<TaskEntity?>(null) }
-
-    var lastDeletedTask by remember { mutableStateOf<TaskEntity?>(null) }
 
     var showConfetti by remember { mutableStateOf(false) }
     var confettiIntensity by remember { mutableStateOf(ConfettiIntensity.Mini) }
@@ -171,6 +167,39 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     showAchievement = true
                     showConfetti = true
                     confettiIntensity = ConfettiIntensity.Medium
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffects.collect { effect ->
+            when (effect) {
+                is TodayUiEffect.TaskMovedTomorrow -> {
+                    snackbarHost.showSnackbar(msgTaskMovedTomorrow)
+                }
+                is TodayUiEffect.TaskDeleted -> {
+                    val result = snackbarHost.showSnackbar(
+                        message = msgTaskDeleted,
+                        actionLabel = msgUndoLabel,
+                        duration = SnackbarDuration.Short,
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        viewModel.restoreTask(effect.task)
+                    }
+                }
+                is TodayUiEffect.TaskCompletedUndo -> {
+                    val result = snackbarHost.showSnackbar(
+                        message = msgTaskCompleted,
+                        actionLabel = msgUndoLabel,
+                        duration = SnackbarDuration.Short,
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        viewModel.undoTaskToggle(effect.taskId)
+                    }
+                }
+                is TodayUiEffect.DaySaved -> {
+                    snackbarHost.showSnackbar(msgDaySaved)
                 }
             }
         }
@@ -229,22 +258,10 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 onMoveTomorrow = {
                     viewModel.moveTaskToTomorrow(task)
                     selectedTask = null
-                    scope.launch { snackbarHost.showSnackbar(msgTaskMovedTomorrow) }
                 },
                 onDelete = {
-                    lastDeletedTask = task
                     viewModel.deleteTask(task)
                     selectedTask = null
-                    scope.launch {
-                        val result = snackbarHost.showSnackbar(
-                            message = msgTaskDeleted,
-                            actionLabel = msgUndoLabel,
-                            duration = SnackbarDuration.Short,
-                        )
-                        if (result == SnackbarResult.ActionPerformed) {
-                            lastDeletedTask?.let { viewModel.restoreTask(it) }
-                        }
-                    }
                 },
                 onAddSubTask = { title -> viewModel.addSubTask(task.id, title) },
                 onToggleSubTask = { st -> viewModel.toggleSubTask(st) },
@@ -266,7 +283,6 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     viewModel.saveDailySummary(note, mood, energy, bestMoment, challenge, tomorrowIntention)
                     if (carryTasks) viewModel.carryTasksToTomorrow()
                     showCloseSheet = false
-                    scope.launch { snackbarHost.showSnackbar(msgDaySaved) }
                 },
             )
         }
@@ -283,7 +299,6 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, _ ->
                     viewModel.saveMissedDaySummary(missedDate, note, mood, energy, bestMoment, challenge, tomorrowIntention)
                     showMissedDaySheet = false
-                    scope.launch { snackbarHost.showSnackbar(msgDaySaved) }
                 },
             )
         }
@@ -348,36 +363,12 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                         tasks = state.tasks,
                         onToggle = { task ->
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val wasPending = task.completionState != TaskCompletionState.COMPLETED.value
                             viewModel.toggleTask(task)
-                            if (wasPending) {
-                                scope.launch {
-                                    val result = snackbarHost.showSnackbar(
-                                        message = msgTaskCompleted,
-                                        actionLabel = msgUndoLabel,
-                                        duration = SnackbarDuration.Short,
-                                    )
-                                    if (result == SnackbarResult.ActionPerformed) {
-                                        viewModel.undoTaskToggle(task.id)
-                                    }
-                                }
-                            }
                         },
                         onAdd = { showAddSheet = true },
                         onOpen = { selectedTask = it },
                         onSwipeDelete = { task ->
-                            lastDeletedTask = task
                             viewModel.deleteTask(task)
-                            scope.launch {
-                                val result = snackbarHost.showSnackbar(
-                                    message = msgTaskDeleted,
-                                    actionLabel = msgUndoLabel,
-                                    duration = SnackbarDuration.Short,
-                                )
-                                if (result == SnackbarResult.ActionPerformed) {
-                                    lastDeletedTask?.let { viewModel.restoreTask(it) }
-                                }
-                            }
                         },
                     )
                 }

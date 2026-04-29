@@ -129,6 +129,7 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
                                 shape = RoundedCornerShape(16.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = XpGold),
                                 modifier = Modifier.fillMaxWidth().height(44.dp),
+                                enabled = !state.isClaimingDailyReward,
                             ) {
                                 Text(stringResource(R.string.shop_daily_gift_claim_btn), color = Color.White)
                             }
@@ -160,6 +161,7 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
                             item = shopItem,
                             owned = owned,
                             canAfford = state.gold >= shopItem.cost,
+                            isPurchasing = state.purchasingItemId == shopItem.id,
                             onBuy = { viewModel.purchaseItem(shopItem) },
                         )
                     }
@@ -177,10 +179,12 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun ShopItemCard(
     item: ShopItem,
     owned: Boolean,
     canAfford: Boolean,
+    isPurchasing: Boolean,
     onBuy: () -> Unit,
 ) {
     val bgColor by animateColorAsState(
@@ -246,7 +250,7 @@ private fun ShopItemCard(
             } else {
                 Button(
                     onClick = onBuy,
-                    enabled = canAfford,
+                    enabled = canAfford && !isPurchasing,
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = XpGold,
@@ -255,7 +259,7 @@ private fun ShopItemCard(
                     contentPadding = ButtonDefaults.ContentPadding,
                 ) {
                     Text(
-                        stringResource(R.string.shop_purchase_button_icon) + " ${item.cost}",
+                        if (isPurchasing) "..." else stringResource(R.string.shop_purchase_button_icon) + " ${item.cost}",
                         style = MaterialTheme.typography.labelMedium,
                         color = Color.White,
                     )
