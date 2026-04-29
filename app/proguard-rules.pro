@@ -83,3 +83,16 @@
 # StoredErrorReport is accessed via getStoredReports() at runtime
 -keep class com.benimgunlerim.analytics.StoredErrorReport { *; }
 
+# ── Domain model data classes ────────────────────────────────────────────────
+# These Kotlin data classes cross architectural layers or are serialised;
+# keep their field names so that reflection-based tooling and debuggers work.
+-keep class com.benimgunlerim.domain.usecase.TodaySnapshot { *; }
+-keep class com.benimgunlerim.domain.AchievementDef { *; }
+-keep class com.benimgunlerim.domain.GameEngine$LevelInfo { *; }
+-keep class com.benimgunlerim.domain.OperationResult { *; }
+-keep class com.benimgunlerim.domain.OperationResult$* { *; }
+-keep class com.benimgunlerim.domain.service.GrantResult { *; }
+-keep class com.benimgunlerim.ui.today.TodayUiState { *; }
+-keep class com.benimgunlerim.ui.today.GameEvent { *; }
+-keep class com.benimgunlerim.ui.today.GameEvent$* { *; }
+

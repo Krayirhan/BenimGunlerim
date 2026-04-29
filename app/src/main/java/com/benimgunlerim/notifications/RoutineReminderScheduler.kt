@@ -16,10 +16,10 @@ import javax.inject.Singleton
 @Singleton
 class RoutineReminderScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : RoutineReminderSchedulerContract {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedule(routine: RoutineEntity) {
+    override fun schedule(routine: RoutineEntity) {
         val time = routine.preferredTime?.let { runCatching { LocalTime.parse(it) }.getOrNull() } ?: return
         val triggerAt = nextTriggerMillis(time)
         val pendingIntent = routinePendingIntent(routine)
@@ -31,7 +31,7 @@ class RoutineReminderScheduler @Inject constructor(
         )
     }
 
-    fun cancel(routine: RoutineEntity) {
+    override fun cancel(routine: RoutineEntity) {
         alarmManager.cancel(routinePendingIntent(routine))
     }
 
@@ -54,7 +54,7 @@ class RoutineReminderScheduler @Inject constructor(
         }
         return PendingIntent.getBroadcast(
             context,
-            routine.id.hashCode(),
+            NotificationIds.forRoutine(routine.id),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )

@@ -14,17 +14,17 @@ import javax.inject.Singleton
 @Singleton
 class TaskReminderScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : TaskReminderSchedulerContract {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-    fun schedule(taskId: String, taskTitle: String, date: LocalDate, time: LocalTime) {
+    override fun schedule(taskId: String, taskTitle: String, date: LocalDate, time: LocalTime) {
         val triggerAt = date.atTime(time).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         if (triggerAt <= System.currentTimeMillis()) return
         val pendingIntent = taskPendingIntent(taskId, taskTitle)
         alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
     }
 
-    fun cancel(taskId: String) {
+    override fun cancel(taskId: String) {
         alarmManager.cancel(taskPendingIntent(taskId, ""))
     }
 
@@ -36,7 +36,7 @@ class TaskReminderScheduler @Inject constructor(
         }
         return PendingIntent.getBroadcast(
             context,
-            taskId.hashCode(),
+            NotificationIds.forTask(taskId),
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )

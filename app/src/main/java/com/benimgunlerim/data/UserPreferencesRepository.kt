@@ -2,6 +2,7 @@ package com.benimgunlerim.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import java.time.LocalDate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -209,9 +210,10 @@ class UserPreferencesRepository @Inject constructor(
         var granted = false
         context.userPreferencesDataStore.edit { prefs ->
             val currentEvents = prefs[Keys.rewardedEvents].orEmpty()
-            val events = currentEvents.split(",").filter { it.isNotBlank() }.toSet()
+            val events = currentEvents.split(",").filter { it.isNotBlank() }.toMutableList()
             if (eventKey !in events) {
-                prefs[Keys.rewardedEvents] = (events + eventKey).joinToString(",")
+                events += eventKey
+                prefs[Keys.rewardedEvents] = pruneRewardedEvents(events)
                 prefs[Keys.totalXp] = (prefs[Keys.totalXp] ?: 0) + xp
                 prefs[Keys.gold] = (prefs[Keys.gold] ?: 0) + gold
                 val currentHappiness = prefs[Keys.happiness] ?: 0
@@ -220,6 +222,29 @@ class UserPreferencesRepository @Inject constructor(
             }
         }
         return granted
+    }
+
+    /**
+     * Removes date-keyed entries older than [REWARDED_EVENTS_RETENTION_DAYS] days and
+     * hard-caps the list at [MAX_REWARDED_EVENTS] entries to prevent unbounded DataStore growth.
+     * Non-date keys (permanent achievements) are always kept.
+     */
+    private fun pruneRewardedEvents(events: List<String>): String {
+        val cutoff = LocalDate.now().minusDays(REWARDED_EVENTS_RETENTION_DAYS).toString()
+        val pruned = events.filter { key ->
+            val dateMatch = DATE_PATTERN.find(key)
+            // Keep if no date found (permanent key) or if date is recent enough
+            dateMatch == null || dateMatch.value >= cutoff
+        }
+        return pruned.takeLast(MAX_REWARDED_EVENTS).joinToString(",")
+    }
+
+    companion object {
+        /** Days to retain date-stamped reward events before pruning. */
+        private const val REWARDED_EVENTS_RETENTION_DAYS = 90L
+        /** Hard cap to prevent unbounded DataStore string growth. */
+        private const val MAX_REWARDED_EVENTS = 500
+        private val DATE_PATTERN = Regex("""\d{4}-\d{2}-\d{2}""")
     }
 
     suspend fun incrementTasksCompleted() {
@@ -263,10 +288,10 @@ class UserPreferencesRepository @Inject constructor(
         var success = false
         context.userPreferencesDataStore.edit { prefs ->
             val currentGold = prefs[Keys.gold] ?: 0
-            if (currentGold >= cost) {
+            val ownedSet = (prefs[Keys.ownedItems] ?: "").split(",").filter { it.isNotBlank() }.toSet()
+            if (currentGold >= cost && itemId !in ownedSet) {
                 prefs[Keys.gold] = currentGold - cost
-                val owned = prefs[Keys.ownedItems] ?: ""
-                prefs[Keys.ownedItems] = if (owned.isEmpty()) itemId else "$owned,$itemId"
+                prefs[Keys.ownedItems] = (ownedSet + itemId).joinToString(",")
                 success = true
             }
         }

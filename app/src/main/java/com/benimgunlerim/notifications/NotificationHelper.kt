@@ -51,13 +51,13 @@ fun Context.showRoutineReminder(routineId: String, routineName: String) {
         .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(getString(R.string.notif_routine_title))
         .setContentText(getString(R.string.notif_routine_body, routineName))
-        .setContentIntent(openAppPendingIntent("routines", routineId.hashCode()))
-        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_ROUTINE, routineId, routineName, routineId.hashCode()))
+        .setContentIntent(openAppPendingIntent("routines", NotificationIds.forRoutine(routineId)))
+        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_ROUTINE, routineId, routineName))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setAutoCancel(true)
         .build()
 
-    safeNotify(routineId.hashCode(), notification)
+    safeNotify(NotificationIds.forRoutine(routineId), notification)
 }
 
 fun Context.showDailySummaryReminder() {
@@ -68,7 +68,7 @@ fun Context.showDailySummaryReminder() {
         .setContentTitle(getString(R.string.notif_daily_title))
         .setContentText(getString(R.string.notif_daily_body))
         .setContentIntent(openAppPendingIntent("today", 21_000))
-        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_DAILY, "daily", "Günlük özet", 21_000))
+        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_DAILY, "daily", "Günlük özet"))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setAutoCancel(true)
         .build()
@@ -124,12 +124,12 @@ fun Context.showTaskReminder(taskId: String, taskTitle: String) {
         .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(getString(R.string.notif_task_title))
         .setContentText(taskTitle)
-        .setContentIntent(openAppPendingIntent("today", taskId.hashCode()))
-        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_TASK, taskId, taskTitle, taskId.hashCode()))
+        .setContentIntent(openAppPendingIntent("today", NotificationIds.forTask(taskId)))
+        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_TASK, taskId, taskTitle))
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setAutoCancel(true)
         .build()
-    safeNotify(taskId.hashCode(), notification)
+    safeNotify(NotificationIds.forTask(taskId), notification)
 }
 
 fun Context.ensureMorningNotificationChannel() {
@@ -153,7 +153,7 @@ fun Context.showMorningPlannerReminder() {
         .setContentTitle(getString(R.string.notif_morning_title))
         .setContentText(getString(R.string.notif_morning_body))
         .setContentIntent(openAppPendingIntent("today", NotificationConstants.MORNING_PLANNER_REQUEST_CODE))
-        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_MORNING, "morning", "Sabah planlayıcısı", NotificationConstants.MORNING_PLANNER_REQUEST_CODE))
+        .addAction(buildSnoozeAction(NotificationConstants.SNOOZE_TYPE_MORNING, "morning", "Sabah planlayıcısı"))
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
         .setAutoCancel(true)
         .build()
@@ -166,7 +166,7 @@ fun Context.showMorningPlannerReminder() {
 
 // ─── Snooze ───────────────────────────────────────────────────────────────────
 
-private fun Context.buildSnoozeAction(type: String, id: String, title: String, requestCode: Int): NotificationCompat.Action {
+private fun Context.buildSnoozeAction(type: String, id: String, title: String): NotificationCompat.Action {
     val intent = Intent(this, SnoozeReceiver::class.java).apply {
         action = NotificationConstants.ACTION_SNOOZE
         putExtra(NotificationConstants.EXTRA_SNOOZE_TYPE, type)
@@ -175,7 +175,7 @@ private fun Context.buildSnoozeAction(type: String, id: String, title: String, r
     }
     val pi = PendingIntent.getBroadcast(
         this,
-        requestCode + 90_000,
+        NotificationIds.forSnoozeAction(type, id),
         intent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
@@ -190,10 +190,9 @@ internal fun Context.scheduleSnoozeShow(type: String, id: String, title: String)
         putExtra(NotificationConstants.EXTRA_SNOOZE_TITLE, title)
         putExtra("snooze_show", true)
     }
-    val requestCode = "$type$id".hashCode() + 91_000
     val pi = PendingIntent.getBroadcast(
         this,
-        requestCode,
+        NotificationIds.forSnoozeReshow(type, id),
         intent,
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )

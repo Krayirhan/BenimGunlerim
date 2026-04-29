@@ -11,16 +11,24 @@ import android.os.Vibrator
 import android.os.VibratorManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
-import javax.inject.Singleton
+
+interface FeedbackManager {
+    fun playSound(name: String, volume: Float = 0.7f)
+    fun tapLight()
+    fun tapMedium()
+    fun tapHeavy()
+    fun doubleTap()
+    fun celebrationBurst()
+    fun levelUpVibration()
+}
 
 /**
  * Lightweight sound + haptic manager.
  * Sound files are optional — if a raw resource doesn't exist, it silently skips.
  */
-@Singleton
-class FeedbackManager @Inject constructor(
+class SystemFeedbackManager @Inject constructor(
     @ApplicationContext private val context: Context,
-) {
+) : FeedbackManager {
     private val vibrator: Vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         (context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
     } else {
@@ -51,44 +59,44 @@ class FeedbackManager @Inject constructor(
         return id
     }
 
-    fun playSound(name: String, volume: Float = 0.7f) {
+    override fun playSound(name: String, volume: Float) {
         val id = loadSound(name) ?: return
         soundPool.play(id, volume, volume, 1, 0, 1f)
     }
 
     // ── Haptic patterns ──────────────────────────────────────────────────────
 
-    fun tapLight() {
+    override fun tapLight() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibrateSafely(VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK))
         }
     }
 
-    fun tapMedium() {
+    override fun tapMedium() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibrateSafely(VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK))
         }
     }
 
-    fun tapHeavy() {
+    override fun tapHeavy() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             vibrateSafely(VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK))
         }
     }
 
-    fun doubleTap() {
+    override fun doubleTap() {
         vibrateSafely(
             VibrationEffect.createWaveform(longArrayOf(0, 40, 60, 40), -1),
         )
     }
 
-    fun celebrationBurst() {
+    override fun celebrationBurst() {
         vibrateSafely(
             VibrationEffect.createWaveform(longArrayOf(0, 30, 50, 30, 50, 60), -1),
         )
     }
 
-    fun levelUpVibration() {
+    override fun levelUpVibration() {
         vibrateSafely(
             VibrationEffect.createWaveform(
                 longArrayOf(0, 50, 80, 50, 80, 50, 80, 100),

@@ -120,14 +120,19 @@ object GameEngine {
         else     -> "🐱"
     }
 
-    fun companionMessage(mood: String, streak: Int, progress: Float): String = when {
-        progress >= 1f          -> listOf("Bugün efsaneydin! 🎉", "Mükemmel gün! Her şeyi bitirdin! 🏆", "Sen bir kahraman! ⭐").random()
-        mood == "ecstatic"      -> listOf("Harika gidiyorsun! 🥳", "Seninle çok mutluyum! 💜", "Birlikte her şeyi başarırız! ✨").random()
-        mood == "happy"         -> listOf("Güzel gidiyor! 💪", "Devam et, iyi yoldasın! 🌟", "Birlikte yapabiliriz! 😊").random()
-        streak >= 7             -> "Harika bir seri! $streak gün! 🔥"
-        progress >= 0.5f        -> listOf("Yarıyı geçtin! 💫", "Güzel ilerliyorsun! 🌈").random()
-        progress > 0f           -> listOf("Güzel başlangıç! 🌱", "Her adım önemli! 🌸").random()
-        else                    -> listOf("Hadi maceraya başlayalım! ✨", "Yeni bir gün, yeni fırsatlar! 🌅", "Bugün ne yapacağız? 🤔").random()
+    fun companionMessage(
+        mood: String,
+        streak: Int,
+        progress: Float,
+        random: RandomProvider = SystemRandomProvider(),
+    ): String = when {
+        progress >= 1f     -> random.pickFrom(listOf("Bugün efsaneydin! 🎉", "Mükemmel gün! Her şeyi bitirdin! 🏆", "Sen bir kahraman! ⭐"))
+        mood == "ecstatic" -> random.pickFrom(listOf("Harika gidiyorsun! 🥳", "Seninle çok mutluyum! 💜", "Birlikte her şeyi başarırız! ✨"))
+        mood == "happy"    -> random.pickFrom(listOf("Güzel gidiyor! 💪", "Devam et, iyi yoldasın! 🌟", "Birlikte yapabiliriz! 😊"))
+        streak >= 7        -> "Harika bir seri! $streak gün! 🔥"
+        progress >= 0.5f   -> random.pickFrom(listOf("Yarıyı geçtin! 💫", "Güzel ilerliyorsun! 🌈"))
+        progress > 0f           -> random.pickFrom(listOf("Güzel başlangıç! 🌱", "Her adım önemli! 🌸"))
+        else                    -> random.pickFrom(listOf("Hadi maceraya başlayalım! ✨", "Yeni bir gün, yeni fırsatlar! 🌅", "Bugün ne yapacağız? 🤔"))
     }
 
     fun xpForTask(priority: Int): Int = when (priority) {

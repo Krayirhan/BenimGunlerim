@@ -4,12 +4,13 @@ import com.benimgunlerim.data.local.TaskDao
 import com.benimgunlerim.data.local.RoutineDao
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.di.ApplicationScope
+import com.benimgunlerim.di.IoDispatcher
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -28,9 +29,10 @@ class ReminderBootstrapper @Inject constructor(
     private val dailySummaryScheduler: DailySummaryScheduler,
     private val userPreferencesRepository: UserPreferencesRepository,
     @ApplicationScope private val applicationScope: CoroutineScope,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ReminderRestorer {
     override fun rescheduleReminders() {
-        applicationScope.launch(Dispatchers.IO) {
+        applicationScope.launch(ioDispatcher) {
             val today = LocalDate.now()
             taskDao.getPendingRemindersFrom(today.toString()).forEach { task ->
                 val date = runCatching { LocalDate.parse(task.plannedDate) }.getOrNull()

@@ -1,6 +1,8 @@
 package com.benimgunlerim.domain
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -151,5 +153,118 @@ class GameEngineTest {
     @Test
     fun dayCloseXp_isPositive() {
         assertTrue(GameEngine.XP_DAY_CLOSE > 0)
+    }
+
+    // ── companionMessage — deterministic via FixedIndexRandomProvider ─────
+
+    @Test
+    fun companionMessage_fullProgress_returnsCelebrationMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 1f, random = fixed)
+        assertEquals("Bugün efsaneydin! 🎉", msg)
+    }
+
+    @Test
+    fun companionMessage_ecstaticMood_returnsEcstaticMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("ecstatic", streak = 0, progress = 0f, random = fixed)
+        assertEquals("Harika gidiyorsun! 🥳", msg)
+    }
+
+    @Test
+    fun companionMessage_happyMood_returnsHappyMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("happy", streak = 0, progress = 0f, random = fixed)
+        assertEquals("Güzel gidiyor! 💪", msg)
+    }
+
+    @Test
+    fun companionMessage_longStreak_returnsStreakMessage() {
+        val msg = GameEngine.companionMessage("neutral", streak = 7, progress = 0f)
+        assertNotNull(msg)
+        assertTrue(msg.contains("7"))
+    }
+
+    @Test
+    fun companionMessage_halfProgress_returnsHalfwayMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0.5f, random = fixed)
+        assertEquals("Yarıyı geçtin! 💫", msg)
+    }
+
+    @Test
+    fun companionMessage_smallProgress_returnsStarterMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0.1f, random = fixed)
+        assertEquals("Güzel başlangıç! 🌱", msg)
+    }
+
+    @Test
+    fun companionMessage_zeroProgress_returnsMotivationMessage() {
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0f, random = fixed)
+        assertEquals("Hadi maceraya başlayalım! ✨", msg)
+    }
+
+    @Test
+    fun companionMessage_fixedIndex1_returnsDifferentMessage() {
+        val fixed0 = FixedIndexRandomProvider(0)
+        val fixed1 = FixedIndexRandomProvider(1)
+        val msg0 = GameEngine.companionMessage("ecstatic", streak = 0, progress = 0f, random = fixed0)
+        val msg1 = GameEngine.companionMessage("ecstatic", streak = 0, progress = 0f, random = fixed1)
+        assertFalse(msg0 == msg1)
+    }
+
+    @Test
+    fun companionMessage_fullProgressHasPriority_overMood() {
+        // progress >= 1f branch should fire before mood check
+        val fixed = FixedIndexRandomProvider(0)
+        val msg = GameEngine.companionMessage("sad", streak = 0, progress = 1f, random = fixed)
+        assertEquals("Bugün efsaneydin! 🎉", msg)
+    }
+
+    // ── clampHappiness boundaries ─────────────────────────────────────────
+
+    @Test
+    fun clampHappiness_exactMin_returnsMin() {
+        assertEquals(GameEngine.HAPPINESS_MIN, GameEngine.clampHappiness(GameEngine.HAPPINESS_MIN))
+    }
+
+    @Test
+    fun clampHappiness_exactMax_returnsMax() {
+        assertEquals(GameEngine.HAPPINESS_MAX, GameEngine.clampHappiness(GameEngine.HAPPINESS_MAX))
+    }
+
+    @Test
+    fun clampHappiness_oneAboveMax_returnsMax() {
+        assertEquals(GameEngine.HAPPINESS_MAX, GameEngine.clampHappiness(GameEngine.HAPPINESS_MAX + 1))
+    }
+
+    @Test
+    fun clampHappiness_oneBelowMin_returnsMin() {
+        assertEquals(GameEngine.HAPPINESS_MIN, GameEngine.clampHappiness(GameEngine.HAPPINESS_MIN - 1))
+    }
+
+    // ── calculateLevel — threshold boundaries ────────────────────────────
+
+    @Test
+    fun calculateLevel_justBeforeLevel2_staysAtLevel1() {
+        val info = GameEngine.calculateLevel(99)
+        assertEquals(1, info.level)
+        assertEquals(99, info.currentXp)
+    }
+
+    @Test
+    fun calculateLevel_atLevel3Threshold_isLevel3() {
+        // Level 1→100, Level 2→200, so 300 total XP = level 3
+        val info = GameEngine.calculateLevel(300)
+        assertEquals(3, info.level)
+        assertEquals(0, info.currentXp)
+    }
+
+    @Test
+    fun calculateLevel_xpForNextLevelIsPositive() {
+        val info = GameEngine.calculateLevel(0)
+        assertTrue(info.xpForNextLevel > 0)
     }
 }

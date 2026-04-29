@@ -1,4 +1,4 @@
-package com.benimgunlerim.domain
+﻿package com.benimgunlerim.domain
 
 import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.entity.AchievementEntity
@@ -13,6 +13,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AchievementTrackerTest {
+
+    private val fixedDtp = FixedDateTimeProvider(fixedMillis = 1_000L)
 
     private class FakeAchievementDao : AchievementDao {
         private val store = linkedMapOf<String, AchievementEntity>()
@@ -62,7 +64,7 @@ class AchievementTrackerTest {
 
     @Test
     fun tryUnlock_returnsNull_whenIdUnknown() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         val result = tracker.tryUnlock("missing_id")
 
@@ -71,7 +73,7 @@ class AchievementTrackerTest {
 
     @Test
     fun tryUnlock_unlocksOnce_andSecondAttemptReturnsNull() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         val first = tracker.tryUnlock("streak_3")
         val second = tracker.tryUnlock("streak_3")
@@ -83,7 +85,7 @@ class AchievementTrackerTest {
 
     @Test
     fun checkStreak_unlocksAllExpectedMilestones() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         tracker.checkStreak(30)
 
@@ -96,7 +98,7 @@ class AchievementTrackerTest {
 
     @Test
     fun checkTaskCount_unlocksTaskMilestonesProgressively() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         tracker.checkTaskCount(50)
 
@@ -108,7 +110,7 @@ class AchievementTrackerTest {
 
     @Test
     fun checkRoutineCount_andPerfectDay_unlockExpectedIds() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         tracker.checkRoutineCount(100)
         tracker.checkPerfectDay(5)
@@ -124,7 +126,7 @@ class AchievementTrackerTest {
 
     @Test
     fun checkLevel_checkGold_checkDayClose_andHappiness_unlockExpected() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         tracker.checkLevel(20)
         tracker.checkGold(1000)
@@ -146,7 +148,7 @@ class AchievementTrackerTest {
 
     @Test
     fun allProgress_containsAllDefinitions_andMarksUnlockedOnes() = runTest {
-        val tracker = AchievementTracker(FakeAchievementDao())
+        val tracker = AchievementTracker(FakeAchievementDao(), fixedDtp)
 
         tracker.tryUnlock("streak_3")
         val progress = tracker.allProgress.first()

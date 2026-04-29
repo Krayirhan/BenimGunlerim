@@ -64,6 +64,7 @@ private val achievementMap = ALL_ACHIEVEMENTS.associateBy { it.id }
 @Singleton
 class AchievementTracker @Inject constructor(
     private val achievementDao: AchievementDao,
+    private val dateTimeProvider: DateTimeProvider,
 ) {
     private val _newUnlock = MutableSharedFlow<AchievementDef>(extraBufferCapacity = 5)
     val newUnlock = _newUnlock.asSharedFlow()
@@ -84,7 +85,7 @@ class AchievementTracker @Inject constructor(
         val def = achievementMap[id] ?: return null
         // Ensure row exists
         achievementDao.insert(AchievementEntity(id = id))
-        val updated = achievementDao.unlock(id, System.currentTimeMillis())
+        val updated = achievementDao.unlock(id, dateTimeProvider.currentTimeMillis())
         return if (updated > 0) {
             _newUnlock.tryEmit(def)
             def
