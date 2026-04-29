@@ -3,8 +3,10 @@
 package com.benimgunlerim.ui.today
 
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,6 +46,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -64,6 +67,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -72,6 +76,10 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -344,46 +352,53 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 106.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                item(key = "hero") { HeroCard(today, state.currentStreak, state.gameState.happiness) }
-                item(key = "dayScore") { DayScoreCard(completed, total, state.progress, completedRoutines, state.routines.size, completedTasks, state.tasks.size) }
-                item(key = "routines") {
-                    RoutinesCard(
+                item(key = "summary") {
+                    TodaySummaryCard(
+                        today = today,
+                        streak = state.currentStreak,
+                        happiness = state.gameState.happiness,
+                        completed = completed,
+                        total = total,
+                        progress = state.progress,
+                        routineDone = completedRoutines,
+                        routineTotal = state.routines.size,
+                        taskDone = completedTasks,
+                        taskTotal = state.tasks.size,
+                    )
+                }
+                item(key = "quickActions") {
+                    ProActionStrip(
+                        canCloseDay = state.canCloseDay || dayIsClosed,
+                        hasOverdue = state.overdueTasks.isNotEmpty(),
+                        onAddTask = { showAddSheet = true },
+                        onCloseDay = { showCloseSheet = true },
+                        onOpenOverdue = { selectedTaskId = state.overdueTasks.firstOrNull()?.id },
+                    )
+                }
+                item(key = "queue") {
+                    UnifiedQueueCard(
                         routines = state.routines,
+                        tasks = state.tasks,
+                        overdueTasks = state.overdueTasks,
                         completedRoutineIds = state.completedRoutineIds,
                         completionLogs = state.completionLogs,
-                        onToggle = {
+                        onToggleRoutine = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             viewModel.toggleRoutine(it.id, completedToday = it.id in state.completedRoutineIds)
                         },
-                        onProgressChange = { routine, value, wasCompleted ->
+                        onRoutineProgressChange = { routine, value, wasCompleted ->
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             viewModel.updateRoutineProgress(routine.id, value, wasCompleted)
                         },
-                    )
-                }
-                item(key = "tasks") {
-                    TasksCard(
-                        tasks = state.tasks,
-                        onToggle = { task ->
+                        onToggleTask = { task ->
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             viewModel.toggleTask(task.id)
                         },
-                        onAdd = { showAddSheet = true },
-                        onOpen = { selectedTaskId = it.id },
-                        onSwipeDelete = { task ->
-                            viewModel.deleteTask(task.id)
-                        },
+                        onOpenTask = { selectedTaskId = it.id },
+                        onDeleteTask = { viewModel.deleteTask(it.id) },
+                        onMoveOverdueToday = { viewModel.moveTaskToDate(it.id, today) },
+                        onAddTask = { showAddSheet = true },
                     )
-                }
-                if (state.overdueTasks.isNotEmpty()) {
-                    item(key = "overdue") {
-                        OverdueTasksCard(
-                            tasks = state.overdueTasks,
-                            onToggle = { viewModel.toggleTask(it.id) },
-                            onOpen = { selectedTaskId = it.id },
-                            onMoveToday = { viewModel.moveTaskToDate(it.id, today) },
-                        )
-                    }
                 }
                 val capturedMissedDay = state.missedDay
                 if (capturedMissedDay != null) {
@@ -415,6 +430,53 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
         FloatingRewardText(rewardText, showReward, Modifier.align(Alignment.Center)) { showReward = false }
         LevelUpOverlay(showLevelUp, levelUpLevel, levelUpTitle) { showLevelUp = false }
         AchievementUnlockOverlay(showAchievement, achievementEmoji, achievementTitle) { showAchievement = false }
+    }
+}
+
+@Composable
+private fun ProActionStrip(
+    canCloseDay: Boolean,
+    hasOverdue: Boolean,
+    onAddTask: () -> Unit,
+    onCloseDay: () -> Unit,
+    onOpenOverdue: () -> Unit,
+) {
+    SurfaceCard(radius = 22.dp, padding = 12.dp) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                text = stringResource(R.string.today_pro_actions_title),
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth().animateContentSize(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                OutlinedButton(
+                    onClick = onAddTask,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Text(stringResource(R.string.today_pro_action_add), maxLines = 1)
+                }
+                OutlinedButton(
+                    onClick = onCloseDay,
+                    enabled = canCloseDay,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Text(stringResource(R.string.today_pro_action_close), maxLines = 1)
+                }
+                OutlinedButton(
+                    onClick = onOpenOverdue,
+                    enabled = hasOverdue,
+                    modifier = Modifier.weight(1f),
+                    shape = RoundedCornerShape(12.dp),
+                ) {
+                    Text(stringResource(R.string.today_pro_action_overdue), maxLines = 1)
+                }
+            }
+        }
     }
 }
 
@@ -495,6 +557,271 @@ private fun DayScoreCard(
             Box(Modifier.fillMaxWidth().height(9.dp).clip(RoundedCornerShape(99.dp)).background(Color.White.copy(.20f))) {
                 Box(Modifier.fillMaxWidth(animated).height(9.dp).clip(RoundedCornerShape(99.dp)).background(Color.White.copy(.88f)))
             }
+        }
+    }
+}
+
+@Composable
+private fun TodaySummaryCard(
+    today: LocalDate,
+    streak: Int,
+    happiness: Int,
+    completed: Int,
+    total: Int,
+    progress: Float,
+    routineDone: Int,
+    routineTotal: Int,
+    taskDone: Int,
+    taskTotal: Int,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        HeroCard(today = today, streak = streak, happiness = happiness)
+        DayScoreCard(
+            completed = completed,
+            total = total,
+            progress = progress,
+            routineDone = routineDone,
+            routineTotal = routineTotal,
+            taskDone = taskDone,
+            taskTotal = taskTotal,
+        )
+    }
+}
+
+@Composable
+private fun UnifiedQueueCard(
+    routines: List<TodayRoutineUi>,
+    tasks: List<TodayTaskUi>,
+    overdueTasks: List<TodayTaskUi>,
+    completedRoutineIds: Set<String>,
+    completionLogs: List<CompletionLogEntity>,
+    onToggleRoutine: (TodayRoutineUi) -> Unit,
+    onRoutineProgressChange: (TodayRoutineUi, Float, Boolean) -> Unit,
+    onToggleTask: (TodayTaskUi) -> Unit,
+    onOpenTask: (TodayTaskUi) -> Unit,
+    onDeleteTask: (TodayTaskUi) -> Unit,
+    onMoveOverdueToday: (TodayTaskUi) -> Unit,
+    onAddTask: () -> Unit,
+) {
+    val openTasks = tasks.filterNot { it.completionState == TaskCompletionState.COMPLETED.value }
+    val completedTasks = tasks.filter { it.completionState == TaskCompletionState.COMPLETED.value }
+    val openRoutines = routines.filterNot { it.id in completedRoutineIds }
+    val completedRoutines = routines.filter { it.id in completedRoutineIds }
+    val focusScore = ((openTasks.size * 2) + (openRoutines.size * 3) + (overdueTasks.size * 4)).coerceAtLeast(0)
+
+    SectionShell(
+        title = stringResource(R.string.today_tasks_title),
+        subtitle = stringResource(R.string.today_tasks_subtitle),
+        badge = stringResource(R.string.today_day_status_label),
+        color = LevelSky,
+        actionLabel = stringResource(R.string.today_tasks_add_action),
+        onAction = onAddTask,
+    ) {
+        QueueHeaderStats(
+            overdueCount = overdueTasks.size,
+            taskCount = openTasks.size,
+            routineCount = openRoutines.size,
+            focusScore = focusScore,
+        )
+
+        if (tasks.isEmpty() && routines.isEmpty() && overdueTasks.isEmpty()) {
+            EmptyBox(stringResource(R.string.today_tasks_empty), LevelSky)
+        } else {
+            if (overdueTasks.isNotEmpty()) {
+                QueueSectionTitle(
+                    title = stringResource(R.string.today_overdue_title),
+                    subtitle = stringResource(R.string.today_overdue_subtitle, overdueTasks.size),
+                    color = StreakCoral,
+                )
+                overdueTasks.sortedByDescending { it.priority }.forEach { task ->
+                    TaskQueueRow(
+                        task = task,
+                        color = StreakCoral,
+                        onToggleTask = onToggleTask,
+                        onOpenTask = onOpenTask,
+                        onDeleteTask = onDeleteTask,
+                        onMoveOverdueToday = onMoveOverdueToday,
+                    )
+                }
+            }
+
+            if (openTasks.isNotEmpty()) {
+                QueueSectionTitle(
+                    title = stringResource(R.string.today_queue_now_title),
+                    subtitle = stringResource(R.string.today_queue_now_subtitle, openTasks.size),
+                    color = LevelSky,
+                )
+                openTasks.sortedByDescending { it.priority }.forEach { task ->
+                    SwipeableTaskRow(
+                        task = task,
+                        onToggle = onToggleTask,
+                        onOpen = onOpenTask,
+                        onDelete = onDeleteTask,
+                    )
+                }
+            }
+
+            if (openRoutines.isNotEmpty()) {
+                QueueSectionTitle(
+                    title = stringResource(R.string.today_queue_routines_title),
+                    subtitle = stringResource(R.string.today_queue_routines_subtitle, openRoutines.size),
+                    color = CandyPrimary,
+                )
+                openRoutines.forEach { routine ->
+                    val log = completionLogs.firstOrNull {
+                        it.entityType == CompletionEntityType.ROUTINE.value && it.entityId == routine.id
+                    }
+                    RoutineRow(
+                        routine = routine,
+                        log = log,
+                        done = false,
+                        onToggle = onToggleRoutine,
+                        onProgressChange = onRoutineProgressChange,
+                    )
+                }
+            }
+
+            if (completedTasks.isNotEmpty() || completedRoutines.isNotEmpty()) {
+                QueueSectionTitle(
+                    title = stringResource(R.string.today_queue_done_title),
+                    subtitle = stringResource(
+                        R.string.today_queue_done_subtitle,
+                        completedTasks.size + completedRoutines.size,
+                    ),
+                    color = CompletedGreen,
+                )
+            }
+
+            completedTasks.take(3).forEach { task ->
+                SwipeableTaskRow(
+                    task = task,
+                    onToggle = onToggleTask,
+                    onOpen = onOpenTask,
+                    onDelete = onDeleteTask,
+                )
+            }
+            completedRoutines.take(2).forEach { routine ->
+                val log = completionLogs.firstOrNull {
+                    it.entityType == CompletionEntityType.ROUTINE.value && it.entityId == routine.id
+                }
+                RoutineRow(
+                    routine = routine,
+                    log = log,
+                    done = true,
+                    onToggle = onToggleRoutine,
+                    onProgressChange = onRoutineProgressChange,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun QueueHeaderStats(
+    overdueCount: Int,
+    taskCount: Int,
+    routineCount: Int,
+    focusScore: Int,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        RewardTile(
+            value = overdueCount.toString(),
+            label = stringResource(R.string.today_overdue_badge),
+            color = if (overdueCount > 0) StreakCoral else MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1f),
+        )
+        RewardTile(
+            value = taskCount.toString(),
+            label = stringResource(R.string.today_tasks_badge),
+            color = LevelSky,
+            modifier = Modifier.weight(1f),
+        )
+        RewardTile(
+            value = routineCount.toString(),
+            label = stringResource(R.string.today_routines_badge),
+            color = CandyPrimary,
+            modifier = Modifier.weight(1f),
+        )
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.today_focus_score_label, focusScore),
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold),
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        if (overdueCount > 0) {
+            Pill(stringResource(R.string.today_focus_urgent_pill), StreakCoral)
+        } else {
+            Pill(stringResource(R.string.today_focus_balanced_pill), CompletedGreen)
+        }
+    }
+}
+
+@Composable
+private fun QueueSectionTitle(title: String, subtitle: String, color: Color) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.ExtraBold),
+            color = color,
+        )
+        Text(
+            text = subtitle,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+@Composable
+private fun TaskQueueRow(
+    task: TodayTaskUi,
+    color: Color,
+    onToggleTask: (TodayTaskUi) -> Unit,
+    onOpenTask: (TodayTaskUi) -> Unit,
+    onDeleteTask: (TodayTaskUi) -> Unit,
+    onMoveOverdueToday: (TodayTaskUi) -> Unit,
+) {
+    ItemRow(
+        done = task.completionState == TaskCompletionState.COMPLETED.value,
+        color = color,
+    ) {
+        CheckCircle(
+            done = task.completionState == TaskCompletionState.COMPLETED.value,
+            color = color,
+        ) { onToggleTask(task) }
+        Column(
+            modifier = Modifier.weight(1f).clickable { onOpenTask(task) },
+        ) {
+            Text(task.title, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(
+                stringResource(R.string.today_queue_overdue_date, task.plannedDate, task.priority),
+                style = MaterialTheme.typography.labelSmall,
+                color = color.copy(alpha = 0.85f),
+            )
+        }
+        IconButton(onClick = { onMoveOverdueToday(task) }, modifier = Modifier.size(36.dp)) {
+            Icon(
+                Icons.Outlined.CalendarToday,
+                contentDescription = stringResource(R.string.today_move_to_today_cd),
+                tint = color,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        IconButton(onClick = { onDeleteTask(task) }, modifier = Modifier.size(36.dp)) {
+            Icon(
+                Icons.Rounded.DeleteOutline,
+                contentDescription = stringResource(R.string.today_delete_label),
+                tint = color,
+                modifier = Modifier.size(18.dp),
+            )
         }
     }
 }
@@ -610,6 +937,7 @@ private fun SectionShell(
 private fun TaskRow(task: TodayTaskUi, onToggle: (TodayTaskUi) -> Unit, onOpen: (TodayTaskUi) -> Unit) {
     val done = task.completionState == TaskCompletionState.COMPLETED.value
     val color = categoryColor(task.category ?: task.title)
+    val openTaskDescription = stringResource(R.string.today_task_open_cd)
     ItemRow(done = done, color = color) {
         CheckCircle(done, color) { onToggle(task) }
         Column(Modifier.weight(1f).clickable { onOpen(task) }, verticalArrangement = Arrangement.spacedBy(2.dp)) {
@@ -624,7 +952,18 @@ private fun TaskRow(task: TodayTaskUi, onToggle: (TodayTaskUi) -> Unit, onOpen: 
                 if (task.startTime != null) stringResource(R.string.today_task_with_time, task.startTime!!) else stringResource(R.string.today_task_no_time),
                 style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         }
-        Icon(Icons.Rounded.MoreHoriz, contentDescription = stringResource(R.string.today_task_open_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })
+        Icon(
+            Icons.Rounded.MoreHoriz,
+            contentDescription = openTaskDescription,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .size(22.dp)
+                .semantics {
+                    role = Role.Button
+                    contentDescription = openTaskDescription
+                }
+                .clickable { onOpen(task) },
+        )
     }
 }
 
@@ -729,8 +1068,23 @@ private fun RoutineRow(
 
 @Composable
 private fun ItemRow(done: Boolean, color: Color, content: @Composable RowScope.() -> Unit) {
+    val animatedBg by animateColorAsState(
+        targetValue = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (done) .48f else 1f),
+        animationSpec = tween(durationMillis = 220),
+        label = "itemRowBg",
+    )
+    val animatedBorder by animateColorAsState(
+        targetValue = MaterialTheme.colorScheme.outline,
+        animationSpec = tween(durationMillis = 180),
+        label = "itemRowBorder",
+    )
     Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (done) .48f else 1f)).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp)),
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .clip(RoundedCornerShape(20.dp))
+            .background(animatedBg)
+            .border(1.dp, animatedBorder, RoundedCornerShape(20.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(Modifier.width(5.dp).height(72.dp).background(color.copy(alpha = if (done) .35f else 1f)))
@@ -740,14 +1094,34 @@ private fun ItemRow(done: Boolean, color: Color, content: @Composable RowScope.(
 
 @Composable
 private fun CheckCircle(done: Boolean, color: Color, onClick: () -> Unit) {
+    val markDone = stringResource(R.string.today_mark_done_label)
+    val unmarkDone = stringResource(R.string.today_unmark_done_label)
+    val animatedFill by animateColorAsState(
+        targetValue = if (done) color else color.copy(.10f),
+        animationSpec = tween(durationMillis = 140),
+        label = "checkFill",
+    )
+    val animatedScale by animateFloatAsState(
+        targetValue = if (done) 1.06f else 1f,
+        animationSpec = tween(durationMillis = 170, easing = FastOutSlowInEasing),
+        label = "checkScale",
+    )
     Box(
         Modifier
             .size(32.dp)
+            .graphicsLayer {
+                scaleX = animatedScale
+                scaleY = animatedScale
+            }
             .clip(CircleShape)
-            .background(if (done) color else color.copy(.10f))
+            .background(animatedFill)
             .border(2.dp, color.copy(if (done) 1f else .45f), CircleShape)
+            .semantics {
+                role = Role.Checkbox
+                contentDescription = if (done) unmarkDone else markDone
+            }
             .clickable(
-                onClickLabel = if (done) stringResource(R.string.today_unmark_done_label) else stringResource(R.string.today_mark_done_label),
+                onClickLabel = if (done) unmarkDone else markDone,
                 onClick = onClick,
             ),
         contentAlignment = Alignment.Center,
@@ -841,6 +1215,11 @@ private fun CloseDayCard(
     dailySummaryTime: String,
     onClick: () -> Unit,
 ) {
+    val readinessLabel = when {
+        progress >= 0.85f -> stringResource(R.string.today_close_readiness_elite)
+        progress >= 0.6f -> stringResource(R.string.today_close_readiness_good)
+        else -> stringResource(R.string.today_close_readiness_building)
+    }
     if (isClosed) {
         // Day is closed — show summary state
         val moodColor = when (mood) {
@@ -863,6 +1242,7 @@ private fun CloseDayCard(
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                     Pill(stringResource(R.string.today_closed_pill), CompletedGreen)
                     Pill(moodLabel, moodColor)
+                    Pill(readinessLabel, CandySecondary)
                 }
                 Text(stringResource(R.string.today_closed_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
                 Text(stringResource(R.string.today_closed_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -880,6 +1260,7 @@ private fun CloseDayCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Pill(stringResource(R.string.today_locked_pill), MaterialTheme.colorScheme.onSurfaceVariant.copy(.5f))
+                Pill(readinessLabel, CandySecondary)
                 Text(stringResource(R.string.today_locked_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.45f))
                 Text(stringResource(R.string.today_locked_desc, dailySummaryTime), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.6f))
                 Button(
@@ -900,6 +1281,7 @@ private fun CloseDayCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Pill(stringResource(R.string.today_locked_pill), CandySecondary)
+                Pill(readinessLabel, CandySecondary)
                 Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
                 Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
