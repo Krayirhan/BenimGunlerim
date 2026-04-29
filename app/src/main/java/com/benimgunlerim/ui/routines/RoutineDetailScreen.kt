@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Archive
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -41,9 +41,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.benimgunlerim.R
 import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandySecondary
@@ -63,15 +65,15 @@ fun RoutineDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(state.routine?.name ?: "Rutin Detayı", maxLines = 1) },
+                title = { Text(state.routine?.name ?: stringResource(R.string.routine_detail_title_fallback), maxLines = 1) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Geri")
+                        Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.routine_detail_back_cd))
                     }
                 },
                 actions = {
                     IconButton(onClick = { viewModel.archiveRoutine(); onBack() }) {
-                        Icon(Icons.Rounded.Archive, contentDescription = "Arşivle", tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Icon(Icons.Rounded.Archive, contentDescription = stringResource(R.string.routine_detail_archive_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -87,17 +89,17 @@ fun RoutineDetailScreen(
             }
         } else if (state.routine == null) {
             Box(Modifier.fillMaxSize().padding(padding), contentAlignment = Alignment.Center) {
-                Text("Rutin bulunamadı.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.routine_detail_not_found), style = MaterialTheme.typography.bodyMedium)
             }
         } else {
             val routine = state.routine!!
             val goalTypeLabel = when (routine.targetType) {
-                "count" -> "Sayaç"
-                "amount" -> "Miktar"
-                "duration" -> "Süre"
-                "limit" -> "Limit"
-                "negative" -> "Kaçın"
-                else -> "Checkbox"
+                "count" -> stringResource(R.string.routine_detail_goal_count)
+                "amount" -> stringResource(R.string.routine_detail_goal_amount)
+                "duration" -> stringResource(R.string.routine_detail_goal_duration)
+                "limit" -> stringResource(R.string.routine_detail_goal_limit)
+                "negative" -> stringResource(R.string.routine_detail_goal_negative)
+                else -> stringResource(R.string.routine_detail_goal_checkbox)
             }
 
             LazyColumn(
@@ -133,7 +135,9 @@ fun RoutineDetailScreen(
                                 DetailPill(goalTypeLabel, CandyPrimary)
                                 if (routine.targetValue != null) {
                                     val unitDisplay = routine.targetUnit ?: ""
-                                    DetailPill("Hedef: ${routine.targetValue} $unitDisplay".trim(), LevelSky)
+                                    val targetText = stringResource(R.string.routine_detail_target_prefix) +
+                                        " ${routine.targetValue} $unitDisplay".trim()
+                                    DetailPill(targetText, LevelSky)
                                 }
                                 if (!routine.preferredTime.isNullOrBlank()) {
                                     DetailPill(routine.preferredTime!!, CandySecondary)
@@ -146,9 +150,28 @@ fun RoutineDetailScreen(
                 // Stats row
                 item {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        StatCard("Seri", "${state.currentStreak} gün", CandyPrimary, Modifier.weight(1f))
-                        StatCard("En iyi", "${state.bestStreak} gün", LevelSky, Modifier.weight(1f))
-                        StatCard("Başarı", "%${state.successRate}", CompletedGreen, Modifier.weight(1f))
+                        StatCard(
+                            label = stringResource(R.string.routine_detail_stat_streak),
+                            value = stringResource(R.string.routine_detail_stat_days, state.currentStreak),
+                            color = CandyPrimary,
+                            modifier = Modifier.weight(1f),
+                        )
+                        StatCard(
+                            label = stringResource(R.string.routine_detail_stat_best),
+                            value = stringResource(R.string.routine_detail_stat_days, state.bestStreak),
+                            color = LevelSky,
+                            modifier = Modifier.weight(1f),
+                        )
+                        val successRateText = String.format(
+                            stringResource(R.string.routine_detail_success_rate_format),
+                            state.successRate,
+                        )
+                        StatCard(
+                            label = stringResource(R.string.routine_detail_stat_success),
+                            value = successRateText,
+                            color = CompletedGreen,
+                            modifier = Modifier.weight(1f),
+                        )
                     }
                 }
 
@@ -163,8 +186,16 @@ fun RoutineDetailScreen(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        Text("Son 7 gün", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-                        val labels = listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz")
+                        Text(stringResource(R.string.routine_detail_last7), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                        val labels = listOf(
+                            stringResource(R.string.routine_detail_day_mon),
+                            stringResource(R.string.routine_detail_day_tue),
+                            stringResource(R.string.routine_detail_day_wed),
+                            stringResource(R.string.routine_detail_day_thu),
+                            stringResource(R.string.routine_detail_day_fri),
+                            stringResource(R.string.routine_detail_day_sat),
+                            stringResource(R.string.routine_detail_day_sun),
+                        )
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                             state.last7Days.take(7).forEachIndexed { index, completed ->
                                 Column(
@@ -201,15 +232,15 @@ fun RoutineDetailScreen(
                             .padding(16.dp),
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
-                        Text("Tekrar günleri", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                        Text(stringResource(R.string.routine_detail_repeat_days), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
                         val dayNames = mapOf(
-                            java.time.DayOfWeek.MONDAY to "Pzt",
-                            java.time.DayOfWeek.TUESDAY to "Sal",
-                            java.time.DayOfWeek.WEDNESDAY to "Çar",
-                            java.time.DayOfWeek.THURSDAY to "Per",
-                            java.time.DayOfWeek.FRIDAY to "Cum",
-                            java.time.DayOfWeek.SATURDAY to "Cmt",
-                            java.time.DayOfWeek.SUNDAY to "Paz",
+                            java.time.DayOfWeek.MONDAY to stringResource(R.string.routine_detail_day_mon),
+                            java.time.DayOfWeek.TUESDAY to stringResource(R.string.routine_detail_day_tue),
+                            java.time.DayOfWeek.WEDNESDAY to stringResource(R.string.routine_detail_day_wed),
+                            java.time.DayOfWeek.THURSDAY to stringResource(R.string.routine_detail_day_thu),
+                            java.time.DayOfWeek.FRIDAY to stringResource(R.string.routine_detail_day_fri),
+                            java.time.DayOfWeek.SATURDAY to stringResource(R.string.routine_detail_day_sat),
+                            java.time.DayOfWeek.SUNDAY to stringResource(R.string.routine_detail_day_sun),
                         )
                         val scheduledDays = routine.targetDaySet()
                         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -246,7 +277,7 @@ fun RoutineDetailScreen(
                                 contentColor = MaterialTheme.colorScheme.onSurface,
                             ),
                         ) {
-                            Text("Bugünü atla")
+                            Text(stringResource(R.string.routine_detail_skip_today))
                         }
                         Spacer(Modifier.height(4.dp))
                     }

@@ -6,6 +6,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,11 +25,11 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Flag
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Lock
-import androidx.compose.material.icons.rounded.ShowChart
 import androidx.compose.material.icons.rounded.TaskAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -48,6 +49,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.data.local.entity.DailyStateEntity
@@ -65,7 +68,10 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
+fun ProgressScreen(
+    onOpenAchievements: () -> Unit = {},
+    viewModel: ProgressViewModel = hiltViewModel(),
+) {
     val state by viewModel.uiState.collectAsState()
     val level = GameEngine.calculateLevel(state.gameState.totalXp)
     val weekDays = state.last30Days.take(7).reversed()
@@ -138,6 +144,7 @@ fun ProgressScreen(viewModel: ProgressViewModel = hiltViewModel()) {
                 unlocked = state.unlockedAchievements,
                 total = state.totalAchievements,
                 ratio = achievementsRatio,
+                onOpenAchievements = onOpenAchievements,
             )
         }
         item {
@@ -161,12 +168,12 @@ private fun HeaderCard() {
     SurfaceCard(radius = 28.dp, padding = 20.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = "İlerlemen",
+                text = stringResource(R.string.progress_header_title),
                 style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold),
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = "Rutin istikrarını, görev üretimini ve haftalık ritmini buradan takip et.",
+                text = stringResource(R.string.progress_header_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -193,11 +200,11 @@ private fun LevelOverviewCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(18.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Seviye $level", style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)
+                Text(stringResource(R.string.progress_level, level), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)
                 Text(levelTitle, style = MaterialTheme.typography.titleMedium, color = Color.White.copy(.86f))
-                Text("$totalXp toplam XP", style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(.76f))
+                Text(stringResource(R.string.progress_total_xp, totalXp), style = MaterialTheme.typography.bodyMedium, color = Color.White.copy(.76f))
                 ProgressLine(progress = animated, color = Color.White, track = Color.White.copy(.20f))
-                Text("$currentXp / $xpForNext sonraki seviye", style = MaterialTheme.typography.labelSmall, color = Color.White.copy(.78f))
+                Text(stringResource(R.string.progress_xp_next, currentXp, xpForNext), style = MaterialTheme.typography.labelSmall, color = Color.White.copy(.78f))
             }
             Ring(progress = animated, label = "%${(animated * 100).toInt()}", color = Color.White, track = Color.White.copy(.22f))
         }
@@ -217,16 +224,30 @@ private fun MetricGrid(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            MetricCard("Aktif Seri", "$streak gün", "Kesintisiz gün", Icons.Rounded.LocalFireDepartment, CandyPrimary, Modifier.weight(1f))
-            MetricCard("En İyi Seri", "$bestStreak gün", "Tüm zamanlarda", Icons.Rounded.LocalFireDepartment, StreakCoral, Modifier.weight(1f))
+            MetricCard(stringResource(R.string.progress_metric_active_streak), stringResource(R.string.progress_metric_streak_days, streak), stringResource(R.string.progress_metric_streak_sub), Icons.Rounded.LocalFireDepartment, CandyPrimary, Modifier.weight(1f))
+            MetricCard(stringResource(R.string.progress_metric_best_streak), stringResource(R.string.progress_metric_streak_days, bestStreak), stringResource(R.string.progress_metric_best_streak_sub), Icons.Rounded.LocalFireDepartment, StreakCoral, Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            MetricCard("Haftalık", "$weeklyScore", "Ortalama skor", Icons.Rounded.ShowChart, CandySecondary, Modifier.weight(1f))
-            MetricCard("Genel Ort.", "$averageScore", "30 gün skoru", Icons.Rounded.ShowChart, LevelSky, Modifier.weight(1f))
+            MetricCard(
+                stringResource(R.string.progress_metric_weekly),
+                "$weeklyScore",
+                stringResource(R.string.progress_metric_weekly_sub),
+                Icons.AutoMirrored.Rounded.ShowChart,
+                CandySecondary,
+                Modifier.weight(1f),
+            )
+            MetricCard(
+                stringResource(R.string.progress_metric_overall),
+                "$averageScore",
+                stringResource(R.string.progress_metric_overall_sub),
+                Icons.AutoMirrored.Rounded.ShowChart,
+                LevelSky,
+                Modifier.weight(1f),
+            )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-            MetricCard("Kapanış", "$daysClosed gün", "Gün kapatıldı", Icons.Rounded.Flag, XpGold, Modifier.weight(1f))
-            MetricCard("Mükemmel", "$totalPerfectDays gün", "%100 günler", Icons.Rounded.TaskAlt, CompletedGreen, Modifier.weight(1f))
+            MetricCard(stringResource(R.string.progress_metric_close), stringResource(R.string.progress_metric_streak_days, daysClosed), stringResource(R.string.progress_metric_close_sub), Icons.Rounded.Flag, XpGold, Modifier.weight(1f))
+            MetricCard(stringResource(R.string.progress_metric_perfect), stringResource(R.string.progress_metric_streak_days, totalPerfectDays), stringResource(R.string.progress_metric_perfect_sub), Icons.Rounded.TaskAlt, CompletedGreen, Modifier.weight(1f))
         }
     }
 }
@@ -259,13 +280,13 @@ private fun WeeklyChartCard(days: List<DailyStateEntity>, average: Int) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
-                    Text("Haftalık ritim", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
-                    Text("Son 7 günlük kapanış skorları", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.progress_chart_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+                    Text(stringResource(R.string.progress_chart_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                Pill("Ort. $average", CandyPrimary)
+                Pill(stringResource(R.string.progress_chart_avg, average), CandyPrimary)
             }
             if (days.isEmpty()) {
-                EmptyPanel("Günü kapattıkça haftalık grafiğin burada oluşur.")
+                EmptyPanel(stringResource(R.string.progress_chart_empty))
             } else {
                 Row(
                     modifier = Modifier.fillMaxWidth().height(168.dp),
@@ -309,34 +330,34 @@ private fun WeeklyChartCard(days: List<DailyStateEntity>, average: Int) {
 private fun ConsistencyCard(streak: Int, bestStreak: Int, bestDay: DailyStateEntity?, averageScore: Int) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("İstikrar özeti", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_consistency_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             InsightRow(
-                title = "Aktif seri",
-                value = if (streak > 0) "$streak gün" else "Başlamadı",
-                helper = if (streak > 0) "Son tamamlanan günlerden hesaplandı" else "Bir günü kapatınca seri başlar",
+                title = stringResource(R.string.progress_streak_label),
+                value = if (streak > 0) stringResource(R.string.progress_metric_streak_days, streak) else stringResource(R.string.progress_streak_not_started),
+                helper = if (streak > 0) stringResource(R.string.progress_streak_helper) else stringResource(R.string.progress_streak_helper_start),
                 color = CandyPrimary,
             )
             InsightRow(
-                title = "En iyi seri",
-                value = if (bestStreak > 0) "$bestStreak gün" else "Veri yok",
-                helper = "Son 30 gün içindeki maksimum seri",
+                title = stringResource(R.string.progress_best_streak_label),
+                value = if (bestStreak > 0) stringResource(R.string.progress_metric_streak_days, bestStreak) else stringResource(R.string.progress_no_data),
+                helper = stringResource(R.string.progress_best_streak_helper),
                 color = StreakCoral,
             )
             InsightRow(
-                title = "En iyi gün",
-                value = bestDay?.let { "${it.dailyScore} puan" } ?: "Veri yok",
-                helper = bestDay?.date?.let(::formatDate).orEmpty().ifBlank { "Gün kapatınca görünür" },
+                title = stringResource(R.string.progress_best_day_label),
+                value = bestDay?.let { stringResource(R.string.progress_best_day_value, it.dailyScore) } ?: stringResource(R.string.progress_no_data),
+                helper = bestDay?.date?.let(::formatDate).orEmpty().ifBlank { stringResource(R.string.progress_best_day_helper) },
                 color = CandySecondary,
             )
             InsightRow(
-                title = "Genel tempo",
+                title = stringResource(R.string.progress_tempo_label),
                 value = when {
-                    averageScore >= 80 -> "Güçlü"
-                    averageScore >= 50 -> "Dengeli"
-                    averageScore > 0 -> "Başlangıç"
-                    else -> "Veri yok"
+                    averageScore >= 80 -> stringResource(R.string.progress_tempo_strong)
+                    averageScore >= 50 -> stringResource(R.string.progress_tempo_balanced)
+                    averageScore > 0 -> stringResource(R.string.progress_tempo_starting)
+                    else -> stringResource(R.string.progress_no_data)
                 },
-                helper = "Ortalama gün skoru: $averageScore",
+                helper = stringResource(R.string.progress_tempo_avg, averageScore),
                 color = LevelSky,
             )
         }
@@ -371,12 +392,12 @@ private fun TaskRoutineBalanceCard(taskCount: Int, routineCount: Int) {
     val routineRatio = routineCount.toFloat() / total
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text("Görev ve rutin dengesi", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-            Text("Görevler bugüne özel işleri, rutinler tekrar eden alışkanlıkları gösterir.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.progress_balance_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_balance_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             BalanceBar(taskRatio = taskRatio, routineRatio = routineRatio)
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                BalanceStat("Görev", taskCount, LevelSky, Modifier.weight(1f))
-                BalanceStat("Rutin", routineCount, CandyPrimary, Modifier.weight(1f))
+                BalanceStat(stringResource(R.string.progress_balance_task), taskCount, LevelSky, Modifier.weight(1f))
+                BalanceStat(stringResource(R.string.progress_balance_routine), routineCount, CandyPrimary, Modifier.weight(1f))
             }
         }
     }
@@ -419,23 +440,22 @@ private fun MoodEnergyTrendCard(
             else -> surfaceVariantColor
         }
     }
-    val moodLabel: (String?) -> String = { mood ->
-        when (mood) {
-            "harika" -> "Harika"
-            "iyi" -> "İyi"
-            "normal" -> "Normal"
-            "kotu" -> "Kötü"
-            "cok_kotu" -> "Çok Kötü"
-            else -> "?"
-        }
-    }
+    val moodLabels = mapOf(
+        "harika" to stringResource(R.string.progress_mood_great),
+        "iyi" to stringResource(R.string.progress_mood_good),
+        "normal" to stringResource(R.string.progress_mood_normal),
+        "kotu" to stringResource(R.string.progress_mood_bad),
+        "cok_kotu" to stringResource(R.string.progress_mood_very_bad),
+    )
+    val moodUnknown = stringResource(R.string.progress_mood_unknown)
+    val moodLabel: (String?) -> String = { mood -> moodLabels[mood] ?: moodUnknown }
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text("Ruh hali ve enerji trendi", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-            Text("Son 7 günün ruh hali ve enerji durumu", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.progress_mood_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_mood_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (recent.any { it.second != null }) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Ruh Hali", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.progress_mood_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         recent.forEach { (date, mood) ->
                             val color = moodColor(mood)
@@ -456,7 +476,7 @@ private fun MoodEnergyTrendCard(
             }
             if (recentEnergy.any { it.second != null }) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Enerji", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.progress_energy_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.Bottom) {
                         recentEnergy.forEach { (_, energy) ->
                             val level = energy ?: 0
@@ -488,18 +508,18 @@ private fun PerformanceCard(
 ) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            Text("Görev ve rutin performansı", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-            Text("Son 30 günde tamamlanan görev ve rutinler", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.progress_perf_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_perf_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Text("Rutin tamamlama: %${(routineHitRate * 100).toInt()}", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.progress_routine_completion, (routineHitRate * 100).toInt()), style = MaterialTheme.typography.labelMedium)
                 ProgressLine(progress = routineHitRate, color = CandyPrimary, track = CandyPrimary.copy(.12f))
                 Spacer(Modifier.height(2.dp))
-                Text("Görev tamamlama: %${(taskHitRate * 100).toInt()}", style = MaterialTheme.typography.labelMedium)
+                Text(stringResource(R.string.progress_task_completion, (taskHitRate * 100).toInt()), style = MaterialTheme.typography.labelMedium)
                 ProgressLine(progress = taskHitRate, color = LevelSky, track = LevelSky.copy(.12f))
             }
             Row(horizontalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.fillMaxWidth()) {
-                BalanceStat("Görev", taskCount, LevelSky, Modifier.weight(1f))
-                BalanceStat("Rutin", routineCount, CandyPrimary, Modifier.weight(1f))
+                BalanceStat(stringResource(R.string.progress_balance_task), taskCount, LevelSky, Modifier.weight(1f))
+                BalanceStat(stringResource(R.string.progress_balance_routine), routineCount, CandyPrimary, Modifier.weight(1f))
             }
         }
     }
@@ -509,16 +529,16 @@ private fun PerformanceCard(
 private fun XpEconomyCard() {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("XP nasıl kazanılır?", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-            Text("Her eyleme göre farklı miktarda XP kazanırsın.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Text(stringResource(R.string.progress_xp_economy_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_xp_economy_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                XpRow("Basit görev tamamla", "${GameEngine.XP_TASK_LOW} XP", LevelSky)
-                XpRow("Normal görev tamamla", "${GameEngine.XP_TASK_NORMAL} XP", CandySecondary)
-                XpRow("Önemli görev tamamla", "${GameEngine.XP_TASK_HIGH} XP", StreakCoral)
-                XpRow("Checkbox rutin yap", "${GameEngine.XP_ROUTINE_CHECKBOX} XP", CandyPrimary)
-                XpRow("Hedefli rutin yap", "${GameEngine.XP_ROUTINE_GOAL} XP", CompletedGreen)
-                XpRow("Günü kapat", "${GameEngine.XP_DAY_CLOSE} XP", XpGold)
-                XpRow("Mükemmel gün kapat", "${GameEngine.XP_PERFECT_DAY} XP + altın", XpGold)
+                XpRow(stringResource(R.string.progress_xp_simple_task), "${GameEngine.XP_TASK_LOW} XP", LevelSky)
+                XpRow(stringResource(R.string.progress_xp_normal_task), "${GameEngine.XP_TASK_NORMAL} XP", CandySecondary)
+                XpRow(stringResource(R.string.progress_xp_important_task), "${GameEngine.XP_TASK_HIGH} XP", StreakCoral)
+                XpRow(stringResource(R.string.progress_xp_checkbox_routine), "${GameEngine.XP_ROUTINE_CHECKBOX} XP", CandyPrimary)
+                XpRow(stringResource(R.string.progress_xp_targeted_routine), "${GameEngine.XP_ROUTINE_GOAL} XP", CompletedGreen)
+                XpRow(stringResource(R.string.progress_xp_close_day), "${GameEngine.XP_DAY_CLOSE} XP", XpGold)
+                XpRow(stringResource(R.string.progress_xp_perfect_day), "${GameEngine.XP_PERFECT_DAY} XP + altın", XpGold)
             }
         }
     }
@@ -537,19 +557,30 @@ private fun XpRow(label: String, value: String, color: Color) {
 }
 
 @Composable
-private fun AchievementsCard(unlocked: List<AchievementDef>, total: Int, ratio: Float) {
+private fun AchievementsCard(
+    unlocked: List<AchievementDef>,
+    total: Int,
+    ratio: Float,
+    onOpenAchievements: () -> Unit,
+) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
-                    Text("Başarımlar", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
-                    Text("$total hedef içinde ${unlocked.size} tanesi açıldı", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.progress_achievements_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+                    Text(stringResource(R.string.progress_achievements_subtitle, total, unlocked.size), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 Pill("%${(ratio * 100).toInt()}", XpGold)
             }
             ProgressLine(progress = ratio, color = XpGold, track = XpGold.copy(.12f))
+            Text(
+                text = "Tüm başarımları gör",
+                modifier = Modifier.clickable(onClick = onOpenAchievements),
+                style = MaterialTheme.typography.labelLarge,
+                color = CandyPrimary,
+            )
             if (unlocked.isEmpty()) {
-                EmptyPanel("Başarımlar görev tamamladıkça, rutin yaptıkça ve gün kapattıkça açılır.")
+                EmptyPanel(stringResource(R.string.progress_achievements_empty))
             } else {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     items(unlocked.size) { index ->
@@ -582,9 +613,9 @@ private fun AchievementItem(achievement: AchievementDef) {
 private fun RecentDaysCard(days: List<DailyStateEntity>) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Son günler", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.progress_recent_days_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             if (days.isEmpty()) {
-                EmptyPanel("Gün sonu değerlendirmesi yaptığında kayıtlar burada listelenir.")
+                EmptyPanel(stringResource(R.string.progress_recent_days_empty))
             } else {
                 days.take(7).forEach { day ->
                     DayRow(day)
@@ -618,7 +649,7 @@ private fun DayRow(day: DailyStateEntity) {
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             ProgressLine(progress = day.completionRate, color = color, track = color.copy(.12f))
-            Text(day.note?.takeIf { it.isNotBlank() } ?: "Not eklenmedi", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            Text(day.note?.takeIf { it.isNotBlank() } ?: stringResource(R.string.progress_day_note_empty), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
         Text("$score", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = color)
     }
