@@ -5,6 +5,7 @@ import com.benimgunlerim.data.local.RoutineDao
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.di.ApplicationScope
 import com.benimgunlerim.di.IoDispatcher
+import com.benimgunlerim.domain.DateTimeProvider
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
@@ -21,6 +22,7 @@ fun interface ReminderRestorer {
 
 
 @Singleton
+@Suppress("LongParameterList")
 class ReminderBootstrapper @Inject constructor(
     private val taskDao: TaskDao,
     private val routineDao: RoutineDao,
@@ -28,12 +30,13 @@ class ReminderBootstrapper @Inject constructor(
     private val routineReminderScheduler: RoutineReminderScheduler,
     private val dailySummaryScheduler: DailySummaryScheduler,
     private val userPreferencesRepository: UserPreferencesRepository,
+    private val dateTimeProvider: DateTimeProvider,
     @ApplicationScope private val applicationScope: CoroutineScope,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ReminderRestorer {
     override fun rescheduleReminders() {
         applicationScope.launch(ioDispatcher) {
-            val today = LocalDate.now()
+            val today = dateTimeProvider.today()
             taskDao.getPendingRemindersFrom(today.toString()).forEach { task ->
                 val date = runCatching { LocalDate.parse(task.plannedDate) }.getOrNull()
                 val time = task.reminderTime?.let { runCatching { LocalTime.parse(it) }.getOrNull() }

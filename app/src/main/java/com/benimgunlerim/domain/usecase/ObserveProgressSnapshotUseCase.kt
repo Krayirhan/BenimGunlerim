@@ -10,6 +10,8 @@ import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.ALL_ACHIEVEMENTS
+import com.benimgunlerim.domain.DateTimeProvider
+import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.model.CompletionStatus
 import java.time.LocalDate
 import javax.inject.Inject
@@ -36,6 +38,7 @@ class ObserveProgressSnapshotUseCase @Inject constructor(
     private val completionLogRepository: CompletionLogRepository,
     private val prefsRepository: UserPreferencesRepository,
     private val achievementTracker: AchievementTracker,
+    private val dateTimeProvider: DateTimeProvider,
 ) {
     operator fun invoke(): Flow<ProgressSnapshot> = combine(
         dailyStateRepository.observeRecent(limit = 30),
@@ -46,14 +49,14 @@ class ObserveProgressSnapshotUseCase @Inject constructor(
         val weekDays = last30Days.take(7)
         ProgressSnapshot(
             last30Days = last30Days,
-            currentStreak = allLogs.currentStreak(),
+            currentStreak = allLogs.currentStreak(dateTimeProvider.today()),
             bestStreak = last30Days.bestStreak(),
             averageScore = if (last30Days.isEmpty()) 0 else last30Days.map { it.dailyScore }.average().toInt(),
             weeklyScore = if (weekDays.isEmpty()) 0 else weekDays.map { it.dailyScore }.average().toInt(),
             moodTrend = last30Days.take(14).map { it.date to it.mood },
             energyTrend = last30Days.take(14).map { it.date to it.energyLevel },
-            routineHitRate = allLogs.hitRate("routine"),
-            taskHitRate = allLogs.hitRate("task"),
+            routineHitRate = allLogs.hitRate(CompletionEntityType.ROUTINE.value),
+            taskHitRate = allLogs.hitRate(CompletionEntityType.TASK.value),
             gameState = prefs,
             unlockedAchievements = unlocked,
         )

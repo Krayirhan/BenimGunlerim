@@ -65,6 +65,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandySecondary
 import com.benimgunlerim.ui.theme.LevelSky
@@ -78,6 +79,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
+    val today = viewModel.today()
     val snackbarHost = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
@@ -148,11 +150,12 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 106.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            item { PlanHeroCard(state.selectedDate) }
+            item { PlanHeroCard(state.selectedDate, today) }
             item {
                 WeekDatePicker(
                     weekStart = state.weekStart,
                     selectedDate = state.selectedDate,
+                    today = today,
                     onSelectDate = { viewModel.selectDate(it) },
                 )
             }
@@ -164,7 +167,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         viewModel.toggleTask(it)
                     },
-                    onMoveToday = { viewModel.moveTaskToDate(it, LocalDate.now()) },
+                    onMoveToday = { viewModel.moveTaskToDate(it, today) },
                     onDelete = {
                         viewModel.deleteTask(it)
                         scope.launch { snackbarHost.showSnackbar(taskDeleted) }
@@ -193,8 +196,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun PlanHeroCard(selectedDate: LocalDate) {
-    val today = LocalDate.now()
+private fun PlanHeroCard(selectedDate: LocalDate, today: LocalDate) {
     val todayLabel = stringResource(R.string.label_today)
     val tomorrowLabel = stringResource(R.string.label_tomorrow)
     val yesterdayLabel = stringResource(R.string.label_yesterday)
@@ -237,6 +239,7 @@ private val turkishDays = listOf("Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz
 private fun WeekDatePicker(
     weekStart: LocalDate,
     selectedDate: LocalDate,
+    today: LocalDate,
     onSelectDate: (LocalDate) -> Unit,
 ) {
     LazyRow(
@@ -245,7 +248,7 @@ private fun WeekDatePicker(
     ) {
         items((0..6).map { weekStart.plusDays(it.toLong()) }) { date ->
             val isSelected = date == selectedDate
-            val isToday = date == LocalDate.now()
+            val isToday = date == today
             val dayLabel = turkishDays[date.dayOfWeek.value - 1]
             Column(
                 modifier = Modifier
@@ -363,7 +366,7 @@ private fun PlanTaskRow(
     onDelete: (TaskEntity) -> Unit,
     secondaryAction: (() -> Unit)?,
 ) {
-    val done = task.completionState == "completed"
+    val done = task.completionState == TaskCompletionState.COMPLETED.value
     Row(
         modifier = Modifier
             .fillMaxWidth()

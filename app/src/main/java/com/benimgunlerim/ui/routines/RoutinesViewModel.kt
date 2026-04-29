@@ -44,6 +44,8 @@ class RoutinesViewModel @Inject constructor(
     private val skipRoutineUseCase: SkipRoutineUseCase,
     private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
+    fun todayDayOfWeek(): DayOfWeek = dateTimeProvider.today().dayOfWeek
+
     val routines: StateFlow<List<RoutineListItem>> = combine(
         routineRepository.observeActive(),
         completionLogRepository.observeAll(),

@@ -4,7 +4,7 @@ import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.domain.model.CompletionStatus
 import java.time.LocalDate
 
-fun List<CompletionLogEntity>.currentStreak(today: LocalDate = LocalDate.now()): Int {
+fun List<CompletionLogEntity>.currentStreak(today: LocalDate): Int {
     val completedDates = filter { it.status == CompletionStatus.COMPLETED.value }.mapNotNull {
         runCatching { LocalDate.parse(it.date) }.getOrNull()
     }.toSet()
@@ -20,6 +20,6 @@ fun List<CompletionLogEntity>.currentStreak(today: LocalDate = LocalDate.now()):
 fun List<CompletionLogEntity>.currentStreakForEntity(
     entityType: String,
     entityId: String,
-    today: LocalDate = LocalDate.now(),
+    today: LocalDate,
 ): Int =
     filter { it.entityType == entityType && it.entityId == entityId }.currentStreak(today)

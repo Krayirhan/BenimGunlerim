@@ -86,6 +86,9 @@ import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.SubTaskEntity
+import com.benimgunlerim.domain.model.CompletionEntityType
+import com.benimgunlerim.domain.model.RoutineTargetType
+import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.ui.components.AchievementUnlockOverlay
 import com.benimgunlerim.ui.components.ConfettiIntensity
 import com.benimgunlerim.ui.components.ConfettiOverlay
@@ -109,6 +112,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
+    val today = viewModel.today()
     val snackbarHost = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
@@ -192,7 +196,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                         viewModel.addTask(
                             title = addText,
                             note = addNote,
-                            date = LocalDate.now().plusDays(addDateOffset.toLong()),
+                            date = today.plusDays(addDateOffset.toLong()),
                             startTime = addTime.takeIf { it.isNotBlank() },
                             category = addCategory.takeIf { it.isNotBlank() },
                             priority = addPriority,
@@ -252,7 +256,9 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     if (showCloseSheet) {
         ModalBottomSheet(onDismissRequest = { showCloseSheet = false }) {
             CloseDaySheet(
-                completedCount = state.tasks.count { it.completionState == "completed" } + state.routines.count { it.id in state.completedRoutineIds },
+                completedCount = state.tasks.count {
+                    it.completionState == TaskCompletionState.COMPLETED.value
+                } + state.routines.count { it.id in state.completedRoutineIds },
                 totalCount = state.tasks.size + state.routines.size,
                 progress = state.progress,
                 overdueCount = state.overdueTasks.size,
@@ -283,7 +289,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
         }
     }
 
-    val completedTasks = state.tasks.count { it.completionState == "completed" }
+    val completedTasks = state.tasks.count { it.completionState == TaskCompletionState.COMPLETED.value }
     val completedRoutines = state.routines.count { it.id in state.completedRoutineIds }
     val total = state.tasks.size + state.routines.size
     val completed = completedTasks + completedRoutines
@@ -320,7 +326,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 106.dp),
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
-                item(key = "hero") { HeroCard(state.currentStreak, state.gameState.happiness) }
+                item(key = "hero") { HeroCard(today, state.currentStreak, state.gameState.happiness) }
                 item(key = "dayScore") { DayScoreCard(completed, total, state.progress, completedRoutines, state.routines.size, completedTasks, state.tasks.size) }
                 item(key = "routines") {
                     RoutinesCard(
@@ -342,7 +348,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                         tasks = state.tasks,
                         onToggle = { task ->
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            val wasPending = task.completionState != "completed"
+                            val wasPending = task.completionState != TaskCompletionState.COMPLETED.value
                             viewModel.toggleTask(task)
                             if (wasPending) {
                                 scope.launch {
@@ -381,7 +387,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                             tasks = state.overdueTasks,
                             onToggle = { viewModel.toggleTask(it) },
                             onOpen = { selectedTask = it },
-                            onMoveToday = { viewModel.moveTaskToDate(it, LocalDate.now()) },
+                            onMoveToday = { viewModel.moveTaskToDate(it, today) },
                         )
                     }
                 }
@@ -429,9 +435,9 @@ private fun HomeBackground(): Brush = Brush.verticalGradient(
 )
 
 @Composable
-private fun HeroCard(streak: Int, happiness: Int) {
-    val date = remember {
-        LocalDate.now()
+private fun HeroCard(today: LocalDate, streak: Int, happiness: Int) {
+    val date = remember(today) {
+        today
             .format(DateTimeFormatter.ofPattern("EEEE, d MMMM", Locale("tr", "TR")))
             .replaceFirstChar { it.titlecase(Locale("tr", "TR")) }
     }
@@ -538,7 +544,9 @@ private fun RoutinesCard(
             EmptyBox(stringResource(R.string.today_routines_empty), CandyPrimary)
         } else {
             routines.forEach { routine ->
-                val log = completionLogs.firstOrNull { it.entityType == "routine" && it.entityId == routine.id }
+                val log = completionLogs.firstOrNull {
+                    it.entityType == CompletionEntityType.ROUTINE.value && it.entityId == routine.id
+                }
                 RoutineRow(routine, log, routine.id in completedRoutineIds, onToggle, onProgressChange)
             }
         }
@@ -606,7 +614,7 @@ private fun SectionShell(
 
 @Composable
 private fun TaskRow(task: TaskEntity, onToggle: (TaskEntity) -> Unit, onOpen: (TaskEntity) -> Unit) {
-    val done = task.completionState == "completed"
+    val done = task.completionState == TaskCompletionState.COMPLETED.value
     val color = categoryColor(task.category ?: task.title)
     ItemRow(done = done, color = color) {
         CheckCircle(done, color) { onToggle(task) }
@@ -676,7 +684,7 @@ private fun RoutineRow(
     onProgressChange: (RoutineEntity, Float, Boolean) -> Unit,
 ) {
     val color = routine.color?.let(::parseColorOrNull) ?: CandyPrimary
-    val isCheckType = routine.targetType == "check"
+    val isCheckType = routine.targetType == RoutineTargetType.CHECK.value
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         ItemRow(done = done, color = color) {
             CheckCircle(done, color) { onToggle(routine) }
@@ -783,8 +791,8 @@ private fun OverdueTasksCard(
         onAction = null,
     ) {
         tasks.forEach { task ->
-            ItemRow(done = task.completionState == "completed", color = StreakCoral) {
-                CheckCircle(done = task.completionState == "completed", color = StreakCoral) { onToggle(task) }
+            ItemRow(done = task.completionState == TaskCompletionState.COMPLETED.value, color = StreakCoral) {
+                CheckCircle(done = task.completionState == TaskCompletionState.COMPLETED.value, color = StreakCoral) { onToggle(task) }
                 Column(
                     modifier = Modifier.weight(1f).clickable { onOpen(task) },
                 ) {

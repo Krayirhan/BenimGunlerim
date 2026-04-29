@@ -69,6 +69,8 @@ class PlanViewModel @Inject constructor(
         _selectedDate.value = date
     }
 
+    fun today(): LocalDate = dateTimeProvider.today()
+
     fun addTask(title: String, date: LocalDate) {
         if (title.isBlank()) return
         viewModelScope.launch {

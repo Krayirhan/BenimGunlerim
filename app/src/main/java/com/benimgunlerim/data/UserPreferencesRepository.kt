@@ -2,11 +2,11 @@ package com.benimgunlerim.data
 
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
-import java.time.LocalDate
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.benimgunlerim.domain.DateTimeProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -73,6 +73,7 @@ interface UserPreferencesAccess : UserPreferencesSource {
 @Singleton
 class UserPreferencesRepository @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val dateTimeProvider: DateTimeProvider,
 ) : UserPreferencesAccess, UserPreferencesSource, UserPreferencesWriter {
     private object Keys {
         val onboardingCompleted = booleanPreferencesKey("onboarding_completed")
@@ -230,7 +231,7 @@ class UserPreferencesRepository @Inject constructor(
      * Non-date keys (permanent achievements) are always kept.
      */
     private fun pruneRewardedEvents(events: List<String>): String {
-        val cutoff = LocalDate.now().minusDays(REWARDED_EVENTS_RETENTION_DAYS).toString()
+        val cutoff = dateTimeProvider.today().minusDays(REWARDED_EVENTS_RETENTION_DAYS).toString()
         val pruned = events.filter { key ->
             val dateMatch = DATE_PATTERN.find(key)
             // Keep if no date found (permanent key) or if date is recent enough

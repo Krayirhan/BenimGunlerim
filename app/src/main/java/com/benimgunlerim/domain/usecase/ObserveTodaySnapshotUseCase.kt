@@ -12,6 +12,7 @@ import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.ProgressCalculator
 import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.model.CompletionStatus
@@ -39,8 +40,9 @@ class ObserveTodaySnapshotUseCase @Inject constructor(
     private val completionLogRepository: CompletionLogRepository,
     private val dailyStateRepository: DailyStateRepository,
     private val prefsRepository: UserPreferencesRepository,
+    private val dateTimeProvider: DateTimeProvider,
 ) {
-    operator fun invoke(today: LocalDate = LocalDate.now()): Flow<TodaySnapshot> = combine(
+    operator fun invoke(today: LocalDate = dateTimeProvider.today()): Flow<TodaySnapshot> = combine(
         taskRepository.observeByDate(today),
         routineRepository.observeActive(),
         completionLogRepository.observeByDate(today),

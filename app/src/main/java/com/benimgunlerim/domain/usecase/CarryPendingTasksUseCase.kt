@@ -3,7 +3,7 @@ package com.benimgunlerim.domain.usecase
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.DatabaseTransactionRunner
 import com.benimgunlerim.data.TaskRepository
-import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.model.TaskCompletionState
 import javax.inject.Inject
@@ -35,7 +35,7 @@ class CarryPendingTasksUseCase @Inject constructor(
                         updatedAt = dateTimeProvider.currentTimeMillis(),
                     ),
                 )
-                completionLogRepository.deleteForDate("task", task.id, task.plannedDate)
+                completionLogRepository.deleteForDate(CompletionEntityType.TASK.value, task.id, task.plannedDate)
             }
         }
         return pending.size

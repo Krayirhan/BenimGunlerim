@@ -4,9 +4,8 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import com.benimgunlerim.domain.DateTimeProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import javax.inject.Inject
@@ -20,12 +19,13 @@ interface MorningPlannerSchedule {
 @Singleton
 class MorningPlannerScheduler @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val dateTimeProvider: DateTimeProvider,
 ) : MorningPlannerSchedule {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     override fun schedule(time: LocalTime) {
-        val now = LocalDateTime.now()
-        var next = LocalDate.now().atTime(time)
+        val now = dateTimeProvider.today().atTime(dateTimeProvider.currentTime())
+        var next = dateTimeProvider.today().atTime(time)
         if (!next.isAfter(now)) {
             next = next.plusDays(1)
         }

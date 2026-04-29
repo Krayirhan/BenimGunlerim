@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.domain.AchievementTracker
+import com.benimgunlerim.domain.DateTimeProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -55,6 +55,7 @@ data class ShopUiState(
 class ShopViewModel @Inject constructor(
     private val prefsRepository: UserPreferencesRepository,
     private val achievementTracker: AchievementTracker,
+    private val dateTimeProvider: DateTimeProvider,
 ) : ViewModel() {
 
     private val _purchaseMessage = MutableStateFlow<String?>(null)
@@ -63,7 +64,7 @@ class ShopViewModel @Inject constructor(
         prefsRepository.preferences,
         _purchaseMessage,
     ) { prefs, msg ->
-        val todayStr = LocalDate.now().toString()
+        val todayStr = dateTimeProvider.today().toString()
         ShopUiState(
             gold = prefs.gold,
             items = ALL_SHOP_ITEMS,
@@ -75,7 +76,7 @@ class ShopViewModel @Inject constructor(
 
     fun claimDailyReward() {
         viewModelScope.launch {
-            val todayStr = LocalDate.now().toString()
+            val todayStr = dateTimeProvider.today().toString()
             prefsRepository.claimDailyReward(todayStr, 25)
             _purchaseMessage.value = "+25 🪙 Günlük hediye alındı!"
         }

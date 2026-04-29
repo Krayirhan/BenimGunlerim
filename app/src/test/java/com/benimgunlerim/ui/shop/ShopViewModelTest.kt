@@ -3,10 +3,12 @@ package com.benimgunlerim.ui.shop
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.domain.AchievementTracker
+import com.benimgunlerim.domain.DateTimeProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import java.time.LocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -28,6 +30,8 @@ class ShopViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val prefsRepository: UserPreferencesRepository = mockk(relaxed = true)
     private val achievementTracker: AchievementTracker = mockk(relaxed = true)
+    private val dateTimeProvider: DateTimeProvider = mockk(relaxed = true)
+    private val fixedDate = LocalDate.of(2025, 6, 9)
 
     private lateinit var viewModel: ShopViewModel
 
@@ -35,7 +39,8 @@ class ShopViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         every { prefsRepository.preferences } returns flowOf(UserPreferences())
-        viewModel = ShopViewModel(prefsRepository, achievementTracker)
+        every { dateTimeProvider.today() } returns fixedDate
+        viewModel = ShopViewModel(prefsRepository, achievementTracker, dateTimeProvider)
     }
 
     @After

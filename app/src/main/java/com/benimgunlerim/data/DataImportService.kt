@@ -13,6 +13,10 @@ import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.model.CompletionEntityType
+import com.benimgunlerim.domain.model.CompletionStatus
+import com.benimgunlerim.domain.model.RoutineTargetType
+import com.benimgunlerim.domain.model.TaskCompletionState
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -103,7 +107,7 @@ class DataImportService @Inject constructor(
             endTime = obj.nullableString("endTime"),
             category = obj.nullableString("category"),
             color = obj.nullableString("color"),
-            completionState = obj.optString("completionState", "pending"),
+            completionState = obj.optString("completionState", TaskCompletionState.PENDING.value),
             completedAt = obj.nullableLong("completedAt"),
             sourceTemplateId = obj.nullableString("sourceTemplateId"),
             createdAt = obj.optLong("createdAt", 0L),
@@ -138,7 +142,7 @@ class DataImportService @Inject constructor(
             isArchived = obj.optBoolean("isArchived", false),
             createdAt = obj.optLong("createdAt", 0L),
             updatedAt = obj.optLong("updatedAt", 0L),
-            targetType = obj.optString("targetType", "check"),
+            targetType = obj.optString("targetType", RoutineTargetType.CHECK.value),
             targetValue = obj.nullableInt("targetValue"),
             targetUnit = obj.nullableString("targetUnit"),
             category = obj.nullableString("category"),
@@ -331,7 +335,7 @@ class DataImportService @Inject constructor(
             task.startTime?.let { require(isHmTime(it)) { "Invalid task startTime: $it" } }
             task.endTime?.let { require(isHmTime(it)) { "Invalid task endTime: $it" } }
             task.reminderTime?.let { require(isHmTime(it)) { "Invalid task reminderTime: $it" } }
-            require(task.completionState in setOf("pending", "completed")) {
+            require(task.completionState in setOf(TaskCompletionState.PENDING.value, TaskCompletionState.COMPLETED.value)) {
                 "Invalid task completionState: ${task.completionState}"
             }
         }
@@ -351,7 +355,9 @@ class DataImportService @Inject constructor(
             routine.targetUnit.requireMaxLength("routine.targetUnit", MAX_SHORT_TEXT_LENGTH)
             routine.category.requireMaxLength("routine.category", MAX_SHORT_TEXT_LENGTH)
             routine.preferredTime?.let { require(isHmTime(it)) { "Invalid routine preferredTime: $it" } }
-            require(routine.targetType in setOf("check", "goal")) { "Invalid routine targetType: ${routine.targetType}" }
+            require(
+                routine.targetType in setOf(RoutineTargetType.CHECK.value, RoutineTargetType.GOAL.value),
+            ) { "Invalid routine targetType: ${routine.targetType}" }
             val dayTokens = routine.targetDays.split(",").map { it.trim() }.filter { it.isNotEmpty() }
             require(dayTokens.isNotEmpty()) { "Routine targetDays must not be empty" }
             dayTokens.forEach { day ->
@@ -365,11 +371,17 @@ class DataImportService @Inject constructor(
             log.note.requireMaxLength("completionLog.note", MAX_LONG_TEXT_LENGTH)
             log.skipReason.requireMaxLength("completionLog.skipReason", MAX_MEDIUM_TEXT_LENGTH)
             require(isIsoDate(log.date)) { "Invalid completionLog date: ${log.date}" }
-            require(log.entityType in setOf("task", "routine")) { "Invalid completionLog entityType: ${log.entityType}" }
-            require(log.status in setOf("completed", "partial", "skipped")) { "Invalid completionLog status: ${log.status}" }
+            require(
+                log.entityType in setOf(CompletionEntityType.TASK.value, CompletionEntityType.ROUTINE.value),
+            ) { "Invalid completionLog entityType: ${log.entityType}" }
+            require(
+                log.status in setOf(CompletionStatus.COMPLETED.value, CompletionStatus.PARTIAL.value, CompletionStatus.SKIPPED.value),
+            ) { "Invalid completionLog status: ${log.status}" }
             when (log.entityType) {
-                "task" -> require(log.entityId in taskIds) { "Dangling completionLog task entityId: ${log.entityId}" }
-                "routine" -> require(log.entityId in routineIds) { "Dangling completionLog routine entityId: ${log.entityId}" }
+                CompletionEntityType.TASK.value ->
+                    require(log.entityId in taskIds) { "Dangling completionLog task entityId: ${log.entityId}" }
+                CompletionEntityType.ROUTINE.value ->
+                    require(log.entityId in routineIds) { "Dangling completionLog routine entityId: ${log.entityId}" }
             }
         }
 

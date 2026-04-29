@@ -38,9 +38,9 @@ import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -108,6 +108,7 @@ class TodayViewModel @Inject constructor(
     private val tickerProvider: TickerProvider,
     observeTodaySnapshot: ObserveTodaySnapshotUseCase,
 ) : ViewModel() {
+    fun today(): LocalDate = dateTimeProvider.today()
 
     // Emits current date, advances at midnight.
     private val currentDateFlow = flow {
@@ -115,7 +116,9 @@ class TodayViewModel @Inject constructor(
             val now = dateTimeProvider.today()
             emit(now)
             val midnight = now.plusDays(1).atStartOfDay(ZoneId.systemDefault())
-            val delayMs = Duration.between(ZonedDateTime.now(), midnight).toMillis()
+            val nowDateTime = Instant.ofEpochMilli(dateTimeProvider.currentTimeMillis())
+                .atZone(ZoneId.systemDefault())
+            val delayMs = Duration.between(nowDateTime, midnight).toMillis()
             delay(delayMs.coerceAtLeast(0L) + 500L)
         }
     }

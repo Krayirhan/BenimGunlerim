@@ -10,6 +10,7 @@ import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.DateTimeProvider
 import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
@@ -28,6 +29,7 @@ class ObserveTodaySnapshotUseCaseTest {
     private val completionLogRepository: CompletionLogRepository = mockk()
     private val dailyStateRepository: DailyStateRepository = mockk()
     private val prefsRepository: UserPreferencesRepository = mockk()
+    private val dateTimeProvider: DateTimeProvider = mockk()
 
     private val fixedDate = LocalDate.of(2025, 1, 15)
 
@@ -37,6 +39,7 @@ class ObserveTodaySnapshotUseCaseTest {
         completionLogRepository = completionLogRepository,
         dailyStateRepository = dailyStateRepository,
         prefsRepository = prefsRepository,
+        dateTimeProvider = dateTimeProvider,
     )
 
     @Before
@@ -47,6 +50,7 @@ class ObserveTodaySnapshotUseCaseTest {
         every { dailyStateRepository.observeToday() } returns flowOf(null)
         every { taskRepository.observeOverdue(any()) } returns flowOf(emptyList())
         every { prefsRepository.preferences } returns flowOf(UserPreferences())
+        every { dateTimeProvider.today() } returns fixedDate
     }
 
     @Test

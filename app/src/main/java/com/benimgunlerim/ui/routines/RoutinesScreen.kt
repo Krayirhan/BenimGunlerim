@@ -68,6 +68,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.shortTr
 import com.benimgunlerim.data.targetDaySet
+import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.domain.normalizedTimeOrNull
 import com.benimgunlerim.ui.theme.AccentPurple
 import com.benimgunlerim.ui.theme.AccentPurpleSoft
@@ -79,7 +80,6 @@ import com.benimgunlerim.ui.theme.CandyPrimaryLight
 import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.R
 import java.time.DayOfWeek
-import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +88,7 @@ fun RoutinesScreen(
     onNavigateToDetail: (String) -> Unit = {},
 ) {
     val routines by viewModel.routines.collectAsState()
-    val today = LocalDate.now().dayOfWeek
+    val today = viewModel.todayDayOfWeek()
     val todayRoutineCount = routines.count { today in it.routine.targetDaySet() }
     val weeklyCompletion = routines
         .flatMap { it.last7Days }
@@ -637,12 +637,12 @@ private fun AddRoutineSheet(
     var name by remember { mutableStateOf("") }
     var days by remember { mutableStateOf(DayOfWeek.entries.toSet()) }
     var time by remember { mutableStateOf("") }
-    var targetType by remember { mutableStateOf("check") }
+    var targetType by remember { mutableStateOf(RoutineTargetType.CHECK.value) }
     var targetValueText by remember { mutableStateOf("") }
     var targetUnit by remember { mutableStateOf("") }
 
     val goalTypes = listOf(
-        "check" to stringResource(R.string.routines_goal_checkbox),
+        RoutineTargetType.CHECK.value to stringResource(R.string.routines_goal_checkbox),
         "count" to stringResource(R.string.routines_goal_counter),
         "amount" to stringResource(R.string.routines_goal_amount),
         "duration" to stringResource(R.string.routines_goal_duration),
@@ -702,7 +702,7 @@ private fun AddRoutineSheet(
                 }
             }
             // Target Value & Unit (only for non-checkbox, non-negative)
-            if (targetType != "check" && targetType != "negative") {
+            if (targetType != RoutineTargetType.CHECK.value && targetType != "negative") {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
                         value = targetValueText,
@@ -756,7 +756,7 @@ private fun AddRoutineSheet(
                     name = ""
                     time = ""
                     days = DayOfWeek.entries.toSet()
-                    targetType = "check"
+                    targetType = RoutineTargetType.CHECK.value
                     targetValueText = ""
                     targetUnit = ""
                 },

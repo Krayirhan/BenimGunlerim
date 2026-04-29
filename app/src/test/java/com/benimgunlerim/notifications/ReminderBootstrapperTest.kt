@@ -6,8 +6,10 @@ import com.benimgunlerim.data.local.RoutineDao
 import com.benimgunlerim.data.local.TaskDao
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.DateTimeProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import java.time.LocalDate
 import java.time.LocalTime
@@ -31,6 +33,8 @@ class ReminderBootstrapperTest {
     private val routineReminderScheduler: RoutineReminderScheduler = mockk(relaxed = true)
     private val dailySummaryScheduler: DailySummaryScheduler = mockk(relaxed = true)
     private val prefsRepository: UserPreferencesRepository = mockk(relaxed = true)
+    private val dateTimeProvider: DateTimeProvider = mockk(relaxed = true)
+    private val fixedDate = LocalDate.of(2026, 4, 29)
 
     private fun makeBootstrapper() = ReminderBootstrapper(
         taskDao = taskDao,
@@ -39,13 +43,15 @@ class ReminderBootstrapperTest {
         routineReminderScheduler = routineReminderScheduler,
         dailySummaryScheduler = dailySummaryScheduler,
         userPreferencesRepository = prefsRepository,
+        dateTimeProvider = dateTimeProvider,
         applicationScope = testScope,
         ioDispatcher = testDispatcher,
     )
 
     @Test
     fun rescheduleReminders_schedulesTaskWithFutureReminder() = testScope.runTest {
-        val tomorrow = LocalDate.now().plusDays(1)
+        every { dateTimeProvider.today() } returns fixedDate
+        val tomorrow = fixedDate.plusDays(1)
         val task = makeTask("t1", "Buy milk", tomorrow.toString(), "09:00")
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns listOf(task)
         coEvery { routineDao.getActiveWithReminder() } returns emptyList()
@@ -66,6 +72,7 @@ class ReminderBootstrapperTest {
 
     @Test
     fun rescheduleReminders_schedulesRoutineReminders() = testScope.runTest {
+        every { dateTimeProvider.today() } returns fixedDate
         val routine = makeRoutine("r1", "Morning Run", "07:00")
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns emptyList()
         coEvery { routineDao.getActiveWithReminder() } returns listOf(routine)
@@ -79,6 +86,7 @@ class ReminderBootstrapperTest {
 
     @Test
     fun rescheduleReminders_schedulesDailySummary_whenNotificationsEnabled() = testScope.runTest {
+        every { dateTimeProvider.today() } returns fixedDate
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns emptyList()
         coEvery { routineDao.getActiveWithReminder() } returns emptyList()
         coEvery { prefsRepository.preferences } returns flowOf(
@@ -93,6 +101,7 @@ class ReminderBootstrapperTest {
 
     @Test
     fun rescheduleReminders_doesNotScheduleDailySummary_whenNotificationsOff() = testScope.runTest {
+        every { dateTimeProvider.today() } returns fixedDate
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns emptyList()
         coEvery { routineDao.getActiveWithReminder() } returns emptyList()
         coEvery { prefsRepository.preferences } returns flowOf(UserPreferences(notificationMode = "off"))
@@ -105,7 +114,8 @@ class ReminderBootstrapperTest {
 
     @Test
     fun rescheduleReminders_skipsTask_withNullReminderTime() = testScope.runTest {
-        val task = makeTask("t1", "No reminder", LocalDate.now().plusDays(1).toString(), null)
+        every { dateTimeProvider.today() } returns fixedDate
+        val task = makeTask("t1", "No reminder", fixedDate.plusDays(1).toString(), null)
         coEvery { taskDao.getPendingRemindersFrom(any()) } returns listOf(task)
         coEvery { routineDao.getActiveWithReminder() } returns emptyList()
         coEvery { prefsRepository.preferences } returns flowOf(UserPreferences(notificationMode = "on"))
