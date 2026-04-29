@@ -4,11 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benimgunlerim.analytics.AnalyticsEvent
 import com.benimgunlerim.analytics.AnalyticsTracker
-import com.benimgunlerim.data.BenimGunlerimRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
+import com.benimgunlerim.domain.DateTimeProvider
+import com.benimgunlerim.domain.model.RoutineTargetType
+import com.benimgunlerim.domain.usecase.AddRoutineUseCase
+import com.benimgunlerim.domain.usecase.AddTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
+import java.time.DayOfWeek
 import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +21,9 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
     private val preferencesRepository: UserPreferencesRepository,
-    private val repository: BenimGunlerimRepository,
+    private val addRoutineUseCase: AddRoutineUseCase,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val dateTimeProvider: DateTimeProvider,
     private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
     val preferences: StateFlow<UserPreferences> = preferencesRepository.preferences.stateIn(
@@ -36,25 +41,20 @@ class OnboardingViewModel @Inject constructor(
         viewModelScope.launch {
             // Add only the routines the user explicitly approved — no auto-mock
             approvedRoutineNames.forEach { name ->
-                repository.addRoutine(
+                addRoutineUseCase(
                     name = name,
-                    targetDays = setOf(
-                        java.time.DayOfWeek.MONDAY, java.time.DayOfWeek.TUESDAY,
-                        java.time.DayOfWeek.WEDNESDAY, java.time.DayOfWeek.THURSDAY,
-                        java.time.DayOfWeek.FRIDAY, java.time.DayOfWeek.SATURDAY,
-                        java.time.DayOfWeek.SUNDAY,
-                    ),
+                    targetDays = DayOfWeek.entries.toSet(),
                     preferredTime = null,
-                    targetType = "check",
+                    targetType = RoutineTargetType.CHECK.value,
                     targetValue = null,
                     targetUnit = null,
                 )
             }
             // Add approved task for today (if any)
             if (!approvedTaskTitle.isNullOrBlank()) {
-                repository.addTask(
+                addTaskUseCase(
                     title = approvedTaskTitle,
-                    date = LocalDate.now(),
+                    date = dateTimeProvider.today(),
                     note = null,
                     startTime = null,
                     category = null,

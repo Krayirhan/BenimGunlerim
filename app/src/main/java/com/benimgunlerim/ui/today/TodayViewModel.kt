@@ -4,30 +4,49 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.benimgunlerim.analytics.AnalyticsEvent
 import com.benimgunlerim.analytics.AnalyticsTracker
-import com.benimgunlerim.data.BenimGunlerimRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
-import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
+import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
-import com.benimgunlerim.domain.GameEngine
 import com.benimgunlerim.domain.AchievementTracker
+import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
+import com.benimgunlerim.domain.TickerProvider
+import com.benimgunlerim.domain.service.RewardDisplayService
+import com.benimgunlerim.domain.usecase.AddTaskUseCase
+import com.benimgunlerim.domain.usecase.AddSubTaskUseCase
+import com.benimgunlerim.domain.usecase.AutoCloseMissedDayUseCase
+import com.benimgunlerim.domain.usecase.CarryPendingTasksUseCase
+import com.benimgunlerim.domain.usecase.CloseDayUseCase
+import com.benimgunlerim.domain.usecase.DeleteTaskUseCase
+import com.benimgunlerim.domain.usecase.DeleteSubTaskUseCase
+import com.benimgunlerim.domain.usecase.MoveTaskToDateUseCase
+import com.benimgunlerim.domain.usecase.ObserveDailyStateUseCase
+import com.benimgunlerim.domain.usecase.ObserveSubTasksUseCase
 import com.benimgunlerim.domain.usecase.ObserveTodaySnapshotUseCase
+import com.benimgunlerim.domain.usecase.RestoreTaskUseCase
+import com.benimgunlerim.domain.usecase.SaveMissedDaySummaryUseCase
+import com.benimgunlerim.domain.usecase.SetTaskPendingUseCase
+import com.benimgunlerim.domain.usecase.ToggleSubTaskUseCase
+import com.benimgunlerim.domain.usecase.ToggleRoutineUseCase
+import com.benimgunlerim.domain.usecase.ToggleTaskUseCase
+import com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase
+import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
+import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
-import javax.inject.Inject
 import java.time.Duration
-import java.time.LocalTime
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import javax.inject.Inject
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -58,18 +77,42 @@ sealed class GameEvent {
 }
 
 @HiltViewModel
+@Suppress("LongParameterList")
+@OptIn(ExperimentalCoroutinesApi::class)
 class TodayViewModel @Inject constructor(
-    private val repository: BenimGunlerimRepository,
     private val prefsRepository: UserPreferencesRepository,
     private val analyticsTracker: AnalyticsTracker,
     private val achievementTracker: AchievementTracker,
     private val feedbackManager: FeedbackManager,
+    private val rewardDisplayService: RewardDisplayService,
+    private val dateTimeProvider: DateTimeProvider,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val updateTaskTitleUseCase: UpdateTaskTitleUseCase,
+    private val moveTaskToDateUseCase: MoveTaskToDateUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val restoreTaskUseCase: RestoreTaskUseCase,
+    private val setTaskPendingUseCase: SetTaskPendingUseCase,
+    private val observeSubTasksUseCase: ObserveSubTasksUseCase,
+    private val addSubTaskUseCase: AddSubTaskUseCase,
+    private val toggleSubTaskUseCase: ToggleSubTaskUseCase,
+    private val deleteSubTaskUseCase: DeleteSubTaskUseCase,
+    private val toggleTaskUseCase: ToggleTaskUseCase,
+    private val toggleRoutineUseCase: ToggleRoutineUseCase,
+    private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase,
+    private val closeDayUseCase: CloseDayUseCase,
+    private val carryPendingTasksUseCase: CarryPendingTasksUseCase,
+    private val observeDailyStateUseCase: ObserveDailyStateUseCase,
+    private val autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase,
+    private val saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase,
+    private val tickerProvider: TickerProvider,
     observeTodaySnapshot: ObserveTodaySnapshotUseCase,
 ) : ViewModel() {
-    // Re-emits current date every midnight so uiState auto-switches to the new day.
+
+    // Emits current date, advances at midnight.
     private val currentDateFlow = flow {
         while (true) {
-            val now = LocalDate.now()
+            val now = dateTimeProvider.today()
             emit(now)
             val midnight = now.plusDays(1).atStartOfDay(ZoneId.systemDefault())
             val delayMs = Duration.between(ZonedDateTime.now(), midnight).toMillis()
@@ -77,25 +120,21 @@ class TodayViewModel @Inject constructor(
         }
     }
 
-    // Fires every minute to re-evaluate canCloseDay when the summary time threshold is crossed.
-    private val minuteTickerFlow = flow<Unit> {
-        while (true) { emit(Unit); delay(60_000L) }
-    }
+    // Fires every minute to re-evaluate canCloseDay.
+    private val minuteTickerFlow = tickerProvider.minuteTicker()
 
-    // Emits yesterday if the user hasn't closed that day yet.
     private val missedDayFlow: Flow<LocalDate?> = currentDateFlow.flatMapLatest { today ->
-        repository.observeDailyState(today.minusDays(1)).map { state ->
+        observeDailyStateUseCase(today.minusDays(1)).map { state ->
             if (state?.closedAt == null) today.minusDays(1) else null
         }
     }
 
-    private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
-    val gameEvents = _gameEvents.asSharedFlow()
+    val gameEvents: Flow<GameEvent> = rewardDisplayService.gameEvents
 
     init {
         viewModelScope.launch {
             achievementTracker.newUnlock.collect { def ->
-                _gameEvents.tryEmit(GameEvent.AchievementUnlocked(def.emoji, def.title))
+                rewardDisplayService.onAchievementUnlocked(def.emoji, def.title)
             }
         }
     }
@@ -106,7 +145,7 @@ class TodayViewModel @Inject constructor(
         minuteTickerFlow,
     ) { snapshot, missedDay, _ ->
         val summaryTime = snapshot.gameState.dailySummaryTime
-        val canClose = runCatching { LocalTime.now() >= LocalTime.parse(summaryTime) }.getOrDefault(false)
+        val canClose = runCatching { dateTimeProvider.currentTime() >= java.time.LocalTime.parse(summaryTime) }.getOrDefault(false)
         TodayUiState(
             tasks = snapshot.tasks,
             routines = snapshot.routines,
@@ -124,10 +163,12 @@ class TodayViewModel @Inject constructor(
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TodayUiState())
 
+    // ── Task actions ─────────────────────────────────────────────────────────
+
     fun addTask(
         title: String,
         note: String? = null,
-        date: LocalDate = LocalDate.now(),
+        date: LocalDate = dateTimeProvider.today(),
         startTime: String? = null,
         category: String? = null,
         priority: Int = 2,
@@ -135,45 +176,26 @@ class TodayViewModel @Inject constructor(
     ) {
         if (title.isBlank()) return
         viewModelScope.launch {
-            repository.addTask(title, date, note, startTime, category, priority, reminderTime)
+            addTaskUseCase(title, date, note, startTime, category, priority, reminderTime)
             analyticsTracker.track(AnalyticsEvent("task_created"))
         }
     }
 
     fun toggleTask(task: TaskEntity) {
         viewModelScope.launch {
-            repository.toggleTask(task)
-            if (task.completionState != "completed") {
-                analyticsTracker.track(AnalyticsEvent("task_completed"))
-                feedbackManager.tapMedium()
-                val oldXp = uiState.value.gameState.totalXp
-                val taskXp = GameEngine.xpForTask(task.priority)
-                val granted = prefsRepository.grantRewardOnce(
-                    eventKey = "task:${task.id}:${task.plannedDate}",
-                    xp = taskXp,
-                    gold = GameEngine.GOLD_TASK_COMPLETE,
-                    happinessDelta = GameEngine.HAPPINESS_TASK,
-                )
-                if (granted) {
-                    prefsRepository.incrementTasksCompleted()
-                    _gameEvents.tryEmit(GameEvent.RewardEarned(taskXp, GameEngine.GOLD_TASK_COMPLETE))
-                    checkLevelUp(oldXp, oldXp + taskXp)
-                    // Achievement checks
-                    val prefs = uiState.value.gameState
-                    achievementTracker.checkTaskCount(prefs.totalTasksCompleted + 1)
-                    achievementTracker.checkGold(prefs.gold + GameEngine.GOLD_TASK_COMPLETE)
-                    achievementTracker.checkHappiness(prefs.happiness + GameEngine.HAPPINESS_TASK)
-                }
-                checkAllTasksCompleted(
-                    toggledTaskId = task.id,
-                    baseXp = oldXp + if (granted) taskXp else 0,
-                )
-            }
+            analyticsTracker.track(AnalyticsEvent("task_completed"))
+            feedbackManager.tapMedium()
+            val result = toggleTaskUseCase(task) ?: return@launch
+            rewardDisplayService.onTaskCompleted(
+                taskId = task.id,
+                taskReward = result.taskReward,
+                allTasksBonus = result.allTasksBonus,
+            )
         }
     }
 
     fun updateTaskTitle(task: TaskEntity, title: String) {
-        viewModelScope.launch { repository.updateTaskTitle(task, title) }
+        viewModelScope.launch { updateTaskTitleUseCase(task, title) }
     }
 
     fun updateTask(
@@ -187,71 +209,69 @@ class TodayViewModel @Inject constructor(
         reminderTime: String?,
     ) {
         viewModelScope.launch {
-            repository.updateTask(task, title, note, date, startTime, category, priority, reminderTime)
+            updateTaskUseCase(task, title, note, date, startTime, category, priority, reminderTime)
         }
     }
 
     fun moveTaskToTomorrow(task: TaskEntity) {
-        viewModelScope.launch { repository.moveTaskToDate(task, LocalDate.now().plusDays(1)) }
+        viewModelScope.launch { moveTaskToDateUseCase(task, dateTimeProvider.today().plusDays(1)) }
     }
 
     fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
-        viewModelScope.launch { repository.moveTaskToDate(task, date) }
+        viewModelScope.launch { moveTaskToDateUseCase(task, date) }
     }
 
     fun deleteTask(task: TaskEntity) {
-        viewModelScope.launch { repository.deleteTask(task) }
+        viewModelScope.launch { deleteTaskUseCase(task) }
     }
 
     fun restoreTask(task: TaskEntity) {
-        viewModelScope.launch { repository.restoreTask(task) }
+        viewModelScope.launch { restoreTaskUseCase(task) }
     }
 
     fun undoTaskToggle(taskId: String) {
-        viewModelScope.launch { repository.setTaskPending(taskId) }
+        viewModelScope.launch { setTaskPendingUseCase(taskId) }
     }
 
-    // ── SubTask ──────────────────────────────────────────────────────────────
+    // ── SubTask actions ─────────────────────────────────────────────────────
 
-    fun subTasksFlow(taskId: String) = repository.observeSubTasks(taskId)
+    fun subTasksFlow(taskId: String) = observeSubTasksUseCase(taskId)
 
     fun addSubTask(taskId: String, title: String) {
-        viewModelScope.launch { repository.addSubTask(taskId, title) }
+        viewModelScope.launch { addSubTaskUseCase(taskId, title) }
     }
 
-    fun toggleSubTask(subTask: com.benimgunlerim.data.local.entity.SubTaskEntity) {
-        viewModelScope.launch { repository.toggleSubTask(subTask) }
+    fun toggleSubTask(subTask: SubTaskEntity) {
+        viewModelScope.launch { toggleSubTaskUseCase(subTask) }
     }
 
-    fun deleteSubTask(subTask: com.benimgunlerim.data.local.entity.SubTaskEntity) {
-        viewModelScope.launch { repository.deleteSubTask(subTask) }
+    fun deleteSubTask(subTask: SubTaskEntity) {
+        viewModelScope.launch { deleteSubTaskUseCase(subTask) }
     }
+
+    // ── Routine actions ──────────────────────────────────────────────────────
 
     fun toggleRoutine(routine: RoutineEntity, completedToday: Boolean) {
         viewModelScope.launch {
-            repository.toggleRoutine(routine, completedToday = completedToday)
-            if (!completedToday) {
-                analyticsTracker.track(AnalyticsEvent("routine_completed"))
-                feedbackManager.tapMedium()
-                val oldXp = uiState.value.gameState.totalXp
-                val routineXp = GameEngine.xpForRoutine(routine.targetType ?: "check")
-                val granted = prefsRepository.grantRewardOnce(
-                    eventKey = "routine:${routine.id}:${LocalDate.now()}",
-                    xp = routineXp,
-                    gold = GameEngine.GOLD_ROUTINE_COMPLETE,
-                    happinessDelta = GameEngine.HAPPINESS_ROUTINE,
-                )
-                if (granted) {
-                    prefsRepository.incrementRoutinesCompleted()
-                    _gameEvents.tryEmit(GameEvent.RewardEarned(routineXp, GameEngine.GOLD_ROUTINE_COMPLETE))
-                    checkLevelUp(oldXp, oldXp + routineXp)
-                    // Achievement checks
-                    val prefs = uiState.value.gameState
-                    achievementTracker.checkRoutineCount(prefs.totalRoutinesCompleted + 1)
-                }
-                checkAllRoutinesCompleted(
-                    toggledRoutineId = routine.id,
-                    baseXp = oldXp + if (granted) routineXp else 0,
+            val state = uiState.value
+            val result = toggleRoutineUseCase(
+                routine = routine,
+                completedToday = completedToday,
+                completedRoutineIds = state.completedRoutineIds,
+                allTodayRoutineIds = state.routines.map { it.id },
+            ) ?: return@launch
+
+            analyticsTracker.track(AnalyticsEvent("routine_completed"))
+            feedbackManager.tapMedium()
+            rewardDisplayService.onRoutineCompleted(
+                routineId = routine.id,
+                grantResult = result.routineReward,
+            )
+            // all-routines bonus
+            if (!result.allRoutinesBonus.alreadyGranted) {
+                rewardDisplayService.onDailyBonusEarned(
+                    xp = result.allRoutinesBonus.xpGranted,
+                    gold = result.allRoutinesBonus.goldGranted,
                 )
             }
         }
@@ -259,33 +279,32 @@ class TodayViewModel @Inject constructor(
 
     fun updateRoutineProgress(routine: RoutineEntity, value: Float, wasCompleted: Boolean) {
         viewModelScope.launch {
-            repository.setRoutineProgress(routine, value)
-            val target = routine.targetValue?.toFloat()?.takeIf { it > 0f } ?: 1f
-            if (!wasCompleted && value >= target) {
-                analyticsTracker.track(AnalyticsEvent("routine_completed"))
-                feedbackManager.tapMedium()
-                val oldXp = uiState.value.gameState.totalXp
-                val routineXp = GameEngine.xpForRoutine(routine.targetType ?: "check")
-                val granted = prefsRepository.grantRewardOnce(
-                    eventKey = "routine:${routine.id}:${LocalDate.now()}",
-                    xp = routineXp,
-                    gold = GameEngine.GOLD_ROUTINE_COMPLETE,
-                    happinessDelta = GameEngine.HAPPINESS_ROUTINE,
-                )
-                if (granted) {
-                    prefsRepository.incrementRoutinesCompleted()
-                    _gameEvents.tryEmit(GameEvent.RewardEarned(routineXp, GameEngine.GOLD_ROUTINE_COMPLETE))
-                    checkLevelUp(oldXp, oldXp + routineXp)
-                    val prefs = uiState.value.gameState
-                    achievementTracker.checkRoutineCount(prefs.totalRoutinesCompleted + 1)
-                }
-                checkAllRoutinesCompleted(
-                    toggledRoutineId = routine.id,
-                    baseXp = oldXp + if (granted) routineXp else 0,
+            val state = uiState.value
+            val result = updateRoutineProgressUseCase(
+                routine = routine,
+                value = value,
+                wasCompleted = wasCompleted,
+                allTodayRoutineIds = state.routines.map { it.id },
+                completedRoutineIds = state.completedRoutineIds,
+            ) ?: return@launch
+
+            analyticsTracker.track(AnalyticsEvent("routine_completed"))
+            feedbackManager.tapMedium()
+            rewardDisplayService.onRoutineCompleted(
+                routineId = routine.id,
+                grantResult = result.routineReward,
+            )
+            // all-routines bonus
+            if (!result.allRoutinesBonus.alreadyGranted) {
+                rewardDisplayService.onDailyBonusEarned(
+                    xp = result.allRoutinesBonus.xpGranted,
+                    gold = result.allRoutinesBonus.goldGranted,
                 )
             }
         }
     }
+
+    // ── Day close ────────────────────────────────────────────────────────────
 
     fun saveDailySummary(
         note: String,
@@ -298,60 +317,38 @@ class TodayViewModel @Inject constructor(
     ) {
         viewModelScope.launch {
             val state = uiState.value
-            val moodLabels = listOf("cok_kotu", "kotu", "normal", "iyi", "harika")
-            val moodLabel = moodLabels.getOrElse(mood) { "normal" }
-            repository.saveDailySummary(
-                mood = moodLabel,
+            val result = closeDayUseCase(
+                mood = mood,
                 note = note,
                 completionRate = state.progress,
-                energyLevel = energy.coerceIn(1, 5),
+                energy = energy,
                 bestMoment = bestMoment,
                 challenge = challenge,
                 tomorrowIntention = tomorrowIntention,
-                carriedTaskCount = carriedCount,
+                carriedCount = carriedCount,
+                streak = state.currentStreak,
             )
             analyticsTracker.track(AnalyticsEvent("daily_summary_completed"))
             feedbackManager.celebrationBurst()
-            val oldXp = state.gameState.totalXp
-            val dayCloseGranted = prefsRepository.grantRewardOnce(
-                eventKey = "dayClose:${LocalDate.now()}",
-                xp = GameEngine.XP_DAY_CLOSE,
+            rewardDisplayService.onDailyBonusEarned(
+                xp = result.dayCloseReward.xpGranted,
+                gold = result.dayCloseReward.goldGranted,
             )
-            if (dayCloseGranted) {
-                prefsRepository.incrementDaysClosed()
-                _gameEvents.tryEmit(GameEvent.RewardEarned(GameEngine.XP_DAY_CLOSE, 0))
-                checkLevelUp(oldXp, oldXp + GameEngine.XP_DAY_CLOSE)
-                if (mood == 4) prefsRepository.incrementHappyMoodCount()
-                achievementTracker.checkDayClose(state.gameState.totalDaysClosed + 1)
-            }
-            if (state.progress >= 1f) {
-                val xpBeforePerfect = oldXp + if (dayCloseGranted) GameEngine.XP_DAY_CLOSE else 0
-                val perfectGranted = prefsRepository.grantRewardOnce(
-                    eventKey = "perfectDay:${LocalDate.now()}",
-                    xp = GameEngine.XP_ALL_TASKS_BONUS + GameEngine.XP_ALL_ROUTINES_BONUS,
-                    gold = GameEngine.GOLD_PERFECT_DAY,
-                    happinessDelta = GameEngine.HAPPINESS_STREAK,
+            if (!result.perfectDayReward.alreadyGranted) {
+                rewardDisplayService.onDailyBonusEarned(
+                    xp = result.perfectDayReward.xpGranted,
+                    gold = result.perfectDayReward.goldGranted,
                 )
-                if (perfectGranted) {
-                    val perfectXp = GameEngine.XP_ALL_TASKS_BONUS + GameEngine.XP_ALL_ROUTINES_BONUS
-                    _gameEvents.tryEmit(GameEvent.RewardEarned(perfectXp, GameEngine.GOLD_PERFECT_DAY))
-                    checkLevelUp(xpBeforePerfect, xpBeforePerfect + perfectXp)
-                    prefsRepository.incrementPerfectDays()
-                    achievementTracker.checkPerfectDay(state.gameState.totalPerfectDays + 1)
-                }
             }
-            // Achievement checks
-            achievementTracker.checkStreak(state.currentStreak)
-            if (mood == 4) achievementTracker.checkHappiness(100)
         }
     }
 
     fun carryTasksToTomorrow() {
-        viewModelScope.launch { repository.carryPendingTasksToTomorrow() }
+        viewModelScope.launch { carryPendingTasksUseCase() }
     }
 
     fun autoSaveMissedDay(date: LocalDate) {
-        viewModelScope.launch { repository.autoCloseMissedDay(date) }
+        viewModelScope.launch { autoCloseMissedDayUseCase(date) }
     }
 
     fun saveMissedDaySummary(
@@ -363,61 +360,6 @@ class TodayViewModel @Inject constructor(
         challenge: String = "",
         tomorrowIntention: String = "",
     ) {
-        viewModelScope.launch {
-            val moodLabels = listOf("cok_kotu", "kotu", "normal", "iyi", "harika")
-            repository.saveDailySummary(
-                date = date,
-                mood = moodLabels.getOrElse(mood) { "normal" },
-                note = note,
-                completionRate = 0f,
-                energyLevel = energy.coerceIn(1, 5),
-                bestMoment = bestMoment.ifBlank { null },
-                challenge = challenge.ifBlank { null },
-                tomorrowIntention = tomorrowIntention.ifBlank { null },
-            )
-        }
-    }
-
-    private fun checkLevelUp(oldXp: Int, newXp: Int) {
-        val oldLevel = GameEngine.calculateLevel(oldXp)
-        val newLevel = GameEngine.calculateLevel(newXp)
-        if (newLevel.level > oldLevel.level) {
-            feedbackManager.levelUpVibration()
-            _gameEvents.tryEmit(GameEvent.LevelUp(newLevel.level, newLevel.title))
-            viewModelScope.launch { achievementTracker.checkLevel(newLevel.level) }
-        }
-    }
-
-    private suspend fun checkAllTasksCompleted(toggledTaskId: String, baseXp: Int) {
-        val state = uiState.value
-        val allDone = state.tasks.all {
-            it.completionState == "completed" || it.id == toggledTaskId
-        } && state.tasks.isNotEmpty()
-        if (allDone) {
-            val granted = prefsRepository.grantRewardOnce(
-                eventKey = "allTasks:${LocalDate.now()}",
-                xp = GameEngine.XP_ALL_TASKS_BONUS,
-            )
-            if (granted) {
-                _gameEvents.tryEmit(GameEvent.RewardEarned(GameEngine.XP_ALL_TASKS_BONUS, 0))
-                checkLevelUp(baseXp, baseXp + GameEngine.XP_ALL_TASKS_BONUS)
-            }
-        }
-    }
-
-    private suspend fun checkAllRoutinesCompleted(toggledRoutineId: String, baseXp: Int) {
-        val state = uiState.value
-        val allDone = state.routines.isNotEmpty() &&
-            state.routines.all { it.id in state.completedRoutineIds || it.id == toggledRoutineId }
-        if (allDone) {
-            val granted = prefsRepository.grantRewardOnce(
-                eventKey = "allRoutines:${LocalDate.now()}",
-                xp = GameEngine.XP_ALL_ROUTINES_BONUS,
-            )
-            if (granted) {
-                _gameEvents.tryEmit(GameEvent.RewardEarned(GameEngine.XP_ALL_ROUTINES_BONUS, 0))
-                checkLevelUp(baseXp, baseXp + GameEngine.XP_ALL_ROUTINES_BONUS)
-            }
-        }
+        viewModelScope.launch { saveMissedDaySummaryUseCase(date, note, mood, energy, bestMoment, challenge, tomorrowIntention) }
     }
 }

@@ -3,8 +3,13 @@ package com.benimgunlerim.ui.plan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benimgunlerim.data.BenimGunlerimRepository
+import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.local.entity.TaskEntity
+import com.benimgunlerim.domain.DateTimeProvider
+import com.benimgunlerim.domain.usecase.AddTaskUseCase
+import com.benimgunlerim.domain.usecase.DeleteTaskUseCase
+import com.benimgunlerim.domain.usecase.MoveTaskToDateUseCase
+import com.benimgunlerim.domain.usecase.ToggleTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -18,8 +23,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 data class PlanUiState(
-    val selectedDate: LocalDate = LocalDate.now(),
-    val weekStart: LocalDate = LocalDate.now().minusDays(LocalDate.now().dayOfWeek.value.toLong() - 1),
+    val selectedDate: LocalDate,
+    val weekStart: LocalDate,
     val tasksForDay: List<TaskEntity> = emptyList(),
     val overdueTasks: List<TaskEntity> = emptyList(),
 )
@@ -27,17 +32,22 @@ data class PlanUiState(
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class PlanViewModel @Inject constructor(
-    private val repository: BenimGunlerimRepository,
+    private val taskRepository: TaskRepository,
+    private val dateTimeProvider: DateTimeProvider,
+    private val addTaskUseCase: AddTaskUseCase,
+    private val toggleTaskUseCase: ToggleTaskUseCase,
+    private val deleteTaskUseCase: DeleteTaskUseCase,
+    private val moveTaskToDateUseCase: MoveTaskToDateUseCase,
 ) : ViewModel() {
-
-    private val _selectedDate = MutableStateFlow(LocalDate.now())
+    private val today = dateTimeProvider.today()
+    private val _selectedDate = MutableStateFlow(today)
 
     val uiState: StateFlow<PlanUiState> = combine(
         _selectedDate,
         _selectedDate.flatMapLatest { date ->
-            repository.observeTasksForRange(date, date)
+            taskRepository.observeRange(date, date)
         },
-        repository.observeOverdueTasks(),
+        taskRepository.observeOverdue(today),
     ) { date, dayTasks, overdue ->
         val weekStart = date.minusDays(date.dayOfWeek.value.toLong() - 1)
         PlanUiState(
@@ -46,7 +56,14 @@ class PlanViewModel @Inject constructor(
             tasksForDay = dayTasks,
             overdueTasks = overdue,
         )
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), PlanUiState())
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        PlanUiState(
+            selectedDate = today,
+            weekStart = today.minusDays(today.dayOfWeek.value.toLong() - 1),
+        ),
+    )
 
     fun selectDate(date: LocalDate) {
         _selectedDate.value = date
@@ -55,27 +72,19 @@ class PlanViewModel @Inject constructor(
     fun addTask(title: String, date: LocalDate) {
         if (title.isBlank()) return
         viewModelScope.launch {
-            repository.addTask(
-                title = title,
-                note = null,
-                date = date,
-                startTime = null,
-                category = null,
-                priority = 2,
-                reminderTime = null,
-            )
+            addTaskUseCase(title = title, date = date)
         }
     }
 
     fun toggleTask(task: TaskEntity) {
-        viewModelScope.launch { repository.toggleTask(task) }
+        viewModelScope.launch { toggleTaskUseCase(task) }
     }
 
     fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
-        viewModelScope.launch { repository.moveTaskToDate(task, date) }
+        viewModelScope.launch { moveTaskToDateUseCase(task, date) }
     }
 
     fun deleteTask(task: TaskEntity) {
-        viewModelScope.launch { repository.deleteTask(task) }
+        viewModelScope.launch { deleteTaskUseCase(task) }
     }
 }

@@ -3,10 +3,15 @@ package com.benimgunlerim.ui.routines
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benimgunlerim.data.BenimGunlerimRepository
-import com.benimgunlerim.data.currentStreakForEntity
+import com.benimgunlerim.data.CompletionLogRepository
+import com.benimgunlerim.data.RoutineRepository
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.domain.DateTimeProvider
+import com.benimgunlerim.domain.model.CompletionEntityType
+import com.benimgunlerim.domain.model.CompletionStatus
+import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
+import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
@@ -28,26 +33,30 @@ data class RoutineDetailUiState(
 
 @HiltViewModel
 class RoutineDetailViewModel @Inject constructor(
-    private val repository: BenimGunlerimRepository,
+    private val routineRepository: RoutineRepository,
+    private val completionLogRepository: CompletionLogRepository,
+    private val dateTimeProvider: DateTimeProvider,
+    private val archiveRoutineUseCase: ArchiveRoutineUseCase,
+    private val skipRoutineUseCase: SkipRoutineUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val routineId: String = checkNotNull(savedStateHandle["routineId"])
 
     val uiState: StateFlow<RoutineDetailUiState> = combine(
-        repository.observeActiveRoutines(),
-        repository.observeAllCompletionLogs(),
+        routineRepository.observeActive(),
+        completionLogRepository.observeAll(),
     ) { routines, allLogs ->
         val routine = routines.firstOrNull { it.id == routineId }
         if (routine == null) return@combine RoutineDetailUiState(isLoading = false)
 
         val routineLogs = allLogs.filter {
-            it.entityType == "routine" && it.entityId == routineId
+            it.entityType == CompletionEntityType.ROUTINE.value && it.entityId == routineId
         }
-        val completedLogs = routineLogs.filter { it.status == "completed" }
+        val completedLogs = routineLogs.filter { it.status == CompletionStatus.COMPLETED.value }
 
         // Last 7 days
-        val today = LocalDate.now()
+        val today = dateTimeProvider.today()
         val weekStart = today.minusDays(6)
         val last7 = (0..6).map { offset ->
             val date = weekStart.plusDays(offset.toLong()).toString()
@@ -76,7 +85,7 @@ class RoutineDetailViewModel @Inject constructor(
 
         RoutineDetailUiState(
             routine = routine,
-            currentStreak = allLogs.currentStreakForEntity("routine", routineId),
+            currentStreak = currentStreakForEntity(allLogs, CompletionEntityType.ROUTINE.value, routineId, today),
             bestStreak = bestStreak,
             successRate = successRate,
             last7Days = last7,
@@ -87,12 +96,12 @@ class RoutineDetailViewModel @Inject constructor(
 
     fun archiveRoutine() {
         val routine = uiState.value.routine ?: return
-        viewModelScope.launch { repository.archiveRoutine(routine) }
+        viewModelScope.launch { archiveRoutineUseCase(routine) }
     }
 
     fun skipToday() {
         val routine = uiState.value.routine ?: return
-        viewModelScope.launch { repository.skipRoutine(routine) }
+        viewModelScope.launch { skipRoutineUseCase(routine, dateTimeProvider.today()) }
     }
 
     private fun calculateBestStreak(logs: List<CompletionLogEntity>): Int {
@@ -113,5 +122,26 @@ class RoutineDetailViewModel @Inject constructor(
             prev = date
         }
         return best
+    }
+
+    private fun currentStreakForEntity(
+        logs: List<CompletionLogEntity>,
+        entityType: String,
+        entityId: String,
+        today: LocalDate,
+    ): Int {
+        val completedDates = logs
+            .asSequence()
+            .filter { it.entityType == entityType && it.entityId == entityId }
+            .filter { it.status == CompletionStatus.COMPLETED.value }
+            .mapNotNull { runCatching { LocalDate.parse(it.date) }.getOrNull() }
+            .toSet()
+        var streak = 0
+        var cursor = today
+        while (cursor in completedDates) {
+            streak += 1
+            cursor = cursor.minusDays(1)
+        }
+        return streak
     }
 }
