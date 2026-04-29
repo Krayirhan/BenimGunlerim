@@ -34,8 +34,8 @@ class SettingsViewModel @Inject constructor(
     private val reminderBootstrapper: ReminderRestorer,
     private val reminderPolicy: NotificationPolicyCache,
 ) : ViewModel() {
-    private val _dataOperationMessage = MutableStateFlow<String?>(null)
-    val dataOperationMessage: StateFlow<String?> = _dataOperationMessage.asStateFlow()
+    private val _dataOperationMessage = MutableStateFlow<SettingsEvent?>(null)
+    val dataOperationMessage: StateFlow<SettingsEvent?> = _dataOperationMessage.asStateFlow()
 
     val preferences: StateFlow<UserPreferences> = preferencesRepository.preferences.stateIn(
         scope = viewModelScope,
@@ -78,7 +78,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             localDataClearer.clearAllLocalData()
             preferencesRepository.resetOnboarding()
-            _dataOperationMessage.value = "Yerel veriler temizlendi."
+            _dataOperationMessage.value = SettingsEvent.DataCleared
         }
     }
 
@@ -86,7 +86,7 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val json = dataExportService.exportToJson()
             if (json == null) {
-                _dataOperationMessage.value = "Veriler dışa aktarılamadı."
+                _dataOperationMessage.value = SettingsEvent.ExportFailed
             } else {
                 onReady(json)
             }
@@ -97,17 +97,17 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = dataImportService.importFromJson(json)
             if (result == null) {
-                _dataOperationMessage.value = "Yedek dosyası içe aktarılamadı."
+                _dataOperationMessage.value = SettingsEvent.ImportParseFailed
                 return@launch
             }
             syncReminderPolicyCache()
             reminderBootstrapper.rescheduleReminders()
-            _dataOperationMessage.value = "Yedek geri yüklendi: ${result.tasks} görev, ${result.routines} rutin."
+            _dataOperationMessage.value = SettingsEvent.ImportSuccess(result.tasks, result.routines)
         }
     }
 
-    fun setDataOperationMessage(message: String) {
-        _dataOperationMessage.value = message
+    fun setDataOperationMessage(event: SettingsEvent) {
+        _dataOperationMessage.value = event
     }
 
     fun clearDataOperationMessage() {

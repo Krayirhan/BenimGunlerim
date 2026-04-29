@@ -57,6 +57,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -79,6 +81,8 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
     val snackbarHost = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
+    val taskAdded = stringResource(R.string.plan_task_added)
+    val taskDeleted = stringResource(R.string.plan_task_deleted)
 
     var showAddSheet by remember { mutableStateOf(false) }
     var addText by remember { mutableStateOf("") }
@@ -93,13 +97,13 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 Text(
-                    "Görev ekle — ${state.selectedDate.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR")))}",
+                    stringResource(R.string.plan_add_task_sheet_title, state.selectedDate.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR")))),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 )
                 OutlinedTextField(
                     value = addText,
                     onValueChange = { addText = it },
-                    label = { Text("Görev başlığı") },
+                    label = { Text(stringResource(R.string.plan_task_title_label)) },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
@@ -107,16 +111,16 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    TextButton(onClick = { showAddSheet = false }) { Text("İptal") }
+                    TextButton(onClick = { showAddSheet = false }) { Text(stringResource(R.string.action_cancel)) }
                     Spacer(Modifier.width(8.dp))
                     TextButton(
                         onClick = {
                             viewModel.addTask(addText, state.selectedDate)
                             addText = ""
                             showAddSheet = false
-                            scope.launch { snackbarHost.showSnackbar("Görev eklendi") }
+                            scope.launch { snackbarHost.showSnackbar(taskAdded) }
                         },
-                    ) { Text("Kaydet") }
+                    ) { Text(stringResource(R.string.action_save)) }
                 }
             }
         }
@@ -132,7 +136,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 contentColor = Color.White,
                 shape = CircleShape,
             ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Görev ekle")
+                Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.plan_add_task_cd))
             }
         },
     ) { padding ->
@@ -163,7 +167,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     onMoveToday = { viewModel.moveTaskToDate(it, LocalDate.now()) },
                     onDelete = {
                         viewModel.deleteTask(it)
-                        scope.launch { snackbarHost.showSnackbar("Görev silindi") }
+                        scope.launch { snackbarHost.showSnackbar(taskDeleted) }
                     },
                     onAdd = { showAddSheet = true },
                 )
@@ -179,7 +183,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                         onMoveToSelected = { viewModel.moveTaskToDate(it, state.selectedDate) },
                         onDelete = {
                             viewModel.deleteTask(it)
-                            scope.launch { snackbarHost.showSnackbar("Görev silindi") }
+                            scope.launch { snackbarHost.showSnackbar(taskDeleted) }
                         },
                     )
                 }
@@ -191,10 +195,13 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
 @Composable
 private fun PlanHeroCard(selectedDate: LocalDate) {
     val today = LocalDate.now()
+    val todayLabel = stringResource(R.string.label_today)
+    val tomorrowLabel = stringResource(R.string.label_tomorrow)
+    val yesterdayLabel = stringResource(R.string.label_yesterday)
     val label = when (selectedDate) {
-        today -> "Bugün"
-        today.plusDays(1) -> "Yarın"
-        today.minusDays(1) -> "Dün"
+        today -> todayLabel
+        today.plusDays(1) -> tomorrowLabel
+        today.minusDays(1) -> yesterdayLabel
         else -> selectedDate.format(DateTimeFormatter.ofPattern("EEEE", Locale("tr", "TR")))
             .replaceFirstChar { it.titlecase(Locale("tr", "TR")) }
     }
@@ -209,7 +216,7 @@ private fun PlanHeroCard(selectedDate: LocalDate) {
             Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            Text("Plan", style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
+            Text(stringResource(R.string.plan_title), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
             Text(dateStr, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Spacer(Modifier.height(4.dp))
             Box(
@@ -286,11 +293,15 @@ private fun DayTasksCard(
     onAdd: () -> Unit,
 ) {
     val dateLabel = date.format(DateTimeFormatter.ofPattern("d MMM", Locale("tr", "TR")))
+    val daySectionTitle = stringResource(R.string.plan_day_section_title, dateLabel)
+    val taskCount = stringResource(R.string.plan_task_count, tasks.size)
+    val addAction = stringResource(R.string.plan_add_action)
+    val emptyState = stringResource(R.string.plan_empty_state)
     PlanSectionShell(
-        title = "$dateLabel görevi",
-        badge = "${tasks.size} görev",
+        title = daySectionTitle,
+        badge = taskCount,
         color = LevelSky,
-        actionLabel = "+ Ekle",
+        actionLabel = addAction,
         onAction = onAdd,
     ) {
         if (tasks.isEmpty()) {
@@ -303,7 +314,7 @@ private fun DayTasksCard(
                     .padding(14.dp),
             ) {
                 Text(
-                    "Bu gün için görev yok. Bir şey planla.",
+                    emptyState,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -323,9 +334,11 @@ private fun PlanOverdueCard(
     onMoveToSelected: (TaskEntity) -> Unit,
     onDelete: (TaskEntity) -> Unit,
 ) {
+    val overdueTitle = stringResource(R.string.plan_overdue_title)
+    val overdueCount = stringResource(R.string.plan_overdue_count, tasks.size)
     PlanSectionShell(
-        title = "Geciken görevler",
-        badge = "${tasks.size} gecikiyor",
+        title = overdueTitle,
+        badge = overdueCount,
         color = StreakCoral,
         actionLabel = null,
         onAction = null,
@@ -392,11 +405,11 @@ private fun PlanTaskRow(
         }
         if (secondaryAction != null) {
             IconButton(onClick = secondaryAction, modifier = Modifier.size(34.dp)) {
-                Icon(Icons.Outlined.CalendarToday, contentDescription = "Seçili güne taşı", tint = accentColor, modifier = Modifier.size(18.dp))
+                Icon(Icons.Outlined.CalendarToday, contentDescription = stringResource(R.string.plan_move_to_selected_day_cd), tint = accentColor, modifier = Modifier.size(18.dp))
             }
         }
         IconButton(onClick = { onDelete(task) }, modifier = Modifier.size(34.dp)) {
-            Icon(Icons.Rounded.DeleteOutline, contentDescription = "Sil", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
+            Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.action_delete), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))
         }
     }
 }

@@ -35,10 +35,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.GoldBadge
 import com.benimgunlerim.ui.components.ScreenHeader
 import com.benimgunlerim.ui.components.SectionTitle
@@ -60,6 +62,14 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
             viewModel.clearMessage()
         }
     }
+
+    // Shop categories (resolved outside LazyListScope so @Composable stringResource() is valid)
+    val categories = listOf(
+        stringResource(R.string.shop_category_badges) to "badge",
+        stringResource(R.string.shop_category_effects) to "effect",
+        stringResource(R.string.shop_category_accents) to "accent",
+        stringResource(R.string.shop_category_reports) to "report",
+    )
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -109,7 +119,7 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
                         )
                         if (state.dailyRewardAvailable) {
                             Text(
-                                text = "+25 \uD83E\uDE99 al\u0131n seni bekliyor!",
+                                text = stringResource(R.string.shop_daily_gift_available),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = XpGold,
                                 textAlign = TextAlign.Center,
@@ -120,11 +130,11 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
                                 colors = ButtonDefaults.buttonColors(containerColor = XpGold),
                                 modifier = Modifier.fillMaxWidth().height(44.dp),
                             ) {
-                                Text("\uD83C\uDF81 Hediyeyi Al!", color = Color.White)
+                                Text(stringResource(R.string.shop_daily_gift_claim_btn), color = Color.White)
                             }
                         } else {
                             Text(
-                                text = "\u2705 Bug\u00fcnk\u00fc hediye al\u0131nd\u0131. Yar\u0131n gel!",
+                                text = stringResource(R.string.shop_daily_gift_claimed),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 textAlign = TextAlign.Center,
@@ -134,22 +144,13 @@ fun ShopScreen(viewModel: ShopViewModel = hiltViewModel()) {
                 }
             }
 
-            // Shop categories
-            val categories = listOf(
-                "🎖️" to "Çerçeveler" to "badge",
-                "✨" to "Kutlama Efektleri" to "effect",
-                "🎨" to "Renk Aksentler" to "accent",
-                "📊" to "Rapor Modu" to "report",
-            )
-
-            categories.forEach { (labelPair, catId) ->
-                val (emoji, catName) = labelPair
+            categories.forEach { (catName, catId) ->
                 val categoryItems = state.items.filter { it.category == catId }
                 if (categoryItems.isNotEmpty()) {
                     item {
                         SectionTitle(
-                            title = "$emoji $catName",
-                            subtitle = "${categoryItems.size} \u00fcr\u00fcn",
+                            title = catName,
+                            subtitle = stringResource(R.string.shop_category_item_count, categoryItems.size),
                             accentColor = CandyPrimary,
                         )
                     }
@@ -240,7 +241,7 @@ private fun ShopItemCard(
                         .background(CompletedGreen)
                         .padding(horizontal = 10.dp, vertical = 5.dp),
                 ) {
-                    Text("\u2713 Sahip", style = MaterialTheme.typography.labelSmall, color = Color.White)
+                    Text(stringResource(R.string.shop_item_owned), style = MaterialTheme.typography.labelSmall, color = Color.White)
                 }
             } else {
                 Button(
@@ -253,7 +254,11 @@ private fun ShopItemCard(
                     ),
                     contentPadding = ButtonDefaults.ContentPadding,
                 ) {
-                    Text("\uD83E\uDE99 ${item.cost}", style = MaterialTheme.typography.labelMedium, color = Color.White)
+                    Text(
+                        stringResource(R.string.shop_purchase_button_icon) + " ${item.cost}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Color.White,
+                    )
                 }
             }
         }

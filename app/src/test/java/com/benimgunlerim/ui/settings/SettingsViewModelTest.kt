@@ -245,14 +245,14 @@ class SettingsViewModelTest {
     @Test
     fun setDataOperationMessage_updatesMessage() {
         val vm = makeViewModel()
-        vm.setDataOperationMessage("test")
-        assertEquals("test", vm.dataOperationMessage.value)
+        vm.setDataOperationMessage(SettingsEvent.ExportSaved)
+        assertEquals(SettingsEvent.ExportSaved, vm.dataOperationMessage.value)
     }
 
     @Test
     fun clearDataOperationMessage_resetsToNull() {
         val vm = makeViewModel()
-        vm.setDataOperationMessage("test")
+        vm.setDataOperationMessage(SettingsEvent.ExportSaved)
         vm.clearDataOperationMessage()
         assertNull(vm.dataOperationMessage.value)
     }
@@ -270,7 +270,7 @@ class SettingsViewModelTest {
 
         assert(clearer.cleared) { "Expected clearAllLocalData() to be called" }
         assert(prefs.onboardingReset) { "Expected resetOnboarding() to be called" }
-        assertEquals("Yerel veriler temizlendi.", vm.dataOperationMessage.value)
+        assertEquals(SettingsEvent.DataCleared, vm.dataOperationMessage.value)
     }
 
     // ── Tests: exportData ──────────────────────────────────────────────────
@@ -311,7 +311,7 @@ class SettingsViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assert(!callbackInvoked) { "Expected callback NOT to be invoked" }
-        assertEquals("Veriler dışa aktarılamadı.", vm.dataOperationMessage.value)
+        assertEquals(SettingsEvent.ExportFailed, vm.dataOperationMessage.value)
     }
 
     // ── Tests: importData ──────────────────────────────────────────────────
@@ -340,9 +340,9 @@ class SettingsViewModelTest {
         vm.importData(validJson)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val message = vm.dataOperationMessage.value
-        assert(message?.startsWith("Yedek geri yüklendi") == true) {
-            "Expected success message, got: $message"
+        val event = vm.dataOperationMessage.value
+        assert(event is SettingsEvent.ImportSuccess) {
+            "Expected ImportSuccess event, got: $event"
         }
     }
 
@@ -363,7 +363,7 @@ class SettingsViewModelTest {
         vm.importData("{\"version\":999}") // unsupported version
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("Yedek dosyası içe aktarılamadı.", vm.dataOperationMessage.value)
+        assertEquals(SettingsEvent.ImportParseFailed, vm.dataOperationMessage.value)
     }
 
     // ── Tests: preferences setter delegation ──────────────────────────────

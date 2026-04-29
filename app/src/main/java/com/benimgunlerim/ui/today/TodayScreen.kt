@@ -97,6 +97,8 @@ import com.benimgunlerim.ui.theme.CompletedGreen
 import com.benimgunlerim.ui.theme.LevelSky
 import com.benimgunlerim.ui.theme.StreakCoral
 import com.benimgunlerim.ui.theme.XpGold
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -110,6 +112,12 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
     val snackbarHost = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
+
+    val msgTaskMovedTomorrow = stringResource(R.string.today_task_moved_tomorrow)
+    val msgTaskDeleted = stringResource(R.string.today_task_deleted)
+    val msgTaskCompleted = stringResource(R.string.today_task_completed)
+    val msgDaySaved = stringResource(R.string.today_day_saved)
+    val msgUndoLabel = stringResource(R.string.action_undo)
 
     var addText by remember { mutableStateOf("") }
     var addNote by remember { mutableStateOf("") }
@@ -217,7 +225,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 onMoveTomorrow = {
                     viewModel.moveTaskToTomorrow(task)
                     selectedTask = null
-                    scope.launch { snackbarHost.showSnackbar("Görev yarına taşındı") }
+                    scope.launch { snackbarHost.showSnackbar(msgTaskMovedTomorrow) }
                 },
                 onDelete = {
                     lastDeletedTask = task
@@ -225,8 +233,8 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     selectedTask = null
                     scope.launch {
                         val result = snackbarHost.showSnackbar(
-                            message = "Görev silindi",
-                            actionLabel = "Geri Al",
+                            message = msgTaskDeleted,
+                            actionLabel = msgUndoLabel,
                             duration = SnackbarDuration.Short,
                         )
                         if (result == SnackbarResult.ActionPerformed) {
@@ -252,7 +260,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     viewModel.saveDailySummary(note, mood, energy, bestMoment, challenge, tomorrowIntention)
                     if (carryTasks) viewModel.carryTasksToTomorrow()
                     showCloseSheet = false
-                    scope.launch { snackbarHost.showSnackbar("Gün kaydedildi") }
+                    scope.launch { snackbarHost.showSnackbar(msgDaySaved) }
                 },
             )
         }
@@ -269,7 +277,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                 onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, _ ->
                     viewModel.saveMissedDaySummary(missedDate, note, mood, energy, bestMoment, challenge, tomorrowIntention)
                     showMissedDaySheet = false
-                    scope.launch { snackbarHost.showSnackbar("Gün kaydedildi") }
+                    scope.launch { snackbarHost.showSnackbar(msgDaySaved) }
                 },
             )
         }
@@ -292,7 +300,7 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                     shape = CircleShape,
                     modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayFab),
                 ) {
-                    Icon(Icons.Rounded.Add, contentDescription = "Ekle")
+                    Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_add_cd))
                 }
             },
         ) { padding ->
@@ -339,8 +347,8 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                             if (wasPending) {
                                 scope.launch {
                                     val result = snackbarHost.showSnackbar(
-                                        message = "Görev tamamlandı",
-                                        actionLabel = "Geri Al",
+                                        message = msgTaskCompleted,
+                                        actionLabel = msgUndoLabel,
                                         duration = SnackbarDuration.Short,
                                     )
                                     if (result == SnackbarResult.ActionPerformed) {
@@ -356,8 +364,8 @@ fun TodayScreen(viewModel: TodayViewModel = hiltViewModel()) {
                             viewModel.deleteTask(task)
                             scope.launch {
                                 val result = snackbarHost.showSnackbar(
-                                    message = "Görev silindi",
-                                    actionLabel = "Geri Al",
+                                    message = msgTaskDeleted,
+                                    actionLabel = msgUndoLabel,
                                     duration = SnackbarDuration.Short,
                                 )
                                 if (result == SnackbarResult.ActionPerformed) {
@@ -430,10 +438,10 @@ private fun HeroCard(streak: Int, happiness: Int) {
     SurfaceCard(radius = 28.dp, padding = 20.dp) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(14.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Bugün", style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
+                Text(stringResource(R.string.today_hero_title), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
                 Text(date, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Rutinlerini koru, bugünün görevlerini net bitir.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Pill(if (streak > 0) "$streak günlük seri aktif" else "Yeni seri başlatmaya hazır", CandyPrimary)
+                Text(stringResource(R.string.today_hero_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Pill(if (streak > 0) stringResource(R.string.today_streak_active, streak) else stringResource(R.string.today_streak_ready), CandyPrimary)
             }
             Box(
                 Modifier
@@ -444,7 +452,7 @@ private fun HeroCard(streak: Int, happiness: Int) {
                 contentAlignment = Alignment.Center,
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text("Enerji", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.today_energy_label), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Text("%$happiness", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = CandySecondary)
                 }
             }
@@ -472,14 +480,14 @@ private fun DayScoreCard(
             .padding(20.dp),
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text("Bugünün durumu", style = MaterialTheme.typography.labelLarge, color = Color.White.copy(.72f))
+            Text(stringResource(R.string.today_day_status_label), style = MaterialTheme.typography.labelLarge, color = Color.White.copy(.72f))
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("$completed / $total", style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)
-                    Text("toplam adım tamamlandı", color = Color.White.copy(.86f))
+                    Text(stringResource(R.string.today_steps_completed), color = Color.White.copy(.86f))
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        ScorePill("Rutin $routineDone/$routineTotal")
-                        ScorePill("Görev $taskDone/$taskTotal")
+                        ScorePill(stringResource(R.string.today_routine_progress, routineDone, routineTotal))
+                        ScorePill(stringResource(R.string.today_task_progress, taskDone, taskTotal))
                     }
                 }
                 ProgressRing(animated, percent)
@@ -519,15 +527,15 @@ private fun RoutinesCard(
     onProgressChange: (RoutineEntity, Float, Boolean) -> Unit,
 ) {
     SectionShell(
-        title = "Günlük rutinler",
-        subtitle = "Her gün olması gereken alışkanlıklar. Su, yürüyüş, ilaç, okuma gibi.",
-        badge = "Tekrar eder",
+        title = stringResource(R.string.today_routines_title),
+        subtitle = stringResource(R.string.today_routines_subtitle),
+        badge = stringResource(R.string.today_routines_badge),
         color = CandyPrimary,
         actionLabel = null,
         onAction = null,
     ) {
         if (routines.isEmpty()) {
-            EmptyBox("Henüz rutin yok. Her gün yapmak istediğin bir alışkanlık ekle.", CandyPrimary)
+            EmptyBox(stringResource(R.string.today_routines_empty), CandyPrimary)
         } else {
             routines.forEach { routine ->
                 val log = completionLogs.firstOrNull { it.entityType == "routine" && it.entityId == routine.id }
@@ -546,15 +554,15 @@ private fun TasksCard(
     onSwipeDelete: (TaskEntity) -> Unit,
 ) {
     SectionShell(
-        title = "Bugünün görevleri",
-        subtitle = "Sadece bugün yapmak istediğin tek seferlik işler.",
-        badge = "Bugüne özel",
+        title = stringResource(R.string.today_tasks_title),
+        subtitle = stringResource(R.string.today_tasks_subtitle),
+        badge = stringResource(R.string.today_tasks_badge),
         color = LevelSky,
-        actionLabel = "+ Görev",
+        actionLabel = stringResource(R.string.today_tasks_add_action),
         onAction = onAdd,
     ) {
         if (tasks.isEmpty()) {
-            EmptyBox("Bugüne özel görev yok. Bir iş, arama veya yapılacak adım ekle.", LevelSky)
+            EmptyBox(stringResource(R.string.today_tasks_empty), LevelSky)
         } else {
             tasks.forEach { task ->
                 SwipeableTaskRow(task = task, onToggle = onToggle, onOpen = onOpen, onDelete = onSwipeDelete)
@@ -610,9 +618,11 @@ private fun TaskRow(task: TaskEntity, onToggle: (TaskEntity) -> Unit, onOpen: (T
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text("${task.startTime ?: "bugün"} · tek seferlik görev", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+            Text(
+                if (task.startTime != null) stringResource(R.string.today_task_with_time, task.startTime!!) else stringResource(R.string.today_task_no_time),
+                style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
         }
-        Icon(Icons.Rounded.MoreHoriz, contentDescription = "Görev detayını aç", tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })
+        Icon(Icons.Rounded.MoreHoriz, contentDescription = stringResource(R.string.today_task_open_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })
     }
 }
 
@@ -645,8 +655,8 @@ private fun SwipeableTaskRow(
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Icon(Icons.Rounded.DeleteOutline, contentDescription = "Sil", tint = StreakCoral, modifier = Modifier.size(20.dp))
-                    Text("Sil", style = MaterialTheme.typography.labelMedium, color = StreakCoral)
+                    Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(20.dp))
+                    Text(stringResource(R.string.today_delete_label), style = MaterialTheme.typography.labelMedium, color = StreakCoral)
                 }
             }
         },
@@ -682,10 +692,10 @@ private fun RoutineRow(
                     val current = log?.value?.toInt() ?: 0
                     Text("$current / ${routine.targetValue} ${routine.targetUnit ?: ""}".trim(), style = MaterialTheme.typography.labelSmall, color = color, maxLines = 1)
                 } else {
-                    Text(routine.preferredTime?.let { "$it · günlük rutin" } ?: "her gün tekrar eder", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    Text(routine.preferredTime?.let { stringResource(R.string.today_routine_time_format, it) } ?: stringResource(R.string.today_routine_daily_no_time), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                 }
             }
-            Pill(if (done) "Tamam" else "Seri", if (done) CompletedGreen else color)
+            Pill(if (done) stringResource(R.string.today_routine_done_pill) else stringResource(R.string.today_routine_streak_pill), if (done) CompletedGreen else color)
         }
         if (!isCheckType && routine.targetValue != null && !done) {
             val current = log?.value ?: 0f
@@ -734,12 +744,12 @@ private fun CheckCircle(done: Boolean, color: Color, onClick: () -> Unit) {
             .background(if (done) color else color.copy(.10f))
             .border(2.dp, color.copy(if (done) 1f else .45f), CircleShape)
             .clickable(
-                onClickLabel = if (done) "Tamamlandı olarak işaretlendi — geri al" else "Tamamlandı olarak işaretle",
+                onClickLabel = if (done) stringResource(R.string.today_unmark_done_label) else stringResource(R.string.today_mark_done_label),
                 onClick = onClick,
             ),
         contentAlignment = Alignment.Center,
     ) {
-        if (done) Icon(Icons.Rounded.Check, contentDescription = "Tamamlandı", tint = Color.White, modifier = Modifier.size(19.dp))
+        if (done) Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.today_done_cd), tint = Color.White, modifier = Modifier.size(19.dp))
     }
 }
 
@@ -765,9 +775,9 @@ private fun OverdueTasksCard(
     onMoveToday: (TaskEntity) -> Unit,
 ) {
     SectionShell(
-        title = "Geciken görevler",
-        subtitle = "${tasks.size} tamamlanmamış görev bulundu.",
-        badge = "Gecikiyor",
+        title = stringResource(R.string.today_overdue_title),
+        subtitle = stringResource(R.string.today_overdue_subtitle, tasks.size),
+        badge = stringResource(R.string.today_overdue_badge),
         color = StreakCoral,
         actionLabel = null,
         onAction = null,
@@ -784,7 +794,7 @@ private fun OverdueTasksCard(
                     }
                 }
                 IconButton(onClick = { onMoveToday(task) }, modifier = Modifier.size(36.dp)) {
-                    Icon(Icons.Outlined.CalendarToday, contentDescription = "Bugüne taşı", tint = StreakCoral, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Outlined.CalendarToday, contentDescription = stringResource(R.string.today_move_to_today_cd), tint = StreakCoral, modifier = Modifier.size(18.dp))
                 }
             }
         }
@@ -795,11 +805,11 @@ private fun OverdueTasksCard(
 private fun RewardsCard(streak: Int, completed: Int, progress: Float) {
     SurfaceCard(radius = 24.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Küçük kazanımlar", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
+            Text(stringResource(R.string.today_rewards_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
-                RewardTile("$streak gün", "Seri", CandyPrimary, Modifier.weight(1f))
-                RewardTile("$completed", "Adım", CompletedGreen, Modifier.weight(1f))
-                RewardTile("%${(progress * 100).toInt()}", "Bugün", CandySecondary, Modifier.weight(1f))
+                RewardTile(stringResource(R.string.today_reward_streak_days, streak), stringResource(R.string.today_reward_streak), CandyPrimary, Modifier.weight(1f))
+                RewardTile("$completed", stringResource(R.string.today_reward_step), CompletedGreen, Modifier.weight(1f))
+                RewardTile("%${(progress * 100).toInt()}", stringResource(R.string.today_reward_today), CandySecondary, Modifier.weight(1f))
             }
         }
     }
@@ -834,7 +844,12 @@ private fun CloseDayCard(
             "harika" -> CompletedGreen; "iyi" -> CandyPrimary; "kotu", "cok_kotu" -> StreakCoral; else -> CandySecondary
         }
         val moodLabel = when (mood) {
-            "harika" -> "Harika"; "iyi" -> "İyi"; "normal" -> "Normal"; "kotu" -> "Kötü"; "cok_kotu" -> "Çok kötü"; else -> "Kapatıldı"
+            "harika" -> stringResource(R.string.today_mood_great)
+            "iyi" -> stringResource(R.string.today_mood_good)
+            "normal" -> stringResource(R.string.today_mood_normal)
+            "kotu" -> stringResource(R.string.today_mood_bad)
+            "cok_kotu" -> stringResource(R.string.today_mood_very_bad)
+            else -> stringResource(R.string.today_mood_closed)
         }
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
@@ -843,13 +858,13 @@ private fun CloseDayCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Pill("Gün kapatıldı", CompletedGreen)
+                    Pill(stringResource(R.string.today_closed_pill), CompletedGreen)
                     Pill(moodLabel, moodColor)
                 }
-                Text("Bugün tamamlandı", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
-                Text("$completed / $total adım tamamlandı. XP zaten kazanıldı.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.today_closed_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
+                Text(stringResource(R.string.today_closed_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 TextButton(onClick = onClick, modifier = Modifier.fillMaxWidth().height(40.dp)) {
-                    Text("Özeti güncelle", color = CompletedGreen, maxLines = 1)
+                    Text(stringResource(R.string.today_closed_update_btn), color = CompletedGreen, maxLines = 1)
                 }
             }
         }
@@ -861,16 +876,16 @@ private fun CloseDayCard(
                 .border(1.dp, MaterialTheme.colorScheme.outline.copy(.12f), RoundedCornerShape(28.dp)).padding(20.dp),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Pill("Gün sonu", MaterialTheme.colorScheme.onSurfaceVariant.copy(.5f))
-                Text("Günü kapat", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.45f))
-                Text("Aktif olacak: $dailySummaryTime'dan sonra", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.6f))
+                Pill(stringResource(R.string.today_locked_pill), MaterialTheme.colorScheme.onSurfaceVariant.copy(.5f))
+                Text(stringResource(R.string.today_locked_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.45f))
+                Text(stringResource(R.string.today_locked_desc, dailySummaryTime), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.6f))
                 Button(
                     onClick = {},
                     enabled = false,
                     modifier = Modifier.fillMaxWidth().height(44.dp),
                     shape = RoundedCornerShape(8.dp),
                 ) {
-                    Text("Günü değerlendir", maxLines = 1)
+                    Text(stringResource(R.string.today_locked_btn), maxLines = 1)
                 }
             }
         }
@@ -881,14 +896,14 @@ private fun CloseDayCard(
                 .border(1.dp, CandySecondary.copy(.18f), RoundedCornerShape(28.dp)).padding(20.dp),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Pill("Gün sonu", CandySecondary)
-                Text("Günü kapat", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
-                Text("Bugün $completed / $total adım tamamlandı. Günü değerlendir.", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Pill(stringResource(R.string.today_locked_pill), CandySecondary)
+                Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
+                Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
                     Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
                 }
                 Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(CandySecondary, Color.White)) {
-                    Text("Günü değerlendir", maxLines = 1)
+                    Text(stringResource(R.string.today_active_btn), maxLines = 1)
                 }
             }
         }
@@ -912,11 +927,11 @@ private fun MissedDayBanner(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text("Değerlendirilmemiş gün", style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = StreakCoral)
+                Text(stringResource(R.string.today_missed_label), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = StreakCoral)
                 Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            TextButton(onClick = onReview) { Text("Değerlendir", color = StreakCoral, style = MaterialTheme.typography.labelLarge) }
-            TextButton(onClick = onDismiss) { Text("Geç", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge) }
+            TextButton(onClick = onReview) { Text(stringResource(R.string.today_missed_review_btn), color = StreakCoral, style = MaterialTheme.typography.labelLarge) }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.today_missed_skip_btn), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge) }
         }
     }
 }
@@ -937,18 +952,18 @@ private fun AddTaskSheet(
     onDateOffsetChange: (Int) -> Unit,
     onSave: () -> Unit,
 ) {
-    val priorityLabels = listOf("Yüksek", "Normal", "Düşük")
-    val dateLabels = listOf("Bugün", "Yarın", "+2 gün")
+    val priorityLabels = listOf(stringResource(R.string.today_priority_high), stringResource(R.string.today_priority_normal), stringResource(R.string.today_priority_low))
+    val dateLabels = listOf(stringResource(R.string.label_today), stringResource(R.string.label_tomorrow), stringResource(R.string.today_date_plus2))
     Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp).navigationBarsPadding(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Yeni görev", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
-        OutlinedTextField(value = text, onValueChange = onTextChange, label = { Text("Görev adı") }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))
-        OutlinedTextField(value = note, onValueChange = onNoteChange, label = { Text("Not (isteğe bağlı)") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+        Text(stringResource(R.string.today_add_task_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+        OutlinedTextField(value = text, onValueChange = onTextChange, label = { Text(stringResource(R.string.today_add_task_name_label)) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))
+        OutlinedTextField(value = note, onValueChange = onNoteChange, label = { Text(stringResource(R.string.today_add_task_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedTextField(value = time, onValueChange = onTimeChange, label = { Text("Saat") }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
-            OutlinedTextField(value = category, onValueChange = onCategoryChange, label = { Text("Kategori") }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
+            OutlinedTextField(value = time, onValueChange = onTimeChange, label = { Text(stringResource(R.string.today_add_task_time_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
+            OutlinedTextField(value = category, onValueChange = onCategoryChange, label = { Text(stringResource(R.string.today_add_task_category_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
         }
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("Öncelik", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.today_add_task_priority_label), style = MaterialTheme.typography.labelLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(1, 2, 3).forEachIndexed { i, p ->
                     val sel = priority == p
@@ -967,7 +982,7 @@ private fun AddTaskSheet(
             }
         }
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("Tarih", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.today_add_task_date_label), style = MaterialTheme.typography.labelLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(0, 1, 2).forEach { offset ->
                     val sel = dateOffset == offset
@@ -985,7 +1000,7 @@ private fun AddTaskSheet(
             }
         }
         Button(onClick = onSave, enabled = text.isNotBlank(), modifier = Modifier.fillMaxWidth().height(50.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(CandyPrimary, Color.White)) {
-            Text("Kaydet")
+            Text(stringResource(R.string.action_save))
         }
         Spacer(Modifier.height(12.dp))
     }
@@ -1009,35 +1024,35 @@ private fun TaskDetailSheet(
     var priority by remember { mutableStateOf(task.priority) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var newSubTaskText by remember { mutableStateOf("") }
-    val priorityLabels = listOf("Yüksek", "Normal", "Düşük")
+    val priorityLabels = listOf(stringResource(R.string.today_priority_high), stringResource(R.string.today_priority_normal), stringResource(R.string.today_priority_low))
 
     if (showDeleteConfirm) {
         AlertDialog(
             onDismissRequest = { showDeleteConfirm = false },
-            title = { Text("Görevi sil?") },
-            text = { Text("\"${task.title}\" görevi kalıcı olarak silinecek. Kısa süre içinde geri alabilirsin.") },
+            title = { Text(stringResource(R.string.today_delete_task_title)) },
+            text = { Text(stringResource(R.string.today_delete_task_body, task.title)) },
             confirmButton = {
                 TextButton(onClick = { showDeleteConfirm = false; onDelete() }) {
-                    Text("Sil", color = StreakCoral)
+                    Text(stringResource(R.string.today_delete_label), color = StreakCoral)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showDeleteConfirm = false }) {
-                    Text("Vazgeç")
+                    Text(stringResource(R.string.action_dismiss))
                 }
             },
         )
     }
     Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp).navigationBarsPadding(), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-        Text("Görevi düzenle", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
-        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("Görev adı") }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))
-        OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text("Not") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+        Text(stringResource(R.string.today_edit_task_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.today_add_task_name_label)) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))
+        OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text(stringResource(R.string.today_edit_task_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedTextField(value = time, onValueChange = { time = it.sanitizedTimeInput() }, label = { Text("Saat") }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
-            OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text("Kategori") }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
+            OutlinedTextField(value = time, onValueChange = { time = it.sanitizedTimeInput() }, label = { Text(stringResource(R.string.today_add_task_time_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
+            OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text(stringResource(R.string.today_add_task_category_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))
         }
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text("Öncelik", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.today_add_task_priority_label), style = MaterialTheme.typography.labelLarge)
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf(1, 2, 3).forEachIndexed { i, p ->
                     val sel = priority == p
@@ -1057,9 +1072,9 @@ private fun TaskDetailSheet(
         }
         // ── Alt Görevler ─────────────────────────────────────────────────────
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text("Alt görevler", style = MaterialTheme.typography.labelLarge)
+            Text(stringResource(R.string.today_subtasks_label), style = MaterialTheme.typography.labelLarge)
             if (subtasks.isEmpty()) {
-                Text("Henüz alt görev yok.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.today_subtasks_empty), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             } else {
                 subtasks.forEach { st ->
                     Row(
@@ -1087,7 +1102,7 @@ private fun TaskDetailSheet(
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (st.isCompleted) .5f else 1f),
                         )
                         IconButton(onClick = { onDeleteSubTask(st) }, modifier = Modifier.size(28.dp)) {
-                            Icon(Icons.Rounded.DeleteOutline, contentDescription = "Sil", tint = StreakCoral, modifier = Modifier.size(16.dp))
+                            Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(16.dp))
                         }
                     }
                 }
@@ -1100,7 +1115,7 @@ private fun TaskDetailSheet(
                 OutlinedTextField(
                     value = newSubTaskText,
                     onValueChange = { newSubTaskText = it },
-                    label = { Text("Alt görev ekle") },
+                    label = { Text(stringResource(R.string.today_subtask_add_label)) },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
                     shape = RoundedCornerShape(8.dp),
@@ -1114,7 +1129,7 @@ private fun TaskDetailSheet(
                     },
                     modifier = Modifier.size(48.dp).clip(RoundedCornerShape(8.dp)).background(CandyPrimary),
                 ) {
-                    Icon(Icons.Rounded.Add, contentDescription = "Ekle", tint = Color.White)
+                    Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_subtask_add_cd), tint = Color.White)
                 }
             }
         }
@@ -1124,10 +1139,10 @@ private fun TaskDetailSheet(
             modifier = Modifier.fillMaxWidth().height(50.dp),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(CandyPrimary, Color.White),
-        ) { Text("Kaydet") }
+        ) { Text(stringResource(R.string.action_save)) }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedSmallButton("Yarına taşı", Modifier.weight(1f), onMoveTomorrow)
-            OutlinedSmallButton("Sil", Modifier.weight(1f)) { showDeleteConfirm = true }
+            OutlinedSmallButton(stringResource(R.string.today_move_tomorrow_btn), Modifier.weight(1f), onMoveTomorrow)
+            OutlinedSmallButton(stringResource(R.string.today_delete_label), Modifier.weight(1f)) { showDeleteConfirm = true }
         }
         Spacer(Modifier.height(12.dp))
     }
@@ -1150,7 +1165,13 @@ private fun CloseDaySheet(
     var tomorrowIntention by remember { mutableStateOf("") }
     var carryTasks by remember { mutableStateOf(overdueCount > 0) }
 
-    val moodLabels = listOf("Çok kötü", "Kötü", "Normal", "İyi", "Harika")
+    val moodLabels = listOf(
+        stringResource(R.string.today_close_step1_mood_very_bad),
+        stringResource(R.string.today_close_step1_mood_bad),
+        stringResource(R.string.today_close_step1_mood_normal),
+        stringResource(R.string.today_close_step1_mood_good),
+        stringResource(R.string.today_close_step1_mood_great),
+    )
     val moodColors = listOf(StreakCoral, StreakCoral.copy(.65f), CandySecondary, CandyPrimary, CompletedGreen)
 
     Column(Modifier.padding(horizontal = 24.dp, vertical = 16.dp).navigationBarsPadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -1167,11 +1188,11 @@ private fun CloseDaySheet(
         when (step) {
             0 -> {
                 // Step 1: Summary
-                Text("Bugünün özeti", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+                Text(stringResource(R.string.today_close_step0_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    SummaryTile("$completedCount / $totalCount", "Tamamlandı", CandyPrimary, Modifier.weight(1f))
-                    SummaryTile("%${(progress * 100).toInt()}", "Başarı", CompletedGreen, Modifier.weight(1f))
-                    if (overdueCount > 0) SummaryTile("$overdueCount", "Geciken", StreakCoral, Modifier.weight(1f))
+                    SummaryTile("$completedCount / $totalCount", stringResource(R.string.today_close_step0_completed), CandyPrimary, Modifier.weight(1f))
+                    SummaryTile("%${(progress * 100).toInt()}", stringResource(R.string.today_close_step0_success), CompletedGreen, Modifier.weight(1f))
+                    if (overdueCount > 0) SummaryTile("$overdueCount", stringResource(R.string.today_close_step0_overdue), StreakCoral, Modifier.weight(1f))
                 }
                 Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
                     Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
@@ -1179,9 +1200,9 @@ private fun CloseDaySheet(
             }
             1 -> {
                 // Step 2: Mood + Energy
-                Text("Bugün nasıl hissettin?", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+                Text(stringResource(R.string.today_close_step1_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Ruh hali", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.today_close_step1_mood_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         moodColors.forEachIndexed { i, col ->
                             Box(
@@ -1197,7 +1218,7 @@ private fun CloseDaySheet(
                     }
                 }
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Enerji seviyesi (1-5)", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.today_close_step1_energy_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         listOf(1, 2, 3, 4, 5).forEach { e ->
                             Box(
@@ -1215,15 +1236,15 @@ private fun CloseDaySheet(
             }
             2 -> {
                 // Step 3: Reflection
-                Text("Bugünü yansıt", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
-                OutlinedTextField(value = bestMoment, onValueChange = { bestMoment = it }, label = { Text("Bugünün en iyi şeyi") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = challenge, onValueChange = { challenge = it }, label = { Text("Zorlayan bir şey vardı mı?") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
-                OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text("Bugünden kısa bir not") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+                Text(stringResource(R.string.today_close_step2_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+                OutlinedTextField(value = bestMoment, onValueChange = { bestMoment = it }, label = { Text(stringResource(R.string.today_close_step2_best_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = challenge, onValueChange = { challenge = it }, label = { Text(stringResource(R.string.today_close_step2_challenge_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+                OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text(stringResource(R.string.today_close_step2_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
             }
             3 -> {
                 // Step 4: Tomorrow
-                Text("Yarına hazırlan", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
-                OutlinedTextField(value = tomorrowIntention, onValueChange = { tomorrowIntention = it }, label = { Text("Yarın için tek niyet") }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
+                Text(stringResource(R.string.today_close_step3_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
+                OutlinedTextField(value = tomorrowIntention, onValueChange = { tomorrowIntention = it }, label = { Text(stringResource(R.string.today_close_step3_intent_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))
                 if (overdueCount > 0) {
                     Row(
                         Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
@@ -1238,8 +1259,8 @@ private fun CloseDaySheet(
                             if (carryTasks) Icon(Icons.Rounded.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))
                         }
                         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            Text("$overdueCount geciken görevi yarına taşı", style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))
-                            Text("Tamamlanmamış görevler yarın listene eklenir.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(R.string.today_close_step3_move_overdue, overdueCount), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))
+                            Text(stringResource(R.string.today_close_step3_move_overdue_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                     }
                 }
@@ -1249,11 +1270,11 @@ private fun CloseDaySheet(
         // Navigation buttons
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             if (step > 0) {
-                OutlinedSmallButton("Geri", Modifier.weight(1f)) { step-- }
+                OutlinedSmallButton(stringResource(R.string.today_close_back_btn), Modifier.weight(1f)) { step-- }
             }
             if (step < 3) {
                 Button(onClick = { step++ }, modifier = Modifier.weight(1f).height(50.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(CandySecondary, Color.White)) {
-                    Text("Devam")
+                    Text(stringResource(R.string.today_close_next_btn))
                 }
             } else {
                 Button(
@@ -1261,7 +1282,7 @@ private fun CloseDaySheet(
                     modifier = Modifier.weight(1f).height(50.dp),
                     shape = RoundedCornerShape(8.dp),
                     colors = ButtonDefaults.buttonColors(CandySecondary, Color.White),
-                ) { Text("Günü kaydet") }
+                ) { Text(stringResource(R.string.today_close_save_btn)) }
             }
         }
         Spacer(Modifier.height(12.dp))

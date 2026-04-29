@@ -76,6 +76,8 @@ import com.benimgunlerim.ui.theme.AccentSkySoft
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandyPrimaryDark
 import com.benimgunlerim.ui.theme.CandyPrimaryLight
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 import java.time.DayOfWeek
 import java.time.LocalDate
 
@@ -120,7 +122,7 @@ fun RoutinesScreen(
                 shape = CircleShape,
                 modifier = Modifier.size(58.dp).testTag(com.benimgunlerim.ui.TestTags.RoutinesFab),
             ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Rutin ekle")
+                Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.routines_add_cd))
             }
         },
     ) { innerPadding ->
@@ -157,8 +159,8 @@ fun RoutinesScreen(
             } else {
                 item(key = "section_header") {
                     SectionHeader(
-                        title = "Aktif rutinler",
-                        subtitle = "Her rutin kendi günlerinde takip edilir.",
+                        title = stringResource(R.string.routines_section_title),
+                        subtitle = stringResource(R.string.routines_section_subtitle),
                     )
                 }
                 items(
@@ -236,13 +238,13 @@ private fun RoutineHeaderCard(
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Rutinler",
+                        text = stringResource(R.string.routines_header_title),
                         style = MaterialTheme.typography.displayLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.ExtraBold,
                     )
                     Text(
-                        text = "Her gün tekrar eden alışkanlıklarını burada yönet.",
+                        text = stringResource(R.string.routines_header_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
@@ -252,14 +254,14 @@ private fun RoutineHeaderCard(
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    InfoPill("Aktif $routineCount", CandyPrimaryLight, CandyPrimary)
+                    InfoPill(stringResource(R.string.routines_active_count, routineCount), CandyPrimaryLight, CandyPrimary)
                     HeaderMetric(
-                        label = "Bugün",
+                        label = stringResource(R.string.label_today),
                         value = todayRoutineCount.toString(),
                         modifier = Modifier.weight(1f),
                     )
                     HeaderMetric(
-                        label = "7 gün",
+                        label = stringResource(R.string.routines_week_label),
                         value = "%$weeklyCompletion",
                         modifier = Modifier.weight(1f),
                     )
@@ -324,12 +326,12 @@ private fun RoutineDefinitionCard() {
                 verticalArrangement = Arrangement.spacedBy(3.dp),
             ) {
                 Text(
-                    text = "Rutin nedir?",
+                    text = stringResource(R.string.routines_definition_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Rutinler tekrar eden alışkanlıklardır. Tek seferlik işler görev olarak Bugün sayfasında kalır.",
+                    text = stringResource(R.string.routines_definition_body),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -380,12 +382,12 @@ private fun EmptyRoutinesCard(onAddRoutine: () -> Unit) {
             }
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = "İlk rutinini oluştur",
+                    text = stringResource(R.string.routines_empty_title),
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Günlük tekrar etmesini istediğin alışkanlığı seç, günlerini belirle ve ilerlemesini takip et.",
+                    text = stringResource(R.string.routines_empty_body),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -397,7 +399,7 @@ private fun EmptyRoutinesCard(onAddRoutine: () -> Unit) {
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Rutin oluştur")
+                Text(stringResource(R.string.routines_empty_cta))
             }
         }
     }
@@ -521,13 +523,13 @@ private fun RoutineViewContent(
         ) {
             if (!routine.preferredTime.isNullOrBlank()) {
                 InfoPill(
-                    text = "Saat ${routine.preferredTime}",
+                    text = stringResource(R.string.routines_time_label, routine.preferredTime!!),
                     container = AccentSkySoft,
                     content = AccentSky,
                 )
             }
             InfoPill(
-                text = if (routine.targetDaySet().size == 7) "Her gün" else "${routine.targetDaySet().size} gün",
+                text = if (routine.targetDaySet().size == 7) stringResource(R.string.routines_every_day) else stringResource(R.string.routines_days_count, routine.targetDaySet().size),
                 container = CandyPrimaryLight,
                 content = CandyPrimary,
             )
@@ -542,24 +544,24 @@ private fun RoutineViewContent(
         ) {
             // Skip today
             TextButton(onClick = onSkip) {
-                Text("Atla", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.routines_skip), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             // Detail / Edit / Archive
             Row(verticalAlignment = Alignment.CenterVertically) {
                 TextButton(onClick = onDetail) {
-                    Text("Detay", style = MaterialTheme.typography.labelMedium, color = CandyPrimary)
+                    Text(stringResource(R.string.routines_detail), style = MaterialTheme.typography.labelMedium, color = CandyPrimary)
                 }
                 IconButton(onClick = onEdit) {
                     Icon(
                         imageVector = Icons.Rounded.Edit,
-                        contentDescription = "Düzenle",
+                        contentDescription = stringResource(R.string.routines_edit_cd),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 IconButton(onClick = onArchive) {
                     Icon(
                         imageVector = Icons.Rounded.Archive,
-                        contentDescription = "Arşivle",
+                        contentDescription = stringResource(R.string.routines_archive_cd),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -581,14 +583,14 @@ private fun RoutineEditContent(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
-            text = "Rutini düzenle",
+            text = stringResource(R.string.routines_edit_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
         OutlinedTextField(
             value = name,
             onValueChange = onNameChange,
-            label = { Text("Rutin adı") },
+            label = { Text(stringResource(R.string.routines_name_label)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
@@ -596,14 +598,14 @@ private fun RoutineEditContent(
         OutlinedTextField(
             value = time,
             onValueChange = onTimeChange,
-            label = { Text("Tercih edilen saat") },
+            label = { Text(stringResource(R.string.routines_time_field_label)) },
             leadingIcon = { Icon(Icons.Rounded.Schedule, contentDescription = null) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
         )
         Text(
-            text = "Tekrar günleri",
+            text = stringResource(R.string.routines_repeat_days_label),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -615,12 +617,12 @@ private fun RoutineEditContent(
             TextButton(onClick = onCancel) {
                 Icon(Icons.Rounded.Close, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text("Vazgeç")
+                Text(stringResource(R.string.action_dismiss))
             }
             TextButton(onClick = onSave, enabled = name.isNotBlank()) {
                 Icon(Icons.Rounded.Check, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text("Kaydet")
+                Text(stringResource(R.string.action_save))
             }
         }
     }
@@ -640,12 +642,12 @@ private fun AddRoutineSheet(
     var targetUnit by remember { mutableStateOf("") }
 
     val goalTypes = listOf(
-        "check" to "Checkbox",
-        "count" to "Sayaç",
-        "amount" to "Miktar",
-        "duration" to "Süre",
-        "limit" to "Limit",
-        "negative" to "Kaçın",
+        "check" to stringResource(R.string.routines_goal_checkbox),
+        "count" to stringResource(R.string.routines_goal_counter),
+        "amount" to stringResource(R.string.routines_goal_amount),
+        "duration" to stringResource(R.string.routines_goal_duration),
+        "limit" to stringResource(R.string.routines_goal_limit),
+        "negative" to stringResource(R.string.routines_goal_avoid),
     )
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
@@ -658,12 +660,12 @@ private fun AddRoutineSheet(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = "Yeni rutin",
+                    text = stringResource(R.string.routines_add_title),
                     style = MaterialTheme.typography.headlineSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Her tekrarında takip edilecek alışkanlığı tanımla.",
+                    text = stringResource(R.string.routines_add_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -671,15 +673,15 @@ private fun AddRoutineSheet(
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Rutin adı") },
-                placeholder = { Text("Örn. 2 litre su iç") },
+                label = { Text(stringResource(R.string.routines_name_label)) },
+                placeholder = { Text(stringResource(R.string.routines_name_placeholder)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
             )
             // Goal Type Selector
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("Hedef tipi", style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.routines_goal_type_label), style = MaterialTheme.typography.labelLarge)
                 androidx.compose.foundation.lazy.LazyRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
@@ -706,7 +708,7 @@ private fun AddRoutineSheet(
                         value = targetValueText,
                         onValueChange = { targetValueText = it.filter { c -> c.isDigit() } },
                         label = {
-                            Text(if (targetType == "limit") "Maksimum" else "Hedef")
+                            Text(if (targetType == "limit") stringResource(R.string.routines_goal_max_label) else stringResource(R.string.routines_goal_target_label))
                         },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
@@ -716,7 +718,7 @@ private fun AddRoutineSheet(
                         value = targetUnit,
                         onValueChange = { targetUnit = it },
                         label = {
-                            Text(if (targetType == "duration") "örn. dk" else if (targetType == "amount") "örn. L" else "birim")
+                            Text(if (targetType == "duration") stringResource(R.string.routines_goal_unit_dk) else if (targetType == "amount") stringResource(R.string.routines_goal_unit_l) else stringResource(R.string.routines_goal_unit_generic))
                         },
                         modifier = Modifier.weight(1f),
                         singleLine = true,
@@ -727,7 +729,7 @@ private fun AddRoutineSheet(
             OutlinedTextField(
                 value = time,
                 onValueChange = { time = it.sanitizedTimeInput() },
-                label = { Text("Tercih edilen saat") },
+                label = { Text(stringResource(R.string.routines_time_field_label)) },
                 placeholder = { Text("09:00") },
                 leadingIcon = { Icon(Icons.Rounded.Schedule, contentDescription = null) },
                 modifier = Modifier.fillMaxWidth(),
@@ -735,7 +737,7 @@ private fun AddRoutineSheet(
                 singleLine = true,
             )
             Text(
-                text = "Tekrar günleri",
+                text = stringResource(R.string.routines_repeat_days_label),
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -765,7 +767,7 @@ private fun AddRoutineSheet(
                 shape = RoundedCornerShape(18.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
             ) {
-                Text("Rutini kaydet")
+                Text(stringResource(R.string.routines_save_btn))
             }
         }
     }
@@ -773,7 +775,7 @@ private fun AddRoutineSheet(
 
 @Composable
 private fun RoutineStreakPill(streak: Int) {
-    val text = if (streak > 0) "Seri $streak gün" else "Seri bekliyor"
+    val text = if (streak > 0) stringResource(R.string.routines_streak_days, streak) else stringResource(R.string.routines_streak_waiting)
     val container = if (streak > 0) CandyPrimaryLight else MaterialTheme.colorScheme.surfaceVariant
     val content = if (streak > 0) CandyPrimary else MaterialTheme.colorScheme.onSurfaceVariant
     InfoPill(text = text, container = container, content = content)
@@ -801,7 +803,7 @@ private fun WeekConsistencyStrip(completedDays: List<Boolean>) {
 
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            text = "Son 7 gün",
+            text = stringResource(R.string.routines_last7),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

@@ -79,6 +79,8 @@ import com.benimgunlerim.ui.theme.AccentSkySoft
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandyPrimaryDark
 import com.benimgunlerim.ui.theme.CandyPrimaryLight
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
@@ -121,9 +123,9 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                 val exported = context.writeTextToUri(uri, json)
                 viewModel.setDataOperationMessage(
                     if (exported) {
-                        "Yedek dosyası kaydedildi."
+                        SettingsEvent.ExportSaved
                     } else {
-                        "Yedek dosyası yazılamadı."
+                        SettingsEvent.ExportWriteFailed
                     },
                 )
             }
@@ -135,7 +137,7 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
         if (uri != null) {
             val json = context.readTextFromUri(uri)
             if (json == null) {
-                viewModel.setDataOperationMessage("Yedek dosyası okunamadı.")
+                viewModel.setDataOperationMessage(SettingsEvent.ImportReadFailed)
             } else {
                 viewModel.importData(json)
             }
@@ -182,8 +184,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
             item {
                 SectionHeader(
-                    title = "Hatırlatmalar",
-                    subtitle = "Bildirim sıklığını ve gün sonu saatini ayarla.",
+                    title = stringResource(R.string.settings_section_reminders),
+                    subtitle = stringResource(R.string.settings_section_reminders_sub),
                 )
             }
             item {
@@ -225,8 +227,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
             item {
                 SectionHeader(
-                    title = "Gizlilik",
-                    subtitle = "Hangi kullanım bilgisinin paylaşılacağını belirle.",
+                    title = stringResource(R.string.settings_section_privacy),
+                    subtitle = stringResource(R.string.settings_section_privacy_sub),
                 )
             }
             item {
@@ -238,8 +240,8 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 
             item {
                 SectionHeader(
-                    title = "Uygulama verisi",
-                    subtitle = "Verilerin cihazda tutulur ve buradan yönetilir.",
+                    title = stringResource(R.string.settings_section_data),
+                    subtitle = stringResource(R.string.settings_section_data_sub),
                 )
             }
             item {
@@ -291,34 +293,39 @@ private fun SettingsHeader(preferences: UserPreferences) {
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                     Text(
-                        text = "Ayarlar",
+                        text = stringResource(R.string.settings_title),
                         style = MaterialTheme.typography.displayLarge,
                         fontWeight = FontWeight.ExtraBold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
-                        text = "BenimGünlerim'in nasıl çalışacağını buradan yönet.",
+                        text = stringResource(R.string.settings_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 2,
                     )
                 }
+                val modeLabel = when (preferences.notificationMode) {
+                    "off" -> stringResource(R.string.settings_notif_mode_off)
+                    "normal" -> stringResource(R.string.settings_notif_mode_normal)
+                    else -> stringResource(R.string.settings_notif_mode_light)
+                }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     HeaderStatusPill(
-                        label = "Bildirim",
-                        value = notificationModeLabel(preferences.notificationMode),
+                        label = stringResource(R.string.settings_status_notification),
+                        value = modeLabel,
                         modifier = Modifier.weight(1f),
                     )
                     HeaderStatusPill(
-                        label = "Gün sonu",
+                        label = stringResource(R.string.settings_status_day_end),
                         value = preferences.dailySummaryTime,
                         modifier = Modifier.weight(1f),
                     )
                     HeaderStatusPill(
-                        label = "Veri",
-                        value = "Yerel",
+                        label = stringResource(R.string.settings_status_data),
+                        value = stringResource(R.string.settings_data_local),
                         modifier = Modifier.weight(1f),
                     )
                 }
@@ -387,20 +394,24 @@ private fun NotificationSettingsCard(
         icon = { Icon(Icons.Rounded.Notifications, contentDescription = null) },
     ) {
         Text(
-            text = "Bildirim modu",
+            text = stringResource(R.string.settings_notif_mode_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            text = notificationModeDescription(mode),
+            text = when (mode) {
+                "off" -> stringResource(R.string.settings_notif_mode_desc_off)
+                "normal" -> stringResource(R.string.settings_notif_mode_desc_normal)
+                else -> stringResource(R.string.settings_notif_mode_desc_light)
+            },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         SingleChoiceChips(
             options = listOf(
-                "off" to "Kapalı",
-                "light" to "Hafif",
-                "normal" to "Normal",
+                "off" to stringResource(R.string.settings_notif_mode_off),
+                "light" to stringResource(R.string.settings_notif_mode_light),
+                "normal" to stringResource(R.string.settings_notif_mode_normal),
             ),
             selected = mode,
             onSelected = onModeChange,
@@ -413,8 +424,8 @@ private fun NotificationSettingsCard(
         OutlinedTextField(
             value = dailySummaryTime,
             onValueChange = onTimeChange,
-            label = { Text("Gün sonu özeti saati") },
-            placeholder = { Text("21:00") },
+            label = { Text(stringResource(R.string.settings_day_end_time_label)) },
+            placeholder = { Text(stringResource(R.string.settings_default_daily_summary_time)) },
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
             enabled = mode != "off",
@@ -431,7 +442,7 @@ private fun NotificationSettingsCard(
         ) {
             Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
-            Text("Saati kaydet")
+            Text(stringResource(R.string.settings_save_time_btn))
         }
     }
 }
@@ -444,7 +455,7 @@ private fun PermissionStatus(
 ) {
     if (!enabled) {
         StatusMessage(
-            text = "Bildirimler kapalı. Rutin ve gün sonu hatırlatmaları planlanmaz.",
+            text = stringResource(R.string.settings_notif_disabled_msg),
             container = MaterialTheme.colorScheme.surfaceVariant,
             content = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -453,14 +464,14 @@ private fun PermissionStatus(
 
     if (notificationsGranted) {
         StatusMessage(
-            text = "Bildirim izni aktif.",
+            text = stringResource(R.string.settings_notif_permission_granted),
             container = CandyPrimaryLight,
             content = CandyPrimary,
         )
     } else {
         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
             StatusMessage(
-                text = "Hatırlatmaları göstermek için bildirim izni gerekiyor.",
+                text = stringResource(R.string.settings_notif_permission_needed),
                 container = AccentCoralSoft,
                 content = AccentCoral,
             )
@@ -472,7 +483,7 @@ private fun PermissionStatus(
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
             ) {
-                Text("Bildirim izni ver")
+                Text(stringResource(R.string.settings_notif_permission_btn))
             }
         }
     }
@@ -496,8 +507,8 @@ private fun MorningPlannerCard(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(Modifier.weight(1f)) {
-                Text("Sabah planlayıcısı", style = MaterialTheme.typography.titleMedium)
-                Text("Her sabah güne hazırlık bildirimi al", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.settings_morning_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.settings_morning_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Switch(checked = enabled, onCheckedChange = onEnabledChange)
         }
@@ -505,8 +516,8 @@ private fun MorningPlannerCard(
             OutlinedTextField(
                 value = time,
                 onValueChange = onTimeChange,
-                label = { Text("Bildirim saati") },
-                placeholder = { Text("08:00") },
+                label = { Text(stringResource(R.string.settings_morning_time_label)) },
+                placeholder = { Text(stringResource(R.string.settings_default_morning_planner_time)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
@@ -519,7 +530,7 @@ private fun MorningPlannerCard(
             ) {
                 Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Saati kaydet")
+                Text(stringResource(R.string.settings_save_time_btn))
             }
         }
     }
@@ -546,8 +557,8 @@ private fun QuietHoursCard(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(Modifier.weight(1f)) {
-                Text("Sessiz saatler", style = MaterialTheme.typography.titleMedium)
-                Text("Bu aralıkta bildirim gönderilmez", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.settings_quiet_title), style = MaterialTheme.typography.titleMedium)
+                Text(stringResource(R.string.settings_quiet_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Switch(checked = enabled, onCheckedChange = onEnabledChange)
         }
@@ -555,8 +566,8 @@ private fun QuietHoursCard(
             OutlinedTextField(
                 value = start,
                 onValueChange = onStartChange,
-                label = { Text("Başlangıç saati") },
-                placeholder = { Text("22:00") },
+                label = { Text(stringResource(R.string.settings_quiet_start_label)) },
+                placeholder = { Text(stringResource(R.string.settings_default_quiet_hours_start)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
@@ -569,13 +580,13 @@ private fun QuietHoursCard(
             ) {
                 Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Başlangıç saatini kaydet")
+                Text(stringResource(R.string.settings_quiet_save_start))
             }
             OutlinedTextField(
                 value = end,
                 onValueChange = onEndChange,
-                label = { Text("Bitiş saati") },
-                placeholder = { Text("07:00") },
+                label = { Text(stringResource(R.string.settings_quiet_end_label)) },
+                placeholder = { Text(stringResource(R.string.settings_default_quiet_hours_end)) },
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
                 singleLine = true,
@@ -588,7 +599,7 @@ private fun QuietHoursCard(
             ) {
                 Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
                 Spacer(Modifier.width(8.dp))
-                Text("Bitiş saatini kaydet")
+                Text(stringResource(R.string.settings_quiet_save_end))
             }
         }
     }
@@ -613,15 +624,15 @@ private fun PrivacySettingsCard(
                 verticalArrangement = Arrangement.spacedBy(4.dp),
             ) {
                 Text(
-                    text = "Anonim kullanım ölçümü",
+                    text = stringResource(R.string.settings_privacy_title),
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = if (analyticsEnabled) {
-                        "Uygulamanın hangi alanlarının kullanıldığını anonim olarak ölçer."
+                        stringResource(R.string.settings_analytics_on_desc)
                     } else {
-                        "Anonim ölçüm kapalı. Temel özellikler aynı şekilde çalışır."
+                        stringResource(R.string.settings_analytics_off_desc)
                     },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -633,7 +644,7 @@ private fun PrivacySettingsCard(
             )
         }
         StatusMessage(
-            text = "Görev başlığı, rutin adı, not ve gün özeti içeriği gönderilmez.",
+            text = stringResource(R.string.settings_privacy_pii_note),
             container = AccentPurpleSoft,
             content = AccentPurple,
         )
@@ -643,7 +654,7 @@ private fun PrivacySettingsCard(
 @Composable
 private fun LocalDataCard(
     preferences: UserPreferences,
-    dataOperationMessage: String?,
+    dataOperationMessage: SettingsEvent?,
     onExportData: () -> Unit,
     onImportData: () -> Unit,
     onClearData: () -> Unit,
@@ -654,28 +665,37 @@ private fun LocalDataCard(
         icon = { Icon(Icons.Rounded.Storage, contentDescription = null) },
     ) {
         Text(
-            text = "Yerel veri yönetimi",
+            text = stringResource(R.string.settings_data_title),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            text = "Görevler, rutinler, ilerleme kayıtları ve ayarlar bu cihazda tutulur.",
+            text = stringResource(R.string.settings_data_desc),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         StatusMessage(
-            text = "Dışa aktarılan JSON dosyası görev başlığı, rutin adı, not ve günlük içerik taşıyabilir. Dosyayı yalnızca güvendiğin yerde sakla veya paylaş.",
+            text = stringResource(R.string.settings_data_export_warning),
             container = AccentSkySoft,
             content = AccentSky,
         )
-        dataOperationMessage?.let { message ->
+        dataOperationMessage?.let { event ->
+            val message = when (event) {
+                SettingsEvent.DataCleared -> stringResource(R.string.settings_msg_cleared)
+                SettingsEvent.ExportFailed -> stringResource(R.string.settings_msg_export_failed)
+                SettingsEvent.ExportSaved -> stringResource(R.string.settings_msg_export_saved)
+                SettingsEvent.ExportWriteFailed -> stringResource(R.string.settings_msg_export_write_failed)
+                SettingsEvent.ImportReadFailed -> stringResource(R.string.settings_msg_import_read_failed)
+                SettingsEvent.ImportParseFailed -> stringResource(R.string.settings_msg_import_parse_failed)
+                is SettingsEvent.ImportSuccess -> stringResource(R.string.settings_msg_import_success, event.tasks, event.routines)
+            }
             StatusMessage(
                 text = message,
                 container = AccentSkySoft,
                 content = AccentSky,
             )
             TextButton(onClick = onDismissMessage) {
-                Text("Mesajı kapat")
+                Text(stringResource(R.string.settings_dismiss_msg))
             }
         }
         Row(
@@ -683,17 +703,17 @@ private fun LocalDataCard(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             DataMetric(
-                label = "XP",
+                label = stringResource(R.string.settings_metric_xp),
                 value = preferences.totalXp.toString(),
                 modifier = Modifier.weight(1f),
             )
             DataMetric(
-                label = "Görev",
+                label = stringResource(R.string.settings_metric_task),
                 value = preferences.totalTasksCompleted.toString(),
                 modifier = Modifier.weight(1f),
             )
             DataMetric(
-                label = "Rutin",
+                label = stringResource(R.string.settings_metric_routine),
                 value = preferences.totalRoutinesCompleted.toString(),
                 modifier = Modifier.weight(1f),
             )
@@ -709,7 +729,7 @@ private fun LocalDataCard(
         ) {
             Icon(Icons.Rounded.Save, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
-            Text("Verileri dışa aktar")
+            Text(stringResource(R.string.settings_export_btn))
         }
         OutlinedButton(
             onClick = onImportData,
@@ -723,7 +743,7 @@ private fun LocalDataCard(
         ) {
             Icon(Icons.Rounded.Storage, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
-            Text("Yedekten geri yükle")
+            Text(stringResource(R.string.settings_import_btn))
         }
         OutlinedButton(
             onClick = onClearData,
@@ -736,7 +756,7 @@ private fun LocalDataCard(
         ) {
             Icon(Icons.Rounded.DeleteOutline, contentDescription = null, modifier = Modifier.size(18.dp))
             Spacer(Modifier.width(8.dp))
-            Text("Yerel verileri temizle")
+            Text(stringResource(R.string.settings_clear_btn))
         }
     }
 }
@@ -780,17 +800,17 @@ private fun AppInfoCard() {
         },
     ) {
         Text(
-            text = "BenimGünlerim",
+            text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            text = "Offline çalışan görev, rutin ve ilerleme merkezi.",
+            text = stringResource(R.string.settings_app_offline_desc),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         StatusMessage(
-            text = "Tema sadeleştirildi: uygulama artık yalnızca açık modda çalışır.",
+            text = stringResource(R.string.settings_theme_note),
             container = AccentSkySoft,
             content = AccentSky,
         )
@@ -908,20 +928,20 @@ private fun SingleChoiceChips(
 private fun ClearDataDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Yerel veriler temizlensin mi?") },
+        title = { Text(stringResource(R.string.settings_clear_confirm_title)) },
         text = {
             Text(
-                text = "Görevler, rutinler, ilerleme kayıtları ve onboarding durumu silinir. Bu işlem geri alınamaz.",
+                text = stringResource(R.string.settings_clear_confirm_body),
             )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("Temizle", color = MaterialTheme.colorScheme.error)
+                Text(stringResource(R.string.settings_clear_confirm_btn), color = MaterialTheme.colorScheme.error)
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Vazgeç")
+                Text(stringResource(R.string.action_cancel))
             }
         },
     )
@@ -931,35 +951,23 @@ private fun ClearDataDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
 private fun ImportDataDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Yedek geri yüklensin mi?") },
+        title = { Text(stringResource(R.string.settings_import_confirm_title)) },
         text = {
             Text(
-                text = "Seçilen yedek dosyası mevcut görevleri, rutinleri, ilerleme kayıtlarını ve ayarları değiştirir. Bu işlemden önce güncel verilerini dışa aktarman önerilir.",
+                text = stringResource(R.string.settings_import_confirm_body),
             )
         },
         confirmButton = {
             TextButton(onClick = onConfirm) {
-                Text("Dosya seç")
+                Text(stringResource(R.string.settings_import_confirm_btn))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Vazgeç")
+                Text(stringResource(R.string.action_cancel))
             }
         },
     )
-}
-
-private fun notificationModeLabel(mode: String): String = when (mode) {
-    "off" -> "Kapalı"
-    "normal" -> "Normal"
-    else -> "Hafif"
-}
-
-private fun notificationModeDescription(mode: String): String = when (mode) {
-    "off" -> "Bildirimler kapalı. Uygulama içindeki takip çalışmaya devam eder."
-    "normal" -> "Normal mod, rutin ve gün sonu hatırlatmalarını daha belirgin tutar."
-    else -> "Hafif mod, gün içinde daha sakin ve az sayıda hatırlatma kullanır."
 }
 
 private fun String.sanitizedTimeInput(): String = filter { it.isDigit() || it == ':' }.take(5)

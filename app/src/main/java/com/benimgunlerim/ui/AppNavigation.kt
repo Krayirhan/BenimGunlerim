@@ -46,6 +46,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.benimgunlerim.ui.achievements.AchievementsScreen
 import com.benimgunlerim.ui.onboarding.OnboardingScreen
 import com.benimgunlerim.ui.onboarding.OnboardingViewModel
 import com.benimgunlerim.ui.plan.PlanScreen
@@ -200,7 +201,14 @@ fun BenimGunlerimApp(
                     onBack = { navController.popBackStack() },
                 )
             }
-            composable(Destination.Progress.route) { ProgressScreen() }
+            composable(Destination.Progress.route) {
+                ProgressScreen(
+                    onOpenAchievements = { navController.navigate("achievements") },
+                )
+            }
+            composable("achievements") {
+                AchievementsScreen(onBack = { navController.popBackStack() })
+            }
             composable(Destination.Settings.route) { SettingsScreen() }
         }
     }

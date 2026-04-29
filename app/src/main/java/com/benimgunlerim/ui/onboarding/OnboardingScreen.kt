@@ -61,6 +61,8 @@ import com.benimgunlerim.ui.theme.CandyPrimaryLight
 import com.benimgunlerim.ui.theme.CandySecondary
 import com.benimgunlerim.ui.theme.CandyTertiary
 import com.benimgunlerim.ui.theme.CompletedGreen
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 
 // ── Data models ───────────────────────────────────────────────────────────────
 
@@ -79,20 +81,6 @@ private data class IntensityOption(
 )
 
 private data class SuggestedRoutine(val name: String, val defaultSelected: Boolean = true)
-
-private val needOptions = listOf(
-    NeedOption("duzen", "Günümü toparlamak istiyorum", "Sabah-akşam dengesi, küçük adımlar", listOf(CandyPrimary, CandyTertiary)),
-    NeedOption("duzenli", "Daha düzenli olmak istiyorum", "Plan, liste, takip — kontrol sende", listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))),
-    NeedOption("saglik", "Sağlıklı rutin kurmak istiyorum", "Su, hareket, nefes — her gün biraz", listOf(Color(0xFF10B981), CandySecondary)),
-    NeedOption("odak", "Odaklanmak istiyorum", "Az ama kaliteli. Dikkat dağılmasını azalt", listOf(Color(0xFFF59E0B), Color(0xFFEA580C))),
-    NeedOption("basit", "Basit bir planlayıcı istiyorum", "Fazlasına gerek yok, sade ve hızlı", listOf(Color(0xFF64748B), Color(0xFF475569))),
-)
-
-private val intensityOptions = listOf(
-    IntensityOption("hafif", "Hafif başlangıç", "2-3 küçük adım. Kolay sürer.", recommended = true),
-    IntensityOption("dengeli", "Dengeli başlangıç", "4-5 rutin ve görev. Orta tempo."),
-    IntensityOption("yogun", "Yoğun başlangıç", "6+ adım. Hızlı başla, çok yap."),
-)
 
 private fun suggestedRoutines(needId: String, intensityId: String): List<SuggestedRoutine> =
     when (needId) {
@@ -137,6 +125,18 @@ private fun suggestedTaskTitle(needId: String): String = when (needId) {
 @Composable
 fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit) {
     val context = LocalContext.current
+    val needOptions = listOf(
+        NeedOption("duzen", stringResource(R.string.onboarding_need_organize), stringResource(R.string.onboarding_need_organize_sub), listOf(CandyPrimary, CandyTertiary)),
+        NeedOption("duzenli", stringResource(R.string.onboarding_need_regular), stringResource(R.string.onboarding_need_regular_sub), listOf(Color(0xFF6366F1), Color(0xFF8B5CF6))),
+        NeedOption("saglik", stringResource(R.string.onboarding_need_health), stringResource(R.string.onboarding_need_health_sub), listOf(Color(0xFF10B981), CandySecondary)),
+        NeedOption("odak", stringResource(R.string.onboarding_need_focus), stringResource(R.string.onboarding_need_focus_sub), listOf(Color(0xFFF59E0B), Color(0xFFEA580C))),
+        NeedOption("basit", stringResource(R.string.onboarding_need_simple), stringResource(R.string.onboarding_need_simple_sub), listOf(Color(0xFF64748B), Color(0xFF475569))),
+    )
+    val intensityOptions = listOf(
+        IntensityOption("hafif", stringResource(R.string.onboarding_intensity_light), stringResource(R.string.onboarding_intensity_light_sub), recommended = true),
+        IntensityOption("dengeli", stringResource(R.string.onboarding_intensity_balanced), stringResource(R.string.onboarding_intensity_balanced_sub)),
+        IntensityOption("yogun", stringResource(R.string.onboarding_intensity_intense), stringResource(R.string.onboarding_intensity_intense_sub)),
+    )
     var page by remember { mutableIntStateOf(0) }
     var selectedNeed by remember { mutableStateOf(needOptions[0]) }
     var selectedIntensity by remember { mutableStateOf(intensityOptions[0]) }
@@ -204,14 +204,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                 }
                 VerticalSpacer(28)
                 Text(
-                    text = "Gününü daha sakin\nve düzenli yaşa",
+                    text = stringResource(R.string.onboarding_p0_title),
                     style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(16)
                 Text(
-                    text = "Küçük ama sürdürülebilir bir başlangıç hazırlayalım.\nSadece birkaç adım.",
+                    text = stringResource(R.string.onboarding_p0_subtitle),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -223,7 +223,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                     shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
                 ) {
-                    Text("Başlayalım", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                    Text(stringResource(R.string.onboarding_p0_btn), style = MaterialTheme.typography.titleMedium, color = Color.White)
                 }
             }
 
@@ -232,14 +232,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
             // ═══════════════════════════════════════════════════════════════
             1 -> {
                 Text(
-                    text = "Şu an neye ihtiyacın var?",
+                    text = stringResource(R.string.onboarding_p1_title),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(8)
                 Text(
-                    text = "Seçimin önerilen rutinleri ve görevleri belirler.\nSonra istediğin gibi değiştirebilirsin.",
+                    text = stringResource(R.string.onboarding_p1_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -260,7 +260,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                     shape = RoundedCornerShape(20.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
                 ) {
-                    Text("İleri", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                    Text(stringResource(R.string.action_next), style = MaterialTheme.typography.titleMedium, color = Color.White)
                 }
             }
 
@@ -269,14 +269,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
             // ═══════════════════════════════════════════════════════════════
             2 -> {
                 Text(
-                    text = "Nasıl bir tempoyla başlamak istersin?",
+                    text = stringResource(R.string.onboarding_p2_title),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(8)
                 Text(
-                    text = "Hafif başlangıç daha kolay sürer.\nİstediğin zaman artırabilirsin.",
+                    text = stringResource(R.string.onboarding_p2_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -293,7 +293,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                 VerticalSpacer(20)
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = { page = 1 }, modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(20.dp)) {
-                        Text("Geri")
+                        Text(stringResource(R.string.action_back))
                     }
                     Button(
                         onClick = { page = 3 },
@@ -301,7 +301,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
                     ) {
-                        Text("İleri", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                        Text(stringResource(R.string.action_next), style = MaterialTheme.typography.titleMedium, color = Color.White)
                     }
                 }
             }
@@ -311,14 +311,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
             // ═══════════════════════════════════════════════════════════════
             3 -> {
                 Text(
-                    text = "İki kavramı tanı",
+                    text = stringResource(R.string.onboarding_p3_title),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(8)
                 Text(
-                    text = "Bu uygulama görevleri ve rutinleri birbirinden ayırır.",
+                    text = stringResource(R.string.onboarding_p3_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -358,14 +358,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
             // ═══════════════════════════════════════════════════════════════
             4 -> {
                 Text(
-                    text = "Hangi rutinleri ekleyelim?",
+                    text = stringResource(R.string.onboarding_p4_title),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(8)
                 Text(
-                    text = "Seçtiğin rutinler her gün listene eklenir.\nİstemeyen kutucukları kaldırabilirsin.",
+                    text = stringResource(R.string.onboarding_p4_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -389,7 +389,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                 VerticalSpacer(16)
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = { page = 3 }, modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(20.dp)) {
-                        Text("Geri")
+                        Text(stringResource(R.string.action_back))
                     }
                     Button(
                         onClick = { page = 5 },
@@ -397,7 +397,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
                     ) {
-                        Text("İleri", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                        Text(stringResource(R.string.action_next), style = MaterialTheme.typography.titleMedium, color = Color.White)
                     }
                 }
             }
@@ -407,14 +407,14 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
             // ═══════════════════════════════════════════════════════════════
             5 -> {
                 Text(
-                    text = "Son birkaç adım",
+                    text = stringResource(R.string.onboarding_p5_title),
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onBackground,
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(8)
                 Text(
-                    text = "Başlangıç görevi eklemek ister misin?\nEklemeden de devam edebilirsin.",
+                    text = stringResource(R.string.onboarding_p5_subtitle),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                     textAlign = TextAlign.Center,
@@ -424,7 +424,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                     name = taskTitle,
                     selected = taskSelected,
                     onToggle = { taskSelected = !taskSelected },
-                    badge = "Bugünkü görev",
+                    badge = stringResource(R.string.onboarding_today_task_badge),
                     badgeColor = CandyPrimary,
                 )
                 VerticalSpacer(24)
@@ -439,11 +439,11 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                     ) {
                         Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                             Text(
-                                "Hatırlatmalar açık olsun mu?",
+                                stringResource(R.string.onboarding_notif_title),
                                 style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
                             )
                             Text(
-                                "Görev ve rutin hatırlatmaları için bildirim iznine ihtiyacımız var.",
+                                stringResource(R.string.onboarding_notif_body),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
                             )
@@ -457,7 +457,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = CandySecondary),
                             ) {
-                                Text("Bildirimlere İzin Ver", color = Color.White)
+                                Text(stringResource(R.string.onboarding_notif_btn), color = Color.White)
                             }
                         }
                     }
@@ -466,7 +466,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                 VerticalSpacer(16)
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = { page = 4 }, modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(20.dp)) {
-                        Text("Geri")
+                        Text(stringResource(R.string.action_back))
                     }
                     Button(
                         onClick = {
@@ -481,7 +481,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = CompletedGreen),
                     ) {
-                        Text("Başlayalım", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                        Text(stringResource(R.string.onboarding_finish_btn), style = MaterialTheme.typography.titleMedium, color = Color.White)
                     }
                 }
             }
@@ -592,7 +592,7 @@ private fun IntensityCard(intensity: IntensityOption, selected: Boolean, onClick
                         Box(
                             modifier = Modifier.clip(RoundedCornerShape(50)).background(CompletedGreen.copy(alpha = 0.15f)).padding(horizontal = 8.dp, vertical = 2.dp),
                         ) {
-                            Text("Önerilen", style = MaterialTheme.typography.labelSmall, color = CompletedGreen)
+                            Text(stringResource(R.string.onboarding_recommended), style = MaterialTheme.typography.labelSmall, color = CompletedGreen)
                         }
                     }
                 }
