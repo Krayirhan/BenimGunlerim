@@ -1,6 +1,9 @@
 package com.benimgunlerim.domain.usecase
 
-import com.benimgunlerim.data.BenimGunlerimRepository
+import com.benimgunlerim.data.CompletionLogRepository
+import com.benimgunlerim.data.DailyStateRepository
+import com.benimgunlerim.data.RoutineRepository
+import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.currentStreak
@@ -10,6 +13,9 @@ import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.ProgressCalculator
+import com.benimgunlerim.domain.model.CompletionEntityType
+import com.benimgunlerim.domain.model.CompletionStatus
+import com.benimgunlerim.domain.model.TaskCompletionState
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -28,19 +34,22 @@ data class TodaySnapshot(
 )
 
 class ObserveTodaySnapshotUseCase @Inject constructor(
-    private val repository: BenimGunlerimRepository,
+    private val taskRepository: TaskRepository,
+    private val routineRepository: RoutineRepository,
+    private val completionLogRepository: CompletionLogRepository,
+    private val dailyStateRepository: DailyStateRepository,
     private val prefsRepository: UserPreferencesRepository,
 ) {
     operator fun invoke(today: LocalDate = LocalDate.now()): Flow<TodaySnapshot> = combine(
-        repository.observeTasks(today),
-        repository.observeActiveRoutines(),
-        repository.observeCompletionLogs(today),
+        taskRepository.observeByDate(today),
+        routineRepository.observeActive(),
+        completionLogRepository.observeByDate(today),
         prefsRepository.preferences,
-        combine(repository.observeTodayState(), repository.observeOverdueTasks()) { ds, ov -> ds to ov },
+        combine(dailyStateRepository.observeToday(), taskRepository.observeOverdue(today)) { ds, ov -> ds to ov },
     ) { tasks, routines, logs, prefs, (todayState, overdue) ->
         val todaysRoutines = routines.filter { it.isScheduledFor(today.dayOfWeek) }
         val completedRoutineIds = logs.completedRoutineIds()
-        val completedTasks = tasks.count { it.completionState == "completed" }
+        val completedTasks = tasks.count { it.completionState == TaskCompletionState.COMPLETED.value }
         val completedRoutines = todaysRoutines.count { it.id in completedRoutineIds }
         TodaySnapshot(
             tasks = tasks,
@@ -62,6 +71,6 @@ class ObserveTodaySnapshotUseCase @Inject constructor(
 }
 
 private fun List<CompletionLogEntity>.completedRoutineIds(): Set<String> =
-    filter { it.entityType == "routine" && it.status == "completed" }
+    filter { it.entityType == CompletionEntityType.ROUTINE.value && it.status == CompletionStatus.COMPLETED.value }
         .map { it.entityId }
         .toSet()

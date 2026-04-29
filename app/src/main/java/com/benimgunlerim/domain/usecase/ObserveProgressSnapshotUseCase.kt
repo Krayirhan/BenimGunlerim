@@ -1,6 +1,7 @@
 package com.benimgunlerim.domain.usecase
 
-import com.benimgunlerim.data.BenimGunlerimRepository
+import com.benimgunlerim.data.CompletionLogRepository
+import com.benimgunlerim.data.DailyStateRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.currentStreak
@@ -9,6 +10,7 @@ import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.ALL_ACHIEVEMENTS
+import com.benimgunlerim.domain.model.CompletionStatus
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -30,13 +32,14 @@ data class ProgressSnapshot(
 )
 
 class ObserveProgressSnapshotUseCase @Inject constructor(
-    private val repository: BenimGunlerimRepository,
+    private val dailyStateRepository: DailyStateRepository,
+    private val completionLogRepository: CompletionLogRepository,
     private val prefsRepository: UserPreferencesRepository,
     private val achievementTracker: AchievementTracker,
 ) {
     operator fun invoke(): Flow<ProgressSnapshot> = combine(
-        repository.observeRecentDailyStates(limit = 30),
-        repository.observeAllCompletionLogs(),
+        dailyStateRepository.observeRecent(limit = 30),
+        completionLogRepository.observeAll(),
         prefsRepository.preferences,
         achievementTracker.unlockedAchievements,
     ) { last30Days, allLogs, prefs, unlocked ->
@@ -75,6 +78,6 @@ private fun List<DailyStateEntity>.bestStreak(): Int {
 private fun List<CompletionLogEntity>.hitRate(entityType: String): Float {
     val filtered = filter { it.entityType == entityType }
     if (filtered.isEmpty()) return 0f
-    val completed = filtered.count { it.status == "completed" }
+    val completed = filtered.count { it.status == CompletionStatus.COMPLETED.value }
     return completed.toFloat() / filtered.size
 }

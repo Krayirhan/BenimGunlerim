@@ -4,14 +4,18 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
 import com.benimgunlerim.BuildConfig
+import com.benimgunlerim.data.CompletionLogRepository
+import com.benimgunlerim.data.CompletionLogRepositoryImpl
 import com.benimgunlerim.data.DatabaseTransactionRunner
+import com.benimgunlerim.data.TaskRepository
+import com.benimgunlerim.data.TaskRepositoryImpl
 import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.analytics.CrashlyticsErrorReporter
 import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.analytics.LocalAnalyticsTracker
 import com.benimgunlerim.analytics.LocalErrorReporter
-import com.benimgunlerim.data.BenimGunlerimRepository
 import com.benimgunlerim.data.LocalDataClearer
+import com.benimgunlerim.data.LocalDataClearerImpl
 import com.benimgunlerim.data.UserPreferencesAccess
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.UserPreferencesSource
@@ -24,6 +28,18 @@ import com.benimgunlerim.notifications.NotificationPolicyCache
 import com.benimgunlerim.notifications.ReminderBootstrapper
 import com.benimgunlerim.notifications.ReminderPolicy
 import com.benimgunlerim.notifications.ReminderRestorer
+import com.benimgunlerim.notifications.RoutineReminderScheduler
+import com.benimgunlerim.notifications.RoutineReminderSchedulerContract
+import com.benimgunlerim.notifications.TaskReminderScheduler
+import com.benimgunlerim.notifications.TaskReminderSchedulerContract
+import com.benimgunlerim.domain.DateTimeProvider
+import com.benimgunlerim.domain.FeedbackManager
+import com.benimgunlerim.domain.RandomProvider
+import com.benimgunlerim.domain.SystemDateTimeProvider
+import com.benimgunlerim.domain.SystemFeedbackManager
+import com.benimgunlerim.domain.SystemRandomProvider
+import com.benimgunlerim.domain.SystemTickerProvider
+import com.benimgunlerim.domain.TickerProvider
 import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.AppDatabase
 import com.benimgunlerim.data.local.CompletionLogDao
@@ -38,6 +54,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -104,7 +121,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDataClearer(repo: BenimGunlerimRepository): LocalDataClearer = repo
+    fun provideTaskRepository(impl: TaskRepositoryImpl): TaskRepository = impl
+
+    @Provides
+    @Singleton
+    fun provideCompletionLogRepository(impl: CompletionLogRepositoryImpl): CompletionLogRepository = impl
+
+    @Provides
+    @Singleton
+    fun provideLocalDataClearer(impl: LocalDataClearerImpl): LocalDataClearer = impl
 
     @Provides
     @Singleton
@@ -124,6 +149,42 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDateTimeProvider(): DateTimeProvider = SystemDateTimeProvider()
+
+    @Provides
+    @Singleton
+    fun provideRandomProvider(): RandomProvider = SystemRandomProvider()
+
+    @Provides
+    @Singleton
+    fun provideTaskReminderSchedulerContract(scheduler: TaskReminderScheduler): TaskReminderSchedulerContract = scheduler
+
+    @Provides
+    @Singleton
+    fun provideRoutineReminderSchedulerContract(scheduler: RoutineReminderScheduler): RoutineReminderSchedulerContract = scheduler
+
+    @Provides
+    @Singleton
     @ApplicationScope
     fun provideApplicationScope(): CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    @Provides
+    @Singleton
+    fun provideFeedbackManager(impl: SystemFeedbackManager): FeedbackManager = impl
+
+    @Provides
+    @IoDispatcher
+    fun provideIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
+
+    @Provides
+    @DefaultDispatcher
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    @MainDispatcher
+    fun provideMainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+    @Provides
+    @Singleton
+    fun provideTickerProvider(): TickerProvider = SystemTickerProvider()
 }

@@ -9,7 +9,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class BenimGunlerimRepositoryTest {
+class CompletionLogExtensionsTest {
     @Test
     fun currentStreakCountsBackwardsFromToday() {
         val today = LocalDate.of(2026, 4, 12)
@@ -19,18 +19,13 @@ class BenimGunlerimRepositoryTest {
             completionLog(today.minusDays(2)),
             completionLog(today.minusDays(4)),
         )
-
         assertEquals(3, logs.currentStreak(today))
     }
 
     @Test
     fun currentStreakReturnsZeroWhenTodayIsMissing() {
         val today = LocalDate.of(2026, 4, 12)
-        val logs = listOf(
-            completionLog(today.minusDays(1)),
-            completionLog(today.minusDays(2)),
-        )
-
+        val logs = listOf(completionLog(today.minusDays(1)), completionLog(today.minusDays(2)))
         assertEquals(0, logs.currentStreak(today))
     }
 
@@ -43,7 +38,6 @@ class BenimGunlerimRepositoryTest {
             completionLog(today.minusDays(2), entityType = "routine", entityId = "routine-2"),
             completionLog(today.minusDays(2), entityType = "task", entityId = "routine-1"),
         )
-
         assertEquals(2, logs.currentStreakForEntity("routine", "routine-1", today))
     }
 
@@ -60,7 +54,6 @@ class BenimGunlerimRepositoryTest {
             createdAt = 0,
             updatedAt = 0,
         )
-
         assertEquals(setOf(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY), routine.targetDaySet())
         assertTrue(routine.isScheduledFor(DayOfWeek.MONDAY))
     }
@@ -78,7 +71,6 @@ class BenimGunlerimRepositoryTest {
             createdAt = 0,
             updatedAt = 0,
         )
-
         assertFalse(routine.isScheduledFor(DayOfWeek.MONDAY))
         assertTrue(routine.targetDaySet().contains(DayOfWeek.TUESDAY))
     }
@@ -86,7 +78,6 @@ class BenimGunlerimRepositoryTest {
     @Test
     fun shortTr_returnsCapitalizedShortName() {
         val label = DayOfWeek.MONDAY.shortTr()
-
         assertTrue(label.isNotBlank())
         assertEquals(label.first().uppercaseChar(), label.first())
     }
@@ -100,7 +91,6 @@ class BenimGunlerimRepositoryTest {
             completionLog(today.minusDays(1), status = "completed").copy(date = "invalid-date"),
             completionLog(today.minusDays(2), status = "completed"),
         )
-
         assertEquals(1, logs.currentStreak(today))
     }
 
