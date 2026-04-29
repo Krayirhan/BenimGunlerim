@@ -22,6 +22,9 @@ complexity:
     active: true
     functionThreshold: 8
     constructorThreshold: 8
+    excludes:
+      - "**/ui/**/**ViewModel.kt"
+      - "**/notifications/ReminderBootstrapper.kt"
   TooManyFunctions:
     active: true
     thresholdInFiles: 20

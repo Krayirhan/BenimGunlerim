@@ -1,6 +1,10 @@
 #!/usr/bin/env pwsh
 # Local development quality gate.
 
+param(
+    [switch]$StrictRelease
+)
+
 Set-Location (Split-Path $PSScriptRoot)
 
 $ErrorActionPreference = "Stop"
@@ -51,3 +55,13 @@ Write-Host "PASS: Debug build" -ForegroundColor Green
 
 Write-Host ""
 Write-Host "=== ALL GATES PASSED ===" -ForegroundColor Green
+
+Write-Host ""
+Write-Host "[release] Release readiness..." -ForegroundColor Yellow
+if ($StrictRelease) {
+    .\gradlew.bat verifyReleaseSigning assembleRelease
+    if ($LASTEXITCODE -ne 0) { Write-Host "FAIL: Release readiness" -ForegroundColor Red; exit 1 }
+    Write-Host "PASS: Release signing + assembleRelease" -ForegroundColor Green
+} else {
+    Write-Host "SKIP: Strict release checks disabled. Run with -StrictRelease to enforce verifyReleaseSigning + assembleRelease." -ForegroundColor DarkYellow
+}

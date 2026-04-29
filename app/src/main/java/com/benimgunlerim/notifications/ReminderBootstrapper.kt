@@ -22,7 +22,6 @@ fun interface ReminderRestorer {
 
 
 @Singleton
-@Suppress("LongParameterList")
 class ReminderBootstrapper @Inject constructor(
     private val taskDao: TaskDao,
     private val routineDao: RoutineDao,

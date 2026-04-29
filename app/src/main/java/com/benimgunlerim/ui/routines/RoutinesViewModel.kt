@@ -33,7 +33,6 @@ data class RoutineListItem(
 )
 
 @HiltViewModel
-@Suppress("LongParameterList")
 class RoutinesViewModel @Inject constructor(
     private val routineRepository: RoutineRepository,
     private val completionLogRepository: CompletionLogRepository,

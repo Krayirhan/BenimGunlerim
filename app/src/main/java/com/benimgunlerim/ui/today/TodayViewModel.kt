@@ -77,7 +77,6 @@ sealed class GameEvent {
 }
 
 @HiltViewModel
-@Suppress("LongParameterList")
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodayViewModel @Inject constructor(
     private val prefsRepository: UserPreferencesRepository,
