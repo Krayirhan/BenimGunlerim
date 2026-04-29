@@ -54,6 +54,9 @@ jobs:
       - name: Lint
         run: ./gradlew lintDebug
 
+      - name: Static analysis (detekt)
+        run: ./gradlew detekt
+
       - name: Debug build
         run: ./gradlew assembleDebug
 

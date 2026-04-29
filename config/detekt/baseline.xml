@@ -1,0 +1,484 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:AppNavigation.kt$@Composable fun BenimGunlerimApp( requestedStartRoute: String? = null, forceOnboardingCompleted: Boolean = false, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
+    <ID>CyclomaticComplexMethod:DataImportService.kt$DataImportService$private fun validateImportData( tasks: List&lt;TaskEntity&gt;, subTasks: List&lt;SubTaskEntity&gt;, routines: List&lt;RoutineEntity&gt;, logs: List&lt;CompletionLogEntity&gt;, states: List&lt;DailyStateEntity&gt;, achievements: List&lt;AchievementEntity&gt;, preferences: UserPreferences?, )</ID>
+    <ID>CyclomaticComplexMethod:GameEngine.kt$GameEngine$fun companionEmoji(type: String, mood: String): String</ID>
+    <ID>CyclomaticComplexMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen(onComplete: (String, String, List&lt;String&gt;, String?) -&gt; Unit)</ID>
+    <ID>CyclomaticComplexMethod:ProgressScreen.kt$@Composable private fun MoodEnergyTrendCard( moodTrend: List&lt;Pair&lt;String, String?&gt;&gt;, energyTrend: List&lt;Pair&lt;String, Int?&gt;&gt;, )</ID>
+    <ID>CyclomaticComplexMethod:RoutineDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutineDetailScreen( routineId: String, onBack: () -&gt; Unit, viewModel: RoutineDetailViewModel = hiltViewModel(), )</ID>
+    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable private fun CloseDaySheet( completedCount: Int, totalCount: Int, progress: Float, overdueCount: Int, onSave: (mood: Int, energy: Int, note: String, bestMoment: String, challenge: String, tomorrowIntention: String, carryTasks: Boolean) -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable private fun RoutineRow( routine: RoutineEntity, log: CompletionLogEntity?, done: Boolean, onToggle: (RoutineEntity) -&gt; Unit, onProgressChange: (RoutineEntity, Float, Boolean) -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable private fun TaskDetailSheet( task: TaskEntity, subtasks: List&lt;SubTaskEntity&gt;, onSave: (String, String?, LocalDate, String?, String?, Int) -&gt; Unit, onMoveTomorrow: () -&gt; Unit, onDelete: () -&gt; Unit, onAddSubTask: (String) -&gt; Unit, onToggleSubTask: (SubTaskEntity) -&gt; Unit, onDeleteSubTask: (SubTaskEntity) -&gt; Unit, )</ID>
+    <ID>CyclomaticComplexMethod:TodayScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TodayScreen(viewModel: TodayViewModel = hiltViewModel())</ID>
+    <ID>EmptyFunctionBlock:DataExportServiceTest.kt$DataExportServiceTest.&lt;no name provided&gt;${}</ID>
+    <ID>EmptyFunctionBlock:SettingsViewModelTest.kt$SettingsViewModelTest.&lt;no name provided&gt;${}</ID>
+    <ID>LongMethod:AppNavigation.kt$@Composable fun BenimGunlerimApp( requestedStartRoute: String? = null, forceOnboardingCompleted: Boolean = false, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:CelebrationSystem.kt$@Composable fun ConfettiOverlay( trigger: Boolean, intensity: ConfettiIntensity = ConfettiIntensity.Medium, onFinished: () -&gt; Unit = {}, )</ID>
+    <ID>LongMethod:CelebrationSystem.kt$@Composable fun LevelUpOverlay( visible: Boolean, level: Int, title: String, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:Common.kt$@Composable fun ProgressSummaryCard( completed: Int, total: Int, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:DataImportService.kt$DataImportService$private fun validateImportData( tasks: List&lt;TaskEntity&gt;, subTasks: List&lt;SubTaskEntity&gt;, routines: List&lt;RoutineEntity&gt;, logs: List&lt;CompletionLogEntity&gt;, states: List&lt;DailyStateEntity&gt;, achievements: List&lt;AchievementEntity&gt;, preferences: UserPreferences?, )</ID>
+    <ID>LongMethod:DataImportServiceTest.kt$DataImportServiceTest$@Test fun exportedJson_canBeImportedIntoEmptyStore()</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen(onComplete: (String, String, List&lt;String&gt;, String?) -&gt; Unit)</ID>
+    <ID>LongMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun PlanScreen(viewModel: PlanViewModel = hiltViewModel())</ID>
+    <ID>LongMethod:ProgressScreen.kt$@Composable fun ProgressScreen( onOpenAchievements: () -&gt; Unit = {}, viewModel: ProgressViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:ProgressScreen.kt$@Composable private fun MoodEnergyTrendCard( moodTrend: List&lt;Pair&lt;String, String?&gt;&gt;, energyTrend: List&lt;Pair&lt;String, Int?&gt;&gt;, )</ID>
+    <ID>LongMethod:RoutineDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutineDetailScreen( routineId: String, onBack: () -&gt; Unit, viewModel: RoutineDetailViewModel = hiltViewModel(), )</ID>
+    <ID>LongMethod:RoutinesScreen.kt$@Composable private fun EmptyRoutinesCard(onAddRoutine: () -&gt; Unit)</ID>
+    <ID>LongMethod:RoutinesScreen.kt$@Composable private fun RoutineViewContent( item: RoutineListItem, onEdit: () -&gt; Unit, onArchive: () -&gt; Unit, onSkip: () -&gt; Unit, onDetail: () -&gt; Unit, )</ID>
+    <ID>LongMethod:RoutinesScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutinesScreen( viewModel: RoutinesViewModel = hiltViewModel(), onNavigateToDetail: (String) -&gt; Unit = {}, )</ID>
+    <ID>LongMethod:RoutinesScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun AddRoutineSheet( onDismiss: () -&gt; Unit, onSave: (String, Set&lt;DayOfWeek&gt;, String?, String, Int?, String?) -&gt; Unit, )</ID>
+    <ID>LongMethod:SettingsScreen.kt$@Composable fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel())</ID>
+    <ID>LongMethod:SettingsScreen.kt$@Composable private fun LocalDataCard( preferences: UserPreferences, dataOperationMessage: SettingsEvent?, onExportData: () -&gt; Unit, onImportData: () -&gt; Unit, onClearData: () -&gt; Unit, onDismissMessage: () -&gt; Unit, )</ID>
+    <ID>LongMethod:ShopScreen.kt$@Composable fun ShopScreen(viewModel: ShopViewModel = hiltViewModel())</ID>
+    <ID>LongMethod:ShopScreen.kt$@Composable private fun ShopItemCard( item: ShopItem, owned: Boolean, canAfford: Boolean, onBuy: () -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayScreen.kt$@Composable private fun CloseDayCard( completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, canCloseDay: Boolean, dailySummaryTime: String, onClick: () -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayScreen.kt$@Composable private fun CloseDaySheet( completedCount: Int, totalCount: Int, progress: Float, overdueCount: Int, onSave: (mood: Int, energy: Int, note: String, bestMoment: String, challenge: String, tomorrowIntention: String, carryTasks: Boolean) -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayScreen.kt$@Composable private fun TaskDetailSheet( task: TaskEntity, subtasks: List&lt;SubTaskEntity&gt;, onSave: (String, String?, LocalDate, String?, String?, Int) -&gt; Unit, onMoveTomorrow: () -&gt; Unit, onDelete: () -&gt; Unit, onAddSubTask: (String) -&gt; Unit, onToggleSubTask: (SubTaskEntity) -&gt; Unit, onDeleteSubTask: (SubTaskEntity) -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TodayScreen(viewModel: TodayViewModel = hiltViewModel())</ID>
+    <ID>LongParameterList:BenimGunlerimRepository.kt$BenimGunlerimRepository$( date: LocalDate = dateTimeProvider.today(), mood: String, note: String, completionRate: Float, energyLevel: Int? = null, bestMoment: String? = null, challenge: String? = null, tomorrowIntention: String? = null, carriedTaskCount: Int = 0, )</ID>
+    <ID>LongParameterList:BenimGunlerimRepository.kt$BenimGunlerimRepository$( private val taskRepo: TaskRepository, private val routineRepo: RoutineRepository, private val completionLogRepo: CompletionLogRepository, private val dailyStateRepo: DailyStateRepository, private val taskReminderScheduler: TaskReminderSchedulerContract, private val routineReminderScheduler: RoutineReminderSchedulerContract, private val errorReporter: ErrorReporter, private val dateTimeProvider: DateTimeProvider, private val transactionRunner: DatabaseTransactionRunner, )</ID>
+    <ID>LongParameterList:BenimGunlerimRepository.kt$BenimGunlerimRepository$( task: TaskEntity, title: String, note: String?, plannedDate: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
+    <ID>LongParameterList:CloseDayUseCase.kt$CloseDayUseCase$( date: LocalDate = dateTimeProvider.today(), mood: Int, note: String, completionRate: Float, energy: Int = 3, bestMoment: String = "", challenge: String = "", tomorrowIntention: String = "", carriedCount: Int = 0, streak: Int = 0, )</ID>
+    <ID>LongParameterList:DailyStateRepository.kt$DailyStateRepository$( date: LocalDate, mood: String, note: String, completionRate: Float, energyLevel: Int? = null, bestMoment: String? = null, challenge: String? = null, tomorrowIntention: String? = null, carriedTaskCount: Int = 0, )</ID>
+    <ID>LongParameterList:DataExportService.kt$DataExportService$( private val taskDao: TaskDao, private val routineDao: RoutineDao, private val subTaskDao: SubTaskDao, private val completionLogDao: CompletionLogDao, private val dailyStateDao: DailyStateDao, private val achievementDao: AchievementDao, private val preferencesRepository: UserPreferencesSource, private val errorReporter: ErrorReporter, )</ID>
+    <ID>LongParameterList:DataImportService.kt$DataImportService$( private val transactionRunner: DatabaseTransactionRunner, private val taskDao: TaskDao, private val routineDao: RoutineDao, private val subTaskDao: SubTaskDao, private val completionLogDao: CompletionLogDao, private val dailyStateDao: DailyStateDao, private val achievementDao: AchievementDao, private val preferencesWriter: UserPreferencesWriter, private val errorReporter: ErrorReporter, )</ID>
+    <ID>LongParameterList:DataImportServiceTest.kt$DataImportServiceTest$( taskDao: FakeTaskDao = FakeTaskDao(), routineDao: FakeRoutineDao = FakeRoutineDao(), subTaskDao: FakeSubTaskDao = FakeSubTaskDao(), logDao: FakeCompletionLogDao = FakeCompletionLogDao(), stateDao: FakeDailyStateDao = FakeDailyStateDao(), achievementDao: FakeAchievementDao = FakeAchievementDao(), prefsWriter: FakePreferencesStore = FakePreferencesStore(), errorReporter: ErrorReporter = object : ErrorReporter { override fun recordNonFatal(error: Throwable, context: Map&lt;String, String&gt;) = Unit override fun setUserProperty(key: String, value: String) = Unit }, )</ID>
+    <ID>LongParameterList:ProgressScreen.kt$( streak: Int, bestStreak: Int, weeklyScore: Int, averageScore: Int, daysClosed: Int, totalTasks: Int, totalRoutines: Int, totalPerfectDays: Int, )</ID>
+    <ID>LongParameterList:ReminderBootstrapper.kt$ReminderBootstrapper$( private val taskDao: TaskDao, private val routineDao: RoutineDao, private val taskReminderScheduler: TaskReminderScheduler, private val routineReminderScheduler: RoutineReminderScheduler, private val dailySummaryScheduler: DailySummaryScheduler, private val userPreferencesRepository: UserPreferencesRepository, @ApplicationScope private val applicationScope: CoroutineScope, @IoDispatcher private val ioDispatcher: CoroutineDispatcher, )</ID>
+    <ID>LongParameterList:RoutinesScreen.kt$( item: RoutineListItem, isEditing: Boolean, editedName: String, editedDays: Set&lt;DayOfWeek&gt;, editedTime: String, onEdit: () -&gt; Unit, onEditedNameChange: (String) -&gt; Unit, onEditedDaysChange: (Set&lt;DayOfWeek&gt;) -&gt; Unit, onEditedTimeChange: (String) -&gt; Unit, onCancelEdit: () -&gt; Unit, onSaveEdit: () -&gt; Unit, onArchive: () -&gt; Unit, onSkip: () -&gt; Unit, onDetail: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:RoutinesScreen.kt$( name: String, days: Set&lt;DayOfWeek&gt;, time: String, onNameChange: (String) -&gt; Unit, onDaysChange: (Set&lt;DayOfWeek&gt;) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCancel: () -&gt; Unit, onSave: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:SettingsScreen.kt$( enabled: Boolean, start: String, end: String, onEnabledChange: (Boolean) -&gt; Unit, onStartChange: (String) -&gt; Unit, onEndChange: (String) -&gt; Unit, onSaveStart: () -&gt; Unit, onSaveEnd: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:SettingsViewModel.kt$SettingsViewModel$( private val preferencesRepository: UserPreferencesAccess, private val localDataClearer: LocalDataClearer, private val dataExportService: DataExportService, private val dataImportService: DataImportService, private val dailySummaryScheduler: DailySummarySchedule, private val morningPlannerScheduler: MorningPlannerSchedule, private val reminderBootstrapper: ReminderRestorer, private val reminderPolicy: NotificationPolicyCache, )</ID>
+    <ID>LongParameterList:TaskRepository.kt$TaskRepository$( task: TaskEntity, title: String, note: String?, plannedDate: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
+    <ID>LongParameterList:TodayScreen.kt$( completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, canCloseDay: Boolean, dailySummaryTime: String, onClick: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:TodayScreen.kt$( task: TaskEntity, subtasks: List&lt;SubTaskEntity&gt;, onSave: (String, String?, LocalDate, String?, String?, Int) -&gt; Unit, onMoveTomorrow: () -&gt; Unit, onDelete: () -&gt; Unit, onAddSubTask: (String) -&gt; Unit, onToggleSubTask: (SubTaskEntity) -&gt; Unit, onDeleteSubTask: (SubTaskEntity) -&gt; Unit, )</ID>
+    <ID>LongParameterList:TodayScreen.kt$( text: String, note: String, time: String, category: String, priority: Int, dateOffset: Int, onTextChange: (String) -&gt; Unit, onNoteChange: (String) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCategoryChange: (String) -&gt; Unit, onPriorityChange: (Int) -&gt; Unit, onDateOffsetChange: (Int) -&gt; Unit, onSave: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:TodayViewModel.kt$TodayViewModel$( private val repository: BenimGunlerimRepository, private val prefsRepository: UserPreferencesRepository, private val analyticsTracker: AnalyticsTracker, private val achievementTracker: AchievementTracker, private val feedbackManager: FeedbackManager, private val dateTimeProvider: DateTimeProvider, private val addTaskUseCase: AddTaskUseCase, private val updateTaskUseCase: UpdateTaskUseCase, private val deleteTaskUseCase: DeleteTaskUseCase, private val restoreTaskUseCase: RestoreTaskUseCase, private val toggleTaskUseCase: ToggleTaskUseCase, private val toggleRoutineUseCase: ToggleRoutineUseCase, private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase, private val closeDayUseCase: CloseDayUseCase, private val carryPendingTasksUseCase: CarryPendingTasksUseCase, private val tickerProvider: TickerProvider, observeTodaySnapshot: ObserveTodaySnapshotUseCase, )</ID>
+    <ID>LongParameterList:TodayViewModel.kt$TodayViewModel$( task: TaskEntity, title: String, note: String?, date: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
+    <ID>LongParameterList:UpdateTaskUseCase.kt$UpdateTaskUseCase$( task: TaskEntity, title: String, note: String?, date: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$10</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$1000</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$14</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$20</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$30</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$5</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$50</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$500</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$7</ID>
+    <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$90</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$10</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$1000</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$14</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$20</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$30</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$5</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$50</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$500</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$7</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$90</ID>
+    <ID>MagicNumber:AppCrashHandler.kt$ReportingUncaughtExceptionHandler$80</ID>
+    <ID>MagicNumber:AppNavigation.kt$200</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0.001f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0.05f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0.5f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0.6f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0xFF00C897</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0xFF4ECDC4</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0xFFFF6B8A</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$0xFFFF8A65</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$1.2f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$12</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$120f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$150</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$200</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$300</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$35</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$400</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$45.0</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$50</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$60</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$600</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$60f</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$8</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$80</ID>
+    <ID>MagicNumber:CelebrationSystem.kt$90</ID>
+    <ID>MagicNumber:CloseDayUseCase.kt$CloseDayUseCase$4</ID>
+    <ID>MagicNumber:CloseDayUseCase.kt$CloseDayUseCase$5</ID>
+    <ID>MagicNumber:Common.kt$0.10f</ID>
+    <ID>MagicNumber:Common.kt$0xFFEAF8F2</ID>
+    <ID>MagicNumber:Common.kt$0xFFF0EEFF</ID>
+    <ID>MagicNumber:Common.kt$0xFFFF8A65</ID>
+    <ID>MagicNumber:Common.kt$25</ID>
+    <ID>MagicNumber:Common.kt$30</ID>
+    <ID>MagicNumber:Common.kt$50</ID>
+    <ID>MagicNumber:Common.kt$7</ID>
+    <ID>MagicNumber:Common.kt$75</ID>
+    <ID>MagicNumber:Common.kt$800</ID>
+    <ID>MagicNumber:DateTimeProvider.kt$FixedDateTimeProvider$12</ID>
+    <ID>MagicNumber:DateTimeProvider.kt$FixedDateTimeProvider$2024</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$150</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$200</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$255</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$30</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$40</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$50</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$60</ID>
+    <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$80</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$0.5f</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$2000</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$40</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$60</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$7</ID>
+    <ID>MagicNumber:GameEngine.kt$GameEngine$80</ID>
+    <ID>MagicNumber:LocalErrorReporter.kt$LocalErrorReporter$160</ID>
+    <ID>MagicNumber:LocalErrorReporter.kt$LocalErrorReporter$80</ID>
+    <ID>MagicNumber:NotificationHelper.kt$21_000</ID>
+    <ID>MagicNumber:NotificationIds.kt$NotificationIds$10_000</ID>
+    <ID>MagicNumber:NotificationIds.kt$NotificationIds$300_000</ID>
+    <ID>MagicNumber:NotificationIds.kt$NotificationIds$500_000</ID>
+    <ID>MagicNumber:NotificationIds.kt$NotificationIds$600_000</ID>
+    <ID>MagicNumber:NotificationIds.kt$NotificationIds$90_000</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$14</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$7</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.07f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.08f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.12f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.15f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.18f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0.30f</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFF10B981</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFF475569</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFF6366F1</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFF64748B</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFF8B5CF6</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFFEA580C</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$0xFFF59E0B</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$10</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$12</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$14</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$16</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$20</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$200</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$24</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$28</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$4</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$40</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$48</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$5</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$50</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$6</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$8</ID>
+    <ID>MagicNumber:OnboardingViewModel.kt$OnboardingViewModel$10</ID>
+    <ID>MagicNumber:PlanScreen.kt$.08f</ID>
+    <ID>MagicNumber:PlanScreen.kt$.10f</ID>
+    <ID>MagicNumber:PlanScreen.kt$.12f</ID>
+    <ID>MagicNumber:PlanScreen.kt$.14f</ID>
+    <ID>MagicNumber:PlanScreen.kt$.30f</ID>
+    <ID>MagicNumber:PlanScreen.kt$.40f</ID>
+    <ID>MagicNumber:PlanScreen.kt$0xFFF7F6FF</ID>
+    <ID>MagicNumber:PlanScreen.kt$0xFFFFFFFF</ID>
+    <ID>MagicNumber:PlanScreen.kt$6</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.001f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.08f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.10f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.12f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.15f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.16f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.20f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.22f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.76f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.78f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.85f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$.86f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$0xFF0E8C5C</ID>
+    <ID>MagicNumber:ProgressScreen.kt$0xFF0FA46A</ID>
+    <ID>MagicNumber:ProgressScreen.kt$0xFF19B97A</ID>
+    <ID>MagicNumber:ProgressScreen.kt$0xFFEAF8F2</ID>
+    <ID>MagicNumber:ProgressScreen.kt$0xFFF4F2FF</ID>
+    <ID>MagicNumber:ProgressScreen.kt$10</ID>
+    <ID>MagicNumber:ProgressScreen.kt$104</ID>
+    <ID>MagicNumber:ProgressScreen.kt$360f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$4</ID>
+    <ID>MagicNumber:ProgressScreen.kt$50</ID>
+    <ID>MagicNumber:ProgressScreen.kt$7</ID>
+    <ID>MagicNumber:ProgressScreen.kt$700</ID>
+    <ID>MagicNumber:ProgressScreen.kt$8</ID>
+    <ID>MagicNumber:ProgressScreen.kt$80</ID>
+    <ID>MagicNumber:ProgressScreen.kt$800</ID>
+    <ID>MagicNumber:ProgressScreen.kt$90f</ID>
+    <ID>MagicNumber:ReminderBootstrapper.kt$ReminderBootstrapper$21</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$.05f</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$.10f</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$.12f</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$.16f</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$.18f</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$50</ID>
+    <ID>MagicNumber:RoutineDetailScreen.kt$7</ID>
+    <ID>MagicNumber:RoutineDetailViewModel.kt$RoutineDetailViewModel$29</ID>
+    <ID>MagicNumber:RoutineDetailViewModel.kt$RoutineDetailViewModel$6</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$0xFFEAF8F2</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$0xFFF0EEFF</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$26</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$4</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$5</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$50</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$7</ID>
+    <ID>MagicNumber:RoutinesScreen.kt$8</ID>
+    <ID>MagicNumber:RoutinesViewModel.kt$RoutinesViewModel$6</ID>
+    <ID>MagicNumber:SettingsScreen.kt$0xFFEAF8F2</ID>
+    <ID>MagicNumber:SettingsScreen.kt$0xFFF0EEFF</ID>
+    <ID>MagicNumber:SettingsScreen.kt$5</ID>
+    <ID>MagicNumber:SettingsScreen.kt$50</ID>
+    <ID>MagicNumber:SettingsViewModel.kt$SettingsViewModel$21</ID>
+    <ID>MagicNumber:SettingsViewModel.kt$SettingsViewModel$8</ID>
+    <ID>MagicNumber:ShopScreen.kt$16</ID>
+    <ID>MagicNumber:ShopScreen.kt$200</ID>
+    <ID>MagicNumber:ShopScreen.kt$50</ID>
+    <ID>MagicNumber:ShopViewModel.kt$ShopViewModel$25</ID>
+    <ID>MagicNumber:TickerProvider.kt$SystemTickerProvider$60_000L</ID>
+    <ID>MagicNumber:TimeText.kt$23</ID>
+    <ID>MagicNumber:TimeText.kt$59</ID>
+    <ID>MagicNumber:TodayScreen.kt$.03f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.08f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.10f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.12f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.13f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.14f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.15f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.16f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.18f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.20f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.22f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.25f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.45f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.4f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.5f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.65f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.6f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.72f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.86f</ID>
+    <ID>MagicNumber:TodayScreen.kt$.88f</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFF0E8C5C</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFF0FA46A</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFF19B97A</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFFEAF8F2</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFFF0EEFF</ID>
+    <ID>MagicNumber:TodayScreen.kt$0xFFF3EEFF</ID>
+    <ID>MagicNumber:TodayScreen.kt$16</ID>
+    <ID>MagicNumber:TodayScreen.kt$360f</ID>
+    <ID>MagicNumber:TodayScreen.kt$4</ID>
+    <ID>MagicNumber:TodayScreen.kt$4f</ID>
+    <ID>MagicNumber:TodayScreen.kt$5</ID>
+    <ID>MagicNumber:TodayScreen.kt$8</ID>
+    <ID>MagicNumber:TodayScreen.kt$800</ID>
+    <ID>MagicNumber:TodayScreen.kt$90f</ID>
+    <ID>MagicNumber:TodayViewModel.kt$TodayViewModel$5</ID>
+    <ID>MatchingDeclarationName:NotificationHelper.kt$NotificationHelperEntryPoint</ID>
+    <ID>MaxLineLength:BenimGunlerimRepository.kt$BenimGunlerimRepository$taskTitles.add(when (needId) { "saglik" -&gt; "Sağlıklı bir öğün planla"; "odak" -&gt; "İkinci odak bloğu (25 dk)"; else -&gt; "Küçük bir mola ver" })</ID>
+    <ID>MaxLineLength:GameEngine.kt$GameEngine$else -&gt; random.pickFrom(listOf("Hadi maceraya başlayalım! ✨", "Yeni bir gün, yeni fırsatlar! 🌅", "Bugün ne yapacağız? 🤔"))</ID>
+    <ID>MaxLineLength:Migrations.kt$&lt;no name provided&gt;$db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_completion_logs_entityType_entityId_date` ON `completion_logs` (`entityType`, `entityId`, `date`)")</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("dengeli", stringResource(R.string.onboarding_intensity_balanced), stringResource(R.string.onboarding_intensity_balanced_sub))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("hafif", stringResource(R.string.onboarding_intensity_light), stringResource(R.string.onboarding_intensity_light_sub), recommended = true)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("basit", stringResource(R.string.onboarding_need_simple), stringResource(R.string.onboarding_need_simple_sub), listOf(Color(0xFF64748B), Color(0xFF475569)))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("duzen", stringResource(R.string.onboarding_need_organize), stringResource(R.string.onboarding_need_organize_sub), listOf(CandyPrimary, CandyTertiary))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("duzenli", stringResource(R.string.onboarding_need_regular), stringResource(R.string.onboarding_need_regular_sub), listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("odak", stringResource(R.string.onboarding_need_focus), stringResource(R.string.onboarding_need_focus_sub), listOf(Color(0xFFF59E0B), Color(0xFFEA580C)))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("saglik", stringResource(R.string.onboarding_need_health), stringResource(R.string.onboarding_need_health_sub), listOf(Color(0xFF10B981), CandySecondary))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$Text(text = intensity.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$modifier = Modifier.clip(RoundedCornerShape(50)).background(CompletedGreen.copy(alpha = 0.15f)).padding(horizontal = 8.dp, vertical = 2.dp)</ID>
+    <ID>MaxLineLength:PlanScreen.kt$Icon(Icons.Outlined.CalendarToday, contentDescription = stringResource(R.string.plan_move_to_selected_day_cd), tint = accentColor, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:PlanScreen.kt$Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.action_delete), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:PlanScreen.kt$Text(stringResource(R.string.plan_title), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:PlanScreen.kt$Text(title, style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:PlanScreen.kt$stringResource(R.string.plan_add_task_sheet_title, state.selectedDate.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR"))))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Box</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_active_streak), stringResource(R.string.progress_metric_streak_days, streak), stringResource(R.string.progress_metric_streak_sub), Icons.Rounded.LocalFireDepartment, CandyPrimary, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_best_streak), stringResource(R.string.progress_metric_streak_days, bestStreak), stringResource(R.string.progress_metric_best_streak_sub), Icons.Rounded.LocalFireDepartment, StreakCoral, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_close), stringResource(R.string.progress_metric_streak_days, daysClosed), stringResource(R.string.progress_metric_close_sub), Icons.Rounded.Flag, XpGold, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_overall), "$averageScore", stringResource(R.string.progress_metric_overall_sub), Icons.Rounded.ShowChart, LevelSky, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_perfect), stringResource(R.string.progress_metric_streak_days, totalPerfectDays), stringResource(R.string.progress_metric_perfect_sub), Icons.Rounded.TaskAlt, CompletedGreen, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_weekly), "$weeklyScore", stringResource(R.string.progress_metric_weekly_sub), Icons.Rounded.ShowChart, CandySecondary, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(achievement.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(achievement.title, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(day.note?.takeIf { it.isNotBlank() } ?: stringResource(R.string.progress_day_note_empty), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(formatDate(day.date), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(helper, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(if (mood != null) moodLabel(mood).take(1) else "-", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold), color = if (mood != null) Color.White else MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_achievements_subtitle, total, unlocked.size), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_achievements_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_balance_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_balance_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_chart_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_chart_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_consistency_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_energy_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_level, level), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_mood_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_mood_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_perf_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_recent_days_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_routine_completion, (routineHitRate * 100).toInt()), style = MaterialTheme.typography.labelMedium)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_economy_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_economy_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_next, currentXp, xpForNext), style = MaterialTheme.typography.labelSmall, color = Color.White.copy(.78f))</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$modifier.clip(RoundedCornerShape(18.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(18.dp)).padding(12.dp)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$value = if (bestStreak &gt; 0) stringResource(R.string.progress_metric_streak_days, bestStreak) else stringResource(R.string.progress_no_data)</ID>
+    <ID>MaxLineLength:ProgressScreen.kt$value = if (streak &gt; 0) stringResource(R.string.progress_metric_streak_days, streak) else stringResource(R.string.progress_streak_not_started)</ID>
+    <ID>MaxLineLength:RoutineDetailScreen.kt$Icon(Icons.Rounded.Archive, contentDescription = stringResource(R.string.routine_detail_archive_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:RoutineDetailScreen.kt$StatCard(stringResource(R.string.routine_detail_stat_best), stringResource(R.string.routine_detail_stat_days, state.bestStreak), LevelSky, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:RoutineDetailScreen.kt$StatCard(stringResource(R.string.routine_detail_stat_streak), stringResource(R.string.routine_detail_stat_days, state.currentStreak), CandyPrimary, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:RoutineDetailScreen.kt$Text(stringResource(R.string.routine_detail_last7), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:RoutineDetailScreen.kt$Text(stringResource(R.string.routine_detail_repeat_days), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:RoutinesScreen.kt$Text(if (targetType == "duration") stringResource(R.string.routines_goal_unit_dk) else if (targetType == "amount") stringResource(R.string.routines_goal_unit_l) else stringResource(R.string.routines_goal_unit_generic))</ID>
+    <ID>MaxLineLength:RoutinesScreen.kt$Text(if (targetType == "limit") stringResource(R.string.routines_goal_max_label) else stringResource(R.string.routines_goal_target_label))</ID>
+    <ID>MaxLineLength:RoutinesScreen.kt$Text(stringResource(R.string.routines_skip), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:RoutinesScreen.kt$text = if (routine.targetDaySet().size == 7) stringResource(R.string.routines_every_day) else stringResource(R.string.routines_days_count, routine.targetDaySet().size)</ID>
+    <ID>MaxLineLength:SettingsScreen.kt$Text(stringResource(R.string.settings_morning_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:SettingsScreen.kt$Text(stringResource(R.string.settings_quiet_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:SettingsViewModel.kt$SettingsViewModel$val backupInfo: String = "Yedekleme: Görevler, rutinler, günlük özetler ve ayarlar Android bulut yedeğine dahil edilir. Gizlilik politikasını inceleyin."</ID>
+    <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &lt; :today AND completionState = 'pending' AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, priority DESC")</ID>
+    <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &gt;= :from AND plannedDate &lt;= :to AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, startTime IS NULL ASC, startTime ASC, priority DESC")</ID>
+    <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &gt;= :fromDate AND completionState = 'pending' AND reminderTime IS NOT NULL AND reminderTime != '' AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, reminderTime ASC")</ID>
+    <ID>MaxLineLength:Theme.kt$displayLarge = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.ExtraBold, fontSize = 32.sp, lineHeight = 40.sp, letterSpacing = (-0.5).sp)</ID>
+    <ID>MaxLineLength:Theme.kt$headlineLarge = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = (-0.3).sp)</ID>
+    <ID>MaxLineLength:Theme.kt$headlineMedium = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp, letterSpacing = (-0.2).sp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Box</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Button</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Outlined.CalendarToday, contentDescription = stringResource(R.string.today_move_to_today_cd), tint = StreakCoral, modifier = Modifier.size(18.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(16.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(20.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Rounded.MoreHoriz, contentDescription = stringResource(R.string.today_task_open_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(22.dp).clickable { onOpen(task) })</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Modifier.clip(RoundedCornerShape(8.dp)).background(color.copy(.12f)).border(1.dp, color.copy(.20f), RoundedCornerShape(8.dp)).padding(horizontal = 9.dp, vertical = 5.dp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(color.copy(.08f)).border(1.dp, color.copy(.14f), RoundedCornerShape(18.dp)).padding(14.dp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = if (done) .48f else 1f)).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(20.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Modifier.fillMaxWidth().clip(RoundedCornerShape(24.dp)).background(MaterialTheme.colorScheme.surface).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(24.dp)).padding(16.dp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = bestMoment, onValueChange = { bestMoment = it }, label = { Text(stringResource(R.string.today_close_step2_best_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = category, onValueChange = onCategoryChange, label = { Text(stringResource(R.string.today_add_task_category_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = category, onValueChange = { category = it }, label = { Text(stringResource(R.string.today_add_task_category_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = challenge, onValueChange = { challenge = it }, label = { Text(stringResource(R.string.today_close_step2_challenge_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = note, onValueChange = onNoteChange, label = { Text(stringResource(R.string.today_add_task_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text(stringResource(R.string.today_close_step2_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = note, onValueChange = { note = it }, label = { Text(stringResource(R.string.today_edit_task_note_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = text, onValueChange = onTextChange, label = { Text(stringResource(R.string.today_add_task_name_label)) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = time, onValueChange = onTimeChange, label = { Text(stringResource(R.string.today_add_task_time_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = time, onValueChange = { time = it.sanitizedTimeInput() }, label = { Text(stringResource(R.string.today_add_task_time_label)) }, modifier = Modifier.weight(1f), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text(stringResource(R.string.today_add_task_name_label)) }, modifier = Modifier.fillMaxWidth(), singleLine = true, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$OutlinedTextField(value = tomorrowIntention, onValueChange = { tomorrowIntention = it }, label = { Text(stringResource(R.string.today_close_step3_intent_label)) }, modifier = Modifier.fillMaxWidth(), minLines = 2, maxLines = 3, shape = RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Pill(if (done) stringResource(R.string.today_routine_done_pill) else stringResource(R.string.today_routine_streak_pill), if (done) CompletedGreen else color)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Pill(if (streak &gt; 0) stringResource(R.string.today_streak_active, streak) else stringResource(R.string.today_streak_ready), CandyPrimary)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$RewardTile(stringResource(R.string.today_reward_streak_days, streak), stringResource(R.string.today_reward_streak), CandyPrimary, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Row(Modifier.weight(1f).padding(horizontal = 12.dp, vertical = 11.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp), content = content)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$SummaryTile("$completedCount / $totalCount", stringResource(R.string.today_close_step0_completed), CandyPrimary, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$SummaryTile("%${(progress * 100).toInt()}", stringResource(R.string.today_close_step0_success), CompletedGreen, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text("$completed / $total", style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text("$current / ${routine.targetValue} ${routine.targetUnit ?: ""}".trim(), style = MaterialTheme.typography.labelSmall, color = color, maxLines = 1)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text("$e", style = MaterialTheme.typography.titleSmall.copy(fontWeight = if (energy == e) FontWeight.ExtraBold else FontWeight.Normal), color = if (energy == e) Color.White else LevelSky)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(actionLabel, modifier = Modifier.clickable(onClick = onAction), style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold), color = color)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(dateLabels[offset], style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (sel) FontWeight.ExtraBold else FontWeight.Normal), color = if (sel) CandySecondary else MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(moodLabels[i], style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (mood == i) FontWeight.ExtraBold else FontWeight.Normal), color = if (mood == i) Color.White else col, maxLines = 1)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(priorityLabels[i], style = MaterialTheme.typography.labelMedium.copy(fontWeight = if (sel) FontWeight.ExtraBold else FontWeight.Normal), color = if (sel) col else MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(routine.preferredTime?.let { stringResource(R.string.today_routine_time_format, it) } ?: stringResource(R.string.today_routine_daily_no_time), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step0_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step1_energy_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step1_mood_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step1_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step2_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step3_move_overdue, overdueCount), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step3_move_overdue_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_close_step3_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_closed_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_closed_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_energy_label), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_hero_subtitle), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_hero_title), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_locked_desc, dailySummaryTime), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.6f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_locked_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.45f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_missed_label), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = StreakCoral)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_subtasks_empty), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(text, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold), color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$TextButton(onClick = onDismiss) { Text(stringResource(R.string.today_missed_skip_btn), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge) }</ID>
+    <ID>MaxLineLength:TodayScreen.kt$TextButton(onClick = onReview) { Text(stringResource(R.string.today_missed_review_btn), color = StreakCoral, style = MaterialTheme.typography.labelLarge) }</ID>
+    <ID>MaxLineLength:TodayScreen.kt$completedCount = state.tasks.count { it.completionState == "completed" } + state.routines.count { it.id in state.completedRoutineIds }</ID>
+    <ID>MaxLineLength:TodayScreen.kt$if (done) Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.today_done_cd), tint = Color.White, modifier = Modifier.size(19.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$if (overdueCount &gt; 0) SummaryTile("$overdueCount", stringResource(R.string.today_close_step0_overdue), StreakCoral, Modifier.weight(1f))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$if (st.isCompleted) Icon(Icons.Rounded.Check, contentDescription = null, tint = Color.White, modifier = Modifier.size(14.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$if (task.startTime != null) stringResource(R.string.today_task_with_time, task.startTime!!) else stringResource(R.string.today_task_no_time)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$item(key = "dayScore") { DayScoreCard(completed, total, state.progress, completedRoutines, state.routines.size, completedTasks, state.tasks.size) }</ID>
+    <ID>MaxLineLength:TodayScreen.kt$modifier = modifier.height(42.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surface).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:TodayScreen.kt$modifier.height(72.dp).clip(RoundedCornerShape(16.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(16.dp)).padding(10.dp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$modifier.height(82.dp).clip(RoundedCornerShape(20.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(20.dp)).padding(10.dp)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$onClick = { onSave(title, note.takeIf { it.isNotBlank() }, LocalDate.parse(task.plannedDate), time.takeIf { it.isNotBlank() }, category.takeIf { it.isNotBlank() }, priority) }</ID>
+    <ID>MaxLineLength:TodayScreen.kt$style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, textDecoration = if (done) TextDecoration.LineThrough else null)</ID>
+    <ID>MaxLineLength:TodayScreen.kt$val priorityLabels = listOf(stringResource(R.string.today_priority_high), stringResource(R.string.today_priority_normal), stringResource(R.string.today_priority_low))</ID>
+    <ID>NewLineAtEndOfFile:ErrorReporterContextPolicy.kt$com.benimgunlerim.analytics.ErrorReporterContextPolicy.kt</ID>
+    <ID>NewLineAtEndOfFile:ShopScreen.kt$com.benimgunlerim.ui.shop.ShopScreen.kt</ID>
+    <ID>ReturnCount:SnoozeReceiver.kt$SnoozeReceiver$override fun onReceive(context: Context, intent: Intent)</ID>
+    <ID>ReturnCount:TimeText.kt$fun String.normalizedTimeOrNull(): String?</ID>
+    <ID>TooGenericExceptionThrown:DataExportServiceTest.kt$DataExportServiceTest.&lt;no name provided&gt;$throw RuntimeException("simulated DAO crash")</ID>
+    <ID>TooManyFunctions:AchievementEvaluationServiceTest.kt$AchievementEvaluationServiceTest</ID>
+    <ID>TooManyFunctions:BenimGunlerimRepository.kt$BenimGunlerimRepository : LocalDataClearer</ID>
+    <ID>TooManyFunctions:CloseDayUseCaseTest.kt$CloseDayUseCaseTest</ID>
+    <ID>TooManyFunctions:Common.kt$.Common.kt</ID>
+    <ID>TooManyFunctions:DataExportServiceTest.kt$DataExportServiceTest</ID>
+    <ID>TooManyFunctions:DataImportService.kt$DataImportService</ID>
+    <ID>TooManyFunctions:DataImportServiceTest.kt$DataImportServiceTest</ID>
+    <ID>TooManyFunctions:GameEngineTest.kt$GameEngineTest</ID>
+    <ID>TooManyFunctions:ProgressScreen.kt$com.benimgunlerim.ui.progress.ProgressScreen.kt</ID>
+    <ID>TooManyFunctions:SettingsScreen.kt$com.benimgunlerim.ui.settings.SettingsScreen.kt</ID>
+    <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:SettingsViewModelTest.kt$SettingsViewModelTest</ID>
+    <ID>TooManyFunctions:TaskDao.kt$TaskDao</ID>
+    <ID>TooManyFunctions:TaskRepository.kt$TaskRepository</ID>
+    <ID>TooManyFunctions:TaskRepository.kt$TaskRepositoryImpl : TaskRepository</ID>
+    <ID>TooManyFunctions:TodayScreen.kt$com.benimgunlerim.ui.today.TodayScreen.kt</ID>
+    <ID>TooManyFunctions:TodayViewModel.kt$TodayViewModel : ViewModel</ID>
+    <ID>TooManyFunctions:ToggleTaskUseCaseTest.kt$ToggleTaskUseCaseTest</ID>
+    <ID>TooManyFunctions:UserPreferencesRepository.kt$UserPreferencesRepository : UserPreferencesAccessUserPreferencesSourceUserPreferencesWriter</ID>
+    <ID>UnusedImports:BenimGunlerimRepository.kt$import com.benimgunlerim.domain.model.CompletionStatus</ID>
+    <ID>UnusedImports:CarryPendingTasksUseCase.kt$import com.benimgunlerim.data.local.entity.TaskEntity</ID>
+    <ID>UnusedImports:CelebrationSystem.kt$import androidx.compose.ui.platform.LocalDensity</ID>
+    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimary</ID>
+    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimaryDark</ID>
+    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimaryLight</ID>
+    <ID>UnusedImports:PlanScreen.kt$import com.benimgunlerim.ui.theme.CandySecondary</ID>
+    <ID>UnusedImports:ProgressScreen.kt$import androidx.compose.material.icons.rounded.CheckCircle</ID>
+    <ID>UnusedImports:ProgressScreen.kt$import androidx.compose.material.icons.rounded.Lock</ID>
+    <ID>UnusedImports:RoutineDetailScreen.kt$import androidx.compose.foundation.layout.width</ID>
+    <ID>UnusedImports:RoutineDetailScreen.kt$import androidx.compose.material3.TextButton</ID>
+    <ID>UnusedImports:RoutineDetailScreen.kt$import com.benimgunlerim.ui.theme.StreakCoral</ID>
+    <ID>UnusedImports:RoutinesScreen.kt$import androidx.compose.foundation.lazy.itemsIndexed</ID>
+    <ID>UnusedImports:RoutinesScreen.kt$import androidx.compose.material3.OutlinedButton</ID>
+    <ID>UnusedImports:RoutinesScreen.kt$import com.benimgunlerim.data.local.entity.RoutineEntity</ID>
+    <ID>UnusedImports:RoutinesViewModel.kt$import com.benimgunlerim.data.local.entity.CompletionLogEntity</ID>
+    <ID>UnusedImports:SettingsScreen.kt$import com.benimgunlerim.ui.theme.CandyPrimaryDark</ID>
+    <ID>UnusedImports:SettingsViewModelTest.kt$import kotlinx.coroutines.flow.first</ID>
+    <ID>UnusedImports:ShopScreen.kt$import androidx.compose.foundation.clickable</ID>
+    <ID>UnusedImports:ShopScreen.kt$import androidx.compose.ui.unit.sp</ID>
+    <ID>UnusedImports:ShopScreen.kt$import com.benimgunlerim.ui.theme.CandySecondary</ID>
+    <ID>UnusedImports:ShopViewModel.kt$import com.benimgunlerim.data.UserPreferences</ID>
+    <ID>UnusedImports:TodayScreen.kt$import androidx.compose.material.icons.rounded.KeyboardArrowRight</ID>
+    <ID>UnusedImports:TodayScreen.kt$import androidx.compose.ui.unit.sp</ID>
+    <ID>UnusedImports:TodayViewModelTest.kt$import kotlinx.coroutines.flow.first</ID>
+    <ID>UnusedImports:TodayViewModelTest.kt$import org.junit.Assert.assertEquals</ID>
+    <ID>UnusedImports:TodayViewModelTest.kt$import org.junit.Assert.assertFalse</ID>
+    <ID>UnusedImports:ToggleTaskUseCaseTest.kt$import java.time.LocalTime</ID>
+    <ID>UnusedImports:ToggleTaskUseCaseTest.kt$import org.junit.Assert.assertEquals</ID>
+    <ID>UnusedParameter:PlanScreen.kt$onMoveToday: (TaskEntity) -&gt; Unit</ID>
+    <ID>UnusedParameter:ProgressScreen.kt$totalRoutines: Int</ID>
+    <ID>UnusedParameter:ProgressScreen.kt$totalTasks: Int</ID>
+    <ID>UnusedParameter:RoutineDetailScreen.kt$routineId: String</ID>
+    <ID>UnusedParameter:SettingsViewModelTest.kt$SettingsViewModelTest$json: String? = "{\"version\":1}"</ID>
+    <ID>UnusedParameter:Theme.kt$themeMode: String = "system"</ID>
+    <ID>UnusedPrivateMember:ProgressScreen.kt$@Composable private fun TaskRoutineBalanceCard(taskCount: Int, routineCount: Int)</ID>
+    <ID>UnusedPrivateProperty:RewardGrantService.kt$RewardGrantService$private val achievementTracker: AchievementTracker</ID>
+    <ID>UnusedPrivateProperty:TodayViewModel.kt$TodayViewModel$private val prefsRepository: UserPreferencesRepository</ID>
+    <ID>UnusedPrivateProperty:UpdateTaskUseCase.kt$UpdateTaskUseCase$private val dateTimeProvider: DateTimeProvider</ID>
+  </CurrentIssues>
+</SmellBaseline>

@@ -1,0 +1,132 @@
+build:
+  maxIssues: 0
+  excludeCorrectable: false
+
+config:
+  validation: true
+  warningsAsErrors: false
+
+# Complexity rules — project-specific thresholds
+complexity:
+  active: true
+  LongMethod:
+    active: true
+    threshold: 60
+  LargeClass:
+    active: true
+    threshold: 400
+  CyclomaticComplexMethod:
+    active: true
+    threshold: 15
+  LongParameterList:
+    active: true
+    functionThreshold: 8
+    constructorThreshold: 8
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+    thresholdInObjects: 15
+    excludes:
+      - "**/di/**"
+  NestedBlockDepth:
+    active: true
+    threshold: 4
+
+# Naming conventions
+naming:
+  active: true
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z][a-zA-Z0-9]*'
+  FunctionNaming:
+    active: true
+    functionPattern: '(`?[a-z][a-zA-Z0-9]*`?|[A-Z][a-zA-Z0-9]*)'
+  PackageNaming:
+    active: true
+    packagePattern: '[a-z]+(\.[a-z][A-Za-z0-9]*)*'
+  VariableMaxLength:
+    active: true
+    maximumVariableNameLength: 64
+  BooleanPropertyNaming:
+    active: false
+
+# Code style
+style:
+  active: true
+  MagicNumber:
+    active: true
+    ignoreNumbers: ['-1', '0', '1', '2', '3', '100']
+    ignoreAnnotated:
+      - 'Preview'
+      - 'Rule'
+      - 'Entity'
+    ignorePropertyDeclaration: true
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 150
+    excludePackageStatements: true
+    excludeImportStatements: true
+  UnusedImports:
+    active: true
+  WildcardImport:
+    active: true
+    excludeImports:
+      - 'kotlinx.coroutines.*'
+  ForbiddenComment:
+    active: true
+    comments:
+      - reason: 'Do not commit fixme comments.'
+        value: 'FIXME:'
+  ReturnCount:
+    active: true
+    max: 4
+  UseCheckOrError:
+    active: false
+  ThrowsCount:
+    active: false
+
+# Performance
+performance:
+  active: true
+
+# Potential bugs
+potential-bugs:
+  active: true
+  NullableToStringCall:
+    active: true
+
+# Coroutines
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: true
+  InjectDispatcher:
+    active: true
+
+# Empty blocks
+empty-blocks:
+  active: true
+
+# Exceptions
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: true
+    exceptionNames:
+      - 'ArrayIndexOutOfBoundsException'
+      - 'IndexOutOfBoundsException'
+    allowedExceptionNameRegex: '_|(ignore|expected).*'
+  TooGenericExceptionThrown:
+    active: true
+
+# Exclusions — generated, DI, test infrastructure
+processors:
+  active: true
+
+output-reports:
+  active: true
+
+# File-level exclusions are handled by Gradle source filtering.
