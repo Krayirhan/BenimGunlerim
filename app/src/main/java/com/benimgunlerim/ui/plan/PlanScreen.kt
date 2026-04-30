@@ -44,11 +44,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,7 +71,6 @@ import com.benimgunlerim.ui.theme.StreakCoral
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,13 +78,23 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
     val state by viewModel.uiState.collectAsState()
     val today = viewModel.today()
     val snackbarHost = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
     val haptic = LocalHapticFeedback.current
     val taskAdded = stringResource(R.string.plan_task_added)
     val taskDeleted = stringResource(R.string.plan_task_deleted)
+    val genericError = stringResource(R.string.today_error_generic)
 
     var showAddSheet by remember { mutableStateOf(false) }
     var addText by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffects.collect { effect ->
+            when (effect) {
+                PlanUiEffect.TaskAdded -> snackbarHost.showSnackbar(taskAdded)
+                PlanUiEffect.TaskDeleted -> snackbarHost.showSnackbar(taskDeleted)
+                PlanUiEffect.ActionFailed -> snackbarHost.showSnackbar(genericError)
+            }
+        }
+    }
 
     if (showAddSheet) {
         ModalBottomSheet(onDismissRequest = { showAddSheet = false }) {
@@ -114,11 +123,11 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     TextButton(onClick = { showAddSheet = false }) { Text(stringResource(R.string.action_cancel)) }
                     Spacer(Modifier.width(8.dp))
                     TextButton(
+                        enabled = addText.trim().isNotEmpty(),
                         onClick = {
                             viewModel.addTask(addText, state.selectedDate)
                             addText = ""
                             showAddSheet = false
-                            scope.launch { snackbarHost.showSnackbar(taskAdded) }
                         },
                     ) { Text(stringResource(R.string.action_save)) }
                 }
@@ -167,7 +176,6 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     },
                     onDelete = {
                         viewModel.deleteTask(it)
-                        scope.launch { snackbarHost.showSnackbar(taskDeleted) }
                     },
                     onAdd = { showAddSheet = true },
                 )
@@ -183,7 +191,6 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                         onMoveToSelected = { viewModel.moveTaskToDate(it, state.selectedDate) },
                         onDelete = {
                             viewModel.deleteTask(it)
-                            scope.launch { snackbarHost.showSnackbar(taskDeleted) }
                         },
                     )
                 }
