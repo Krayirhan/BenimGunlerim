@@ -51,28 +51,6 @@ private val LightTodayColorTokens = TodayColorTokens(
     missedDayBorder = Color(0xFFF0B9B3),
 )
 
-private val DarkTodayColorTokens = TodayColorTokens(
-    backgroundTop = Color(0xFF1A1C22),
-    backgroundBottom = Color(0xFF121318),
-    headerSurface = Color(0xFF3D7A60),
-    headerBorder = Color(0xFF4D8E72),
-    tasksSectionSurface = Color(0xFF1E2330),
-    tasksSectionBorder = Color(0xFF3A4866),
-    routinesSectionSurface = Color(0xFF1B2620),
-    routinesSectionBorder = Color(0xFF355C45),
-    itemSurface = Color(0xFF1D2027),
-    itemBorder = Color(0xFF475064),
-    chipSurface = Color(0xFF2A303D),
-    chipBorder = Color(0xFF525E76),
-    chipText = Color(0xFFD4DAE6),
-    overdueSurface = Color(0xFF312223),
-    overdueBorder = Color(0xFF6B4441),
-    closeDaySurface = Color(0xFF1D2027),
-    closeDayBorder = Color(0xFF4A5265),
-    missedDaySurface = Color(0xFF322122),
-    missedDayBorder = Color(0xFF7A4A46),
-)
-
 val LocalTodayColorTokens = staticCompositionLocalOf { LightTodayColorTokens }
 
 val MaterialTheme.todayColorTokens: TodayColorTokens
@@ -80,6 +58,5 @@ val MaterialTheme.todayColorTokens: TodayColorTokens
     get() = LocalTodayColorTokens.current
 
 @Composable
-fun todayColorTokens(darkTheme: Boolean): TodayColorTokens =
-    if (darkTheme) DarkTodayColorTokens else LightTodayColorTokens
+fun todayColorTokens(): TodayColorTokens = LightTodayColorTokens
 

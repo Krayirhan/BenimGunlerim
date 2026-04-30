@@ -6,7 +6,6 @@ import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -139,13 +138,8 @@ private val AppTypography = Typography(
 
 @Composable
 fun BenimGunlerimTheme(themeMode: String = "system", content: @Composable () -> Unit) {
-    val darkTheme = when (themeMode.lowercase()) {
-        "dark" -> true
-        "light" -> false
-        else -> isSystemInDarkTheme()
-    }
     CompositionLocalProvider(
-        LocalTodayColorTokens provides todayColorTokens(darkTheme),
+        LocalTodayColorTokens provides todayColorTokens(),
     ) {
         MaterialTheme(
             colorScheme = LightColors,

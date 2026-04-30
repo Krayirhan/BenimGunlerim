@@ -984,10 +984,10 @@ private fun MetaTag(text: String) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(999.dp))
-            .background(MaterialTheme.todayColorTokens.chipSurface)
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.90f))
             .border(
                 width = 1.dp,
-                color = MaterialTheme.todayColorTokens.chipBorder,
+                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.42f),
                 shape = RoundedCornerShape(999.dp),
             )
             .padding(horizontal = 8.dp, vertical = metrics.metaChipVertical),
@@ -995,7 +995,7 @@ private fun MetaTag(text: String) {
         Text(
             text = text,
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.todayColorTokens.chipText,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.88f),
             maxLines = 1,
         )
     }
@@ -1020,7 +1020,7 @@ private fun OverdueTaskRow(
             else -> stringResource(R.string.today_relative_days_ago, days)
         }
     } ?: task.plannedDate
-    ItemRow(done = done, color = StreakCoral, tone = MaterialTheme.todayColorTokens.overdueSurface) {
+    ItemRow(done = done, color = StreakCoral) {
         CheckCircle(done, StreakCoral, enabled = !interactionLocked) { onToggle(task) }
         Column(
             modifier = Modifier.weight(1f).clickable(onClickLabel = openTaskLabel) { onOpen(task) },
@@ -1344,12 +1344,12 @@ private fun ItemRow(
     val metrics = rememberTodayLayoutMetrics()
     val reduceMotion = rememberSystemAnimationsDisabled()
     val animatedBg by animateColorAsState(
-        targetValue = (tone ?: MaterialTheme.todayColorTokens.itemSurface).copy(alpha = if (done) .96f else 1f),
+        targetValue = (tone ?: MaterialTheme.colorScheme.surface).copy(alpha = if (done) .96f else 1f),
         animationSpec = if (reduceMotion) snap() else tween(durationMillis = 220),
         label = "itemRowBg",
     )
     val animatedBorder by animateColorAsState(
-        targetValue = MaterialTheme.todayColorTokens.itemBorder,
+        targetValue = MaterialTheme.colorScheme.outline.copy(alpha = 0.62f),
         animationSpec = if (reduceMotion) snap() else tween(durationMillis = 180),
         label = "itemRowBorder",
     )
@@ -1471,8 +1471,8 @@ internal fun CloseDayCard(
         }
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.headerCorner))
-                .background(MaterialTheme.todayColorTokens.closeDaySurface)
-                .border(1.dp, MaterialTheme.todayColorTokens.closeDayBorder, RoundedCornerShape(metrics.headerCorner))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.dp, mutedAccent(CompletedGreen).copy(.30f), RoundedCornerShape(metrics.headerCorner))
                 .padding(if (metrics.isCompact) 16.dp else 20.dp)
                 .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
         ) {
@@ -1528,8 +1528,8 @@ internal fun CloseDayCard(
     } else {
         Box(
             Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.headerCorner))
-                .background(MaterialTheme.todayColorTokens.closeDaySurface)
-                .border(1.dp, MaterialTheme.todayColorTokens.closeDayBorder, RoundedCornerShape(metrics.headerCorner))
+                .background(MaterialTheme.colorScheme.surface)
+                .border(1.dp, mutedAccent(CandySecondary).copy(.30f), RoundedCornerShape(metrics.headerCorner))
                 .padding(if (metrics.isCompact) 16.dp else 20.dp)
                 .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
         ) {
@@ -1565,8 +1565,8 @@ internal fun MissedDayBanner(
     }
     Box(
         Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.itemCorner))
-            .background(MaterialTheme.todayColorTokens.missedDaySurface)
-            .border(1.dp, MaterialTheme.todayColorTokens.missedDayBorder, RoundedCornerShape(metrics.itemCorner))
+            .background(StreakCoral.copy(.08f))
+            .border(1.dp, StreakCoral.copy(.22f), RoundedCornerShape(metrics.itemCorner))
             .padding(horizontal = if (metrics.isCompact) 14.dp else 16.dp, vertical = if (metrics.isCompact) 10.dp else 12.dp)
             .testTag(com.benimgunlerim.ui.TestTags.TodayMissedDayBanner),
     ) {
