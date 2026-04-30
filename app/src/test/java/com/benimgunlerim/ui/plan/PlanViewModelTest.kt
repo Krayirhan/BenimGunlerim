@@ -16,6 +16,7 @@ import java.time.LocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -108,6 +109,22 @@ class PlanViewModelTest {
         advanceUntilIdle()
 
         coVerify { addTaskUseCase("Buy milk", fixedDate, null, null, null, 2, null) }
+    }
+
+    @Test
+    fun addTask_trimsTitle_beforeCallingRepository() = runTest {
+        viewModel.addTask("  Buy milk  ", fixedDate)
+        advanceUntilIdle()
+
+        coVerify { addTaskUseCase("Buy milk", fixedDate, null, null, null, 2, null) }
+    }
+
+    @Test
+    fun addTask_emitsTaskAddedEffect_onSuccess() = runTest {
+        viewModel.addTask("Buy milk", fixedDate)
+        advanceUntilIdle()
+
+        assertEquals(PlanUiEffect.TaskAdded, viewModel.uiEffects.first())
     }
 
     // ── toggleTask ────────────────────────────────────────────────────────────
