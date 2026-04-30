@@ -343,6 +343,7 @@
     <string name="today_empty_cta_routine">Rutin oluştur</string>
     <string name="today_completed_show_more">Tamamlananları göster (%1$d)</string>
     <string name="today_completed_show_less">Daralt</string>
+    <string name="today_completed_summary">Bugün %1$d öğe tamamlandı</string>
     <string name="today_relative_yesterday">Dün planlanmıştı</string>
     <string name="today_relative_days_ago">%1$d gün önce planlanmıştı</string>
     <string name="today_summary_overdue">%1$d gecikiyor</string>
