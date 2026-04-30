@@ -1,4 +1,4 @@
-﻿@file:Suppress("SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection")
 package com.benimgunlerim.ui
 
 import androidx.compose.animation.core.Spring
@@ -191,7 +191,27 @@ fun BenimGunlerimApp(
                     },
                 )
             }
-            composable(Destination.Today.route) { TodayScreen() }
+            composable(Destination.Today.route) {
+                TodayScreen(
+                    onNavigateToRoutines = {
+                        navController.navigate(Destination.Routines.route) {
+                            popUpTo(Destination.Today.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onNavigateToPlan = {
+                        navController.navigate(Destination.Plan.route) {
+                            popUpTo(Destination.Today.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onOpenRoutineDetail = { routineId ->
+                        navController.navigate(AppDestination.RoutineDetailPattern.createRoute(routineId))
+                    },
+                )
+            }
             composable(Destination.Plan.route) { PlanScreen() }
             composable(Destination.Routines.route) {
                 RoutinesScreen(onNavigateToDetail = { routineId ->

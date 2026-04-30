@@ -45,6 +45,8 @@ data class UserPreferences(
     val quietHoursEnabled: Boolean = false,
     val quietHoursStart: String = "22:00",
     val quietHoursEnd: String = "07:00",
+    /** XP/kutlama konfeti ve tam ekran kutlama efektleri */
+    val celebrationEffectsEnabled: Boolean = true,
 )
 
 /** Exposes user preferences as a [Flow]. Exists to keep [DataExportService] testable without Android context. */
@@ -68,6 +70,7 @@ interface UserPreferencesAccess : UserPreferencesSource {
     suspend fun setQuietHoursEnabled(enabled: Boolean)
     suspend fun setQuietHoursStart(time: String)
     suspend fun setQuietHoursEnd(time: String)
+    suspend fun setCelebrationEffectsEnabled(enabled: Boolean)
 }
 
 @Singleton
@@ -100,6 +103,7 @@ class UserPreferencesRepository @Inject constructor(
         val quietHoursEnabled = booleanPreferencesKey("quiet_hours_enabled")
         val quietHoursStart = stringPreferencesKey("quiet_hours_start")
         val quietHoursEnd = stringPreferencesKey("quiet_hours_end")
+        val celebrationEffectsEnabled = booleanPreferencesKey("celebration_effects_enabled")
     }
 
     override val preferences: Flow<UserPreferences> = context.userPreferencesDataStore.data.map { prefs ->
@@ -128,6 +132,7 @@ class UserPreferencesRepository @Inject constructor(
             quietHoursEnabled = prefs[Keys.quietHoursEnabled] ?: false,
             quietHoursStart = prefs[Keys.quietHoursStart] ?: "22:00",
             quietHoursEnd = prefs[Keys.quietHoursEnd] ?: "07:00",
+            celebrationEffectsEnabled = prefs[Keys.celebrationEffectsEnabled] ?: true,
         )
     }
 
@@ -329,6 +334,12 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
+    override suspend fun setCelebrationEffectsEnabled(enabled: Boolean) {
+        context.userPreferencesDataStore.edit { prefs ->
+            prefs[Keys.celebrationEffectsEnabled] = enabled
+        }
+    }
+
     override suspend fun replacePreferences(preferences: UserPreferences) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.onboardingCompleted] = preferences.onboardingCompleted
@@ -356,6 +367,7 @@ class UserPreferencesRepository @Inject constructor(
             prefs[Keys.quietHoursEnabled] = preferences.quietHoursEnabled
             prefs[Keys.quietHoursStart] = preferences.quietHoursStart
             prefs[Keys.quietHoursEnd] = preferences.quietHoursEnd
+            prefs[Keys.celebrationEffectsEnabled] = preferences.celebrationEffectsEnabled
         }
     }
 }

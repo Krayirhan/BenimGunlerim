@@ -23,6 +23,7 @@ import com.benimgunlerim.notifications.TaskReminderScheduler
 import com.benimgunlerim.notifications.ensureMorningNotificationChannel
 import com.benimgunlerim.notifications.ensureRoutineNotificationChannel
 import com.benimgunlerim.notifications.ensureTaskNotificationChannel
+import com.benimgunlerim.domain.SystemDateTimeProvider
 import java.time.LocalDate
 import java.time.LocalTime
 import org.junit.Assert.assertNotNull
@@ -33,6 +34,7 @@ import org.junit.runner.RunWith
 class NotificationMatrixSmokeTest {
 
     private val context = ApplicationProvider.getApplicationContext<Context>()
+    private val dateTimeProvider = SystemDateTimeProvider()
 
     @Test
     fun notificationChannels_areCreated_onSupportedApiLevels() {
@@ -59,12 +61,12 @@ class NotificationMatrixSmokeTest {
             cancel("task_matrix_1")
         }
 
-        DailySummaryScheduler(context).apply {
+        DailySummaryScheduler(context, dateTimeProvider).apply {
             schedule(futureTime)
             cancel()
         }
 
-        MorningPlannerScheduler(context).apply {
+        MorningPlannerScheduler(context, dateTimeProvider).apply {
             schedule(futureTime)
             cancel()
         }
@@ -80,7 +82,7 @@ class NotificationMatrixSmokeTest {
             createdAt = System.currentTimeMillis(),
             updatedAt = System.currentTimeMillis(),
         )
-        RoutineReminderScheduler(context).apply {
+        RoutineReminderScheduler(context, dateTimeProvider).apply {
             schedule(routine)
             cancel(routine)
         }

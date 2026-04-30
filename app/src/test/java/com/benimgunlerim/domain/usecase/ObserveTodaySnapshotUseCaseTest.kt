@@ -47,6 +47,7 @@ class ObserveTodaySnapshotUseCaseTest {
         every { taskRepository.observeByDate(fixedDate) } returns flowOf(emptyList())
         every { routineRepository.observeActive() } returns flowOf(emptyList())
         every { completionLogRepository.observeByDate(fixedDate) } returns flowOf(emptyList())
+        every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         every { dailyStateRepository.observeToday() } returns flowOf(null)
         every { taskRepository.observeOverdue(any()) } returns flowOf(emptyList())
         every { prefsRepository.preferences } returns flowOf(UserPreferences())
@@ -129,6 +130,36 @@ class ObserveTodaySnapshotUseCaseTest {
         val snapshot = useCase(fixedDate).first()
 
         assertTrue("r1" in snapshot.completedRoutineIds)
+    }
+
+    @Test
+    fun invoke_usesAllLogsForCurrentStreaks() = runTest {
+        val routine = RoutineEntity(
+            id = "r1", name = "Egzersiz", description = null,
+            targetDays = "WEDNESDAY", preferredTime = null, color = null,
+            isArchived = false, createdAt = 1_000L, updatedAt = 1_000L,
+        )
+        val todayLog = CompletionLogEntity(
+            id = "log-today",
+            entityType = "routine",
+            entityId = "r1",
+            date = fixedDate.toString(),
+            completedAt = 1_000L,
+            status = "completed",
+            note = null,
+        )
+        val yesterdayLog = todayLog.copy(
+            id = "log-yesterday",
+            date = fixedDate.minusDays(1).toString(),
+        )
+        every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        every { completionLogRepository.observeByDate(fixedDate) } returns flowOf(listOf(todayLog))
+        every { completionLogRepository.observeAll() } returns flowOf(listOf(todayLog, yesterdayLog))
+
+        val snapshot = useCase(fixedDate).first()
+
+        assertEquals(2, snapshot.currentStreak)
+        assertEquals(2, snapshot.routineStreaks["r1"])
     }
 
     @Test

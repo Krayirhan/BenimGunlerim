@@ -29,6 +29,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Celebration
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.Notifications
@@ -234,6 +235,19 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                     onEndChange = { quietHoursEnd = it.sanitizedTimeInput() },
                     onSaveStart = { viewModel.setQuietHoursStart(quietHoursStart) },
                     onSaveEnd = { viewModel.setQuietHoursEnd(quietHoursEnd) },
+                )
+            }
+
+            item {
+                SectionHeader(
+                    title = stringResource(R.string.settings_section_experience),
+                    subtitle = stringResource(R.string.settings_section_experience_sub),
+                )
+            }
+            item {
+                CelebrationEffectsCard(
+                    enabled = preferences.celebrationEffectsEnabled,
+                    onEnabledChange = viewModel::setCelebrationEffectsEnabled,
                 )
             }
 
@@ -544,6 +558,33 @@ private fun MorningPlannerCard(
                 Spacer(Modifier.width(8.dp))
                 Text(stringResource(R.string.settings_save_time_btn))
             }
+        }
+    }
+}
+
+@Composable
+private fun CelebrationEffectsCard(
+    enabled: Boolean,
+    onEnabledChange: (Boolean) -> Unit,
+) {
+    SettingsCard(
+        accent = CandyPrimary,
+        icon = { Icon(Icons.Rounded.Celebration, contentDescription = null) },
+    ) {
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(Modifier.weight(1f)) {
+                Text(stringResource(R.string.settings_celebration_title), style = MaterialTheme.typography.titleMedium)
+                Text(
+                    stringResource(R.string.settings_celebration_subtitle),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Switch(checked = enabled, onCheckedChange = onEnabledChange)
         }
     }
 }

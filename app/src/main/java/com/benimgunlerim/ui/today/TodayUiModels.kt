@@ -21,4 +21,6 @@ data class TodayRoutineUi(
     val targetType: String,
     val targetValue: Int?,
     val targetUnit: String?,
+    val currentStreak: Int,
+    val bestStreak: Int,
 )

@@ -1,11 +1,15 @@
-﻿package com.benimgunlerim
+package com.benimgunlerim
 
 import android.content.Intent
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -54,6 +58,11 @@ class TodayScreenTest {
     }
 
     @Test
+    fun today_snapshot_error_banner_hidden_when_load_ok() {
+        composeTestRule.onAllNodesWithTag(TestTags.TodaySnapshotErrorBanner).assertCountEquals(0)
+    }
+
+    @Test
     fun routines_tab_is_accessible_via_nav_tag() {
         composeTestRule
             .onNodeWithTag(TestTags.BottomNavRoutines)
@@ -61,5 +70,23 @@ class TodayScreenTest {
         composeTestRule
             .onNodeWithTag(TestTags.RoutinesRoot)
             .assertIsDisplayed()
+    }
+
+    @Test
+    fun deleting_completed_task_shows_confirmation_dialog() {
+        val title = "Tamamlanmis test gorevi"
+
+        composeTestRule.onNodeWithTag(TestTags.TodayFab).performClick()
+        composeTestRule.onNodeWithText("Görev adı").performTextInput(title)
+        composeTestRule.onNodeWithText("Kaydet").performClick()
+
+        // Mark it completed first.
+        composeTestRule.onNodeWithContentDescription("Tamamlandı olarak işaretle").performClick()
+
+        // Try to delete from overflow menu.
+        composeTestRule.onNodeWithContentDescription("Görev menüsü").performClick()
+        composeTestRule.onNodeWithText("Sil").performClick()
+
+        composeTestRule.onNodeWithText("Tamamlanan görevi sil?").assertIsDisplayed()
     }
 }

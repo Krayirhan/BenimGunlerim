@@ -1,4 +1,4 @@
-﻿package com.benimgunlerim.ui.settings
+package com.benimgunlerim.ui.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -81,6 +81,10 @@ class SettingsViewModel @Inject constructor(
 
     fun setThemeMode(mode: String) {
         viewModelScope.launch { preferencesRepository.setThemeMode(mode) }
+    }
+
+    fun setCelebrationEffectsEnabled(enabled: Boolean) {
+        viewModelScope.launch { preferencesRepository.setCelebrationEffectsEnabled(enabled) }
     }
 
     fun clearLocalData() {

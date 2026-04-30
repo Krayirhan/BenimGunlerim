@@ -3,6 +3,9 @@ package com.benimgunlerim.ui.today
 import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
+import com.benimgunlerim.data.local.entity.DailyStateEntity
+import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.AchievementTracker
@@ -10,6 +13,7 @@ import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
 import com.benimgunlerim.domain.TickerProvider
 import com.benimgunlerim.domain.model.GameEvent
+import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.domain.service.GrantResult
 import com.benimgunlerim.domain.service.RewardDisplayService
@@ -35,6 +39,10 @@ import com.benimgunlerim.domain.usecase.ToggleTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
+import com.benimgunlerim.ui.theme.CandyPrimary
+import com.benimgunlerim.ui.theme.CandySecondary
+import com.benimgunlerim.ui.theme.LevelSky
+import com.benimgunlerim.ui.theme.StreakCoral
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -43,11 +51,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.toList
+import io.mockk.coVerifyOrder
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -129,35 +140,7 @@ class TodayViewModelTest {
         every { observeTodaySnapshotUseCase(any()) } returns flowOf(emptySnapshot())
         every { observeDailyStateUseCase(any()) } returns flowOf(null)
 
-        viewModel = TodayViewModel(
-            prefsRepository,
-            analyticsTracker,
-            achievementTracker,
-            feedbackManager,
-            rewardDisplayService,
-            dateTimeProvider,
-            addTaskUseCase,
-            updateTaskTitleUseCase,
-            moveTaskToDateUseCase,
-            updateTaskUseCase,
-            deleteTaskUseCase,
-            restoreTaskUseCase,
-            setTaskPendingUseCase,
-            observeSubTasksUseCase,
-            addSubTaskUseCase,
-            toggleSubTaskUseCase,
-            deleteSubTaskUseCase,
-            toggleTaskUseCase,
-            toggleRoutineUseCase,
-            updateRoutineProgressUseCase,
-            closeDayUseCase,
-            carryPendingTasksUseCase,
-            observeDailyStateUseCase,
-            autoCloseMissedDayUseCase,
-            saveMissedDaySummaryUseCase,
-            tickerProvider,
-            observeTodaySnapshotUseCase,
-        )
+        viewModel = createViewModel()
     }
 
     @After
@@ -304,6 +287,182 @@ class TodayViewModelTest {
         collectJob.cancel()
     }
 
+    @Test
+    fun saveDailySummaryWithOptionalCarry_runsCarryBeforeClose_andPassesCount() = runTest {
+        coEvery { carryPendingTasksUseCase() } returns 4
+        coEvery {
+            closeDayUseCase(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } returns CloseDayUseCase.Result(
+            dayCloseReward = GrantResult.Granted(xpGranted = 10, goldGranted = 0),
+            perfectDayReward = GrantResult.AlreadyGranted,
+        )
+
+        viewModel.saveDailySummaryWithOptionalCarry(
+            note = "not",
+            mood = 2,
+            energy = 3,
+            bestMoment = "",
+            challenge = "",
+            tomorrowIntention = "",
+            carryOverdueToTomorrow = true,
+        )
+        advanceUntilIdle()
+
+        coVerifyOrder {
+            carryPendingTasksUseCase()
+            closeDayUseCase(
+                fixedDate,
+                2,
+                "not",
+                0f,
+                3,
+                "",
+                "",
+                "",
+                4,
+                0,
+            )
+        }
+    }
+
+    @Test
+    fun saveDailySummaryWithOptionalCarry_whenRewardsAlreadyGranted_skipsBonusDisplay() = runTest {
+        coEvery {
+            closeDayUseCase(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } returns CloseDayUseCase.Result(
+            dayCloseReward = GrantResult.AlreadyGranted,
+            perfectDayReward = GrantResult.AlreadyGranted,
+        )
+
+        viewModel.saveDailySummaryWithOptionalCarry(
+            note = "",
+            mood = 0,
+            carryOverdueToTomorrow = false,
+        )
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { rewardDisplayService.onDailyBonusEarned(any(), any()) }
+    }
+
+    @Test
+    fun retrySnapshotLoad_reconnectsAfterSnapshotError() = runTest {
+        var attempt = 0
+        every { observeTodaySnapshotUseCase(any()) } answers {
+            attempt++
+            if (attempt == 1) {
+                flow<TodaySnapshot> { throw IllegalStateException("boom") }
+            } else {
+                flowOf(emptySnapshot())
+            }
+        }
+        viewModel = createViewModel()
+        val errorState = viewModel.uiState.first { !it.isLoading }
+
+        assertTrue(errorState.snapshotLoadError)
+
+        viewModel.retrySnapshotLoad()
+        val recoveredState = viewModel.uiState.first { !it.isLoading && !it.snapshotLoadError }
+
+        assertFalse(recoveredState.snapshotLoadError)
+    }
+
+    @Test
+    fun closedDay_blocksTaskAndSubTaskMutations() = runTest {
+        val task = pendingTask("closed-task")
+        val routine = routine("closed-routine", targetType = RoutineTargetType.GOAL.value, targetValue = 4)
+        val subTask = SubTaskEntity(
+            id = "sub-1",
+            taskId = task.id,
+            title = "Alt görev",
+            createdAt = 1_000L,
+        )
+        every { observeTodaySnapshotUseCase(any()) } returns flowOf(
+            emptySnapshot().copy(
+                tasks = listOf(task),
+                routines = listOf(routine),
+                todayState = closedDailyState(),
+            ),
+        )
+        viewModel = createViewModel()
+
+        viewModel.uiState.first { !it.isLoading }
+        viewModel.addTask("Kapalı günde görev")
+        viewModel.updateTaskTitle(task, "Yeni başlık")
+        viewModel.updateTask(task, "Yeni başlık", null, fixedDate, null, null, 2, null)
+        viewModel.deleteTask(task)
+        viewModel.moveTaskToDate(task, fixedDate.plusDays(1))
+        viewModel.addSubTask(task.id, "Alt görev")
+        viewModel.toggleSubTask(subTask)
+        viewModel.deleteSubTask(subTask)
+        viewModel.undoTaskToggle(task.id)
+        viewModel.toggleRoutine(routine.id, completedToday = false)
+        viewModel.updateRoutineProgress(routine.id, 2f, wasCompleted = false)
+        advanceUntilIdle()
+
+        coVerify(exactly = 0) { addTaskUseCase(any(), any(), any(), any(), any(), any(), any()) }
+        coVerify(exactly = 0) { updateTaskTitleUseCase(any(), any()) }
+        coVerify(exactly = 0) { updateTaskUseCase(any(), any(), any(), any(), any(), any(), any(), any()) }
+        coVerify(exactly = 0) { deleteTaskUseCase(any()) }
+        coVerify(exactly = 0) { moveTaskToDateUseCase(any(), any()) }
+        coVerify(exactly = 0) { addSubTaskUseCase(any(), any()) }
+        coVerify(exactly = 0) { toggleSubTaskUseCase(any()) }
+        coVerify(exactly = 0) { deleteSubTaskUseCase(any()) }
+        coVerify(exactly = 0) { setTaskPendingUseCase(any()) }
+        coVerify(exactly = 0) { toggleRoutineUseCase(any(), any(), any(), any(), any()) }
+        coVerify(exactly = 0) { updateRoutineProgressUseCase(any(), any(), any(), any(), any(), any()) }
+    }
+
+    @Test
+    fun moveAllOverdueTo_emitsMovedCount() = runTest {
+        val old1 = pendingTask("old-1").copy(plannedDate = fixedDate.minusDays(2).toString())
+        val old2 = pendingTask("old-2").copy(plannedDate = fixedDate.minusDays(1).toString())
+        every { observeTodaySnapshotUseCase(any()) } returns flowOf(
+            emptySnapshot().copy(overdueTasks = listOf(old1, old2)),
+        )
+        viewModel = createViewModel()
+        viewModel.uiState.first { !it.isLoading }
+        val effect = async {
+            viewModel.uiEffects.first { it is TodayUiEffect.OverdueTasksMoved } as TodayUiEffect.OverdueTasksMoved
+        }
+
+        viewModel.moveAllOverdueTo(fixedDate)
+        advanceUntilIdle()
+
+        assertEquals(2, effect.await().count)
+        coVerify { moveTaskToDateUseCase(old1, fixedDate) }
+        coVerify { moveTaskToDateUseCase(old2, fixedDate) }
+    }
+
+    @Test
+    fun categoryPalette_matchesTurkishKeywords() {
+        assertEquals(LevelSky, CategoryPalette.colorFor("\u0130\u015f toplant\u0131s\u0131"))
+        assertEquals(CandyPrimary, CategoryPalette.colorFor("Sa\u011fl\u0131k y\u00fcr\u00fcy\u00fc\u015f"))
+        assertEquals(CandySecondary, CategoryPalette.colorFor("Al\u0131\u015fveri\u015f listesi"))
+        assertEquals(StreakCoral, CategoryPalette.colorFor("\u00c7ocuk g\u00fcnl\u00fck notu"))
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private fun pendingTask(id: String) = TaskEntity(
@@ -323,6 +482,26 @@ class TodayViewModelTest {
         updatedAt = 1_000L,
     )
 
+    private fun routine(
+        id: String,
+        targetType: String = RoutineTargetType.CHECK.value,
+        targetValue: Int? = null,
+    ) = RoutineEntity(
+        id = id,
+        name = "Test rutini $id",
+        description = null,
+        targetDays = "1,2,3,4,5,6,7",
+        preferredTime = "08:00",
+        color = null,
+        isArchived = false,
+        createdAt = 1_000L,
+        updatedAt = 1_000L,
+        targetType = targetType,
+        targetValue = targetValue,
+        targetUnit = "kez",
+        bestStreak = 5,
+    )
+
     private fun emptySnapshot() = TodaySnapshot(
         tasks = emptyList(),
         routines = emptyList(),
@@ -333,5 +512,46 @@ class TodayViewModelTest {
         gameState = UserPreferences(),
         todayState = null,
         overdueTasks = emptyList(),
+    )
+
+    private fun createViewModel() = TodayViewModel(
+        prefsRepository,
+        analyticsTracker,
+        achievementTracker,
+        feedbackManager,
+        rewardDisplayService,
+        dateTimeProvider,
+        addTaskUseCase,
+        updateTaskTitleUseCase,
+        moveTaskToDateUseCase,
+        updateTaskUseCase,
+        deleteTaskUseCase,
+        restoreTaskUseCase,
+        setTaskPendingUseCase,
+        observeSubTasksUseCase,
+        addSubTaskUseCase,
+        toggleSubTaskUseCase,
+        deleteSubTaskUseCase,
+        toggleTaskUseCase,
+        toggleRoutineUseCase,
+        updateRoutineProgressUseCase,
+        closeDayUseCase,
+        carryPendingTasksUseCase,
+        observeDailyStateUseCase,
+        autoCloseMissedDayUseCase,
+        saveMissedDaySummaryUseCase,
+        tickerProvider,
+        observeTodaySnapshotUseCase,
+    )
+
+    private fun closedDailyState() = DailyStateEntity(
+        date = fixedDate.toString(),
+        mood = "iyi",
+        energyLevel = 3,
+        completionRate = 0f,
+        note = null,
+        reflection = null,
+        dailyScore = 0,
+        closedAt = 1_000L,
     )
 }

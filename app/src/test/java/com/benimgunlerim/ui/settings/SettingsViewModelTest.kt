@@ -85,6 +85,7 @@ class SettingsViewModelTest {
         override suspend fun setQuietHoursEnabled(enabled: Boolean) { quietHoursEnabled = enabled }
         override suspend fun setQuietHoursStart(time: String) { quietHoursStart = time }
         override suspend fun setQuietHoursEnd(time: String) { quietHoursEnd = time }
+        override suspend fun setCelebrationEffectsEnabled(enabled: Boolean) { /* tracked via preferences flow in tests if needed */ }
     }
 
     private class FakeLocalDataClearer : LocalDataClearer {

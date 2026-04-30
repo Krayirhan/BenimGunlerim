@@ -7,6 +7,7 @@ import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.currentStreak
+import com.benimgunlerim.data.currentStreakForEntity
 import com.benimgunlerim.data.isScheduledFor
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
@@ -29,6 +30,7 @@ data class TodaySnapshot(
     val completedRoutineIds: Set<String>,
     val progress: Float,
     val currentStreak: Int,
+    val routineStreaks: Map<String, Int> = emptyMap(),
     val gameState: UserPreferences,
     val todayState: DailyStateEntity?,
     val overdueTasks: List<TaskEntity>,
@@ -45,18 +47,22 @@ class ObserveTodaySnapshotUseCase @Inject constructor(
     operator fun invoke(today: LocalDate = dateTimeProvider.today()): Flow<TodaySnapshot> = combine(
         taskRepository.observeByDate(today),
         routineRepository.observeActive(),
-        completionLogRepository.observeByDate(today),
+        combine(
+            completionLogRepository.observeByDate(today),
+            completionLogRepository.observeAll(),
+        ) { todayLogs, allLogs -> todayLogs to allLogs },
         prefsRepository.preferences,
         combine(dailyStateRepository.observeToday(), taskRepository.observeOverdue(today)) { ds, ov -> ds to ov },
-    ) { tasks, routines, logs, prefs, (todayState, overdue) ->
+    ) { tasks, routines, logsPair, prefs, (todayState, overdue) ->
+        val (todayLogs, allLogs) = logsPair
         val todaysRoutines = routines.filter { it.isScheduledFor(today.dayOfWeek) }
-        val completedRoutineIds = logs.completedRoutineIds()
+        val completedRoutineIds = todayLogs.completedRoutineIds()
         val completedTasks = tasks.count { it.completionState == TaskCompletionState.COMPLETED.value }
         val completedRoutines = todaysRoutines.count { it.id in completedRoutineIds }
         TodaySnapshot(
             tasks = tasks,
             routines = todaysRoutines,
-            completionLogs = logs,
+            completionLogs = todayLogs,
             completedRoutineIds = completedRoutineIds,
             progress = ProgressCalculator.dailyProgress(
                 totalTasks = tasks.size,
@@ -64,7 +70,14 @@ class ObserveTodaySnapshotUseCase @Inject constructor(
                 totalRoutines = todaysRoutines.size,
                 completedRoutines = completedRoutines,
             ),
-            currentStreak = logs.currentStreak(today),
+            currentStreak = allLogs.currentStreak(today),
+            routineStreaks = todaysRoutines.associate { routine ->
+                routine.id to allLogs.currentStreakForEntity(
+                    CompletionEntityType.ROUTINE.value,
+                    routine.id,
+                    today,
+                )
+            },
             gameState = prefs,
             todayState = todayState,
             overdueTasks = overdue,

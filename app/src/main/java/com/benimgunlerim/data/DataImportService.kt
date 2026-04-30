@@ -216,6 +216,7 @@ class DataImportService @Inject constructor(
         quietHoursEnabled = optBoolean("quietHoursEnabled", false),
         quietHoursStart = optString("quietHoursStart", "22:00"),
         quietHoursEnd = optString("quietHoursEnd", "07:00"),
+        celebrationEffectsEnabled = optBoolean("celebrationEffectsEnabled", true),
     )
 
     private fun JSONArray?.orEmpty(): JSONArray = this ?: JSONArray()
