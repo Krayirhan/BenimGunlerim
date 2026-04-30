@@ -55,7 +55,7 @@ import com.benimgunlerim.ui.routines.RoutineDetailScreen
 import com.benimgunlerim.ui.routines.RoutinesScreen
 import com.benimgunlerim.ui.settings.SettingsScreen
 import com.benimgunlerim.ui.theme.CandyPrimary
-import com.benimgunlerim.ui.today.TodayScreen
+import com.benimgunlerim.ui.today.TodayRoute
 
 private enum class Destination(
     val route: String,
@@ -192,7 +192,7 @@ fun BenimGunlerimApp(
                 )
             }
             composable(Destination.Today.route) {
-                TodayScreen(
+                TodayRoute(
                     onNavigateToRoutines = {
                         navController.navigate(Destination.Routines.route) {
                             popUpTo(Destination.Today.route) { saveState = true }

@@ -5,6 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -13,6 +14,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.benimgunlerim.R
+import com.benimgunlerim.ui.today.theme.LocalTodayColorTokens
+import com.benimgunlerim.ui.today.theme.todayColorTokens
 
 // ── Nunito Font Family ────────────────────────────────────────────────────────
 val Nunito = FontFamily(
@@ -135,10 +138,14 @@ private val AppTypography = Typography(
 
 @Composable
 fun BenimGunlerimTheme(themeMode: String = "system", content: @Composable () -> Unit) {
-    MaterialTheme(
-        colorScheme = LightColors,
-        typography  = AppTypography,
-        content     = content,
-    )
+    CompositionLocalProvider(
+        LocalTodayColorTokens provides todayColorTokens(),
+    ) {
+        MaterialTheme(
+            colorScheme = LightColors,
+            typography = AppTypography,
+            content = content,
+        )
+    }
 }
 

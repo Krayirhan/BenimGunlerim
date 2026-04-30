@@ -106,6 +106,16 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.uiEffects.collect { effect ->
+            when (effect) {
+                PlanUiEffect.TaskAdded -> snackbarHost.showSnackbar(taskAdded)
+                PlanUiEffect.TaskDeleted -> snackbarHost.showSnackbar(taskDeleted)
+                PlanUiEffect.ActionFailed -> snackbarHost.showSnackbar(genericError)
+            }
+        }
+    }
+
     if (showAddSheet) {
         ModalBottomSheet(onDismissRequest = { showAddSheet = false }) {
             Column(
@@ -155,6 +165,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     Spacer(Modifier.width(8.dp))
                     TextButton(
                         enabled = addText.trim().isNotEmpty() && addText.trim().length <= 80,
+                        enabled = addText.trim().isNotEmpty(),
                         onClick = {
                             addAttempted = true
                             if (addText.trim().isEmpty()) return@TextButton

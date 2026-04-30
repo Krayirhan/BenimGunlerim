@@ -1,4 +1,4 @@
-package com.benimgunlerim
+﻿package com.benimgunlerim
 
 import android.content.Intent
 import androidx.compose.ui.test.assertCountEquals
@@ -54,6 +54,13 @@ class TodayScreenTest {
     fun today_fab_is_visible() {
         composeTestRule
             .onNodeWithTag(TestTags.TodayFab)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun today_close_day_card_is_visible() {
+        composeTestRule
+            .onNodeWithTag(TestTags.TodayCloseDayCard)
             .assertIsDisplayed()
     }
 

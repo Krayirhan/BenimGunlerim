@@ -94,7 +94,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.domain.model.GameEvent
@@ -111,6 +110,7 @@ import com.benimgunlerim.ui.theme.CompletedGreen
 import com.benimgunlerim.ui.theme.LevelSky
 import com.benimgunlerim.ui.theme.StreakCoral
 import com.benimgunlerim.ui.theme.XpGold
+import com.benimgunlerim.ui.today.theme.todayColorTokens
 import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.R
 import com.benimgunlerim.domain.validation.TimeInputValidator
@@ -131,7 +131,7 @@ private fun rememberSystemAnimationsDisabled(): Boolean {
 }
 
 @Composable
-private fun SnapshotErrorBanner(onRetry: () -> Unit) {
+internal fun SnapshotErrorBanner(onRetry: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -160,7 +160,7 @@ private fun SnapshotErrorBanner(onRetry: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(
-    viewModel: TodayViewModel = hiltViewModel(),
+    viewModel: TodayViewModel,
     onNavigateToRoutines: () -> Unit = {},
     onNavigateToPlan: () -> Unit = {},
     onOpenRoutineDetail: (String) -> Unit = {},
@@ -457,104 +457,24 @@ fun TodayScreen(
                 }
             },
         ) { padding ->
-            if (state.isLoading) {
-                Box(
-                    Modifier.fillMaxSize().background(HomeBackground()).padding(padding),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(color = CandyPrimary)
-                }
-            } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(HomeBackground())
-                    .padding(padding),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 140.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-            ) {
-                if (state.snapshotLoadError) {
-                    item(key = "snapshot_err") {
-                        SnapshotErrorBanner(onRetry = { viewModel.retrySnapshotLoad() })
-                    }
-                }
-                item(key = "header") {
-                    TodayHeaderCard(
-                        today = today,
-                        streak = state.currentStreak,
-                        happiness = state.gameState.happiness,
-                        completed = completed,
-                        total = total,
-                        progress = state.progress,
-                    )
-                }
-                item(key = "list") {
-                    TodayList(
-                        today = today,
-                        routines = state.routines,
-                        tasks = state.tasks,
-                        overdueTasks = state.overdueTasks,
-                        completedRoutineIds = state.completedRoutineIds,
-                        completionLogs = state.completionLogs,
-                        onToggleRoutine = {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            viewModel.toggleRoutine(it.id, completedToday = it.id in state.completedRoutineIds)
-                        },
-                        onRoutineProgressChange = { routine, value, wasCompleted ->
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            viewModel.updateRoutineProgress(routine.id, value, wasCompleted)
-                        },
-                        onOpenRoutineDetail = { onOpenRoutineDetail(it.id) },
-                        onToggleTask = { task ->
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            viewModel.toggleTask(task.id)
-                        },
-                        onOpenTask = { selectedTaskId = it.id },
-                        onDeleteTask = { task ->
-                            if (task.completionState == TaskCompletionState.COMPLETED.value) {
-                                pendingDeleteTask = task
-                            } else {
-                                viewModel.deleteTask(task.id)
-                            }
-                        },
-                        snapshotLoadError = state.snapshotLoadError,
-                        dayLocked = dayIsClosed,
-                        onMoveOverdueToday = { viewModel.moveTaskToDate(it.id, today) },
-                        onMoveAllOverdueToday = { viewModel.moveAllOverdueTo(today) },
-                        onMoveAllOverdueTomorrow = { viewModel.moveAllOverdueTo(today.plusDays(1)) },
-                        onAddTask = { showAddSheet = true },
-                        onNavigateToRoutines = onNavigateToRoutines,
-                        onNavigateToPlan = onNavigateToPlan,
-                    )
-                }
-                val capturedMissedDay = state.missedDay
-                if (capturedMissedDay != null) {
-                    item(key = "missedDay") {
-                        MissedDayBanner(
-                            date = capturedMissedDay,
-                            onReview = { showMissedDaySheet = true },
-                            onDismiss = { viewModel.autoSaveMissedDay(capturedMissedDay) },
-                        )
-                    }
-                }
-                item(key = "closeDay") {
-                    CloseDayCard(
-                        completed = completed,
-                        total = total,
-                        progress = state.progress,
-                        isClosed = dayIsClosed,
-                        mood = state.todayState?.mood,
-                        closedNote = state.todayState?.note,
-                        closedEnergyLevel = state.todayState?.energyLevel,
-                        canCloseDay = state.canCloseDay,
-                        dailySummaryTime = state.dailySummaryTime,
-                    ) { showCloseSheet = true }
-                }
-                item(key = "fab_safe_space") {
-                    Spacer(Modifier.height(16.dp))
-                }
-            }
-            } // end if (!isLoading)
+            TodayContent(
+                state = state,
+                today = today,
+                completed = completed,
+                total = total,
+                dayIsClosed = dayIsClosed,
+                padding = padding,
+                haptic = haptic,
+                viewModel = viewModel,
+                onNavigateToRoutines = onNavigateToRoutines,
+                onNavigateToPlan = onNavigateToPlan,
+                onOpenRoutineDetail = onOpenRoutineDetail,
+                onOpenTask = { selectedTaskId = it },
+                onShowAddTaskSheet = { showAddSheet = true },
+                onShowMissedDaySheet = { showMissedDaySheet = true },
+                onShowCloseDaySheet = { showCloseSheet = true },
+                onConfirmDeleteCompletedTask = { pendingDeleteTask = it },
+            )
         }
 
         ConfettiOverlay(showConfetti, confettiIntensity) { showConfetti = false }
@@ -588,10 +508,10 @@ fun TodayScreen(
 }
 
 @Composable
-private fun HomeBackground(): Brush = Brush.verticalGradient(
+internal fun HomeBackground(): Brush = Brush.verticalGradient(
     listOf(
-        Color(0xFFF7F6FF),
-        Color(0xFFFFFFFF),
+        MaterialTheme.todayColorTokens.backgroundTop,
+        MaterialTheme.todayColorTokens.backgroundBottom,
     ),
 )
 
@@ -599,10 +519,20 @@ private fun HomeBackground(): Brush = Brush.verticalGradient(
 private fun mutedAccent(color: Color): Color = lerp(color, MaterialTheme.colorScheme.surface, 0.40f)
 
 private data class TodayLayoutMetrics(
+    val isCompact: Boolean,
+    val headerCorner: Dp,
+    val headerPadding: Dp,
+    val headerSpacing: Dp,
+    val headerMetaSpacing: Dp,
+    val headerProgressHeight: Dp,
     val sectionCorner: Dp,
     val sectionPaddingHorizontal: Dp,
     val sectionPaddingVertical: Dp,
     val sectionItemSpacing: Dp,
+    val listBlockSpacing: Dp,
+    val summaryBlockSpacing: Dp,
+    val dividerTopPadding: Dp,
+    val dividerBottomPadding: Dp,
     val itemCorner: Dp,
     val itemMinHeight: Dp,
     val itemContentHorizontal: Dp,
@@ -618,20 +548,31 @@ private data class TodayLayoutMetrics(
 @Composable
 private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics {
     val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val scale = (screenWidthDp / 411f).coerceIn(0.92f, 1.08f)
+    val isCompact = screenWidthDp < 380
+    val scale = (screenWidthDp / 411f).coerceIn(if (isCompact) 0.9f else 0.94f, if (isCompact) 1.0f else 1.1f)
     fun s(value: Float): Dp = (value * scale).dp
-    return remember(screenWidthDp) {
+    return remember(screenWidthDp, isCompact) {
         TodayLayoutMetrics(
-            sectionCorner = s(16f),
-            sectionPaddingHorizontal = s(12f),
-            sectionPaddingVertical = s(10f),
-            sectionItemSpacing = s(8f),
+            isCompact = isCompact,
+            headerCorner = s(if (isCompact) 24f else 28f),
+            headerPadding = s(if (isCompact) 14f else 16f),
+            headerSpacing = s(if (isCompact) 8f else 10f),
+            headerMetaSpacing = s(if (isCompact) 2f else 3f),
+            headerProgressHeight = s(if (isCompact) 7f else 8f),
+            sectionCorner = s(if (isCompact) 14f else 16f),
+            sectionPaddingHorizontal = s(if (isCompact) 10f else 12f),
+            sectionPaddingVertical = s(if (isCompact) 9f else 10f),
+            sectionItemSpacing = s(if (isCompact) 7f else 8f),
+            listBlockSpacing = s(if (isCompact) 9f else 10f),
+            summaryBlockSpacing = s(2f),
+            dividerTopPadding = s(4f),
+            dividerBottomPadding = s(2f),
             itemCorner = s(20f),
-            itemMinHeight = s(82f),
+            itemMinHeight = s(if (isCompact) 78f else 82f),
             itemContentHorizontal = s(12f),
-            itemContentVertical = s(11f),
+            itemContentVertical = s(if (isCompact) 10f else 11f),
             accentRailWidth = s(2f),
-            accentRailHeight = s(68f),
+            accentRailHeight = s(if (isCompact) 64f else 68f),
             iconButtonSize = s(40f),
             metaChipVertical = s(2f),
             routineControlCorner = s(12f),
@@ -641,7 +582,7 @@ private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics {
 }
 
 @Composable
-private fun TodayHeaderCard(
+internal fun TodayHeaderCard(
     today: LocalDate,
     streak: Int,
     happiness: Int,
@@ -649,6 +590,7 @@ private fun TodayHeaderCard(
     total: Int,
     progress: Float,
 ) {
+    val metrics = rememberTodayLayoutMetrics()
     val date = remember(today) {
         today
             .format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale("tr", "TR")))
@@ -665,18 +607,18 @@ private fun TodayHeaderCard(
     Box(
         Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(28.dp))
-            .background(Color(0xFF66AE90))
-            .border(1.dp, Color(0xFF5C9F84), RoundedCornerShape(28.dp))
-            .padding(16.dp),
+            .clip(RoundedCornerShape(metrics.headerCorner))
+            .background(MaterialTheme.todayColorTokens.headerSurface)
+            .border(1.dp, MaterialTheme.todayColorTokens.headerBorder, RoundedCornerShape(metrics.headerCorner))
+            .padding(metrics.headerPadding),
     ) {
-        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Column(verticalArrangement = Arrangement.spacedBy(metrics.headerSpacing)) {
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(metrics.headerMetaSpacing)) {
                     Text(
                         date,
                         style = MaterialTheme.typography.labelMedium,
@@ -704,14 +646,14 @@ private fun TodayHeaderCard(
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .height(8.dp)
+                    .height(metrics.headerProgressHeight)
                     .clip(RoundedCornerShape(99.dp))
                     .background(Color.White.copy(.20f)),
             ) {
                 Box(
                     Modifier
                         .fillMaxWidth(animated)
-                        .height(8.dp)
+                        .height(metrics.headerProgressHeight)
                         .clip(RoundedCornerShape(99.dp))
                         .background(Color.White.copy(.88f)),
                 )
@@ -721,7 +663,7 @@ private fun TodayHeaderCard(
 }
 
 @Composable
-private fun TodayList(
+internal fun TodayList(
     today: LocalDate,
     routines: List<TodayRoutineUi>,
     tasks: List<TodayTaskUi>,
@@ -730,18 +672,7 @@ private fun TodayList(
     completionLogs: List<CompletionLogEntity>,
     snapshotLoadError: Boolean,
     dayLocked: Boolean,
-    onToggleRoutine: (TodayRoutineUi) -> Unit,
-    onRoutineProgressChange: (TodayRoutineUi, Float, Boolean) -> Unit,
-    onOpenRoutineDetail: (TodayRoutineUi) -> Unit,
-    onToggleTask: (TodayTaskUi) -> Unit,
-    onOpenTask: (TodayTaskUi) -> Unit,
-    onDeleteTask: (TodayTaskUi) -> Unit,
-    onMoveOverdueToday: (TodayTaskUi) -> Unit,
-    onMoveAllOverdueToday: () -> Unit,
-    onMoveAllOverdueTomorrow: () -> Unit,
-    onAddTask: () -> Unit,
-    onNavigateToRoutines: () -> Unit,
-    onNavigateToPlan: () -> Unit,
+    actions: TodayListActions,
 ) {
     var completedExpanded by remember { mutableStateOf(false) }
     val metrics = rememberTodayLayoutMetrics()
@@ -760,8 +691,8 @@ private fun TodayList(
     }
     val completedTotal = completedTasks.size + completedRoutines.size
     val completedHeavy = completedTotal > 3
-    val visibleCompletedTasks = if (!completedHeavy || completedExpanded) completedTasks else completedTasks.take(2)
-    val visibleCompletedRoutines = if (!completedHeavy || completedExpanded) completedRoutines else completedRoutines.take(1)
+    val visibleCompletedTasks = if (completedExpanded) completedTasks else completedTasks.take(2)
+    val visibleCompletedRoutines = if (completedExpanded) completedRoutines else completedRoutines.take(1)
     val routineLogsById = remember(completionLogs) {
         completionLogs
             .filter { it.entityType == CompletionEntityType.ROUTINE.value }
@@ -787,8 +718,8 @@ private fun TodayList(
         else -> stringResource(R.string.today_guidance_all_done)
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(metrics.listBlockSpacing)) {
+        Column(verticalArrangement = Arrangement.spacedBy(metrics.summaryBlockSpacing)) {
             Text(
                 text = readableSummary,
                 style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
@@ -796,8 +727,8 @@ private fun TodayList(
             )
             Text(
                 text = guidance,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(.74f),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(.66f),
             )
         }
 
@@ -807,9 +738,9 @@ private fun TodayList(
                 return@Column
             }
             EmptyTodayOnboarding(
-                onAddTask = onAddTask,
-                onNavigateToPlan = onNavigateToPlan,
-                onNavigateToRoutines = onNavigateToRoutines,
+                onAddTask = actions.onAddTask,
+                onNavigateToPlan = actions.onNavigateToPlan,
+                onNavigateToRoutines = actions.onNavigateToRoutines,
             )
             return@Column
         }
@@ -820,51 +751,56 @@ private fun TodayList(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                TextButton(onClick = onMoveAllOverdueToday, enabled = !dayLocked) {
+                TextButton(onClick = actions.onMoveAllOverdueToday, enabled = !dayLocked) {
                     Text(stringResource(R.string.today_bulk_all_today))
                 }
-                TextButton(onClick = onMoveAllOverdueTomorrow, enabled = !dayLocked) {
+                TextButton(onClick = actions.onMoveAllOverdueTomorrow, enabled = !dayLocked) {
                     Text(stringResource(R.string.today_bulk_all_tomorrow))
                 }
             }
             sortedOverdueTasks.forEach { task ->
-                OverdueTaskRow(
-                    task = task,
-                    today = today,
-                    interactionLocked = dayLocked,
-                    onToggle = onToggleTask,
-                    onOpen = onOpenTask,
-                    onMoveToday = onMoveOverdueToday,
-                )
+                Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayOverdueRow(task.id))) {
+                    OverdueTaskRow(
+                        task = task,
+                        today = today,
+                        interactionLocked = dayLocked,
+                        onToggle = actions.onToggleTask,
+                        onOpen = actions.onOpenTask,
+                        onMoveToday = actions.onMoveOverdueToday,
+                    )
+                }
             }
         }
 
         if (openTasks.isNotEmpty() || openRoutines.isNotEmpty()) {
             QuietDivider(stringResource(R.string.today_focus_now_label))
-            if (!dayLocked && sortedOpenTasks.isNotEmpty()) {
+            if (!dayLocked && sortedOpenTasks.size >= 2) {
                 Text(
                     stringResource(R.string.today_swipe_delete_hint),
                     modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodaySwipeHint),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(0.72f),
+                    color = MaterialTheme.colorScheme.onSurface.copy(0.62f),
                 )
             }
             if (sortedOpenTasks.isNotEmpty()) {
                 SectionCard(
                     title = stringResource(R.string.today_tasks_subsection),
                     tint = mutedAccent(CandyPrimary),
-                    containerColor = Color(0xFFF2F5FF),
-                    borderColor = Color(0xFFD0DAF2),
+                    containerColor = MaterialTheme.todayColorTokens.tasksSectionSurface,
+                    borderColor = MaterialTheme.todayColorTokens.tasksSectionBorder,
                     metrics = metrics,
+                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayTasksSection),
                 ) {
                     sortedOpenTasks.forEach { task ->
-                        SwipeableTaskRow(
-                            task = task,
-                            interactionLocked = dayLocked,
-                            onToggle = onToggleTask,
-                            onOpen = onOpenTask,
-                            onDelete = onDeleteTask,
-                        )
+                        Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayTaskRow(task.id))) {
+                            SwipeableTaskRow(
+                                task = task,
+                                interactionLocked = dayLocked,
+                                onToggle = actions.onToggleTask,
+                                onOpen = actions.onOpenTask,
+                                onDelete = actions.onDeleteTask,
+                            )
+                        }
                     }
                 }
             }
@@ -879,56 +815,81 @@ private fun TodayList(
                 SectionCard(
                     title = stringResource(R.string.today_routines_subsection),
                     tint = mutedAccent(LevelSky),
-                    containerColor = Color(0xFFF2FAF4),
-                    borderColor = Color(0xFFCEE4D4),
+                    containerColor = MaterialTheme.todayColorTokens.routinesSectionSurface,
+                    borderColor = MaterialTheme.todayColorTokens.routinesSectionBorder,
                     metrics = metrics,
+                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayRoutinesSection),
                 ) {
                     sortedOpenRoutines.forEach { routine ->
-                        RoutineRow(
-                            routine = routine,
-                            log = routineLogsById[routine.id],
-                            done = false,
-                            interactionLocked = dayLocked,
-                            onToggle = onToggleRoutine,
-                            onProgressChange = onRoutineProgressChange,
-                            onOpenDetail = onOpenRoutineDetail,
-                        )
+                        Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayRoutineRow(routine.id))) {
+                            RoutineRow(
+                                routine = routine,
+                                log = routineLogsById[routine.id],
+                                done = false,
+                                interactionLocked = dayLocked,
+                                onToggle = actions.onToggleRoutine,
+                                onProgressChange = actions.onRoutineProgressChange,
+                                onOpenDetail = actions.onOpenRoutineDetail,
+                            )
+                        }
                     }
                 }
             }
         }
 
         if (completedTasks.isNotEmpty() || completedRoutines.isNotEmpty()) {
-            QuietDivider(stringResource(R.string.today_completed_label))
-            visibleCompletedTasks.forEach { task ->
-                SwipeableTaskRow(
-                    task = task,
-                    interactionLocked = dayLocked,
-                    onToggle = onToggleTask,
-                    onOpen = onOpenTask,
-                    onDelete = onDeleteTask,
-                )
-            }
-            visibleCompletedRoutines.forEach { routine ->
-                RoutineRow(
-                    routine = routine,
-                    log = routineLogsById[routine.id],
-                    done = true,
-                    interactionLocked = dayLocked,
-                    onToggle = onToggleRoutine,
-                    onProgressChange = onRoutineProgressChange,
-                    onOpenDetail = onOpenRoutineDetail,
-                )
-            }
-            if (completedHeavy) {
-                TextButton(onClick = { completedExpanded = !completedExpanded }) {
-                    Text(
-                        if (completedExpanded) {
-                            stringResource(R.string.today_completed_show_less)
-                        } else {
-                            stringResource(R.string.today_completed_show_more, completedTotal)
-                        },
-                    )
+            QuietDivider(stringResource(R.string.today_completed_label), Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayCompletedSection))
+            if (!completedExpanded) {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.35f), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 12.dp, vertical = 10.dp),
+                ) {
+                    Row(
+                        Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Text(
+                            text = stringResource(R.string.today_completed_summary, completedTotal),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.82f),
+                        )
+                        TextButton(onClick = { completedExpanded = true }) {
+                            Text(stringResource(R.string.today_completed_show_more, completedTotal))
+                        }
+                    }
+                }
+            } else {
+                visibleCompletedTasks.forEach { task ->
+                    Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayTaskRow(task.id))) {
+                        SwipeableTaskRow(
+                            task = task,
+                            interactionLocked = dayLocked,
+                            onToggle = actions.onToggleTask,
+                            onOpen = actions.onOpenTask,
+                            onDelete = actions.onDeleteTask,
+                        )
+                    }
+                }
+                visibleCompletedRoutines.forEach { routine ->
+                    Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayRoutineRow(routine.id))) {
+                        RoutineRow(
+                            routine = routine,
+                            log = routineLogsById[routine.id],
+                            done = true,
+                            interactionLocked = dayLocked,
+                            onToggle = actions.onToggleRoutine,
+                            onProgressChange = actions.onRoutineProgressChange,
+                            onOpenDetail = actions.onOpenRoutineDetail,
+                        )
+                    }
+                }
+                TextButton(onClick = { completedExpanded = false }) {
+                    Text(stringResource(R.string.today_completed_show_less))
                 }
             }
         }
@@ -967,13 +928,14 @@ private fun EmptyTodayOnboarding(
 }
 
 @Composable
-private fun QuietDivider(label: String) {
+private fun QuietDivider(label: String, modifier: Modifier = Modifier) {
+    val metrics = rememberTodayLayoutMetrics()
     Text(
         text = label,
         style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.78f),
-        modifier = Modifier
-            .padding(top = 4.dp, bottom = 2.dp)
+        modifier = modifier
+            .padding(top = metrics.dividerTopPadding, bottom = metrics.dividerBottomPadding)
             .semantics { heading() },
     )
 }
@@ -995,10 +957,11 @@ private fun SectionCard(
     containerColor: Color,
     borderColor: Color,
     metrics: TodayLayoutMetrics,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(metrics.sectionCorner))
             .background(containerColor)
@@ -1048,6 +1011,7 @@ private fun OverdueTaskRow(
     onMoveToday: (TodayTaskUi) -> Unit,
 ) {
     val done = task.completionState == TaskCompletionState.COMPLETED.value
+    val openTaskLabel = stringResource(R.string.today_task_open_cd)
     val plannedLabel = runCatching { LocalDate.parse(task.plannedDate) }.getOrNull()?.let { date ->
         val days = ChronoUnit.DAYS.between(date, today).toInt()
         when {
@@ -1059,7 +1023,7 @@ private fun OverdueTaskRow(
     ItemRow(done = done, color = StreakCoral) {
         CheckCircle(done, StreakCoral, enabled = !interactionLocked) { onToggle(task) }
         Column(
-            modifier = Modifier.weight(1f).clickable { onOpen(task) },
+            modifier = Modifier.weight(1f).clickable(onClickLabel = openTaskLabel) { onOpen(task) },
             verticalArrangement = Arrangement.spacedBy(2.dp),
         ) {
             Text(
@@ -1102,6 +1066,7 @@ private fun TaskRow(
     val done = task.completionState == TaskCompletionState.COMPLETED.value
     val color = mutedAccent(task.color?.let(::parseColorOrNull) ?: CategoryPalette.colorFor(task.category ?: task.title))
     val overflowCd = stringResource(R.string.today_task_overflow_cd)
+    val openTaskLabel = stringResource(R.string.today_task_open_cd)
     val timeNone = stringResource(R.string.today_task_time_none_short)
     val priorityLabel = when (task.priority) {
         1 -> stringResource(R.string.today_priority_short_high)
@@ -1113,7 +1078,7 @@ private fun TaskRow(
     val notePreview = task.note?.trim()?.takeIf { it.isNotEmpty() }
     ItemRow(done = done, color = color) {
         CheckCircle(done, color, enabled = !interactionLocked) { onToggle(task) }
-        Column(Modifier.weight(1f).clickable { onOpen(task) }, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Column(Modifier.weight(1f).clickable(onClickLabel = openTaskLabel) { onOpen(task) }, verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
                 task.title,
                 style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, textDecoration = if (done) TextDecoration.LineThrough else null),
@@ -1186,6 +1151,7 @@ private fun SwipeableTaskRow(
     onOpen: (TodayTaskUi) -> Unit,
     onDelete: (TodayTaskUi) -> Unit,
 ) {
+    val metrics = rememberTodayLayoutMetrics()
     val swipeDeleteCd = stringResource(R.string.today_swipe_to_delete_cd)
     val dismissState = rememberSwipeToDismissBoxState(
         confirmValueChange = { value ->
@@ -1205,7 +1171,7 @@ private fun SwipeableTaskRow(
             Box(
                 Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(20.dp))
+                    .clip(RoundedCornerShape(metrics.itemCorner))
                     .background(StreakCoral.copy(.15f))
                     .semantics { contentDescription = swipeDeleteCd },
                 contentAlignment = Alignment.CenterEnd,
@@ -1477,7 +1443,7 @@ private fun EmptyBox(text: String, color: Color) {
 }
 
 @Composable
-private fun CloseDayCard(
+internal fun CloseDayCard(
     completed: Int,
     total: Int,
     progress: Float,
@@ -1489,6 +1455,7 @@ private fun CloseDayCard(
     dailySummaryTime: String,
     onClick: () -> Unit,
 ) {
+    val metrics = rememberTodayLayoutMetrics()
     if (isClosed) {
         // Day is closed — show summary state
         val moodColor = when (mood) {
@@ -1503,9 +1470,11 @@ private fun CloseDayCard(
             else -> stringResource(R.string.today_mood_closed)
         }
         Box(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.headerCorner))
                 .background(MaterialTheme.colorScheme.surface)
-                .border(1.dp, mutedAccent(CompletedGreen).copy(.30f), RoundedCornerShape(28.dp)).padding(20.dp),
+                .border(1.dp, mutedAccent(CompletedGreen).copy(.30f), RoundedCornerShape(metrics.headerCorner))
+                .padding(if (metrics.isCompact) 16.dp else 20.dp)
+                .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -1538,10 +1507,11 @@ private fun CloseDayCard(
     } else if (!canCloseDay) {
         // Before summary time — show locked state
         Box(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp))
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.sectionCorner))
                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(.6f))
-                .border(1.dp, MaterialTheme.colorScheme.outline.copy(.12f), RoundedCornerShape(18.dp))
-                .padding(horizontal = 14.dp, vertical = 12.dp),
+                .border(1.dp, MaterialTheme.colorScheme.outline.copy(.12f), RoundedCornerShape(metrics.sectionCorner))
+                .padding(horizontal = if (metrics.isCompact) 12.dp else 14.dp, vertical = if (metrics.isCompact) 10.dp else 12.dp)
+                .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
         ) {
             Row(
                 Modifier.fillMaxWidth(),
@@ -1557,18 +1527,25 @@ private fun CloseDayCard(
         }
     } else {
         Box(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(28.dp))
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.headerCorner))
                 .background(MaterialTheme.colorScheme.surface)
-                .border(1.dp, mutedAccent(CandySecondary).copy(.30f), RoundedCornerShape(28.dp)).padding(20.dp),
+                .border(1.dp, mutedAccent(CandySecondary).copy(.30f), RoundedCornerShape(metrics.headerCorner))
+                .padding(if (metrics.isCompact) 16.dp else 20.dp)
+                .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Pill(stringResource(R.string.today_locked_pill), CandySecondary)
                 Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)
                 Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
-                    Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
+                Box(Modifier.fillMaxWidth().height(metrics.headerProgressHeight).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
+                    Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(metrics.headerProgressHeight).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
                 }
-                Button(onClick = onClick, modifier = Modifier.fillMaxWidth().height(44.dp), shape = RoundedCornerShape(8.dp), colors = ButtonDefaults.buttonColors(CandySecondary, Color.White)) {
+                Button(
+                    onClick = onClick,
+                    modifier = Modifier.fillMaxWidth().height(if (metrics.isCompact) 42.dp else 44.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(CandySecondary, Color.White),
+                ) {
                     Text(stringResource(R.string.today_active_btn), maxLines = 1)
                 }
             }
@@ -1577,19 +1554,21 @@ private fun CloseDayCard(
 }
 
 @Composable
-private fun MissedDayBanner(
+internal fun MissedDayBanner(
     date: LocalDate,
     onReview: () -> Unit,
     onDismiss: () -> Unit,
 ) {
+    val metrics = rememberTodayLayoutMetrics()
     val label = remember(date) {
         date.format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale("tr", "TR")))
     }
     Box(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.itemCorner))
             .background(StreakCoral.copy(.08f))
-            .border(1.dp, StreakCoral.copy(.22f), RoundedCornerShape(20.dp))
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .border(1.dp, StreakCoral.copy(.22f), RoundedCornerShape(metrics.itemCorner))
+            .padding(horizontal = if (metrics.isCompact) 14.dp else 16.dp, vertical = if (metrics.isCompact) 10.dp else 12.dp)
+            .testTag(com.benimgunlerim.ui.TestTags.TodayMissedDayBanner),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
