@@ -22,6 +22,14 @@ object TestTags {
     fun todayRoutineRow(id: String) = "screen.today.routine.$id"
     fun todayOverdueRow(id: String) = "screen.today.overdue.$id"
 
+    // Plan Screen
+    const val PlanRoot = "screen.plan.root"
+    const val PlanFab = "screen.plan.add_task.button"
+    const val PlanSnapshotErrorBanner = "screen.plan.snapshot_error.banner"
+    const val PlanWeekPicker = "screen.plan.week_picker"
+    fun planTaskRow(id: String) = "screen.plan.task.$id"
+    fun planOverdueRow(id: String) = "screen.plan.overdue.$id"
+
     // ── Routines Screen ───────────────────────────────────────────────────
     const val RoutinesRoot = "screen.routines.root"
     const val RoutinesFab  = "screen.routines.add_routine.button"

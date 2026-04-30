@@ -93,6 +93,22 @@
     <string name="plan_overdue_title">Geciken görevler</string>
     <string name="plan_overdue_count">%1$d gecikiyor</string>
     <string name="plan_move_to_selected_day_cd">Seçili güne taşı</string>
+    <string name="plan_previous_week_cd">Önceki hafta</string>
+    <string name="plan_next_week_cd">Sonraki hafta</string>
+    <string name="plan_pick_date_cd">Tarih seç</string>
+    <string name="plan_pick_date_title">Planlanacak günü seç</string>
+    <string name="plan_today_action">Bugün</string>
+    <string name="plan_week_range">%1$s - %2$s</string>
+    <string name="plan_summary_total">Toplam</string>
+    <string name="plan_summary_completed">Tamam</string>
+    <string name="plan_summary_overdue">Geciken</string>
+    <string name="plan_snapshot_load_error">Plan verileri yüklenemedi.</string>
+    <string name="plan_overdue_move_today">Hepsini bugüne al</string>
+    <string name="plan_overdue_move_tomorrow">Hepsini yarına taşı</string>
+    <string name="plan_overdue_move_selected">Seçili güne taşı</string>
+    <string name="plan_overdue_show_all">Tümünü göster (%1$d)</string>
+    <string name="plan_overdue_show_less">Daralt</string>
+    <string name="plan_overdue_moved_count">%1$d geciken görev taşındı</string>
 
     <!-- Rutinler ekranı -->
     <string name="routines_add_cd">Rutin ekle</string>

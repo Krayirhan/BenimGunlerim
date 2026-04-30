@@ -160,8 +160,16 @@ class AccessibilityTest {
         composeTestRule
             .onNodeWithTag(TestTags.BottomNavPlan)
             .performClick()
-        // Plan ekranının kök düğümü mevcut; çökme yoksa test geçer.
-        composeTestRule.waitForIdle()
+        composeTestRule
+            .onNodeWithTag(TestTags.PlanRoot)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithTag(TestTags.PlanFab)
+            .assertIsDisplayed()
+            .assertHasClickAction()
+        composeTestRule
+            .onNodeWithTag(TestTags.PlanWeekPicker)
+            .assertIsDisplayed()
     }
 
     @Test
