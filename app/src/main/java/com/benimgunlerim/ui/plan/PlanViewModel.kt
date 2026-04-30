@@ -14,9 +14,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.LocalDate
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
@@ -28,6 +30,12 @@ data class PlanUiState(
     val tasksForDay: List<PlanTaskUi> = emptyList(),
     val overdueTasks: List<PlanTaskUi> = emptyList(),
 )
+
+sealed class PlanUiEffect {
+    data object TaskAdded : PlanUiEffect()
+    data object TaskDeleted : PlanUiEffect()
+    data object ActionFailed : PlanUiEffect()
+}
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
@@ -42,6 +50,8 @@ class PlanViewModel @Inject constructor(
     private val today = dateTimeProvider.today()
     private val _selectedDate = MutableStateFlow(today)
     private var latestTasksById: Map<String, TaskEntity> = emptyMap()
+    private val _uiEffects = MutableSharedFlow<PlanUiEffect>(extraBufferCapacity = 16)
+    val uiEffects = _uiEffects.asSharedFlow()
 
     val uiState: StateFlow<PlanUiState> = combine(
         _selectedDate,
@@ -73,9 +83,16 @@ class PlanViewModel @Inject constructor(
     fun today(): LocalDate = dateTimeProvider.today()
 
     fun addTask(title: String, date: LocalDate) {
-        if (title.isBlank()) return
+        val cleanTitle = title.trim()
+        if (cleanTitle.isBlank()) return
         viewModelScope.launch {
-            addTaskUseCase(title = title, date = date)
+            runCatching {
+                addTaskUseCase(title = cleanTitle, date = date)
+            }.onSuccess {
+                _uiEffects.tryEmit(PlanUiEffect.TaskAdded)
+            }.onFailure {
+                _uiEffects.tryEmit(PlanUiEffect.ActionFailed)
+            }
         }
     }
 
@@ -91,7 +108,15 @@ class PlanViewModel @Inject constructor(
 
     fun deleteTask(taskId: String) {
         val task = latestTasksById[taskId] ?: return
-        viewModelScope.launch { deleteTaskUseCase(task) }
+        viewModelScope.launch {
+            runCatching {
+                deleteTaskUseCase(task)
+            }.onSuccess {
+                _uiEffects.tryEmit(PlanUiEffect.TaskDeleted)
+            }.onFailure {
+                _uiEffects.tryEmit(PlanUiEffect.ActionFailed)
+            }
+        }
     }
 
     private fun TaskEntity.toUiModel(): PlanTaskUi = PlanTaskUi(
