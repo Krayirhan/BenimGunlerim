@@ -31,6 +31,7 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -85,6 +86,25 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
 
     var showAddSheet by remember { mutableStateOf(false) }
     var addText by remember { mutableStateOf("") }
+    var addDate by remember { mutableStateOf(state.selectedDate) }
+    var addAttempted by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.uiEffects.collect { effect ->
+            when (effect) {
+                PlanUiEffect.TaskAdded -> snackbarHost.showSnackbar(taskAdded)
+                PlanUiEffect.TaskDeleted -> snackbarHost.showSnackbar(taskDeleted)
+                PlanUiEffect.ActionFailed -> snackbarHost.showSnackbar(genericError)
+            }
+        }
+    }
+
+    LaunchedEffect(showAddSheet, state.selectedDate) {
+        if (showAddSheet) {
+            addDate = state.selectedDate
+            addAttempted = false
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.uiEffects.collect { effect ->
@@ -106,13 +126,34 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 verticalArrangement = Arrangement.spacedBy(14.dp),
             ) {
                 Text(
-                    stringResource(R.string.plan_add_task_sheet_title, state.selectedDate.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR")))),
+                    stringResource(R.string.plan_add_task_sheet_title, addDate.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR")))),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
                 )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = addDate == today,
+                        onClick = { addDate = today },
+                        label = { Text(stringResource(R.string.label_today)) },
+                    )
+                    FilterChip(
+                        selected = addDate == today.plusDays(1),
+                        onClick = { addDate = today.plusDays(1) },
+                        label = { Text(stringResource(R.string.label_tomorrow)) },
+                    )
+                    FilterChip(
+                        selected = addDate == state.selectedDate,
+                        onClick = { addDate = state.selectedDate },
+                        label = { Text(state.selectedDate.format(DateTimeFormatter.ofPattern("d MMM", Locale("tr", "TR")))) },
+                    )
+                }
                 OutlinedTextField(
                     value = addText,
                     onValueChange = { addText = it },
                     label = { Text(stringResource(R.string.plan_task_title_label)) },
+                    supportingText = {
+                        Text("${addText.trim().length}/80")
+                    },
+                    isError = addAttempted && addText.trim().isEmpty(),
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                 )
@@ -123,10 +164,15 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                     TextButton(onClick = { showAddSheet = false }) { Text(stringResource(R.string.action_cancel)) }
                     Spacer(Modifier.width(8.dp))
                     TextButton(
+                        enabled = addText.trim().isNotEmpty() && addText.trim().length <= 80,
                         enabled = addText.trim().isNotEmpty(),
                         onClick = {
-                            viewModel.addTask(addText, state.selectedDate)
+                            addAttempted = true
+                            if (addText.trim().isEmpty()) return@TextButton
+                            viewModel.addTask(addText.take(80), addDate)
                             addText = ""
+                            addDate = state.selectedDate
+                            addAttempted = false
                             showAddSheet = false
                         },
                     ) { Text(stringResource(R.string.action_save)) }
