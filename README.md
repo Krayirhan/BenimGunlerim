@@ -60,6 +60,7 @@ Release için signing bilgileri `keystore.properties` veya CI secret'ları ile s
 
 ## Production Dokümanları
 
+- [Tasarım ve teknik mimari rehberi](DESIGN.md)
 - [Güncel proje durumu ve sprint kaynağı](docs/PROJECT_STATUS.md)
 - [Ürün felsefesi ve kullanıcı akışları](docs/product/benimgunlerim-urun-felsefesi-ve-akislari.md)
 
