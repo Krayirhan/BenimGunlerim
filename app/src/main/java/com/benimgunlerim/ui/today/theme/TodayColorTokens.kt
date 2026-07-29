@@ -30,8 +30,8 @@ data class TodayColorTokens(
 )
 
 private val LightTodayColorTokens = TodayColorTokens(
-    backgroundTop = Color(0xFFF8F9FA),
-    backgroundBottom = Color(0xFFF8F9FA),
+    backgroundTop = Color(0xFFFFFFFF),
+    backgroundBottom = Color(0xFFFFFFFF),
     headerSurface = Color(0xFF6BBF8E),
     headerBorder = Color(0xFF6BBF8E),
     tasksSectionSurface = Color(0xFFFFFFFF),
