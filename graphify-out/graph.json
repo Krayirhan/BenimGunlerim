@@ -9736,7 +9736,7 @@
       "label": "rememberSystemAnimationsDisabled()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L124",
+      "source_location": "L126",
       "_origin": "ast"
     },
     {
@@ -9744,7 +9744,7 @@
       "label": "SnapshotErrorBanner()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L134",
+      "source_location": "L136",
       "_origin": "ast"
     },
     {
@@ -9752,7 +9752,7 @@
       "label": "TodayScreen()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L161",
+      "source_location": "L163",
       "_origin": "ast"
     },
     {
@@ -9760,7 +9760,7 @@
       "label": "HomeBackground()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L511",
+      "source_location": "L520",
       "_origin": "ast"
     },
     {
@@ -9776,7 +9776,7 @@
       "label": "mutedAccent()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L519",
+      "source_location": "L528",
       "_origin": "ast"
     },
     {
@@ -9792,7 +9792,7 @@
       "label": "TodayLayoutMetrics",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L522",
+      "source_location": "L531",
       "_origin": "ast"
     },
     {
@@ -9800,7 +9800,7 @@
       "label": "rememberTodayLayoutMetrics()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L549",
+      "source_location": "L558",
       "_origin": "ast"
     },
     {
@@ -9808,7 +9808,15 @@
       "label": "TodayHeaderCard()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L585",
+      "source_location": "L594",
+      "_origin": "ast"
+    },
+    {
+      "id": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todaytopbar",
+      "label": "TodayTopBar()",
+      "file_type": "code",
+      "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
+      "source_location": "L689",
       "_origin": "ast"
     },
     {
@@ -9816,7 +9824,7 @@
       "label": "TodayList()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "_origin": "ast"
     },
     {
@@ -9824,7 +9832,7 @@
       "label": "EmptyTodayOnboarding()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L919",
+      "source_location": "L986",
       "_origin": "ast"
     },
     {
@@ -9832,7 +9840,7 @@
       "label": "QuietDivider()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L949",
+      "source_location": "L1016",
       "_origin": "ast"
     },
     {
@@ -9848,7 +9856,7 @@
       "label": "QuietSubLabel()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L962",
+      "source_location": "L1029",
       "_origin": "ast"
     },
     {
@@ -9856,7 +9864,7 @@
       "label": "SectionCard()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L972",
+      "source_location": "L1039",
       "_origin": "ast"
     },
     {
@@ -9864,7 +9872,7 @@
       "label": "SectionListDivider()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1008",
+      "source_location": "L1075",
       "_origin": "ast"
     },
     {
@@ -9872,7 +9880,7 @@
       "label": "MetaTag()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1019",
+      "source_location": "L1086",
       "_origin": "ast"
     },
     {
@@ -9880,7 +9888,7 @@
       "label": "OverdueTaskRow()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1042",
+      "source_location": "L1109",
       "_origin": "ast"
     },
     {
@@ -9888,7 +9896,7 @@
       "label": "TaskRow()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1094",
+      "source_location": "L1161",
       "_origin": "ast"
     },
     {
@@ -9896,7 +9904,7 @@
       "label": "SwipeableTaskRow()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1183",
+      "source_location": "L1250",
       "_origin": "ast"
     },
     {
@@ -9904,7 +9912,7 @@
       "label": "RoutineRow()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1240",
+      "source_location": "L1307",
       "_origin": "ast"
     },
     {
@@ -9912,7 +9920,7 @@
       "label": "ItemRow()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1372",
+      "source_location": "L1439",
       "_origin": "ast"
     },
     {
@@ -9920,7 +9928,7 @@
       "label": "CheckCircle()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1413",
+      "source_location": "L1480",
       "_origin": "ast"
     },
     {
@@ -9928,7 +9936,7 @@
       "label": "EmptyBox()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1460",
+      "source_location": "L1527",
       "_origin": "ast"
     },
     {
@@ -9936,7 +9944,7 @@
       "label": "CloseDayCard()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1474",
+      "source_location": "L1541",
       "_origin": "ast"
     },
     {
@@ -9944,7 +9952,7 @@
       "label": "MissedDayBanner()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1572",
+      "source_location": "L1639",
       "_origin": "ast"
     },
     {
@@ -9952,7 +9960,7 @@
       "label": "Pill()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1593",
+      "source_location": "L1660",
       "_origin": "ast"
     },
     {
@@ -9960,7 +9968,7 @@
       "label": "parseColorOrNull()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1604",
+      "source_location": "L1671",
       "_origin": "ast"
     },
     {
@@ -9968,7 +9976,7 @@
       "label": "normalizeMiddleDot()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1609",
+      "source_location": "L1676",
       "_origin": "ast"
     },
     {
@@ -9976,7 +9984,7 @@
       "label": "todayTaskComparator()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1614",
+      "source_location": "L1681",
       "_origin": "ast"
     },
     {
@@ -9984,7 +9992,7 @@
       "label": "overdueTaskComparator()",
       "file_type": "code",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1620",
+      "source_location": "L1687",
       "_origin": "ast"
     },
     {
@@ -16844,14 +16852,6 @@
       "_origin": "ast"
     },
     {
-      "id": "fix_encoding",
-      "label": "fix_encoding.py",
-      "file_type": "code",
-      "source_file": "fix_encoding.py",
-      "source_location": "L1",
-      "_origin": "ast"
-    },
-    {
       "id": "gradlew",
       "label": "gradlew",
       "file_type": "code",
@@ -17012,99 +17012,203 @@
       "_origin": "ast"
     },
     {
-      "id": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "label": "BenimGünlerim — Tasarım ve Teknik Mimari Rehberi",
+      "id": "design_benimgünlerim_tasarım_standardı",
+      "label": "BenimGünlerim — Tasarım Standardı",
       "file_type": "document",
       "source_file": "DESIGN.md",
       "source_location": "L1",
       "_origin": "ast"
     },
     {
-      "id": "design_i̇çindekiler",
-      "label": "İçindekiler",
+      "id": "design_1_tasarım_vaadi",
+      "label": "1. Tasarım Vaadi",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L7",
+      "source_location": "L6",
       "_origin": "ast"
     },
     {
-      "id": "design_1_ürün_özeti",
-      "label": "1. Ürün özeti",
+      "id": "design_2_tasarım_hedefleri",
+      "label": "2. Tasarım Hedefleri",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L23",
+      "source_location": "L16",
       "_origin": "ast"
     },
     {
-      "id": "design_2_ürün_felsefesi",
-      "label": "2. Ürün felsefesi",
+      "id": "design_3_tasarım_i̇lkeleri",
+      "label": "3. Tasarım İlkeleri",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L37",
+      "source_location": "L25",
       "_origin": "ast"
     },
     {
-      "id": "design_küçük_adımlar_gerçek_ilerlemedir",
-      "label": "Küçük adımlar gerçek ilerlemedir",
+      "id": "design_küçük_adım_önce_gelir",
+      "label": "Küçük adım önce gelir",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L27",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_sakin_başarı_hissi",
+      "label": "Sakin başarı hissi",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L31",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_yumuşak_yönlendirme",
+      "label": "Yumuşak yönlendirme",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L35",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_bilgi_hiyerarşisi_dekorasyondan_önemlidir",
+      "label": "Bilgi hiyerarşisi dekorasyondan önemlidir",
       "file_type": "document",
       "source_file": "DESIGN.md",
       "source_location": "L39",
       "_origin": "ast"
     },
     {
-      "id": "design_kullanıcı_suçlanmaz",
-      "label": "Kullanıcı suçlanmaz",
+      "id": "design_tutarlılık_güven_yaratır",
+      "label": "Tutarlılık güven yaratır",
       "file_type": "document",
       "source_file": "DESIGN.md",
       "source_location": "L43",
       "_origin": "ast"
     },
     {
-      "id": "design_sadelik_önceliklidir",
-      "label": "Sadelik önceliklidir",
+      "id": "design_4_görsel_karakter",
+      "label": "4. Görsel Karakter",
       "file_type": "document",
       "source_file": "DESIGN.md",
       "source_location": "L47",
       "_origin": "ast"
     },
     {
-      "id": "design_kontrol_kullanıcıdadır",
-      "label": "Kontrol kullanıcıdadır",
+      "id": "design_genel_ifade",
+      "label": "Genel ifade",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L51",
+      "source_location": "L49",
       "_origin": "ast"
     },
     {
-      "id": "design_i̇lerleme_görünür_baskı_görünmez_olmalıdır",
-      "label": "İlerleme görünür, baskı görünmez olmalıdır",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L55",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_3_deneyim_ilkeleri",
-      "label": "3. Deneyim ilkeleri",
+      "id": "design_kaçınılacak_ifade",
+      "label": "Kaçınılacak ifade",
       "file_type": "document",
       "source_file": "DESIGN.md",
       "source_location": "L59",
       "_origin": "ast"
     },
     {
-      "id": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "label": "4. Bilgi mimarisi ve ekranlar",
+      "id": "design_5_renk_sistemi",
+      "label": "5. Renk Sistemi",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L70",
+      "source_location": "L69",
       "_origin": "ast"
     },
     {
-      "id": "design_onboarding",
-      "label": "Onboarding",
+      "id": "design_renk_kuralları",
+      "label": "Renk kuralları",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L78",
+      "source_location": "L89",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_6_tipografi_ve_metin_hiyerarşisi",
+      "label": "6. Tipografi ve Metin Hiyerarşisi",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L97",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_7_yerleşim_ve_boşluk",
+      "label": "7. Yerleşim ve Boşluk",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L111",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_ekran_iskeleti",
+      "label": "Ekran iskeleti",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L113",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_boşluk_kuralları",
+      "label": "Boşluk kuralları",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L127",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_8_bileşen_standardı",
+      "label": "8. Bileşen Standardı",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L135",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_screenherocard",
+      "label": "ScreenHeroCard",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L139",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_appcard_ve_bilgi_kartları",
+      "label": "AppCard ve bilgi kartları",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L148",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_butonlar",
+      "label": "Butonlar",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L154",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_empty_state",
+      "label": "Empty state",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L166",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_alert_ve_hata_kartları",
+      "label": "Alert ve hata kartları",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L176",
+      "_origin": "ast"
+    },
+    {
+      "id": "design_9_ekran_bazlı_tasarım_standardı",
+      "label": "9. Ekran Bazlı Tasarım Standardı",
+      "file_type": "document",
+      "source_file": "DESIGN.md",
+      "source_location": "L183",
       "_origin": "ast"
     },
     {
@@ -17112,7 +17216,7 @@
       "label": "Bugün",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L82",
+      "source_location": "L185",
       "_origin": "ast"
     },
     {
@@ -17120,7 +17224,7 @@
       "label": "Plan",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L93",
+      "source_location": "L205",
       "_origin": "ast"
     },
     {
@@ -17128,31 +17232,15 @@
       "label": "Rutinler",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L97",
+      "source_location": "L214",
       "_origin": "ast"
     },
     {
-      "id": "design_rutin_detayı",
-      "label": "Rutin detayı",
+      "id": "design_i̇lerlemen_ve_başarımlar",
+      "label": "İlerlemen ve başarımlar",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L104",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_i̇lerlemen",
-      "label": "İlerlemen",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L108",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_başarımlar",
-      "label": "Başarımlar",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L112",
+      "source_location": "L222",
       "_origin": "ast"
     },
     {
@@ -17160,319 +17248,55 @@
       "label": "Ayarlar",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L116",
+      "source_location": "L228",
       "_origin": "ast"
     },
     {
-      "id": "design_5_temel_kullanıcı_akışları",
-      "label": "5. Temel kullanıcı akışları",
+      "id": "design_10_durumlar_ve_geri_bildirim",
+      "label": "10. Durumlar ve Geri Bildirim",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L120",
+      "source_location": "L234",
       "_origin": "ast"
     },
     {
-      "id": "design_5_1_günlük_döngü",
-      "label": "5.1 Günlük döngü",
+      "id": "design_hareket",
+      "label": "Hareket",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L122",
+      "source_location": "L247",
       "_origin": "ast"
     },
     {
-      "id": "design_5_2_görev_akışı",
-      "label": "5.2 Görev akışı",
+      "id": "design_11_erişilebilirlik_standardı",
+      "label": "11. Erişilebilirlik Standardı",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L134",
+      "source_location": "L254",
       "_origin": "ast"
     },
     {
-      "id": "design_5_3_rutin_akışı",
-      "label": "5.3 Rutin akışı",
+      "id": "design_12_i̇çerik_tonu",
+      "label": "12. İçerik Tonu",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L143",
+      "source_location": "L268",
       "_origin": "ast"
     },
     {
-      "id": "design_5_4_gün_sonu_akışı",
-      "label": "5.4 Gün sonu akışı",
+      "id": "design_13_tasarım_karar_kontrol_listesi",
+      "label": "13. Tasarım Karar Kontrol Listesi",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L151",
+      "source_location": "L293",
       "_origin": "ast"
     },
     {
-      "id": "design_5_5_missed_day_akışı",
-      "label": "5.5 Missed day akışı",
+      "id": "design_14_i̇lgili_belgeler",
+      "label": "14. İlgili Belgeler",
       "file_type": "document",
       "source_file": "DESIGN.md",
-      "source_location": "L159",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_6_görsel_tasarım_sistemi",
-      "label": "6. Görsel tasarım sistemi",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L166",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_tasarım_karakteri",
-      "label": "Tasarım karakteri",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L168",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_tasarım_tokenları",
-      "label": "Tasarım tokenları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L172",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_ortak_bileşenler",
-      "label": "Ortak bileşenler",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L183",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_hiyerarşi_kuralları",
-      "label": "Hiyerarşi kuralları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L198",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_7_i̇çerik_ve_dil_ilkeleri",
-      "label": "7. İçerik ve dil ilkeleri",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L206",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_ton",
-      "label": "Ton",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L210",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_örnekler",
-      "label": "Örnekler",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L218",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_8_teknik_mimari",
-      "label": "8. Teknik mimari",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L227",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_ui_katmanı",
-      "label": "UI katmanı",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L244",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_viewmodel_katmanı",
-      "label": "ViewModel katmanı",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L258",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_domain_katmanı",
-      "label": "Domain katmanı",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L270",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_data_katmanı",
-      "label": "Data katmanı",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L287",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_dependency_injection",
-      "label": "Dependency injection",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L298",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_9_veri_modeli_ve_yerel_saklama",
-      "label": "9. Veri modeli ve yerel saklama",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L302",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_offline_first_yaklaşımı",
-      "label": "Offline-first yaklaşımı",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L316",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_veri_güvenliği_ilkeleri",
-      "label": "Veri güvenliği ilkeleri",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L323",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_10_oyunlaştırma_ve_geri_bildirim",
-      "label": "10. Oyunlaştırma ve geri bildirim",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L330",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_ödül_mekanikleri",
-      "label": "Ödül mekanikleri",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L334",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_koruyucu_kurallar",
-      "label": "Koruyucu kurallar",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L341",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_geri_bildirim_kanalları",
-      "label": "Geri bildirim kanalları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L348",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_11_bildirimler_gizlilik_ve_hata_yönetimi",
-      "label": "11. Bildirimler, gizlilik ve hata yönetimi",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L356",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_bildirimler",
-      "label": "Bildirimler",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L358",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_gizlilik",
-      "label": "Gizlilik",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L376",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_hata_yönetimi_ve_gözlemlenebilirlik",
-      "label": "Hata yönetimi ve gözlemlenebilirlik",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L385",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_12_erişilebilirlik_kalite_ve_test",
-      "label": "12. Erişilebilirlik, kalite ve test",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L392",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_erişilebilirlik_hedefleri",
-      "label": "Erişilebilirlik hedefleri",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L394",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_test_katmanları",
-      "label": "Test katmanları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L404",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_kalite_kapıları",
-      "label": "Kalite kapıları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L414",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_bilinen_açıklar",
-      "label": "Bilinen açıklar",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L424",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_13_geliştirme_kararları",
-      "label": "13. Geliştirme kararları",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L434",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_uygulama_sırası",
-      "label": "Uygulama sırası",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L447",
-      "_origin": "ast"
-    },
-    {
-      "id": "design_i̇lgili_belgeler",
-      "label": "İlgili belgeler",
-      "file_type": "document",
-      "source_file": "DESIGN.md",
-      "source_location": "L455",
+      "source_location": "L306",
       "_origin": "ast"
     },
     {
@@ -42197,7 +42021,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L124",
+      "source_location": "L126",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42207,7 +42031,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L134",
+      "source_location": "L136",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42217,7 +42041,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L161",
+      "source_location": "L163",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42227,7 +42051,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L161",
+      "source_location": "L163",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42238,7 +42062,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L511",
+      "source_location": "L520",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42248,7 +42072,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L511",
+      "source_location": "L520",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast"
@@ -42259,7 +42083,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L519",
+      "source_location": "L528",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42269,7 +42093,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L519",
+      "source_location": "L528",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42280,7 +42104,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L522",
+      "source_location": "L531",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42290,7 +42114,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L549",
+      "source_location": "L558",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42300,7 +42124,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L549",
+      "source_location": "L558",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast"
@@ -42311,7 +42135,17 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L585",
+      "source_location": "L594",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen",
+      "target": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todaytopbar",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
+      "source_location": "L689",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42321,7 +42155,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42331,7 +42165,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast"
@@ -42342,7 +42176,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast"
@@ -42353,7 +42187,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast"
@@ -42364,7 +42198,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L679",
+      "source_location": "L746",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42375,7 +42209,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L919",
+      "source_location": "L986",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42385,7 +42219,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L949",
+      "source_location": "L1016",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42395,7 +42229,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L949",
+      "source_location": "L1016",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42406,7 +42240,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L962",
+      "source_location": "L1029",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42416,7 +42250,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L972",
+      "source_location": "L1039",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42426,7 +42260,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L972",
+      "source_location": "L1039",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42437,7 +42271,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L972",
+      "source_location": "L1039",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42448,7 +42282,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L972",
+      "source_location": "L1039",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42459,7 +42293,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1008",
+      "source_location": "L1075",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42469,7 +42303,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1019",
+      "source_location": "L1086",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42479,7 +42313,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1042",
+      "source_location": "L1109",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42489,7 +42323,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1042",
+      "source_location": "L1109",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42500,7 +42334,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1094",
+      "source_location": "L1161",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42510,7 +42344,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1094",
+      "source_location": "L1161",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42521,7 +42355,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1183",
+      "source_location": "L1250",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42531,7 +42365,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1183",
+      "source_location": "L1250",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42542,7 +42376,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1240",
+      "source_location": "L1307",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42552,7 +42386,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1240",
+      "source_location": "L1307",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42563,7 +42397,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1240",
+      "source_location": "L1307",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42574,7 +42408,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1372",
+      "source_location": "L1439",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42584,7 +42418,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1372",
+      "source_location": "L1439",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42595,7 +42429,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1413",
+      "source_location": "L1480",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42605,7 +42439,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1413",
+      "source_location": "L1480",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42616,7 +42450,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1460",
+      "source_location": "L1527",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42626,7 +42460,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1460",
+      "source_location": "L1527",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42637,7 +42471,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1474",
+      "source_location": "L1541",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42647,7 +42481,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1572",
+      "source_location": "L1639",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42657,7 +42491,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1593",
+      "source_location": "L1660",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42667,7 +42501,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1593",
+      "source_location": "L1660",
       "weight": 1.0,
       "context": "parameter_type",
       "_origin": "ast"
@@ -42678,7 +42512,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1604",
+      "source_location": "L1671",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42688,7 +42522,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1604",
+      "source_location": "L1671",
       "weight": 1.0,
       "context": "return_type",
       "_origin": "ast"
@@ -42699,7 +42533,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1609",
+      "source_location": "L1676",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42709,7 +42543,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1614",
+      "source_location": "L1681",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42719,7 +42553,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1614",
+      "source_location": "L1681",
       "weight": 1.0,
       "context": "generic_arg",
       "_origin": "ast"
@@ -42730,7 +42564,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1620",
+      "source_location": "L1687",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42740,9 +42574,20 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1620",
+      "source_location": "L1687",
       "weight": 1.0,
       "context": "generic_arg",
+      "_origin": "ast"
+    },
+    {
+      "source": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todayscreen",
+      "target": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todaytopbar",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
+      "source_location": "L438",
+      "weight": 1.0,
       "_origin": "ast"
     },
     {
@@ -42752,7 +42597,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L556",
+      "source_location": "L565",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42763,7 +42608,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L594",
+      "source_location": "L603",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42774,7 +42619,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L600",
+      "source_location": "L604",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42785,7 +42630,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L655",
+      "source_location": "L666",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42796,7 +42641,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L692",
+      "source_location": "L759",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42807,7 +42652,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L697",
+      "source_location": "L764",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42818,7 +42663,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L698",
+      "source_location": "L765",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42829,7 +42674,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L728",
+      "source_location": "L795",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42840,7 +42685,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L741",
+      "source_location": "L808",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42851,7 +42696,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L744",
+      "source_location": "L811",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42862,7 +42707,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L753",
+      "source_location": "L820",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42873,7 +42718,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L755",
+      "source_location": "L822",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42884,7 +42729,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L773",
+      "source_location": "L840",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42895,7 +42740,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L783",
+      "source_location": "L850",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42906,7 +42751,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L809",
+      "source_location": "L876",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42917,7 +42762,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L834",
+      "source_location": "L901",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42928,7 +42773,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L951",
+      "source_location": "L1018",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42939,7 +42784,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1021",
+      "source_location": "L1088",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42950,7 +42795,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1061",
+      "source_location": "L1128",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42961,7 +42806,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1062",
+      "source_location": "L1129",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42972,7 +42817,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1102",
+      "source_location": "L1169",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42983,7 +42828,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1105",
+      "source_location": "L1172",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -42994,7 +42839,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1117",
+      "source_location": "L1184",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43005,7 +42850,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1118",
+      "source_location": "L1185",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43016,7 +42861,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1131",
+      "source_location": "L1198",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43027,7 +42872,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1192",
+      "source_location": "L1259",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43038,7 +42883,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1230",
+      "source_location": "L1297",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43049,7 +42894,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1251",
+      "source_location": "L1318",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43060,7 +42905,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1252",
+      "source_location": "L1319",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43071,7 +42916,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1279",
+      "source_location": "L1346",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43082,7 +42927,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1379",
+      "source_location": "L1446",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43093,7 +42938,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1380",
+      "source_location": "L1447",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43104,7 +42949,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1417",
+      "source_location": "L1484",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43115,7 +42960,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1487",
+      "source_location": "L1554",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43126,7 +42971,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1504",
+      "source_location": "L1571",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43137,7 +42982,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1510",
+      "source_location": "L1577",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -43148,7 +42993,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1606",
+      "source_location": "L1673",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -59430,28 +59275,6 @@
       "_origin": "ast"
     },
     {
-      "source": "fix_encoding",
-      "target": "os",
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "fix_encoding.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "fix_encoding",
-      "target": "glob",
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "fix_encoding.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
       "source": "gradlew",
       "target": "gradlew__entry",
       "relation": "contains",
@@ -59515,7 +59338,7 @@
     },
     {
       "source": "design",
-      "target": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
+      "target": "design_benimgünlerim_tasarım_standardı",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59524,48 +59347,68 @@
       "_origin": "ast"
     },
     {
-      "source": "design",
-      "target": "docs_project_status",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L5",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_i̇çindekiler",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_1_tasarım_vaadi",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L7",
+      "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_1_ürün_özeti",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_2_tasarım_hedefleri",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L23",
+      "source_location": "L16",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_2_ürün_felsefesi",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_3_tasarım_i̇lkeleri",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L37",
+      "source_location": "L25",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_2_ürün_felsefesi",
-      "target": "design_küçük_adımlar_gerçek_ilerlemedir",
+      "source": "design_3_tasarım_i̇lkeleri",
+      "target": "design_küçük_adım_önce_gelir",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DESIGN.md",
+      "source_location": "L27",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "design_3_tasarım_i̇lkeleri",
+      "target": "design_sakin_başarı_hissi",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DESIGN.md",
+      "source_location": "L31",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "design_3_tasarım_i̇lkeleri",
+      "target": "design_yumuşak_yönlendirme",
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "DESIGN.md",
+      "source_location": "L35",
+      "weight": 1.0,
+      "_origin": "ast"
+    },
+    {
+      "source": "design_3_tasarım_i̇lkeleri",
+      "target": "design_bilgi_hiyerarşisi_dekorasyondan_önemlidir",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59574,8 +59417,8 @@
       "_origin": "ast"
     },
     {
-      "source": "design_2_ürün_felsefesi",
-      "target": "design_kullanıcı_suçlanmaz",
+      "source": "design_3_tasarım_i̇lkeleri",
+      "target": "design_tutarlılık_güven_yaratır",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59584,8 +59427,8 @@
       "_origin": "ast"
     },
     {
-      "source": "design_2_ürün_felsefesi",
-      "target": "design_sadelik_önceliklidir",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_4_görsel_karakter",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59594,28 +59437,18 @@
       "_origin": "ast"
     },
     {
-      "source": "design_2_ürün_felsefesi",
-      "target": "design_kontrol_kullanıcıdadır",
+      "source": "design_4_görsel_karakter",
+      "target": "design_genel_ifade",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L51",
+      "source_location": "L49",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_2_ürün_felsefesi",
-      "target": "design_i̇lerleme_görünür_baskı_görünmez_olmalıdır",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L55",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_3_deneyim_ilkeleri",
+      "source": "design_4_görsel_karakter",
+      "target": "design_kaçınılacak_ifade",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59624,48 +59457,28 @@
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_4_bilgi_mimarisi_ve_ekranlar",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_5_renk_sistemi",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L70",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_onboarding",
+      "source": "design_5_renk_sistemi",
+      "target": "design_renk_kuralları",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L78",
+      "source_location": "L89",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_bugün",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L82",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_plan",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L93",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_rutinler",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_6_tipografi_ve_metin_hiyerarşisi",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59674,108 +59487,78 @@
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_rutin_detayı",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_7_yerleşim_ve_boşluk",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L104",
+      "source_location": "L111",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_i̇lerlemen",
+      "source": "design_7_yerleşim_ve_boşluk",
+      "target": "design_ekran_iskeleti",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L108",
+      "source_location": "L113",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_başarımlar",
+      "source": "design_7_yerleşim_ve_boşluk",
+      "target": "design_boşluk_kuralları",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L112",
+      "source_location": "L127",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_4_bilgi_mimarisi_ve_ekranlar",
-      "target": "design_ayarlar",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_8_bileşen_standardı",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L116",
+      "source_location": "L135",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_5_temel_kullanıcı_akışları",
+      "source": "design_8_bileşen_standardı",
+      "target": "design_screenherocard",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L120",
+      "source_location": "L139",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_5_temel_kullanıcı_akışları",
-      "target": "design_5_1_günlük_döngü",
+      "source": "design_8_bileşen_standardı",
+      "target": "design_appcard_ve_bilgi_kartları",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L122",
+      "source_location": "L148",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_5_temel_kullanıcı_akışları",
-      "target": "design_5_2_görev_akışı",
+      "source": "design_8_bileşen_standardı",
+      "target": "design_butonlar",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L134",
+      "source_location": "L154",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_5_temel_kullanıcı_akışları",
-      "target": "design_5_3_rutin_akışı",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L143",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_5_temel_kullanıcı_akışları",
-      "target": "design_5_4_gün_sonu_akışı",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L151",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_5_temel_kullanıcı_akışları",
-      "target": "design_5_5_missed_day_akışı",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L159",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_6_görsel_tasarım_sistemi",
+      "source": "design_8_bileşen_standardı",
+      "target": "design_empty_state",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59784,28 +59567,18 @@
       "_origin": "ast"
     },
     {
-      "source": "design_6_görsel_tasarım_sistemi",
-      "target": "design_tasarım_karakteri",
+      "source": "design_8_bileşen_standardı",
+      "target": "design_alert_ve_hata_kartları",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L168",
+      "source_location": "L176",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_6_görsel_tasarım_sistemi",
-      "target": "design_tasarım_tokenları",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L172",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_6_görsel_tasarım_sistemi",
-      "target": "design_ortak_bileşenler",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_9_ekran_bazlı_tasarım_standardı",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
@@ -59814,322 +59587,112 @@
       "_origin": "ast"
     },
     {
-      "source": "design_6_görsel_tasarım_sistemi",
-      "target": "design_hiyerarşi_kuralları",
+      "source": "design_9_ekran_bazlı_tasarım_standardı",
+      "target": "design_bugün",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L198",
+      "source_location": "L185",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_7_i̇çerik_ve_dil_ilkeleri",
+      "source": "design_9_ekran_bazlı_tasarım_standardı",
+      "target": "design_plan",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L206",
+      "source_location": "L205",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_7_i̇çerik_ve_dil_ilkeleri",
-      "target": "design_ton",
+      "source": "design_9_ekran_bazlı_tasarım_standardı",
+      "target": "design_rutinler",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L210",
+      "source_location": "L214",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_7_i̇çerik_ve_dil_ilkeleri",
-      "target": "design_örnekler",
+      "source": "design_9_ekran_bazlı_tasarım_standardı",
+      "target": "design_i̇lerlemen_ve_başarımlar",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L218",
+      "source_location": "L222",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_8_teknik_mimari",
+      "source": "design_9_ekran_bazlı_tasarım_standardı",
+      "target": "design_ayarlar",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L227",
+      "source_location": "L228",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_8_teknik_mimari",
-      "target": "design_ui_katmanı",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_10_durumlar_ve_geri_bildirim",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L244",
+      "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_8_teknik_mimari",
-      "target": "design_viewmodel_katmanı",
+      "source": "design_10_durumlar_ve_geri_bildirim",
+      "target": "design_hareket",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L258",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_8_teknik_mimari",
-      "target": "design_domain_katmanı",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_11_erişilebilirlik_standardı",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L270",
+      "source_location": "L254",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_8_teknik_mimari",
-      "target": "design_data_katmanı",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_12_i̇çerik_tonu",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L287",
+      "source_location": "L268",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_8_teknik_mimari",
-      "target": "design_dependency_injection",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_13_tasarım_karar_kontrol_listesi",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L298",
+      "source_location": "L293",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_9_veri_modeli_ve_yerel_saklama",
+      "source": "design_benimgünlerim_tasarım_standardı",
+      "target": "design_14_i̇lgili_belgeler",
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L302",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_9_veri_modeli_ve_yerel_saklama",
-      "target": "design_offline_first_yaklaşımı",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L316",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_9_veri_modeli_ve_yerel_saklama",
-      "target": "design_veri_güvenliği_ilkeleri",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L323",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_10_oyunlaştırma_ve_geri_bildirim",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L330",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_10_oyunlaştırma_ve_geri_bildirim",
-      "target": "design_ödül_mekanikleri",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L334",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_10_oyunlaştırma_ve_geri_bildirim",
-      "target": "design_koruyucu_kurallar",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L341",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_10_oyunlaştırma_ve_geri_bildirim",
-      "target": "design_geri_bildirim_kanalları",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L348",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_11_bildirimler_gizlilik_ve_hata_yönetimi",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L356",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_11_bildirimler_gizlilik_ve_hata_yönetimi",
-      "target": "design_bildirimler",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L358",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_11_bildirimler_gizlilik_ve_hata_yönetimi",
-      "target": "design_gizlilik",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L376",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design",
-      "target": "docs_production_privacy_and_backup",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L382",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design",
-      "target": "docs_production_privacy_policy_tr",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L383",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_11_bildirimler_gizlilik_ve_hata_yönetimi",
-      "target": "design_hata_yönetimi_ve_gözlemlenebilirlik",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L385",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_12_erişilebilirlik_kalite_ve_test",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L392",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_12_erişilebilirlik_kalite_ve_test",
-      "target": "design_erişilebilirlik_hedefleri",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L394",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_12_erişilebilirlik_kalite_ve_test",
-      "target": "design_test_katmanları",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L404",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_12_erişilebilirlik_kalite_ve_test",
-      "target": "design_kalite_kapıları",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L414",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design",
-      "target": "docs_production_quality_gates",
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L416",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_12_erişilebilirlik_kalite_ve_test",
-      "target": "design_bilinen_açıklar",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L424",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_13_geliştirme_kararları",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L434",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_13_geliştirme_kararları",
-      "target": "design_uygulama_sırası",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L447",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "design_benimgünlerim_tasarım_ve_teknik_mimari_rehberi",
-      "target": "design_i̇lgili_belgeler",
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "DESIGN.md",
-      "source_location": "L455",
+      "source_location": "L306",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -60139,27 +59702,27 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L458",
+      "source_location": "L308",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "design",
-      "target": "docs_production_production_readiness",
+      "target": "docs_project_status",
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L459",
+      "source_location": "L309",
       "weight": 1.0,
       "_origin": "ast"
     },
     {
       "source": "design",
-      "target": "docs_testing_test_strategy",
+      "target": "docs_production_quality_gates",
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L461",
+      "source_location": "L310",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -60169,7 +59732,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "DESIGN.md",
-      "source_location": "L462",
+      "source_location": "L311",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67221,7 +66784,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L217",
+      "source_location": "L224",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67233,7 +66796,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L219",
+      "source_location": "L226",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67245,7 +66808,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L227",
+      "source_location": "L234",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67257,7 +66820,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L233",
+      "source_location": "L240",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67269,7 +66832,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L238",
+      "source_location": "L245",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67281,7 +66844,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt",
-      "source_location": "L240",
+      "source_location": "L247",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67605,7 +67168,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayRoute.kt",
-      "source_location": "L13",
+      "source_location": "L14",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67617,7 +67180,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L302",
+      "source_location": "L305",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67629,7 +67192,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L348",
+      "source_location": "L351",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67641,7 +67204,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L387",
+      "source_location": "L390",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67653,7 +67216,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L461",
+      "source_location": "L470",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67665,7 +67228,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L481",
+      "source_location": "L490",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67677,7 +67240,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L482",
+      "source_location": "L491",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67689,7 +67252,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L483",
+      "source_location": "L492",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67701,7 +67264,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L484",
+      "source_location": "L493",
       "weight": 1.0,
       "_origin": "ast"
     },
@@ -67713,7 +67276,7 @@
       "confidence": "INFERRED",
       "confidence_score": 0.8,
       "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L1324",
+      "source_location": "L1391",
       "weight": 1.0,
       "_origin": "ast"
     },

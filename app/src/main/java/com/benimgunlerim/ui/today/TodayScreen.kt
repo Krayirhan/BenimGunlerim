@@ -38,6 +38,8 @@ import androidx.compose.material.icons.rounded.Bedtime
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.DeleteOutline
 import androidx.compose.material.icons.rounded.MoreHoriz
+import androidx.compose.material.icons.rounded.NotificationsNone
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.AlertDialog
@@ -164,6 +166,7 @@ fun TodayScreen(
     viewModel: TodayViewModel,
     onNavigateToRoutines: () -> Unit = {},
     onNavigateToPlan: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     onOpenRoutineDetail: (String) -> Unit = {},
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -431,6 +434,12 @@ fun TodayScreen(
         Scaffold(
             contentWindowInsets = WindowInsets(0),
             containerColor = MaterialTheme.colorScheme.background,
+            topBar = {
+                TodayTopBar(
+                    onOpenProfile = onNavigateToSettings,
+                    onOpenNotifications = onNavigateToSettings,
+                )
+            },
             snackbarHost = { SnackbarHost(snackbarHost) },
             floatingActionButton = {
                 if (emptyForFab) {
@@ -584,7 +593,7 @@ private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics {
 
 @Composable
 internal fun TodayHeaderCard(
-    today: LocalDate,
+    @Suppress("UNUSED_PARAMETER") today: LocalDate = LocalDate.now(),
     streak: Int,
     happiness: Int,
     completed: Int,
@@ -592,11 +601,6 @@ internal fun TodayHeaderCard(
     progress: Float,
 ) {
     val metrics = rememberTodayLayoutMetrics()
-    val date = remember(today) {
-        today
-            .format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale("tr", "TR")))
-            .replaceFirstChar { it.titlecase(Locale("tr", "TR")) }
-    }
     val instantTransition = rememberSystemAnimationsDisabled()
     val targetProgress = progress.coerceIn(0f, 1f)
     val animated by animateFloatAsState(
@@ -617,10 +621,17 @@ internal fun TodayHeaderCard(
         stringResource(R.string.today_support_add_first_step)
     }
 
-    com.benimgunlerim.ui.components.ScreenHeroCard(
-        title = stringResource(R.string.label_today),
-        subtitle = date,
-        metricRow = {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(metrics.sectionCorner),
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+    ) {
+        Column(
+            modifier = Modifier.padding(if (metrics.isCompact) 14.dp else 16.dp),
+            verticalArrangement = Arrangement.spacedBy(metrics.headerSpacing),
+        ) {
             Column(verticalArrangement = Arrangement.spacedBy(metrics.headerSpacing)) {
                 Row(
                     Modifier.fillMaxWidth(),
@@ -671,8 +682,64 @@ internal fun TodayHeaderCard(
                     )
                 }
             }
-        },
-    )
+        }
+    }
+}
+
+@Composable
+private fun TodayTopBar(
+    onOpenProfile: () -> Unit,
+    onOpenNotifications: () -> Unit,
+) {
+    val profileDescription = stringResource(R.string.today_profile_cd)
+    val notificationsDescription = stringResource(R.string.today_notifications_cd)
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        color = MaterialTheme.colorScheme.background,
+        shadowElevation = 0.dp,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            IconButton(
+                onClick = onOpenProfile,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .size(48.dp)
+                    .clip(CircleShape)
+                    .background(CandyPrimary.copy(alpha = 0.12f))
+                    .semantics { contentDescription = profileDescription },
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.Person,
+                    contentDescription = null,
+                    tint = CandyPrimary,
+                )
+            }
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.ExtraBold),
+                color = CandyPrimary,
+            )
+            IconButton(
+                onClick = onOpenNotifications,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .size(48.dp)
+                    .semantics { contentDescription = notificationsDescription },
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.NotificationsNone,
+                    contentDescription = null,
+                    tint = CandyPrimary,
+                )
+            }
+        }
+    }
 }
 
 

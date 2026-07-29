@@ -209,6 +209,13 @@ fun BenimGunlerimApp(
                             restoreState = true
                         }
                     },
+                    onNavigateToSettings = {
+                        navController.navigate(Destination.Settings.route) {
+                            popUpTo(Destination.Today.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
                     onOpenRoutineDetail = { routineId ->
                         navController.navigate(AppDestination.RoutineDetailPattern.createRoute(routineId))
                     },

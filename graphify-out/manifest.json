@@ -585,8 +585,8 @@
     "semantic_hash": "89fc5f6287bfa2399ccdb46627f1cf01"
   },
   "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt": {
-    "mtime": 1785362787.0388153,
-    "ast_hash": "3eaac12193c82f99bd9eab4e7db31dad",
+    "mtime": 1785365428.589501,
+    "ast_hash": "3c61fefad47813a7476f7b8a2d6d3a37",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/TestTags.kt": {
@@ -730,9 +730,9 @@
     "semantic_hash": "33b41cb475e32925919830d9ac1bf142"
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayContent.kt": {
-    "mtime": 1784326806.9442408,
+    "mtime": 1785365569.2847161,
     "ast_hash": "6adec4b28e362e8f40e1f961a56a6544",
-    "semantic_hash": "6adec4b28e362e8f40e1f961a56a6544"
+    "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayPreviews.kt": {
     "mtime": 1778435396.228533,
@@ -740,13 +740,13 @@
     "semantic_hash": "ee8e6746825278b222c8870f84ec86cb"
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayRoute.kt": {
-    "mtime": 1777564576.4152827,
-    "ast_hash": "bae7e1de5046318c3282332958a98a36",
-    "semantic_hash": "bae7e1de5046318c3282332958a98a36"
+    "mtime": 1785365428.5884984,
+    "ast_hash": "e80edce502f1e2505abc1f5741221750",
+    "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt": {
-    "mtime": 1785362769.4383175,
-    "ast_hash": "e2f3af3dfa1b547fd711150c0269175e",
+    "mtime": 1785365569.2827134,
+    "ast_hash": "df87dcfbe78c910dd7c653590a66595a",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodaySheets.kt": {
@@ -1014,11 +1014,6 @@
     "ast_hash": "3e9756f718c62ec51116a606c71aff9b",
     "semantic_hash": "3e9756f718c62ec51116a606c71aff9b"
   },
-  "fix_encoding.py": {
-    "mtime": 1775957574.5326364,
-    "ast_hash": "46e2dbcf920c570f5b456353f5945cae",
-    "semantic_hash": "46e2dbcf920c570f5b456353f5945cae"
-  },
   "gradlew": {
     "mtime": 1775941081.4768345,
     "ast_hash": "f092910dfa8e47c5a37a452c3f6baf8a",
@@ -1224,216 +1219,6 @@
     "ast_hash": "d5d268fdf10eff978bf9be70b25c7a0c",
     "semantic_hash": ""
   },
-  "current_screen.png": {
-    "mtime": 1784325643.8956468,
-    "ast_hash": "8a17f702931b3f119b5a22196b9b84cd",
-    "semantic_hash": ""
-  },
-  "fullpage-captures/today-full-1.png": {
-    "mtime": 1778433374.8188488,
-    "ast_hash": "df59023b69528d810782c9411d00f14c",
-    "semantic_hash": ""
-  },
-  "fullpage-captures/today-full-2.png": {
-    "mtime": 1778433376.839692,
-    "ast_hash": "ebd00cd7cddd7664e8e9e248b0e39c52",
-    "semantic_hash": ""
-  },
-  "fullpage-captures/today-full-3.png": {
-    "mtime": 1778433378.7314656,
-    "ast_hash": "1ca953e0535b7bfb4c77c90a770b1000",
-    "semantic_hash": ""
-  },
-  "fullpage-captures/today-full-4.png": {
-    "mtime": 1778433380.6250503,
-    "ast_hash": "1ca953e0535b7bfb4c77c90a770b1000",
-    "semantic_hash": ""
-  },
-  "phone-current-screen-final.png": {
-    "mtime": 1778433321.628196,
-    "ast_hash": "665dda059de0dad29121bea80ebca154",
-    "semantic_hash": ""
-  },
-  "phone-current-screen-fullpage.png": {
-    "mtime": 1778433380.9818466,
-    "ast_hash": "5e9bc970d9e9945d7d32ed2e19b44428",
-    "semantic_hash": ""
-  },
-  "phone-current-screen-latest.png": {
-    "mtime": 1778432142.4532967,
-    "ast_hash": "5af05b3c1d78c89be1a10bf8b9a054a3",
-    "semantic_hash": ""
-  },
-  "phone-current-screen.png": {
-    "mtime": 1778431376.5402927,
-    "ast_hash": "cf26e2c1499d50623dc74d2a1c5e9f6c",
-    "semantic_hash": ""
-  },
-  "s_ayarlar.png": {
-    "mtime": 1784326514.2158172,
-    "ast_hash": "ef51d723cc09f86e34d0c803f8b30aa7",
-    "semantic_hash": ""
-  },
-  "s_bugun.png": {
-    "mtime": 1784326516.8941915,
-    "ast_hash": "ef51d723cc09f86e34d0c803f8b30aa7",
-    "semantic_hash": ""
-  },
-  "s_final_today.png": {
-    "mtime": 1784328139.5457428,
-    "ast_hash": "7bf353b19b92d430d43815162d28e569",
-    "semantic_hash": ""
-  },
-  "s_fixed_header.png": {
-    "mtime": 1784328374.2494042,
-    "ast_hash": "5363524dfd68b258d40a621a3cdf8012",
-    "semantic_hash": ""
-  },
-  "s_fixed_header2.png": {
-    "mtime": 1784328393.761766,
-    "ast_hash": "cfc92ffcb1902a03ae0c59619d6fab70",
-    "semantic_hash": ""
-  },
-  "s_fixed_header3.png": {
-    "mtime": 1784328420.5211303,
-    "ast_hash": "d023bcf1db26f3c259d53a72d374e520",
-    "semantic_hash": ""
-  },
-  "s_ilerleme.png": {
-    "mtime": 1784326511.4360075,
-    "ast_hash": "db2afe37af3a11d7565c5f801ee0f3db",
-    "semantic_hash": ""
-  },
-  "s_plan.png": {
-    "mtime": 1784326505.8977036,
-    "ast_hash": "8a974d599454396f706e8767c24c2104",
-    "semantic_hash": ""
-  },
-  "s_pure_white.png": {
-    "mtime": 1784328705.4655764,
-    "ast_hash": "80b5c545be4ba931ef45851c2889298c",
-    "semantic_hash": ""
-  },
-  "s_pure_white_routines.png": {
-    "mtime": 1784328728.794984,
-    "ast_hash": "d34207cf00742675069b1464a2423823",
-    "semantic_hash": ""
-  },
-  "s_rutinler.png": {
-    "mtime": 1784326508.6466134,
-    "ast_hash": "db2afe37af3a11d7565c5f801ee0f3db",
-    "semantic_hash": ""
-  },
-  "s_today_soft.png": {
-    "mtime": 1784327492.427608,
-    "ast_hash": "a0eaa8af60a9f1cec1ea74206b963487",
-    "semantic_hash": ""
-  },
-  "s_today_soft2.png": {
-    "mtime": 1784327512.6891613,
-    "ast_hash": "0a1494219b6568c0ae62dcf352e02c12",
-    "semantic_hash": ""
-  },
-  "screen_after.png": {
-    "mtime": 1784326293.1917832,
-    "ast_hash": "3d1166fb1b85f527690bee4349fb301c",
-    "semantic_hash": ""
-  },
-  "today2.png": {
-    "mtime": 1784326553.4513128,
-    "ast_hash": "790c332d376b74980fe207860d3cc6e6",
-    "semantic_hash": ""
-  },
-  "today_live.png": {
-    "mtime": 1777549753.7343833,
-    "ast_hash": "571a55bb12d1c1b51899847f26b96b82",
-    "semantic_hash": ""
-  },
-  "today_live10.png": {
-    "mtime": 1777551180.789317,
-    "ast_hash": "a34dba4a354ee8a4daf4bf53d35e7c2a",
-    "semantic_hash": ""
-  },
-  "today_live11.png": {
-    "mtime": 1777551386.432434,
-    "ast_hash": "1c739ce01a25f4b45454a24e3ca06813",
-    "semantic_hash": ""
-  },
-  "today_live12.png": {
-    "mtime": 1777551555.320662,
-    "ast_hash": "c22f45c24a8f1faae0e9783357d60c81",
-    "semantic_hash": ""
-  },
-  "today_live13.png": {
-    "mtime": 1777551697.2071323,
-    "ast_hash": "140cb96c42a75756da2d1dfd909641f9",
-    "semantic_hash": ""
-  },
-  "today_live14.png": {
-    "mtime": 1777551713.5738702,
-    "ast_hash": "89ab6c891580a4e64bafdc360e538cc3",
-    "semantic_hash": ""
-  },
-  "today_live15.png": {
-    "mtime": 1777551725.165041,
-    "ast_hash": "89ab6c891580a4e64bafdc360e538cc3",
-    "semantic_hash": ""
-  },
-  "today_live2.png": {
-    "mtime": 1777550049.2080452,
-    "ast_hash": "44285d4498d8699e7fbda7018aace47c",
-    "semantic_hash": ""
-  },
-  "today_live3.png": {
-    "mtime": 1777550297.2076705,
-    "ast_hash": "2bc33b540ed266b282f4152b949a72f2",
-    "semantic_hash": ""
-  },
-  "today_live4.png": {
-    "mtime": 1777550323.4303572,
-    "ast_hash": "4fbb390ece85aed8925ea36e5e168da4",
-    "semantic_hash": ""
-  },
-  "today_live5.png": {
-    "mtime": 1777550523.4614165,
-    "ast_hash": "140cb96c42a75756da2d1dfd909641f9",
-    "semantic_hash": ""
-  },
-  "today_live6.png": {
-    "mtime": 1777550543.5568156,
-    "ast_hash": "4dbfeea901bcb3163178e1689c6f6802",
-    "semantic_hash": ""
-  },
-  "today_live7.png": {
-    "mtime": 1777550738.0050375,
-    "ast_hash": "72865f370f90d4557f36a7f23f7333cf",
-    "semantic_hash": ""
-  },
-  "today_live8.png": {
-    "mtime": 1777550771.4917326,
-    "ast_hash": "dc8a0c09f501af1ee2a5f184bf997dde",
-    "semantic_hash": ""
-  },
-  "today_live9.png": {
-    "mtime": 1777551024.3638833,
-    "ast_hash": "b538a5cda95df0f29d5552441bbe419e",
-    "semantic_hash": ""
-  },
-  "u_plan.png": {
-    "mtime": 1784327235.6237023,
-    "ast_hash": "7a4b7ede996721083e5a69f9410ae730",
-    "semantic_hash": ""
-  },
-  "u_today.png": {
-    "mtime": 1784327215.6899145,
-    "ast_hash": "d2f78aa6b19207aa6ebffb03f1729111",
-    "semantic_hash": ""
-  },
-  "v_today.png": {
-    "mtime": 1784327180.9045959,
-    "ast_hash": "41e85e60078e73b04aa963906bfa3aed",
-    "semantic_hash": ""
-  },
   "docs/product/benimgunlerim-urun-felsefesi-ve-akislari.md": {
     "mtime": 1785361994.367151,
     "ast_hash": "d172e36f3b5f8e3d69f7f1d8006d9715",
@@ -1445,8 +1230,8 @@
     "semantic_hash": ""
   },
   "DESIGN.md": {
-    "mtime": 1785363870.8443685,
-    "ast_hash": "553ab9a85f22b1e5b369741fd4829d59",
+    "mtime": 1785364189.6660662,
+    "ast_hash": "0b589cb91f60f92acde7481340b7aba0",
     "semantic_hash": ""
   }
 }

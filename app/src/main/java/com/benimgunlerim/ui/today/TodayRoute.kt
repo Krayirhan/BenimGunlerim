@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun TodayRoute(
     onNavigateToRoutines: () -> Unit = {},
     onNavigateToPlan: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
     onOpenRoutineDetail: (String) -> Unit = {},
     viewModel: TodayViewModel = hiltViewModel(),
 ) {
@@ -14,7 +15,7 @@ fun TodayRoute(
         viewModel = viewModel,
         onNavigateToRoutines = onNavigateToRoutines,
         onNavigateToPlan = onNavigateToPlan,
+        onNavigateToSettings = onNavigateToSettings,
         onOpenRoutineDetail = onOpenRoutineDetail,
     )
 }
-

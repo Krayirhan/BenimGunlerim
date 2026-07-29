@@ -40,6 +40,8 @@
     <string name="nav_progress">İlerlemen</string>
     <string name="nav_settings">Ayarlar</string>
     <string name="app_name">BenimGünlerim</string>
+    <string name="today_profile_cd">Profil ve ayarlar</string>
+    <string name="today_notifications_cd">Bildirim ayarları</string>
 
     <!-- Bildirim kanal adları -->
     <string name="notif_channel_routine_name">Rutin hatırlatmaları</string>
