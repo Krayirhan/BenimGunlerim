@@ -42713,17 +42713,6 @@
     },
     {
       "source": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todaylist",
-      "target": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_mutedaccent",
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt",
-      "source_location": "L822",
-      "weight": 1.0,
-      "_origin": "ast"
-    },
-    {
-      "source": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_todaylist",
       "target": "app_src_main_java_com_benimgunlerim_ui_today_todayscreen_overduetaskrow",
       "relation": "calls",
       "context": "call",

@@ -564,14 +564,14 @@ private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics {
     return remember(screenWidthDp, isCompact) {
         TodayLayoutMetrics(
             isCompact = isCompact,
-            headerCorner = s(if (isCompact) 24f else 28f),
-            headerPadding = s(if (isCompact) 14f else 16f),
+            headerCorner = s(24f),
+            headerPadding = s(20f),
             headerSpacing = s(if (isCompact) 8f else 10f),
             headerMetaSpacing = s(if (isCompact) 2f else 3f),
             headerProgressHeight = s(if (isCompact) 7f else 8f),
             sectionCorner = s(if (isCompact) 14f else 16f),
-            sectionPaddingHorizontal = s(if (isCompact) 10f else 12f),
-            sectionPaddingVertical = s(if (isCompact) 9f else 10f),
+            sectionPaddingHorizontal = s(20f),
+            sectionPaddingVertical = s(16f),
             sectionItemSpacing = s(if (isCompact) 7f else 8f),
             listBlockSpacing = s(if (isCompact) 9f else 10f),
             summaryBlockSpacing = s(2f),
@@ -624,9 +624,9 @@ internal fun TodayHeaderCard(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(metrics.sectionCorner),
-        color = MaterialTheme.colorScheme.surface,
+        color = MaterialTheme.colorScheme.primaryContainer,
         tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
+        shadowElevation = 4.dp,
     ) {
         Column(
             modifier = Modifier.padding(if (metrics.isCompact) 14.dp else 16.dp),
@@ -645,40 +645,40 @@ internal fun TodayHeaderCard(
                         Text(
                             statusLine,
                             style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                         Text(
                             supportLine,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.76f),
                         )
                     }
                     Text(
                         "%$percent",
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = CandyPrimary,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Pill(stringResource(R.string.today_streak_pill, streak), CandyPrimary)
-                    Pill(stringResource(R.string.today_mood_pill, happiness), CandySecondary)
+                    Pill(stringResource(R.string.today_streak_pill, streak), MaterialTheme.colorScheme.onPrimaryContainer)
+                    Pill(stringResource(R.string.today_mood_pill, happiness), MaterialTheme.colorScheme.secondary)
                 }
                 Box(
                     Modifier
                         .fillMaxWidth()
                         .height(metrics.headerProgressHeight)
                         .clip(RoundedCornerShape(99.dp))
-                        .background(CandyPrimary.copy(.18f)),
+                        .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(.14f)),
                 ) {
                     Box(
                         Modifier
                             .fillMaxWidth(animated)
                             .height(metrics.headerProgressHeight)
                             .clip(RoundedCornerShape(99.dp))
-                            .background(CandyPrimary.copy(.92f)),
+                            .background(MaterialTheme.colorScheme.onPrimaryContainer.copy(.92f)),
                     )
                 }
             }
@@ -819,9 +819,9 @@ internal fun TodayList(
             if (overdueTasks.isNotEmpty()) {
                 SectionCard(
                     title = stringResource(R.string.today_overdue_title),
-                    tint = mutedAccent(StreakCoral),
-                    containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.90f),
-                    borderColor = StreakCoral.copy(alpha = 0.34f),
+                    tint = MaterialTheme.colorScheme.tertiary,
+                    containerColor = MaterialTheme.todayColorTokens.overdueSurface,
+                    borderColor = MaterialTheme.todayColorTokens.overdueBorder,
                     metrics = metrics,
                 ) {
                 Row(
@@ -865,8 +865,8 @@ internal fun TodayList(
             if (sortedOpenTasks.isNotEmpty()) {
                 SectionCard(
                     title = stringResource(R.string.today_tasks_subsection),
-                    tint = mutedAccent(CandyPrimary),
-                    containerColor = MaterialTheme.todayColorTokens.tasksSectionSurface.copy(alpha = 0.92f),
+                    tint = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.todayColorTokens.tasksSectionSurface,
                     borderColor = MaterialTheme.todayColorTokens.tasksSectionBorder,
                     metrics = metrics,
                     modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayTasksSection),
@@ -890,8 +890,8 @@ internal fun TodayList(
             if (sortedOpenRoutines.isNotEmpty()) {
                 SectionCard(
                     title = stringResource(R.string.today_routines_subsection),
-                    tint = mutedAccent(LevelSky),
-                    containerColor = MaterialTheme.todayColorTokens.routinesSectionSurface.copy(alpha = 0.92f),
+                    tint = MaterialTheme.colorScheme.secondary,
+                    containerColor = MaterialTheme.todayColorTokens.routinesSectionSurface,
                     borderColor = MaterialTheme.todayColorTokens.routinesSectionBorder,
                     metrics = metrics,
                     modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayRoutinesSection),
@@ -919,9 +919,9 @@ internal fun TodayList(
         if (completedTasks.isNotEmpty() || completedRoutines.isNotEmpty()) {
             SectionCard(
                 title = stringResource(R.string.today_completed_label),
-                tint = mutedAccent(CandyPrimary),
+                tint = MaterialTheme.colorScheme.primary,
                 containerColor = MaterialTheme.colorScheme.surface,
-                borderColor = CandyPrimary.copy(alpha = 0.28f),
+                borderColor = MaterialTheme.colorScheme.outlineVariant,
                 metrics = metrics,
                 modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayCompletedSection),
             ) {

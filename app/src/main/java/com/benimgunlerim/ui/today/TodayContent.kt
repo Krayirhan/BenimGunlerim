@@ -53,8 +53,8 @@ internal fun TodayContent(
             .fillMaxSize()
             .background(ScreenBackground())
             .padding(padding),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 140.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 140.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (state.snapshotLoadError) {
             item(key = "snapshot_err") {

@@ -27,25 +27,25 @@ val Nunito = FontFamily(
 )
 
 // ── BenimGünlerim — Core Palette ─────────────────────────────────────────────
-val CandyPrimary      = Color(0xFF19B97A)  // Primary Mint
-val CandyPrimaryLight = Color(0xFFE7FAF1)  // Mint Soft
-val CandyPrimaryDark  = Color(0xFF0FA46A)  // Deep Mint
-val CandySecondary    = Color(0xFF7C5CFF)  // Accent Purple
-val CandySecondaryLt  = Color(0xFFF0EBFF)  // Purple Soft
-val CandyTertiary     = Color(0xFFFFB648)  // Amber
-val CandyTertiaryLt   = Color(0xFFFFF4DF)  // Amber Soft
+val CandyPrimary      = Color(0xFF0B6C43)  // Warm Companion sage
+val CandyPrimaryLight = Color(0xFFE8F5EE)  // Success soft
+val CandyPrimaryDark  = Color(0xFF004C2D)  // Deep sage
+val CandySecondary    = Color(0xFF396282)  // Supporting blue
+val CandySecondaryLt  = Color(0xFFB0D9FD)  // Blue container
+val CandyTertiary     = Color(0xFF815526)  // Warm apricot attention
+val CandyTertiaryLt   = Color(0xFFFFF4E5)  // Warning soft
 val AccentPurple      = CandySecondary
 val AccentPurpleSoft  = CandySecondaryLt
 val AccentAmber       = CandyTertiary
 val AccentAmberSoft   = CandyTertiaryLt
-val AccentCoral       = Color(0xFFFF7B72)
-val AccentCoralSoft   = Color(0xFFFFF0EE)
-val AccentSky         = Color(0xFF4FA6FF)
-val AccentSkySoft     = Color(0xFFEEF7FF)
+val AccentCoral       = Color(0xFFBA1A1A)
+val AccentCoralSoft   = Color(0xFFFDE8E8)
+val AccentSky         = CandySecondary
+val AccentSkySoft     = Color(0xFFCBE6FF)
 
 // ── Oyunlaştırma Accent Renkleri ──────────────────────────────────────────────
 val XpGold            = AccentAmber
-val StreakCoral       = AccentCoral
+val StreakCoral       = CandyTertiary
 val LevelSky          = AccentSky
 val HeartPink         = AccentCoral
 
@@ -97,24 +97,24 @@ val BannerEnd   = AccentPurple
 private val LightColors = lightColorScheme(
     primary              = CandyPrimary,
     onPrimary            = Color.White,
-    primaryContainer     = CandyPrimaryLight,
-    onPrimaryContainer   = CandyPrimary,
-    secondary            = AccentPurple,
+    primaryContainer     = Color(0xFF6BBF8E),
+    onPrimaryContainer   = Color(0xFF004C2D),
+    secondary            = CandySecondary,
     onSecondary          = Color.White,
-    secondaryContainer   = AccentPurpleSoft,
-    onSecondaryContainer = AccentPurple,
-    tertiary             = AccentAmber,
+    secondaryContainer   = CandySecondaryLt,
+    onSecondaryContainer = CandySecondary,
+    tertiary             = CandyTertiary,
     onTertiary           = Color.White,
-    tertiaryContainer    = AccentAmberSoft,
-    onTertiaryContainer  = AccentAmber,
-    background           = Color(0xFFF6F8FC),
+    tertiaryContainer    = Color(0xFFDBA36D),
+    onTertiaryContainer  = Color(0xFF5F390B),
+    background           = Color(0xFFF8F9FA),
     surface              = Color(0xFFFFFFFF),
-    surfaceVariant       = Color(0xFFF1F5F9),
-    onBackground         = Color(0xFF0F172A),
-    onSurface            = Color(0xFF0F172A),
-    onSurfaceVariant     = Color(0xFF475569),
-    outline              = Color(0xFFE5EAF2),
-    outlineVariant       = Color(0xFFE5EAF2),
+    surfaceVariant       = Color(0xFFDCE3EC),
+    onBackground         = Color(0xFF151C23),
+    onSurface            = Color(0xFF151C23),
+    onSurfaceVariant     = Color(0xFF3F4941),
+    outline              = Color(0xFF6F7A71),
+    outlineVariant       = Color(0xFFBEC9BF),
     error                = SemanticError,
     onError              = Color.White,
 )
