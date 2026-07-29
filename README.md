@@ -60,6 +60,9 @@ Release için signing bilgileri `keystore.properties` veya CI secret'ları ile s
 
 ## Production Dokümanları
 
+- [Güncel proje durumu ve sprint kaynağı](docs/PROJECT_STATUS.md)
+- [Ürün felsefesi ve kullanıcı akışları](docs/product/benimgunlerim-urun-felsefesi-ve-akislari.md)
+
 - [Production readiness özeti](docs/production/production-readiness.md)
 - [Tarihli audit snapshot](docs/production/readiness-audit-2026-04-13.md)
 - [Kalite kapıları](docs/production/quality-gates.md)

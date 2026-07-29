@@ -15,6 +15,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.unit.dp
 import com.benimgunlerim.domain.model.TaskCompletionState
+import com.benimgunlerim.ui.components.ScreenBackground
 import com.benimgunlerim.ui.theme.CandyPrimary
 import java.time.LocalDate
 
@@ -39,7 +40,7 @@ internal fun TodayContent(
 ) {
     if (state.isLoading) {
         androidx.compose.foundation.layout.Box(
-            Modifier.fillMaxSize().background(HomeBackground()).padding(padding),
+            Modifier.fillMaxSize().background(ScreenBackground()).padding(padding),
             contentAlignment = androidx.compose.ui.Alignment.Center,
         ) {
             CircularProgressIndicator(color = CandyPrimary)
@@ -50,7 +51,7 @@ internal fun TodayContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(HomeBackground())
+            .background(ScreenBackground())
             .padding(padding),
         contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 18.dp, bottom = 140.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -112,16 +113,6 @@ internal fun TodayContent(
                 actions = listActions,
             )
         }
-        val capturedMissedDay = state.missedDay
-        if (capturedMissedDay != null) {
-            item(key = "missedDay") {
-                MissedDayBanner(
-                    date = capturedMissedDay,
-                    onReview = onShowMissedDaySheet,
-                    onDismiss = { viewModel.autoSaveMissedDay(capturedMissedDay) },
-                )
-            }
-        }
         item(key = "closeDay") {
             CloseDayCard(
                 completed = completed,
@@ -135,9 +126,18 @@ internal fun TodayContent(
                 dailySummaryTime = state.dailySummaryTime,
             ) { onShowCloseDaySheet() }
         }
+        val capturedMissedDay = state.missedDay
+        if (capturedMissedDay != null) {
+            item(key = "missedDay") {
+                MissedDayBanner(
+                    date = capturedMissedDay,
+                    onReview = onShowMissedDaySheet,
+                    onDismiss = { viewModel.autoSaveMissedDay(capturedMissedDay) },
+                )
+            }
+        }
         item(key = "fab_safe_space") {
             Spacer(Modifier.height(16.dp))
         }
     }
 }
-

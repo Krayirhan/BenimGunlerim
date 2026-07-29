@@ -41,12 +41,14 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.benimgunlerim.ui.achievements.AchievementsScreen
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.onboarding.OnboardingScreen
 import com.benimgunlerim.ui.onboarding.OnboardingViewModel
 import com.benimgunlerim.ui.plan.PlanScreen
@@ -59,15 +61,15 @@ import com.benimgunlerim.ui.today.TodayRoute
 
 private enum class Destination(
     val route: String,
-    val label: String,
+    val labelRes: Int,
     val icon: ImageVector,
     val selectedIcon: ImageVector,
 ) {
-    Today(AppDestination.Today.route, "Bugün", Icons.Outlined.CheckCircle, Icons.Filled.CheckCircle),
-    Plan(AppDestination.Plan.route, "Plan", Icons.Outlined.CalendarMonth, Icons.Filled.CalendarMonth),
-    Routines(AppDestination.Routines.route, "Rutinler", Icons.Outlined.LocalFireDepartment, Icons.Filled.LocalFireDepartment),
-    Progress(AppDestination.Progress.route, "İlerlemen", Icons.Outlined.BarChart, Icons.Filled.BarChart),
-    Settings(AppDestination.Settings.route, "Ayarlar", Icons.Outlined.Settings, Icons.Filled.Settings),
+    Today(AppDestination.Today.route, R.string.nav_today, Icons.Outlined.CheckCircle, Icons.Filled.CheckCircle),
+    Plan(AppDestination.Plan.route, R.string.nav_plan, Icons.Outlined.CalendarMonth, Icons.Filled.CalendarMonth),
+    Routines(AppDestination.Routines.route, R.string.nav_routines, Icons.Outlined.LocalFireDepartment, Icons.Filled.LocalFireDepartment),
+    Progress(AppDestination.Progress.route, R.string.nav_progress, Icons.Outlined.BarChart, Icons.Filled.BarChart),
+    Settings(AppDestination.Settings.route, R.string.nav_settings, Icons.Outlined.Settings, Icons.Filled.Settings),
 }
 
 @Composable
@@ -136,7 +138,7 @@ fun BenimGunlerimApp(
                             },
                             label = {
                                 Text(
-                                    destination.label,
+                                    stringResource(destination.labelRes),
                                     style = MaterialTheme.typography.labelSmall,
                                 )
                             },
@@ -144,7 +146,7 @@ fun BenimGunlerimApp(
                                 Box(contentAlignment = Alignment.TopEnd) {
                                     Icon(
                                         imageVector = if (selected) destination.selectedIcon else destination.icon,
-                                        contentDescription = destination.label,
+                                        contentDescription = stringResource(destination.labelRes),
                                         modifier = Modifier.scale(scale),
                                     )
                                     if (selected) {

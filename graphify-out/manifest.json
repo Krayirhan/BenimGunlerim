@@ -1,0 +1,1447 @@
+{
+  "app/build.gradle.kts": {
+    "mtime": 1777496551.7177732,
+    "ast_hash": "4ac2eb37c0a70b9b6ca32615480a4074",
+    "semantic_hash": "4ac2eb37c0a70b9b6ca32615480a4074"
+  },
+  "app/schemas/com.benimgunlerim.data.local.AppDatabase/7.json": {
+    "mtime": 1776088408.8022127,
+    "ast_hash": "ce82152218b4964045780bc2092a7a58",
+    "semantic_hash": "ce82152218b4964045780bc2092a7a58"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/AccessibilityTest.kt": {
+    "mtime": 1777578955.324134,
+    "ast_hash": "9b58704759df058f20cae19b88d9ed51",
+    "semantic_hash": "9b58704759df058f20cae19b88d9ed51"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/NotificationMatrixSmokeTest.kt": {
+    "mtime": 1777559989.8033917,
+    "ast_hash": "e1370be63c8c7945a63ddf29f4f4573c",
+    "semantic_hash": "e1370be63c8c7945a63ddf29f4f4573c"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/RoutinesScreenTest.kt": {
+    "mtime": 1776094058.4611998,
+    "ast_hash": "46b922e20672ad19341c3038d6ab4acd",
+    "semantic_hash": "46b922e20672ad19341c3038d6ab4acd"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/SettingsScreenTest.kt": {
+    "mtime": 1776118700.6327367,
+    "ast_hash": "943ebb757a60e80bb656e47a86f151d1",
+    "semantic_hash": "943ebb757a60e80bb656e47a86f151d1"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/TodayScreenTest.kt": {
+    "mtime": 1777565484.2279224,
+    "ast_hash": "897fab12e1e68cd53af752059b12122f",
+    "semantic_hash": "897fab12e1e68cd53af752059b12122f"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/data/local/AppDatabaseMigrationTest.kt": {
+    "mtime": 1776095059.479613,
+    "ast_hash": "5ce7ccbe710d1c5ac163380c60206894",
+    "semantic_hash": "5ce7ccbe710d1c5ac163380c60206894"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/data/local/DaoTests.kt": {
+    "mtime": 1776206924.409377,
+    "ast_hash": "87b41c279a71af2e6da8db26feedb664",
+    "semantic_hash": "87b41c279a71af2e6da8db26feedb664"
+  },
+  "app/src/androidTest/java/com/benimgunlerim/data/local/TaskDaoTest.kt": {
+    "mtime": 1776206924.409377,
+    "ast_hash": "657fd9e9e7e0faeb2a86d3f1d2e6c887",
+    "semantic_hash": "657fd9e9e7e0faeb2a86d3f1d2e6c887"
+  },
+  "app/src/main/java/com/benimgunlerim/BenimGunlerimApplication.kt": {
+    "mtime": 1776108093.469815,
+    "ast_hash": "83a18310d227ca7519c720e43db2e065",
+    "semantic_hash": "83a18310d227ca7519c720e43db2e065"
+  },
+  "app/src/main/java/com/benimgunlerim/MainActivity.kt": {
+    "mtime": 1776105579.6889818,
+    "ast_hash": "9602bfe0e98a23c1270a785754d44260",
+    "semantic_hash": "9602bfe0e98a23c1270a785754d44260"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/AnalyticsTracker.kt": {
+    "mtime": 1775943396.3248146,
+    "ast_hash": "bb8391b9b013ca5376136372c5bbcd4e",
+    "semantic_hash": "bb8391b9b013ca5376136372c5bbcd4e"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/AppCrashHandler.kt": {
+    "mtime": 1776101306.5572486,
+    "ast_hash": "bc27e457e18d07b7220531f41087fe5d",
+    "semantic_hash": "bc27e457e18d07b7220531f41087fe5d"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/CrashlyticsErrorReporter.kt": {
+    "mtime": 1776115142.4217117,
+    "ast_hash": "e339786282f965faae469fbf43554c3f",
+    "semantic_hash": "e339786282f965faae469fbf43554c3f"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/ErrorReporter.kt": {
+    "mtime": 1776091029.440567,
+    "ast_hash": "379bf1aec2b4bbb8097de7faa6eccc39",
+    "semantic_hash": "379bf1aec2b4bbb8097de7faa6eccc39"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/ErrorReporterContextPolicy.kt": {
+    "mtime": 1776115142.4217117,
+    "ast_hash": "def8bc4814bea3b96daf477e0842ff9e",
+    "semantic_hash": "def8bc4814bea3b96daf477e0842ff9e"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/LocalAnalyticsTracker.kt": {
+    "mtime": 1776094949.0658407,
+    "ast_hash": "fab9b6d4562c2040b5f20ad61a58b257",
+    "semantic_hash": "fab9b6d4562c2040b5f20ad61a58b257"
+  },
+  "app/src/main/java/com/benimgunlerim/analytics/LocalErrorReporter.kt": {
+    "mtime": 1776115142.4201806,
+    "ast_hash": "4bc25aceec2cd9d21e37c12692b81c66",
+    "semantic_hash": "4bc25aceec2cd9d21e37c12692b81c66"
+  },
+  "app/src/main/java/com/benimgunlerim/data/CompletionLogExtensions.kt": {
+    "mtime": 1777492779.3760734,
+    "ast_hash": "22cea575f89364e11e8f713de68d2eaa",
+    "semantic_hash": "22cea575f89364e11e8f713de68d2eaa"
+  },
+  "app/src/main/java/com/benimgunlerim/data/CompletionLogRepository.kt": {
+    "mtime": 1776277567.3222528,
+    "ast_hash": "f59631ed7794851ad5388681fd4a5c56",
+    "semantic_hash": "f59631ed7794851ad5388681fd4a5c56"
+  },
+  "app/src/main/java/com/benimgunlerim/data/DailyStateRepository.kt": {
+    "mtime": 1776204790.7546523,
+    "ast_hash": "b0a63906d3c5623069b3d91049f6f9a9",
+    "semantic_hash": "b0a63906d3c5623069b3d91049f6f9a9"
+  },
+  "app/src/main/java/com/benimgunlerim/data/DataExportService.kt": {
+    "mtime": 1777559989.704295,
+    "ast_hash": "4b149e3858be71500f3f32b65ca854da",
+    "semantic_hash": "4b149e3858be71500f3f32b65ca854da"
+  },
+  "app/src/main/java/com/benimgunlerim/data/DataImportService.kt": {
+    "mtime": 1777559989.2586067,
+    "ast_hash": "9682b5efb331c8d33e336fb447420dfe",
+    "semantic_hash": "9682b5efb331c8d33e336fb447420dfe"
+  },
+  "app/src/main/java/com/benimgunlerim/data/DatabaseTransactionRunner.kt": {
+    "mtime": 1776098959.6457784,
+    "ast_hash": "a89f3e4093ae1e054b65b727e76d2f43",
+    "semantic_hash": "a89f3e4093ae1e054b65b727e76d2f43"
+  },
+  "app/src/main/java/com/benimgunlerim/data/LocalDataClearer.kt": {
+    "mtime": 1777489444.5864582,
+    "ast_hash": "5aeae4350f17ab0c4b3319ddabf626f9",
+    "semantic_hash": "5aeae4350f17ab0c4b3319ddabf626f9"
+  },
+  "app/src/main/java/com/benimgunlerim/data/LocalDataClearerImpl.kt": {
+    "mtime": 1777489156.6239464,
+    "ast_hash": "ea8b13443ebdf4044287007cc4b4c0e4",
+    "semantic_hash": "ea8b13443ebdf4044287007cc4b4c0e4"
+  },
+  "app/src/main/java/com/benimgunlerim/data/RoutineExtensions.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "cddb99d257e87c8b430633ff24c7769c",
+    "semantic_hash": "cddb99d257e87c8b430633ff24c7769c"
+  },
+  "app/src/main/java/com/benimgunlerim/data/RoutineRepository.kt": {
+    "mtime": 1776204790.7546523,
+    "ast_hash": "ba4b7f75c129b886046562558557ff58",
+    "semantic_hash": "ba4b7f75c129b886046562558557ff58"
+  },
+  "app/src/main/java/com/benimgunlerim/data/TaskRepository.kt": {
+    "mtime": 1776277676.467503,
+    "ast_hash": "9a71a47fd10cc893298b566cb75059d1",
+    "semantic_hash": "9a71a47fd10cc893298b566cb75059d1"
+  },
+  "app/src/main/java/com/benimgunlerim/data/UserPreferencesRepository.kt": {
+    "mtime": 1777559989.3135,
+    "ast_hash": "e4788214a4273fdeb70646cf84c2fda2",
+    "semantic_hash": "e4788214a4273fdeb70646cf84c2fda2"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/AchievementDao.kt": {
+    "mtime": 1776098764.6040368,
+    "ast_hash": "98118a4b93e10650a256a27448d67710",
+    "semantic_hash": "98118a4b93e10650a256a27448d67710"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/AppDatabase.kt": {
+    "mtime": 1776089136.846003,
+    "ast_hash": "f2d809b065d13ad987f948c172598d74",
+    "semantic_hash": "f2d809b065d13ad987f948c172598d74"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/CompletionLogDao.kt": {
+    "mtime": 1776098768.614117,
+    "ast_hash": "54669f1165018edc4c903432d7b09b85",
+    "semantic_hash": "54669f1165018edc4c903432d7b09b85"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/DailyStateDao.kt": {
+    "mtime": 1776098772.2082298,
+    "ast_hash": "cdd67945e701f5568abb377e17ed408b",
+    "semantic_hash": "cdd67945e701f5568abb377e17ed408b"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/Migrations.kt": {
+    "mtime": 1776094989.8260589,
+    "ast_hash": "8561e2f2452ef487a30264b47bcd10ef",
+    "semantic_hash": "8561e2f2452ef487a30264b47bcd10ef"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/RoutineDao.kt": {
+    "mtime": 1776091029.440567,
+    "ast_hash": "aaf5c82c34ecd705691f5140d25a7bad",
+    "semantic_hash": "aaf5c82c34ecd705691f5140d25a7bad"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/SubTaskDao.kt": {
+    "mtime": 1776098758.9527853,
+    "ast_hash": "113b2edd8a6994abf2069405a097f1c3",
+    "semantic_hash": "113b2edd8a6994abf2069405a097f1c3"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/TaskDao.kt": {
+    "mtime": 1776098078.142493,
+    "ast_hash": "c01cd38c0b4b4b63fd227e5351653dc5",
+    "semantic_hash": "c01cd38c0b4b4b63fd227e5351653dc5"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/AchievementEntity.kt": {
+    "mtime": 1776007192.1851056,
+    "ast_hash": "a4c65058e8e6661b0f85626afedb4e74",
+    "semantic_hash": "a4c65058e8e6661b0f85626afedb4e74"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/CompletionLogEntity.kt": {
+    "mtime": 1776089136.8919358,
+    "ast_hash": "fa059d6368b97e4303094283ab3230fa",
+    "semantic_hash": "fa059d6368b97e4303094283ab3230fa"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/DailyStateEntity.kt": {
+    "mtime": 1776034447.6923273,
+    "ast_hash": "3806612608441df5b21705cee8b79539",
+    "semantic_hash": "3806612608441df5b21705cee8b79539"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/RoutineEntity.kt": {
+    "mtime": 1776089136.8919358,
+    "ast_hash": "bb45a0b8623816dd7d1be820cc15016c",
+    "semantic_hash": "bb45a0b8623816dd7d1be820cc15016c"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/SubTaskEntity.kt": {
+    "mtime": 1776082427.862718,
+    "ast_hash": "c583baad030cc3d8e755deb07738f9d8",
+    "semantic_hash": "c583baad030cc3d8e755deb07738f9d8"
+  },
+  "app/src/main/java/com/benimgunlerim/data/local/entity/TaskEntity.kt": {
+    "mtime": 1776089136.891522,
+    "ast_hash": "664d66043913ad76c340ed92c6d98080",
+    "semantic_hash": "664d66043913ad76c340ed92c6d98080"
+  },
+  "app/src/main/java/com/benimgunlerim/di/AppModule.kt": {
+    "mtime": 1777489161.137372,
+    "ast_hash": "c616b0f0a2922d9559ecdfd93112f5b7",
+    "semantic_hash": "c616b0f0a2922d9559ecdfd93112f5b7"
+  },
+  "app/src/main/java/com/benimgunlerim/di/ApplicationScope.kt": {
+    "mtime": 1776089136.893938,
+    "ast_hash": "a9eee1ffac537910c07eb45e21f54414",
+    "semantic_hash": "a9eee1ffac537910c07eb45e21f54414"
+  },
+  "app/src/main/java/com/benimgunlerim/di/DefaultDispatcher.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "7a9f49c46f57eb601e84680ac90e248d",
+    "semantic_hash": "7a9f49c46f57eb601e84680ac90e248d"
+  },
+  "app/src/main/java/com/benimgunlerim/di/IoDispatcher.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "265118dc4745ede1e3eab5f6494e9698",
+    "semantic_hash": "265118dc4745ede1e3eab5f6494e9698"
+  },
+  "app/src/main/java/com/benimgunlerim/di/MainDispatcher.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "f6064c2d13067ace8c3b6133d475ff55",
+    "semantic_hash": "f6064c2d13067ace8c3b6133d475ff55"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/AchievementTracker.kt": {
+    "mtime": 1776205799.196018,
+    "ast_hash": "984c36c44d2c44d9da3d6303a6739ce5",
+    "semantic_hash": "984c36c44d2c44d9da3d6303a6739ce5"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/DailyScoreCalculator.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "51c2b3026c64c4ec306b07df848fa3f0",
+    "semantic_hash": "51c2b3026c64c4ec306b07df848fa3f0"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/DateTimeProvider.kt": {
+    "mtime": 1776204790.7340753,
+    "ast_hash": "2d55fcfb4d096815df739df5d5cc5247",
+    "semantic_hash": "2d55fcfb4d096815df739df5d5cc5247"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/FeedbackManager.kt": {
+    "mtime": 1776274351.2655113,
+    "ast_hash": "251eb5d3d04bcde345b7e16402b88209",
+    "semantic_hash": "251eb5d3d04bcde345b7e16402b88209"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/GameEngine.kt": {
+    "mtime": 1776206258.1432543,
+    "ast_hash": "5a4f7c34685848a47059cdf23a240b97",
+    "semantic_hash": "5a4f7c34685848a47059cdf23a240b97"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/OperationResult.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "dd175fb10f68cee5b89148a378a8c456",
+    "semantic_hash": "dd175fb10f68cee5b89148a378a8c456"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/ProgressCalculator.kt": {
+    "mtime": 1775945312.58084,
+    "ast_hash": "bbc5b2fb85fbe536dc0924bdd08ccd96",
+    "semantic_hash": "bbc5b2fb85fbe536dc0924bdd08ccd96"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/RandomProvider.kt": {
+    "mtime": 1776204790.747652,
+    "ast_hash": "6f1d86ebfe74d8a73292e275d76817a4",
+    "semantic_hash": "6f1d86ebfe74d8a73292e275d76817a4"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/TickerProvider.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "8ac4d596df169bc43e10b1618d7ca0c3",
+    "semantic_hash": "8ac4d596df169bc43e10b1618d7ca0c3"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/TimeText.kt": {
+    "mtime": 1775945889.4860208,
+    "ast_hash": "9fc1123ed666a49cd60f85db7287dc66",
+    "semantic_hash": "9fc1123ed666a49cd60f85db7287dc66"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/model/CompletionEntityType.kt": {
+    "mtime": 1776204790.7496538,
+    "ast_hash": "e90615fadfa9db9dfedd82032ca5a3f4",
+    "semantic_hash": "e90615fadfa9db9dfedd82032ca5a3f4"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/model/CompletionStatus.kt": {
+    "mtime": 1776204790.7496538,
+    "ast_hash": "aaabe86e4de19b7d5d5209dd1352c4f2",
+    "semantic_hash": "aaabe86e4de19b7d5d5209dd1352c4f2"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/model/GameEvent.kt": {
+    "mtime": 1777494450.618737,
+    "ast_hash": "04622d820ed0b8a2f8b457f7af4f5715",
+    "semantic_hash": "04622d820ed0b8a2f8b457f7af4f5715"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/model/RoutineTargetType.kt": {
+    "mtime": 1776204790.7536504,
+    "ast_hash": "bb02a22fa7248d0e451a9245fee3aeec",
+    "semantic_hash": "bb02a22fa7248d0e451a9245fee3aeec"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/model/TaskCompletionState.kt": {
+    "mtime": 1776204790.7496538,
+    "ast_hash": "5c4e52b325dc0929ddf41cb27ef7de7d",
+    "semantic_hash": "5c4e52b325dc0929ddf41cb27ef7de7d"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/service/AchievementEvaluationService.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "e116c3ab1bc9269ac34c430248b77a16",
+    "semantic_hash": "e116c3ab1bc9269ac34c430248b77a16"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/service/LevelProgressionService.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "a693708fea2fbb325aff8f5ddf1cf42e",
+    "semantic_hash": "a693708fea2fbb325aff8f5ddf1cf42e"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/service/RewardDisplayService.kt": {
+    "mtime": 1777494453.5584893,
+    "ast_hash": "9dfd90f26b50fbd498be6b60ec9e1c3d",
+    "semantic_hash": "9dfd90f26b50fbd498be6b60ec9e1c3d"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/service/RewardGrantService.kt": {
+    "mtime": 1776277567.2752538,
+    "ast_hash": "a9dfb438215b227447658c3e5d648f1b",
+    "semantic_hash": "a9dfb438215b227447658c3e5d648f1b"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/AddRoutineUseCase.kt": {
+    "mtime": 1777487991.743348,
+    "ast_hash": "25289518426ab3a95c2554f410ae869b",
+    "semantic_hash": "25289518426ab3a95c2554f410ae869b"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/AddSubTaskUseCase.kt": {
+    "mtime": 1777488316.9125805,
+    "ast_hash": "3ade0c39acbef7d04ef8189e0ab2e012",
+    "semantic_hash": "3ade0c39acbef7d04ef8189e0ab2e012"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/AddTaskUseCase.kt": {
+    "mtime": 1776204790.7596538,
+    "ast_hash": "ad052e37ff95238a26741afb3038b5f3",
+    "semantic_hash": "ad052e37ff95238a26741afb3038b5f3"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ArchiveRoutineUseCase.kt": {
+    "mtime": 1777487998.0958817,
+    "ast_hash": "94e1f8e2d075931dd2a8864890a3933b",
+    "semantic_hash": "94e1f8e2d075931dd2a8864890a3933b"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/AutoCloseMissedDayUseCase.kt": {
+    "mtime": 1777488338.121971,
+    "ast_hash": "b27e33982f6eeded12a1814dd88d622a",
+    "semantic_hash": "b27e33982f6eeded12a1814dd88d622a"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/CarryPendingTasksUseCase.kt": {
+    "mtime": 1777491989.6297505,
+    "ast_hash": "24c590f9142e1d0b258d7f37e9d8e784",
+    "semantic_hash": "24c590f9142e1d0b258d7f37e9d8e784"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/CloseDayUseCase.kt": {
+    "mtime": 1776277567.1977293,
+    "ast_hash": "782e7936720e613950b8e88c95eace06",
+    "semantic_hash": "782e7936720e613950b8e88c95eace06"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/DeleteSubTaskUseCase.kt": {
+    "mtime": 1777488330.869721,
+    "ast_hash": "97e9d0fed059b9caa9298ef02f990ffa",
+    "semantic_hash": "97e9d0fed059b9caa9298ef02f990ffa"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/DeleteTaskUseCase.kt": {
+    "mtime": 1776206924.4083767,
+    "ast_hash": "d2f1acb7fd640f90c995faddda1fb3b8",
+    "semantic_hash": "d2f1acb7fd640f90c995faddda1fb3b8"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/MoveTaskToDateUseCase.kt": {
+    "mtime": 1777487984.2945044,
+    "ast_hash": "bef026d15a218a22a9c49bc41e3a78ce",
+    "semantic_hash": "bef026d15a218a22a9c49bc41e3a78ce"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ObserveDailyStateUseCase.kt": {
+    "mtime": 1777488334.3208122,
+    "ast_hash": "db16912f8cad53b7b5259c23da90aaaf",
+    "semantic_hash": "db16912f8cad53b7b5259c23da90aaaf"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ObservePlanSnapshotUseCase.kt": {
+    "mtime": 1777577858.5529773,
+    "ast_hash": "2707b6a51a5026a0acd707d31c80294e",
+    "semantic_hash": "2707b6a51a5026a0acd707d31c80294e"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ObserveProgressSnapshotUseCase.kt": {
+    "mtime": 1777492784.4657094,
+    "ast_hash": "e1dbcce4943414b2b66892c2d9365579",
+    "semantic_hash": "e1dbcce4943414b2b66892c2d9365579"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ObserveSubTasksUseCase.kt": {
+    "mtime": 1777488314.394665,
+    "ast_hash": "ef56dc6e3e578574b91c0538f8628e4e",
+    "semantic_hash": "ef56dc6e3e578574b91c0538f8628e4e"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ObserveTodaySnapshotUseCase.kt": {
+    "mtime": 1777545983.870644,
+    "ast_hash": "9eed79fd0e73a9a4dcbe99625ee70343",
+    "semantic_hash": "9eed79fd0e73a9a4dcbe99625ee70343"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/RestoreRemindersUseCase.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "8ba18e0291551b6b50f568f171cf4764",
+    "semantic_hash": "8ba18e0291551b6b50f568f171cf4764"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/RestoreTaskUseCase.kt": {
+    "mtime": 1776204790.7616537,
+    "ast_hash": "7fa5047759dc9cea35c1e9c8be11da7d",
+    "semantic_hash": "7fa5047759dc9cea35c1e9c8be11da7d"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/SaveMissedDaySummaryUseCase.kt": {
+    "mtime": 1777489678.4588096,
+    "ast_hash": "69287e8725e1929763965fbb431c6cec",
+    "semantic_hash": "69287e8725e1929763965fbb431c6cec"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/SetTaskPendingUseCase.kt": {
+    "mtime": 1777488311.7239902,
+    "ast_hash": "095a0a85951b33c141f18d6af3208261",
+    "semantic_hash": "095a0a85951b33c141f18d6af3208261"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/SkipRoutineUseCase.kt": {
+    "mtime": 1777488002.649817,
+    "ast_hash": "a331189c03e15ad8afe339282eb84758",
+    "semantic_hash": "a331189c03e15ad8afe339282eb84758"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ToggleRoutineUseCase.kt": {
+    "mtime": 1776204790.7546523,
+    "ast_hash": "a88996f3566707d96b995faedccc3d3e",
+    "semantic_hash": "a88996f3566707d96b995faedccc3d3e"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ToggleSubTaskUseCase.kt": {
+    "mtime": 1777488324.2181435,
+    "ast_hash": "c56b465d8c7100e8a17e69447e3b07dd",
+    "semantic_hash": "c56b465d8c7100e8a17e69447e3b07dd"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ToggleTaskCompletionUseCase.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "02a411c7ee403dc1f304139a03174789",
+    "semantic_hash": "02a411c7ee403dc1f304139a03174789"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/ToggleTaskUseCase.kt": {
+    "mtime": 1776206924.407382,
+    "ast_hash": "7de5582fb5560d6fc9396f72515494e6",
+    "semantic_hash": "7de5582fb5560d6fc9396f72515494e6"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/UpdateRoutineProgressUseCase.kt": {
+    "mtime": 1776205440.0714934,
+    "ast_hash": "4e20c1f8362655b00f94bc745f2a4c0c",
+    "semantic_hash": "4e20c1f8362655b00f94bc745f2a4c0c"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/UpdateRoutineUseCase.kt": {
+    "mtime": 1777487995.3240905,
+    "ast_hash": "28d865ca1e2e41a6f8e2090b440229f1",
+    "semantic_hash": "28d865ca1e2e41a6f8e2090b440229f1"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/UpdateTaskTitleUseCase.kt": {
+    "mtime": 1777488304.4688635,
+    "ast_hash": "43212b8fdccf6824c5a1bb8e6589a44b",
+    "semantic_hash": "43212b8fdccf6824c5a1bb8e6589a44b"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/usecase/UpdateTaskUseCase.kt": {
+    "mtime": 1776204790.7596538,
+    "ast_hash": "69c2ce0d9c88c6f55d78a9552b457785",
+    "semantic_hash": "69c2ce0d9c88c6f55d78a9552b457785"
+  },
+  "app/src/main/java/com/benimgunlerim/domain/validation/TimeInputValidator.kt": {
+    "mtime": 1777559989.649515,
+    "ast_hash": "6a72f9979deb6a74243bb9a7e8aff122",
+    "semantic_hash": "6a72f9979deb6a74243bb9a7e8aff122"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/BootReceiver.kt": {
+    "mtime": 1776098096.781951,
+    "ast_hash": "53f2c12a0b0cc7dd1f6af664ec9cf065",
+    "semantic_hash": "53f2c12a0b0cc7dd1f6af664ec9cf065"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/DailySummaryReceiver.kt": {
+    "mtime": 1775943807.2704787,
+    "ast_hash": "93e6c6bb691fd2c1d54f2bfc0217248c",
+    "semantic_hash": "93e6c6bb691fd2c1d54f2bfc0217248c"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/DailySummaryScheduler.kt": {
+    "mtime": 1777492573.4380255,
+    "ast_hash": "28946d0b83a3d034ef07444d89e0ca51",
+    "semantic_hash": "28946d0b83a3d034ef07444d89e0ca51"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/MorningPlannerReceiver.kt": {
+    "mtime": 1776036812.2946706,
+    "ast_hash": "d5b41f784ca47f4ac12c6d36dfb62540",
+    "semantic_hash": "d5b41f784ca47f4ac12c6d36dfb62540"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/MorningPlannerScheduler.kt": {
+    "mtime": 1777492566.373153,
+    "ast_hash": "7cf80fb94c13ac45c19f013a900c243b",
+    "semantic_hash": "7cf80fb94c13ac45c19f013a900c243b"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/NotificationConstants.kt": {
+    "mtime": 1776082427.8687205,
+    "ast_hash": "26fa9e61631f24050d4497c757e1e064",
+    "semantic_hash": "26fa9e61631f24050d4497c757e1e064"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/NotificationHelper.kt": {
+    "mtime": 1776207496.743933,
+    "ast_hash": "cb31b5b03f756d372e14980899d104e8",
+    "semantic_hash": "cb31b5b03f756d372e14980899d104e8"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/NotificationIds.kt": {
+    "mtime": 1776207496.7020054,
+    "ast_hash": "0608cb65c8bff6d5c9307e9a8e6509bc",
+    "semantic_hash": "0608cb65c8bff6d5c9307e9a8e6509bc"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/ReminderBootstrapper.kt": {
+    "mtime": 1777493512.2917097,
+    "ast_hash": "9b654ed1f0542b630b4d8fd83a1b6c26",
+    "semantic_hash": "9b654ed1f0542b630b4d8fd83a1b6c26"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/ReminderPolicy.kt": {
+    "mtime": 1776107504.8783762,
+    "ast_hash": "7ae8a768615b92412046a079b10fea29",
+    "semantic_hash": "7ae8a768615b92412046a079b10fea29"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/RoutineReminderReceiver.kt": {
+    "mtime": 1777492789.70524,
+    "ast_hash": "46f292c048b920280346eb6b7873157d",
+    "semantic_hash": "46f292c048b920280346eb6b7873157d"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/RoutineReminderScheduler.kt": {
+    "mtime": 1777492577.462185,
+    "ast_hash": "3ac961af192b90c98ec96a3d71ab0d88",
+    "semantic_hash": "3ac961af192b90c98ec96a3d71ab0d88"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/RoutineReminderSchedulerContract.kt": {
+    "mtime": 1776205440.068494,
+    "ast_hash": "b1b62d348cf5338f11cf0242f110610e",
+    "semantic_hash": "b1b62d348cf5338f11cf0242f110610e"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/SnoozeReceiver.kt": {
+    "mtime": 1776089136.848051,
+    "ast_hash": "ad99b9f11ac28fabce606c856f69ab38",
+    "semantic_hash": "ad99b9f11ac28fabce606c856f69ab38"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/TaskReminderReceiver.kt": {
+    "mtime": 1776036812.2946706,
+    "ast_hash": "c93aae5976f7299f07680b4f948dd62e",
+    "semantic_hash": "c93aae5976f7299f07680b4f948dd62e"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/TaskReminderScheduler.kt": {
+    "mtime": 1776207496.6992183,
+    "ast_hash": "8977b1114e07994fb75f8730b8f5223f",
+    "semantic_hash": "8977b1114e07994fb75f8730b8f5223f"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/TaskReminderSchedulerContract.kt": {
+    "mtime": 1776204790.7626514,
+    "ast_hash": "e23d0e1a362a562a9f29e8eeeb2034bc",
+    "semantic_hash": "e23d0e1a362a562a9f29e8eeeb2034bc"
+  },
+  "app/src/main/java/com/benimgunlerim/notifications/TimeChangeReceiver.kt": {
+    "mtime": 1776206924.409377,
+    "ast_hash": "5c32f55805c6bf9ec612cfe20d1357bb",
+    "semantic_hash": "5c32f55805c6bf9ec612cfe20d1357bb"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/AppDestination.kt": {
+    "mtime": 1777496092.1373482,
+    "ast_hash": "89fc5f6287bfa2399ccdb46627f1cf01",
+    "semantic_hash": "89fc5f6287bfa2399ccdb46627f1cf01"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt": {
+    "mtime": 1785362787.0388153,
+    "ast_hash": "3eaac12193c82f99bd9eab4e7db31dad",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/TestTags.kt": {
+    "mtime": 1777578882.9429102,
+    "ast_hash": "b61d96e7b03afa5cf75292baa7b41283",
+    "semantic_hash": "b61d96e7b03afa5cf75292baa7b41283"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsScreen.kt": {
+    "mtime": 1776277676.470505,
+    "ast_hash": "8b806abe8dd5f87926d62a7c595139d0",
+    "semantic_hash": "8b806abe8dd5f87926d62a7c595139d0"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsViewModel.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "e399769715bbbd7bb894f64e8468da04",
+    "semantic_hash": "e399769715bbbd7bb894f64e8468da04"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/CelebrationSystem.kt": {
+    "mtime": 1776007787.328479,
+    "ast_hash": "f2e52d53a2cce43ccf38345004616b22",
+    "semantic_hash": "f2e52d53a2cce43ccf38345004616b22"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/Common.kt": {
+    "mtime": 1784328456.2407625,
+    "ast_hash": "d9365bfc804d207d18f5e4e37d8c0fae",
+    "semantic_hash": "d9365bfc804d207d18f5e4e37d8c0fae"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/onboarding/OnboardingScreen.kt": {
+    "mtime": 1785362940.3776257,
+    "ast_hash": "765c692f66bef986779053e569c3e90e",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/onboarding/OnboardingViewModel.kt": {
+    "mtime": 1777488856.250046,
+    "ast_hash": "5368008d5971f33d2a24b9458ca67c2c",
+    "semantic_hash": "5368008d5971f33d2a24b9458ca67c2c"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/plan/PlanScreen.kt": {
+    "mtime": 1784328522.6104436,
+    "ast_hash": "2de9a39dbfb3506bff5a6f65e5baeda8",
+    "semantic_hash": "2de9a39dbfb3506bff5a6f65e5baeda8"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/plan/PlanTaskListComponents.kt": {
+    "mtime": 1777982564.3576539,
+    "ast_hash": "e01a86a7aefe88141c31c88297e4058d",
+    "semantic_hash": "e01a86a7aefe88141c31c88297e4058d"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/plan/PlanTaskUi.kt": {
+    "mtime": 1777578032.3514266,
+    "ast_hash": "6a1afaebc28cb34eea608ce6cbf1f301",
+    "semantic_hash": "6a1afaebc28cb34eea608ce6cbf1f301"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/plan/PlanViewModel.kt": {
+    "mtime": 1777578877.6602767,
+    "ast_hash": "101122c24787dd34838eeeded2b179d7",
+    "semantic_hash": "101122c24787dd34838eeeded2b179d7"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/progress/ProgressDayUi.kt": {
+    "mtime": 1777495749.4640226,
+    "ast_hash": "60afe0dd06acebc7e5554d21e3beb616",
+    "semantic_hash": "60afe0dd06acebc7e5554d21e3beb616"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/progress/ProgressScreen.kt": {
+    "mtime": 1784326937.9971023,
+    "ast_hash": "1937b5d17d6d97f9625cba3f5cac1ea5",
+    "semantic_hash": "1937b5d17d6d97f9625cba3f5cac1ea5"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/progress/ProgressViewModel.kt": {
+    "mtime": 1777495754.430124,
+    "ast_hash": "8e731bcd1d562159f93a6f7eb82795ee",
+    "semantic_hash": "8e731bcd1d562159f93a6f7eb82795ee"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/routines/RoutineDetailScreen.kt": {
+    "mtime": 1778429896.104447,
+    "ast_hash": "5bc4aa42c2b90da47e11da6b370d1ac2",
+    "semantic_hash": "5bc4aa42c2b90da47e11da6b370d1ac2"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/routines/RoutineDetailViewModel.kt": {
+    "mtime": 1777495736.0690389,
+    "ast_hash": "fecd47c3db83a35d5d103dbf0a1bbeeb",
+    "semantic_hash": "fecd47c3db83a35d5d103dbf0a1bbeeb"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/routines/RoutineUiModels.kt": {
+    "mtime": 1777495686.2893717,
+    "ast_hash": "3efc2f7f52b86d6b6b5f6765d5a2bc4a",
+    "semantic_hash": "3efc2f7f52b86d6b6b5f6765d5a2bc4a"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/routines/RoutinesScreen.kt": {
+    "mtime": 1785362769.44033,
+    "ast_hash": "784b37812ebf5cdc064216776e211f47",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/routines/RoutinesViewModel.kt": {
+    "mtime": 1777495699.8949292,
+    "ast_hash": "5ebf62a7a54a2117a1a4e50882cda218",
+    "semantic_hash": "5ebf62a7a54a2117a1a4e50882cda218"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/settings/SettingsEvent.kt": {
+    "mtime": 1776263641.086238,
+    "ast_hash": "4e2f98a4e235ee8dc96552cf52b26a05",
+    "semantic_hash": "4e2f98a4e235ee8dc96552cf52b26a05"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/settings/SettingsScreen.kt": {
+    "mtime": 1784328501.6208115,
+    "ast_hash": "59a1811dd366d1e2155b9f700d524a8f",
+    "semantic_hash": "59a1811dd366d1e2155b9f700d524a8f"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/settings/SettingsViewModel.kt": {
+    "mtime": 1777559989.4027116,
+    "ast_hash": "6d87f85cd0b33190e317045bfecb5d59",
+    "semantic_hash": "6d87f85cd0b33190e317045bfecb5d59"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/shop/ShopScreen.kt": {
+    "mtime": 1777496083.2727933,
+    "ast_hash": "25b128be85ddf83e564aeb40c3fdcf5e",
+    "semantic_hash": "25b128be85ddf83e564aeb40c3fdcf5e"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/shop/ShopViewModel.kt": {
+    "mtime": 1777496131.6193514,
+    "ast_hash": "120901d015f071d73b093387820d15f1",
+    "semantic_hash": "120901d015f071d73b093387820d15f1"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/theme/DesignTokens.kt": {
+    "mtime": 1784325785.0995827,
+    "ast_hash": "7ee9369f6e3a9ffaa77574e3ff371cbc",
+    "semantic_hash": "7ee9369f6e3a9ffaa77574e3ff371cbc"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/theme/Theme.kt": {
+    "mtime": 1777567450.7326655,
+    "ast_hash": "81ccda10c559183fde923524273042e8",
+    "semantic_hash": "81ccda10c559183fde923524273042e8"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/CategoryPalette.kt": {
+    "mtime": 1777560039.5841365,
+    "ast_hash": "1a53270efb88069335aaf54ae1c984ce",
+    "semantic_hash": "1a53270efb88069335aaf54ae1c984ce"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayActions.kt": {
+    "mtime": 1777564652.9268653,
+    "ast_hash": "33b41cb475e32925919830d9ac1bf142",
+    "semantic_hash": "33b41cb475e32925919830d9ac1bf142"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayContent.kt": {
+    "mtime": 1784326806.9442408,
+    "ast_hash": "6adec4b28e362e8f40e1f961a56a6544",
+    "semantic_hash": "6adec4b28e362e8f40e1f961a56a6544"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayPreviews.kt": {
+    "mtime": 1778435396.228533,
+    "ast_hash": "ee8e6746825278b222c8870f84ec86cb",
+    "semantic_hash": "ee8e6746825278b222c8870f84ec86cb"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayRoute.kt": {
+    "mtime": 1777564576.4152827,
+    "ast_hash": "bae7e1de5046318c3282332958a98a36",
+    "semantic_hash": "bae7e1de5046318c3282332958a98a36"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt": {
+    "mtime": 1785362769.4383175,
+    "ast_hash": "e2f3af3dfa1b547fd711150c0269175e",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodaySheets.kt": {
+    "mtime": 1777559989.5764518,
+    "ast_hash": "4740d6b840b2d4e409dc9f77640e2d45",
+    "semantic_hash": "4740d6b840b2d4e409dc9f77640e2d45"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayUiModels.kt": {
+    "mtime": 1777545853.461121,
+    "ast_hash": "a25d94aaef60686ef6f7cc4ea258b8b0",
+    "semantic_hash": "a25d94aaef60686ef6f7cc4ea258b8b0"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/TodayViewModel.kt": {
+    "mtime": 1777559989.0552068,
+    "ast_hash": "3b4eb7d224a841c537dbdb5f6eee9009",
+    "semantic_hash": "3b4eb7d224a841c537dbdb5f6eee9009"
+  },
+  "app/src/main/java/com/benimgunlerim/ui/today/theme/TodayColorTokens.kt": {
+    "mtime": 1777567467.5057757,
+    "ast_hash": "6a2ea9a7fa1db9594f867bdae6f20328",
+    "semantic_hash": "6a2ea9a7fa1db9594f867bdae6f20328"
+  },
+  "app/src/test/java/com/benimgunlerim/analytics/AppCrashHandlerTest.kt": {
+    "mtime": 1776101319.4212565,
+    "ast_hash": "20f2580a8e25e3f42181d85c0b50679d",
+    "semantic_hash": "20f2580a8e25e3f42181d85c0b50679d"
+  },
+  "app/src/test/java/com/benimgunlerim/analytics/ErrorReporterTest.kt": {
+    "mtime": 1776115142.4201806,
+    "ast_hash": "1354869e7cd670f45633357e59d6bfbc",
+    "semantic_hash": "1354869e7cd670f45633357e59d6bfbc"
+  },
+  "app/src/test/java/com/benimgunlerim/analytics/LocalErrorReporterTest.kt": {
+    "mtime": 1776108093.4248896,
+    "ast_hash": "51007fe04e41a8a637314108bcb3c95e",
+    "semantic_hash": "51007fe04e41a8a637314108bcb3c95e"
+  },
+  "app/src/test/java/com/benimgunlerim/data/CompletionLogExtensionsTest.kt": {
+    "mtime": 1777489516.7136917,
+    "ast_hash": "dfa0c9f299a395202a46992e04a37723",
+    "semantic_hash": "dfa0c9f299a395202a46992e04a37723"
+  },
+  "app/src/test/java/com/benimgunlerim/data/DataExportServiceTest.kt": {
+    "mtime": 1776099249.8045008,
+    "ast_hash": "731dab47902d49ac7261ce5ad98cf27c",
+    "semantic_hash": "731dab47902d49ac7261ce5ad98cf27c"
+  },
+  "app/src/test/java/com/benimgunlerim/data/DataImportServiceTest.kt": {
+    "mtime": 1776116625.4250896,
+    "ast_hash": "0daafb969a82af982e3c0dd660c8c59b",
+    "semantic_hash": "0daafb969a82af982e3c0dd660c8c59b"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/AchievementDefTest.kt": {
+    "mtime": 1776089503.4461286,
+    "ast_hash": "e0399346079e77f0a6f869d75b2353a9",
+    "semantic_hash": "e0399346079e77f0a6f869d75b2353a9"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/AchievementTrackerTest.kt": {
+    "mtime": 1776206258.1472554,
+    "ast_hash": "bd573c95b12845a92962df830b68ca06",
+    "semantic_hash": "bd573c95b12845a92962df830b68ca06"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/DailyScoreCalculatorTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "d227e7ef595b3a4c35131c237d64f2c1",
+    "semantic_hash": "d227e7ef595b3a4c35131c237d64f2c1"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/GameEngineTest.kt": {
+    "mtime": 1776206258.1452541,
+    "ast_hash": "c7cef021da3b8b245e259f0895d47a33",
+    "semantic_hash": "c7cef021da3b8b245e259f0895d47a33"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/OperationResultTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "b56109e4c1dc7fe3b24e9530f0ded285",
+    "semantic_hash": "b56109e4c1dc7fe3b24e9530f0ded285"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/ProgressCalculatorTest.kt": {
+    "mtime": 1776089503.4461286,
+    "ast_hash": "cbb3722f967b2b2765c9cf7cdea9d495",
+    "semantic_hash": "cbb3722f967b2b2765c9cf7cdea9d495"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/TickerProviderTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "d57941dc18edd34119279c4d58cba1ba",
+    "semantic_hash": "d57941dc18edd34119279c4d58cba1ba"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/TimeTextTest.kt": {
+    "mtime": 1775945889.5083084,
+    "ast_hash": "c0d2607681d93eb69504a577f357dd43",
+    "semantic_hash": "c0d2607681d93eb69504a577f357dd43"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/service/AchievementEvaluationServiceTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "e1a0e4a4cc4f540eda4d5fd1fc526266",
+    "semantic_hash": "e1a0e4a4cc4f540eda4d5fd1fc526266"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/service/GrantResultTest.kt": {
+    "mtime": 1776277601.8985984,
+    "ast_hash": "7b78119c21d435f353c3a969c081ea0e",
+    "semantic_hash": "7b78119c21d435f353c3a969c081ea0e"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/service/LevelProgressionServiceTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "109fb196e696cf28f7cc60bac407d6fa",
+    "semantic_hash": "109fb196e696cf28f7cc60bac407d6fa"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/service/RewardGrantServiceTest.kt": {
+    "mtime": 1776206258.1472554,
+    "ast_hash": "377f097b0625187fd27632faba4c6758",
+    "semantic_hash": "377f097b0625187fd27632faba4c6758"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/AddTaskUseCaseTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "03d5832672abba919f19217b1fdb494e",
+    "semantic_hash": "03d5832672abba919f19217b1fdb494e"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/CarryPendingTasksUseCaseTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "e27c435f0ba25dbff9c5245937c26488",
+    "semantic_hash": "e27c435f0ba25dbff9c5245937c26488"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/CloseDayUseCaseTest.kt": {
+    "mtime": 1776206258.1492548,
+    "ast_hash": "fc291931b0a207e53714e5559726e70e",
+    "semantic_hash": "fc291931b0a207e53714e5559726e70e"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/DeleteTaskUseCaseTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "59de5d614103f232bb3144619f75b6df",
+    "semantic_hash": "59de5d614103f232bb3144619f75b6df"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/ObserveProgressSnapshotUseCaseTest.kt": {
+    "mtime": 1777493524.1498349,
+    "ast_hash": "c12632194251939fe091f3dbf7ffa3b7",
+    "semantic_hash": "c12632194251939fe091f3dbf7ffa3b7"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/ObserveTodaySnapshotUseCaseTest.kt": {
+    "mtime": 1777545935.5089805,
+    "ast_hash": "311f7a377254d1e75c2756b36e08c81b",
+    "semantic_hash": "311f7a377254d1e75c2756b36e08c81b"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/RestoreRemindersUseCaseTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "15876836d0aa85e6d3ee9efab97dbf02",
+    "semantic_hash": "15876836d0aa85e6d3ee9efab97dbf02"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/ToggleRoutineUseCaseTest.kt": {
+    "mtime": 1776206258.1482544,
+    "ast_hash": "5a77af50e7f0bf2c276e85fd54e26d6d",
+    "semantic_hash": "5a77af50e7f0bf2c276e85fd54e26d6d"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/ToggleTaskCompletionUseCaseTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "3ab4af57973487be7958e6a1a118f448",
+    "semantic_hash": "3ab4af57973487be7958e6a1a118f448"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/ToggleTaskUseCaseTest.kt": {
+    "mtime": 1776206924.4083767,
+    "ast_hash": "d945bd2f9d90e32d9927bc6838d584e4",
+    "semantic_hash": "d945bd2f9d90e32d9927bc6838d584e4"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/usecase/UpdateTaskUseCaseTest.kt": {
+    "mtime": 1776274351.2675188,
+    "ast_hash": "71c455e3fe3bff64776be3c56af69be4",
+    "semantic_hash": "71c455e3fe3bff64776be3c56af69be4"
+  },
+  "app/src/test/java/com/benimgunlerim/domain/validation/TimeInputValidatorTest.kt": {
+    "mtime": 1777559989.679236,
+    "ast_hash": "4f33ff2f0fabafc9efa7043711bc49aa",
+    "semantic_hash": "4f33ff2f0fabafc9efa7043711bc49aa"
+  },
+  "app/src/test/java/com/benimgunlerim/helpers/FakeTransactionRunner.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "1721878fb3e232016c1c724c0df09865",
+    "semantic_hash": "1721878fb3e232016c1c724c0df09865"
+  },
+  "app/src/test/java/com/benimgunlerim/helpers/FakeTransactionRunnerTest.kt": {
+    "mtime": 1776277601.9548655,
+    "ast_hash": "a504790de9637a2194601cdf6fc10df5",
+    "semantic_hash": "a504790de9637a2194601cdf6fc10df5"
+  },
+  "app/src/test/java/com/benimgunlerim/notifications/NotificationIdsTest.kt": {
+    "mtime": 1776266747.3925843,
+    "ast_hash": "84d675b1951775d3a31c26d6b7ba8adf",
+    "semantic_hash": "84d675b1951775d3a31c26d6b7ba8adf"
+  },
+  "app/src/test/java/com/benimgunlerim/notifications/ReminderBootstrapperTest.kt": {
+    "mtime": 1777496832.92139,
+    "ast_hash": "86cfc72414dfdb14e53ed77e838d2e7d",
+    "semantic_hash": "86cfc72414dfdb14e53ed77e838d2e7d"
+  },
+  "app/src/test/java/com/benimgunlerim/notifications/ReminderPolicyTest.kt": {
+    "mtime": 1776089503.44512,
+    "ast_hash": "6fe74c6a6a8fef5976d3b14dbbfa915c",
+    "semantic_hash": "6fe74c6a6a8fef5976d3b14dbbfa915c"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/AppDestinationTest.kt": {
+    "mtime": 1777496546.6278453,
+    "ast_hash": "164f4199285d7a5faae75696ad7270cb",
+    "semantic_hash": "164f4199285d7a5faae75696ad7270cb"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/achievements/AchievementsViewModelTest.kt": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "6c30a823960d85896ab00fc3b95adc59",
+    "semantic_hash": "6c30a823960d85896ab00fc3b95adc59"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/onboarding/OnboardingViewModelTest.kt": {
+    "mtime": 1777488864.8594077,
+    "ast_hash": "dff0067a6d6ffaf6bf3ce373d108d184",
+    "semantic_hash": "dff0067a6d6ffaf6bf3ce373d108d184"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/plan/PlanViewModelTest.kt": {
+    "mtime": 1777580551.3265617,
+    "ast_hash": "58c613dbec3ce89beedfb7c9c9776d94",
+    "semantic_hash": "58c613dbec3ce89beedfb7c9c9776d94"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/progress/ProgressViewModelTest.kt": {
+    "mtime": 1776266012.6057706,
+    "ast_hash": "43ac64bd98929d14d967b797783c9639",
+    "semantic_hash": "43ac64bd98929d14d967b797783c9639"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/routines/RoutineDetailViewModelTest.kt": {
+    "mtime": 1777488753.8498123,
+    "ast_hash": "a72068a837c13a6ba6b65df184b6b773",
+    "semantic_hash": "a72068a837c13a6ba6b65df184b6b773"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/routines/RoutinesViewModelTest.kt": {
+    "mtime": 1777495844.6461983,
+    "ast_hash": "9cc465764fab060cdf76d53950f50abc",
+    "semantic_hash": "9cc465764fab060cdf76d53950f50abc"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/settings/SettingsViewModelTest.kt": {
+    "mtime": 1777559989.5148644,
+    "ast_hash": "0f475b736ad6e165dac7e837bdfa785b",
+    "semantic_hash": "0f475b736ad6e165dac7e837bdfa785b"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/shop/ShopViewModelTest.kt": {
+    "mtime": 1777496068.9446216,
+    "ast_hash": "18ee15b6fc3246cb00214266a0a16098",
+    "semantic_hash": "18ee15b6fc3246cb00214266a0a16098"
+  },
+  "app/src/test/java/com/benimgunlerim/ui/today/TodayViewModelTest.kt": {
+    "mtime": 1777559989.097383,
+    "ast_hash": "37b9795287bc67fc7e744c7ac0053370",
+    "semantic_hash": "37b9795287bc67fc7e744c7ac0053370"
+  },
+  "benchmark/build.gradle.kts": {
+    "mtime": 1776120368.3956556,
+    "ast_hash": "16bf277ad3d6c1ae9dfa7e22c9992a42",
+    "semantic_hash": "16bf277ad3d6c1ae9dfa7e22c9992a42"
+  },
+  "benchmark/src/main/java/com/benimgunlerim/benchmark/ScrollJankBenchmark.kt": {
+    "mtime": 1776120368.3966558,
+    "ast_hash": "f2a6e331ce006d3ae32f1c5be41181c2",
+    "semantic_hash": "f2a6e331ce006d3ae32f1c5be41181c2"
+  },
+  "benchmark/src/main/java/com/benimgunlerim/benchmark/StartupBenchmark.kt": {
+    "mtime": 1776120368.3966558,
+    "ast_hash": "f0e1d5edcff7671b7c9551c413c82a01",
+    "semantic_hash": "f0e1d5edcff7671b7c9551c413c82a01"
+  },
+  "build.gradle.kts": {
+    "mtime": 1776263641.0852375,
+    "ast_hash": "3e9756f718c62ec51116a606c71aff9b",
+    "semantic_hash": "3e9756f718c62ec51116a606c71aff9b"
+  },
+  "fix_encoding.py": {
+    "mtime": 1775957574.5326364,
+    "ast_hash": "46e2dbcf920c570f5b456353f5945cae",
+    "semantic_hash": "46e2dbcf920c570f5b456353f5945cae"
+  },
+  "gradlew": {
+    "mtime": 1775941081.4768345,
+    "ast_hash": "f092910dfa8e47c5a37a452c3f6baf8a",
+    "semantic_hash": "f092910dfa8e47c5a37a452c3f6baf8a"
+  },
+  "scripts/check-external-release-readiness.ps1": {
+    "mtime": 1776108093.4718127,
+    "ast_hash": "a4b769e1a7b592983d811044fa6c7dbb",
+    "semantic_hash": "a4b769e1a7b592983d811044fa6c7dbb"
+  },
+  "scripts/check-local.ps1": {
+    "mtime": 1777496679.5862484,
+    "ast_hash": "160ab0758769ee02274a8c218b79c122",
+    "semantic_hash": "160ab0758769ee02274a8c218b79c122"
+  },
+  "scripts/check-mojibake.ps1": {
+    "mtime": 1777580366.8225734,
+    "ast_hash": "e54ede836e604332c6a32a882890dc8f",
+    "semantic_hash": "e54ede836e604332c6a32a882890dc8f"
+  },
+  "scripts/check-performance-gate.ps1": {
+    "mtime": 1776119204.3529375,
+    "ast_hash": "907e98d9f918644c278e0d40b3cd7a9b",
+    "semantic_hash": "907e98d9f918644c278e0d40b3cd7a9b"
+  },
+  "scripts/check-release.ps1": {
+    "mtime": 1777496690.2909608,
+    "ast_hash": "0009ba779bfb9ed10df3b76ba921ac55",
+    "semantic_hash": "0009ba779bfb9ed10df3b76ba921ac55"
+  },
+  "scripts/clean-build-artifacts.ps1": {
+    "mtime": 1776088167.2652287,
+    "ast_hash": "6a6fc70109ebb6fce459967bf136fd2c",
+    "semantic_hash": "6a6fc70109ebb6fce459967bf136fd2c"
+  },
+  "scripts/generate-keystore.ps1": {
+    "mtime": 1776108093.4708145,
+    "ast_hash": "6821a6fff6babfef79dc9bec4b8f8c0d",
+    "semantic_hash": "6821a6fff6babfef79dc9bec4b8f8c0d"
+  },
+  "scripts/measure-startup-perf.ps1": {
+    "mtime": 1776119452.920169,
+    "ast_hash": "455f33d47096c31e90a0869e052b53f0",
+    "semantic_hash": "455f33d47096c31e90a0869e052b53f0"
+  },
+  "scripts/run-notification-smoke-matrix.ps1": {
+    "mtime": 1776112154.3106384,
+    "ast_hash": "126909caa1c019ee40f75bac0f7afbe6",
+    "semantic_hash": "126909caa1c019ee40f75bac0f7afbe6"
+  },
+  "settings.gradle.kts": {
+    "mtime": 1776120368.3946571,
+    "ast_hash": "39787f36a73afa98ccc48a6afd4c68bc",
+    "semantic_hash": "39787f36a73afa98ccc48a6afd4c68bc"
+  },
+  "scripts/update-graphify.ps1": {
+    "mtime": 1785361576.1420534,
+    "ast_hash": "20c42eabf34fb270a9d77d2645079052",
+    "semantic_hash": ""
+  },
+  ".github/dependabot.yml": {
+    "mtime": 1776116625.4260893,
+    "ast_hash": "050581430517d196c0b2bf8b0cea8794",
+    "semantic_hash": ""
+  },
+  ".github/workflows/android.yml": {
+    "mtime": 1776274351.2685208,
+    "ast_hash": "742497bd7322143421370814a20c1377",
+    "semantic_hash": ""
+  },
+  ".github/workflows/dependency-review.yml": {
+    "mtime": 1776116625.4260893,
+    "ast_hash": "9134fe4447f9d9ed4e8a268471513bc0",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1785362546.185068,
+    "ast_hash": "652a6703b7207c90da74e5303d0e5d68",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1785362546.1830568,
+    "ast_hash": "dcfefee5f8419055f421ec33fbfa337c",
+    "semantic_hash": ""
+  },
+  "app/src/main/baseline-prof.txt": {
+    "mtime": 1776113321.040611,
+    "ast_hash": "b904c322dde74d343aaef32b562318ae",
+    "semantic_hash": ""
+  },
+  "config/detekt/detekt.yml": {
+    "mtime": 1777493504.3250785,
+    "ast_hash": "40d24551d7f798307f7e1a12f8968257",
+    "semantic_hash": ""
+  },
+  "docs/archive/BENIMGUNLERIM_PRODUCTION_READY_9_SPRINT_PLANI.md": {
+    "mtime": 1776086769.6281154,
+    "ast_hash": "ae662e9dce8ff8274317cfe63215ec09",
+    "semantic_hash": ""
+  },
+  "docs/archive/PRODUCTION_9_SPRINT_PLANI.md": {
+    "mtime": 1776087247.535571,
+    "ast_hash": "badadd0194cff5fd66655ad26d6505de",
+    "semantic_hash": ""
+  },
+  "docs/archive/dok\u00fcman.md": {
+    "mtime": 1776032366.838079,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "docs/audit/e2e-review-2026-04-30.md": {
+    "mtime": 1777568360.190869,
+    "ast_hash": "b97d775edab8b67002f4620a23a61e85",
+    "semantic_hash": ""
+  },
+  "docs/audit/plan-page-e2e-deep-review-2026-04-30.md": {
+    "mtime": 1777568360.1919203,
+    "ast_hash": "ed3078bd479f1843e665659497e23175",
+    "semantic_hash": ""
+  },
+  "docs/audit/today-page-e2e-score-2026-04-30.md": {
+    "mtime": 1777568360.1929197,
+    "ast_hash": "e33b76ad1dd5d4113b17fa560fcc83ab",
+    "semantic_hash": ""
+  },
+  "docs/production/dependency-platform-policy.md": {
+    "mtime": 1776119204.3961897,
+    "ast_hash": "3c880bb51f49c2397c79d93c4a1b3ca1",
+    "semantic_hash": ""
+  },
+  "docs/production/evidence/2026-04-13-notification-matrix-summary.md": {
+    "mtime": 1776115281.5397854,
+    "ast_hash": "b6e123ef89c232a50cedff6b7962cd44",
+    "semantic_hash": ""
+  },
+  "docs/production/evidence/2026-04-13-startup-perf-summary.md": {
+    "mtime": 1776115281.5397854,
+    "ast_hash": "e79f3fa66b9353d987c58313b7c3b231",
+    "semantic_hash": ""
+  },
+  "docs/production/external-release-setup.md": {
+    "mtime": 1776101380.789507,
+    "ast_hash": "17ef17551e2a025b9ed2e1c8c828c08c",
+    "semantic_hash": ""
+  },
+  "docs/production/performance-policy.md": {
+    "mtime": 1776120368.3946571,
+    "ast_hash": "c20b0c8dfb7645fcd34e4c9299e550d2",
+    "semantic_hash": ""
+  },
+  "docs/production/plan-page-sprint-plan-2026-04-30.md": {
+    "mtime": 1778427637.0206735,
+    "ast_hash": "079aa5d7f93dbe7135d82a982f8d79a2",
+    "semantic_hash": ""
+  },
+  "docs/production/privacy-and-backup.md": {
+    "mtime": 1776098172.7748477,
+    "ast_hash": "45ed19d7ab1b5a6fc0e238c8b314919d",
+    "semantic_hash": ""
+  },
+  "docs/production/privacy-policy-tr.md": {
+    "mtime": 1776101111.4701233,
+    "ast_hash": "8c7ea7c7b1a15cf42fb1b908bbe0ce3b",
+    "semantic_hash": ""
+  },
+  "docs/production/production-readiness.md": {
+    "mtime": 1785362552.0960412,
+    "ast_hash": "3c4eedc0a4e9ae10adbb3fe8f2a38977",
+    "semantic_hash": ""
+  },
+  "docs/production/quality-gates.md": {
+    "mtime": 1777496700.2382724,
+    "ast_hash": "c11855c5226dd10df92a08d3dd6e2a08",
+    "semantic_hash": ""
+  },
+  "docs/production/readiness-audit-2026-04-13.md": {
+    "mtime": 1776120591.6130292,
+    "ast_hash": "15be20d6093fcc10fea46de582e338a5",
+    "semantic_hash": ""
+  },
+  "docs/release/github-protection-checklist.md": {
+    "mtime": 1776121628.8916311,
+    "ast_hash": "7c820041ee60f40acdcd2fdcfbf1f637",
+    "semantic_hash": ""
+  },
+  "docs/release/release-checklist.md": {
+    "mtime": 1776119204.3512738,
+    "ast_hash": "d26bfbc90a08f64519575e0a3bd438d1",
+    "semantic_hash": ""
+  },
+  "docs/testing/test-strategy.md": {
+    "mtime": 1776117167.5377266,
+    "ast_hash": "f0ee9f4312612e7afd0df721b69d93cf",
+    "semantic_hash": ""
+  },
+  "today_ui_agent_sprint_progress.md": {
+    "mtime": 1785363098.8304393,
+    "ast_hash": "8186c77ce86df43e00b4f051e057a625",
+    "semantic_hash": ""
+  },
+  "today_ui_agent_sprint_sistemi.md": {
+    "mtime": 1785362552.0980427,
+    "ast_hash": "d5d268fdf10eff978bf9be70b25c7a0c",
+    "semantic_hash": ""
+  },
+  "current_screen.png": {
+    "mtime": 1784325643.8956468,
+    "ast_hash": "8a17f702931b3f119b5a22196b9b84cd",
+    "semantic_hash": ""
+  },
+  "fullpage-captures/today-full-1.png": {
+    "mtime": 1778433374.8188488,
+    "ast_hash": "df59023b69528d810782c9411d00f14c",
+    "semantic_hash": ""
+  },
+  "fullpage-captures/today-full-2.png": {
+    "mtime": 1778433376.839692,
+    "ast_hash": "ebd00cd7cddd7664e8e9e248b0e39c52",
+    "semantic_hash": ""
+  },
+  "fullpage-captures/today-full-3.png": {
+    "mtime": 1778433378.7314656,
+    "ast_hash": "1ca953e0535b7bfb4c77c90a770b1000",
+    "semantic_hash": ""
+  },
+  "fullpage-captures/today-full-4.png": {
+    "mtime": 1778433380.6250503,
+    "ast_hash": "1ca953e0535b7bfb4c77c90a770b1000",
+    "semantic_hash": ""
+  },
+  "phone-current-screen-final.png": {
+    "mtime": 1778433321.628196,
+    "ast_hash": "665dda059de0dad29121bea80ebca154",
+    "semantic_hash": ""
+  },
+  "phone-current-screen-fullpage.png": {
+    "mtime": 1778433380.9818466,
+    "ast_hash": "5e9bc970d9e9945d7d32ed2e19b44428",
+    "semantic_hash": ""
+  },
+  "phone-current-screen-latest.png": {
+    "mtime": 1778432142.4532967,
+    "ast_hash": "5af05b3c1d78c89be1a10bf8b9a054a3",
+    "semantic_hash": ""
+  },
+  "phone-current-screen.png": {
+    "mtime": 1778431376.5402927,
+    "ast_hash": "cf26e2c1499d50623dc74d2a1c5e9f6c",
+    "semantic_hash": ""
+  },
+  "s_ayarlar.png": {
+    "mtime": 1784326514.2158172,
+    "ast_hash": "ef51d723cc09f86e34d0c803f8b30aa7",
+    "semantic_hash": ""
+  },
+  "s_bugun.png": {
+    "mtime": 1784326516.8941915,
+    "ast_hash": "ef51d723cc09f86e34d0c803f8b30aa7",
+    "semantic_hash": ""
+  },
+  "s_final_today.png": {
+    "mtime": 1784328139.5457428,
+    "ast_hash": "7bf353b19b92d430d43815162d28e569",
+    "semantic_hash": ""
+  },
+  "s_fixed_header.png": {
+    "mtime": 1784328374.2494042,
+    "ast_hash": "5363524dfd68b258d40a621a3cdf8012",
+    "semantic_hash": ""
+  },
+  "s_fixed_header2.png": {
+    "mtime": 1784328393.761766,
+    "ast_hash": "cfc92ffcb1902a03ae0c59619d6fab70",
+    "semantic_hash": ""
+  },
+  "s_fixed_header3.png": {
+    "mtime": 1784328420.5211303,
+    "ast_hash": "d023bcf1db26f3c259d53a72d374e520",
+    "semantic_hash": ""
+  },
+  "s_ilerleme.png": {
+    "mtime": 1784326511.4360075,
+    "ast_hash": "db2afe37af3a11d7565c5f801ee0f3db",
+    "semantic_hash": ""
+  },
+  "s_plan.png": {
+    "mtime": 1784326505.8977036,
+    "ast_hash": "8a974d599454396f706e8767c24c2104",
+    "semantic_hash": ""
+  },
+  "s_pure_white.png": {
+    "mtime": 1784328705.4655764,
+    "ast_hash": "80b5c545be4ba931ef45851c2889298c",
+    "semantic_hash": ""
+  },
+  "s_pure_white_routines.png": {
+    "mtime": 1784328728.794984,
+    "ast_hash": "d34207cf00742675069b1464a2423823",
+    "semantic_hash": ""
+  },
+  "s_rutinler.png": {
+    "mtime": 1784326508.6466134,
+    "ast_hash": "db2afe37af3a11d7565c5f801ee0f3db",
+    "semantic_hash": ""
+  },
+  "s_today_soft.png": {
+    "mtime": 1784327492.427608,
+    "ast_hash": "a0eaa8af60a9f1cec1ea74206b963487",
+    "semantic_hash": ""
+  },
+  "s_today_soft2.png": {
+    "mtime": 1784327512.6891613,
+    "ast_hash": "0a1494219b6568c0ae62dcf352e02c12",
+    "semantic_hash": ""
+  },
+  "screen_after.png": {
+    "mtime": 1784326293.1917832,
+    "ast_hash": "3d1166fb1b85f527690bee4349fb301c",
+    "semantic_hash": ""
+  },
+  "today2.png": {
+    "mtime": 1784326553.4513128,
+    "ast_hash": "790c332d376b74980fe207860d3cc6e6",
+    "semantic_hash": ""
+  },
+  "today_live.png": {
+    "mtime": 1777549753.7343833,
+    "ast_hash": "571a55bb12d1c1b51899847f26b96b82",
+    "semantic_hash": ""
+  },
+  "today_live10.png": {
+    "mtime": 1777551180.789317,
+    "ast_hash": "a34dba4a354ee8a4daf4bf53d35e7c2a",
+    "semantic_hash": ""
+  },
+  "today_live11.png": {
+    "mtime": 1777551386.432434,
+    "ast_hash": "1c739ce01a25f4b45454a24e3ca06813",
+    "semantic_hash": ""
+  },
+  "today_live12.png": {
+    "mtime": 1777551555.320662,
+    "ast_hash": "c22f45c24a8f1faae0e9783357d60c81",
+    "semantic_hash": ""
+  },
+  "today_live13.png": {
+    "mtime": 1777551697.2071323,
+    "ast_hash": "140cb96c42a75756da2d1dfd909641f9",
+    "semantic_hash": ""
+  },
+  "today_live14.png": {
+    "mtime": 1777551713.5738702,
+    "ast_hash": "89ab6c891580a4e64bafdc360e538cc3",
+    "semantic_hash": ""
+  },
+  "today_live15.png": {
+    "mtime": 1777551725.165041,
+    "ast_hash": "89ab6c891580a4e64bafdc360e538cc3",
+    "semantic_hash": ""
+  },
+  "today_live2.png": {
+    "mtime": 1777550049.2080452,
+    "ast_hash": "44285d4498d8699e7fbda7018aace47c",
+    "semantic_hash": ""
+  },
+  "today_live3.png": {
+    "mtime": 1777550297.2076705,
+    "ast_hash": "2bc33b540ed266b282f4152b949a72f2",
+    "semantic_hash": ""
+  },
+  "today_live4.png": {
+    "mtime": 1777550323.4303572,
+    "ast_hash": "4fbb390ece85aed8925ea36e5e168da4",
+    "semantic_hash": ""
+  },
+  "today_live5.png": {
+    "mtime": 1777550523.4614165,
+    "ast_hash": "140cb96c42a75756da2d1dfd909641f9",
+    "semantic_hash": ""
+  },
+  "today_live6.png": {
+    "mtime": 1777550543.5568156,
+    "ast_hash": "4dbfeea901bcb3163178e1689c6f6802",
+    "semantic_hash": ""
+  },
+  "today_live7.png": {
+    "mtime": 1777550738.0050375,
+    "ast_hash": "72865f370f90d4557f36a7f23f7333cf",
+    "semantic_hash": ""
+  },
+  "today_live8.png": {
+    "mtime": 1777550771.4917326,
+    "ast_hash": "dc8a0c09f501af1ee2a5f184bf997dde",
+    "semantic_hash": ""
+  },
+  "today_live9.png": {
+    "mtime": 1777551024.3638833,
+    "ast_hash": "b538a5cda95df0f29d5552441bbe419e",
+    "semantic_hash": ""
+  },
+  "u_plan.png": {
+    "mtime": 1784327235.6237023,
+    "ast_hash": "7a4b7ede996721083e5a69f9410ae730",
+    "semantic_hash": ""
+  },
+  "u_today.png": {
+    "mtime": 1784327215.6899145,
+    "ast_hash": "d2f78aa6b19207aa6ebffb03f1729111",
+    "semantic_hash": ""
+  },
+  "v_today.png": {
+    "mtime": 1784327180.9045959,
+    "ast_hash": "41e85e60078e73b04aa963906bfa3aed",
+    "semantic_hash": ""
+  },
+  "docs/product/benimgunlerim-urun-felsefesi-ve-akislari.md": {
+    "mtime": 1785361994.367151,
+    "ast_hash": "d172e36f3b5f8e3d69f7f1d8006d9715",
+    "semantic_hash": ""
+  },
+  "docs/PROJECT_STATUS.md": {
+    "mtime": 1785363098.8319504,
+    "ast_hash": "488de0c1c236a995910d6706f3003126",
+    "semantic_hash": ""
+  }
+}

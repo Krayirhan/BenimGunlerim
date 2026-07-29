@@ -153,31 +153,14 @@ fun ProgressScreen(
 }
 
 @Composable
-private fun ProgressBackground(): Brush = Brush.verticalGradient(
-    listOf(
-        Color(0xFFEAF8F2),
-        Color(0xFFF4F2FF),
-        MaterialTheme.colorScheme.background,
-        MaterialTheme.colorScheme.background,
-    ),
-)
+private fun ProgressBackground(): Brush = com.benimgunlerim.ui.components.ScreenBackground()
 
 @Composable
 private fun HeaderCard() {
-    SurfaceCard(radius = 28.dp, padding = 20.dp) {
-        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Text(
-                text = stringResource(R.string.progress_header_title),
-                style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold),
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Text(
-                text = stringResource(R.string.progress_header_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
+    com.benimgunlerim.ui.components.ScreenHeroCard(
+        title = stringResource(R.string.progress_header_title),
+        subtitle = stringResource(R.string.progress_header_subtitle),
+    )
 }
 
 @Composable
@@ -679,14 +662,15 @@ private fun EmptyPanel(text: String) {
     Box(
         Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
+            .clip(RoundedCornerShape(com.benimgunlerim.ui.theme.AppTokens.Radius.lg))
             .background(MaterialTheme.colorScheme.surfaceVariant)
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(18.dp))
-            .padding(16.dp),
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(com.benimgunlerim.ui.theme.AppTokens.Radius.lg))
+            .padding(com.benimgunlerim.ui.theme.AppTokens.Spacing.cardInner),
     ) {
         Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
+
 
 @Composable
 private fun Pill(text: String, color: Color) {

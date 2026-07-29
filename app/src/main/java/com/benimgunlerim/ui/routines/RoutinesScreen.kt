@@ -156,9 +156,10 @@ fun RoutinesScreen(
                 }
             } else {
                 item(key = "section_header") {
-                    SectionHeader(
+                    com.benimgunlerim.ui.components.SectionHeader(
                         title = stringResource(R.string.routines_section_title),
                         subtitle = stringResource(R.string.routines_section_subtitle),
+                        accentColor = CandyPrimary,
                     )
                 }
                 items(
@@ -204,14 +205,7 @@ fun RoutinesScreen(
 }
 
 @Composable
-private fun RoutinesBackground(): Brush = Brush.verticalGradient(
-    listOf(
-        Color(0xFFEAF8F2),
-        Color(0xFFF0EEFF),
-        MaterialTheme.colorScheme.background,
-        MaterialTheme.colorScheme.background,
-    ),
-)
+private fun RoutinesBackground(): Brush = com.benimgunlerim.ui.components.ScreenBackground()
 
 @Composable
 private fun RoutineHeaderCard(
@@ -219,67 +213,37 @@ private fun RoutineHeaderCard(
     todayRoutineCount: Int,
     weeklyCompletion: Int,
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-        ) {
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = stringResource(R.string.routines_header_title),
-                        style = MaterialTheme.typography.displayLarge,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontWeight = FontWeight.ExtraBold,
-                    )
-                    Text(
-                        text = stringResource(R.string.routines_header_subtitle),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    InfoPill(stringResource(R.string.routines_active_count, routineCount), CandyPrimaryLight, CandyPrimary)
-                    HeaderMetric(
-                        label = stringResource(R.string.label_today),
-                        value = todayRoutineCount.toString(),
-                        modifier = Modifier.weight(1f),
-                    )
-                    HeaderMetric(
-                        label = stringResource(R.string.routines_week_label),
-                        value = "%$weeklyCompletion",
-                        modifier = Modifier.weight(1f),
-                    )
-                }
+    com.benimgunlerim.ui.components.ScreenHeroCard(
+        title = stringResource(R.string.routines_header_title),
+        subtitle = stringResource(R.string.routines_header_subtitle),
+        metricRow = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(com.benimgunlerim.ui.theme.AppTokens.Spacing.xs),
+            ) {
+                HeaderMetric(
+                    label = stringResource(R.string.label_active),
+                    value = routineCount.toString(),
+                    modifier = Modifier.weight(1f),
+                )
+                HeaderMetric(
+                    label = stringResource(R.string.label_today),
+                    value = todayRoutineCount.toString(),
+                    modifier = Modifier.weight(1f),
+                )
+                HeaderMetric(
+                    label = stringResource(R.string.routines_week_label),
+                    value = "%$weeklyCompletion",
+                    modifier = Modifier.weight(1f),
+                )
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
 private fun HeaderMetric(label: String, value: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(18.dp))
-            .background(CandyPrimaryLight)
-            .border(
-                BorderStroke(1.dp, CandyPrimary.copy(alpha = 0.18f)),
-                RoundedCornerShape(18.dp),
-            )
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+        modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(
@@ -291,7 +255,7 @@ private fun HeaderMetric(label: String, value: String, modifier: Modifier = Modi
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
-            color = CandyPrimary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
         )
     }
@@ -403,21 +367,6 @@ private fun EmptyRoutinesCard(onAddRoutine: () -> Unit) {
     }
 }
 
-@Composable
-private fun SectionHeader(title: String, subtitle: String) {
-    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground,
-        )
-        Text(
-            text = subtitle,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
 
 @Composable
 @Suppress("LongParameterList")

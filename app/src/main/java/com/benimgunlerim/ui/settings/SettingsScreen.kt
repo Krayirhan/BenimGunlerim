@@ -291,86 +291,46 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
 }
 
 @Composable
-private fun SettingsBackground(): Brush = Brush.verticalGradient(
-    listOf(
-        Color(0xFFEAF8F2),
-        Color(0xFFF0EEFF),
-        MaterialTheme.colorScheme.background,
-        MaterialTheme.colorScheme.background,
-    ),
-)
+private fun SettingsBackground(): Brush = com.benimgunlerim.ui.components.ScreenBackground()
 
 @Composable
 private fun SettingsHeader(preferences: UserPreferences) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-        ) {
-            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text = stringResource(R.string.settings_title),
-                        style = MaterialTheme.typography.displayLarge,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        text = stringResource(R.string.settings_subtitle),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 2,
-                    )
-                }
-                val modeLabel = when (preferences.notificationMode) {
-                    "off" -> stringResource(R.string.settings_notif_mode_off)
-                    "normal" -> stringResource(R.string.settings_notif_mode_normal)
-                    else -> stringResource(R.string.settings_notif_mode_light)
-                }
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    HeaderStatusPill(
-                        label = stringResource(R.string.settings_status_notification),
-                        value = modeLabel,
-                        modifier = Modifier.weight(1f),
-                    )
-                    HeaderStatusPill(
-                        label = stringResource(R.string.settings_status_day_end),
-                        value = preferences.dailySummaryTime,
-                        modifier = Modifier.weight(1f),
-                    )
-                    HeaderStatusPill(
-                        label = stringResource(R.string.settings_status_data),
-                        value = stringResource(R.string.settings_data_local),
-                        modifier = Modifier.weight(1f),
-                    )
-                }
-            }
-        }
+    val modeLabel = when (preferences.notificationMode) {
+        "off" -> stringResource(R.string.settings_notif_mode_off)
+        "normal" -> stringResource(R.string.settings_notif_mode_normal)
+        else -> stringResource(R.string.settings_notif_mode_light)
     }
+    com.benimgunlerim.ui.components.ScreenHeroCard(
+        title = stringResource(R.string.settings_title),
+        subtitle = stringResource(R.string.settings_subtitle),
+        metricRow = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                HeaderStatusPill(
+                    label = stringResource(R.string.settings_status_notification),
+                    value = modeLabel,
+                    modifier = Modifier.weight(1f),
+                )
+                HeaderStatusPill(
+                    label = stringResource(R.string.settings_status_day_end),
+                    value = preferences.dailySummaryTime,
+                    modifier = Modifier.weight(1f),
+                )
+                HeaderStatusPill(
+                    label = stringResource(R.string.settings_status_data),
+                    value = stringResource(R.string.settings_data_local),
+                    modifier = Modifier.weight(1f),
+                )
+            }
+        },
+    )
 }
 
 @Composable
 private fun HeaderStatusPill(label: String, value: String, modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .clip(RoundedCornerShape(18.dp))
-            .background(CandyPrimaryLight)
-            .border(
-                border = BorderStroke(1.dp, CandyPrimary.copy(alpha = 0.18f)),
-                shape = RoundedCornerShape(18.dp),
-            )
-            .padding(horizontal = 12.dp, vertical = 10.dp),
+        modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(
@@ -383,7 +343,7 @@ private fun HeaderStatusPill(label: String, value: String, modifier: Modifier = 
         Text(
             text = label,
             style = MaterialTheme.typography.labelMedium,
-            color = CandyPrimary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
         )
     }

@@ -190,8 +190,8 @@ private fun PlanOverdueActionButton(text: String, modifier: Modifier, onClick: (
         modifier = modifier
             .height(40.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(StreakCoral.copy(.10f))
-            .border(1.dp, StreakCoral.copy(.20f), RoundedCornerShape(8.dp)),
+            .background(StreakCoral.copy(.12f))
+            .border(1.dp, StreakCoral.copy(.30f), RoundedCornerShape(8.dp)),
         contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
     ) {
         Text(
@@ -226,7 +226,8 @@ private fun PlanTaskRow(
             .fillMaxWidth()
             .testTag(rowTag)
             .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(12.dp))
             .padding(horizontal = 8.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
@@ -318,7 +319,8 @@ private fun PlanMetaPill(text: String, color: Color) {
     Box(
         Modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(color.copy(.10f))
+            .background(color.copy(.12f))
+            .border(1.dp, color.copy(.22f), RoundedCornerShape(6.dp))
             .padding(horizontal = 6.dp, vertical = 2.dp),
     ) {
         Text(
@@ -341,7 +343,9 @@ private fun PlanSectionShell(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(18.dp)),
         shape = RoundedCornerShape(18.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -365,6 +369,7 @@ private fun PlanSectionShell(
                         Modifier
                             .clip(RoundedCornerShape(6.dp))
                             .background(color.copy(.12f))
+                            .border(1.dp, color.copy(.22f), RoundedCornerShape(6.dp))
                             .padding(horizontal = 7.dp, vertical = 3.dp),
                     ) {
                         Text(

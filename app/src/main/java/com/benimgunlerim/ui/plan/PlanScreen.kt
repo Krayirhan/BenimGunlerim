@@ -1,4 +1,4 @@
-﻿@file:Suppress(
+@file:Suppress(
     "SpellCheckingInspection",
     "LongParameterList",
     "LongMethod",
@@ -303,7 +303,7 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
             modifier = Modifier
                 .fillMaxSize()
                 .testTag(TestTags.PlanRoot)
-                .background(MaterialTheme.colorScheme.background)
+                .background(com.benimgunlerim.ui.components.ScreenBackground())
                 .padding(padding),
             contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 106.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -383,28 +383,15 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
 
 @Composable
 private fun PlanSnapshotErrorBanner(onRetry: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(TestTags.PlanSnapshotErrorBanner)
-            .clip(RoundedCornerShape(14.dp))
-            .background(StreakCoral.copy(.10f))
-            .border(1.dp, StreakCoral.copy(.22f), RoundedCornerShape(14.dp))
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            stringResource(R.string.plan_snapshot_load_error),
-            modifier = Modifier.weight(1f),
-            style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        TextButton(onClick = onRetry) {
-            Text(stringResource(R.string.today_retry), color = StreakCoral)
-        }
-    }
+    com.benimgunlerim.ui.components.AlertCard(
+        modifier = Modifier.testTag(TestTags.PlanSnapshotErrorBanner),
+        title = stringResource(R.string.plan_snapshot_load_error),
+        body = "",
+        primaryCtaLabel = stringResource(R.string.today_retry),
+        onPrimaryCtaClick = onRetry,
+    )
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -891,7 +878,9 @@ private fun PlanDateNavigationRow(
         weekEnd.format(DateTimeFormatter.ofPattern("d MMM", Locale("tr", "TR"))),
     )
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(16.dp)),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
@@ -951,7 +940,7 @@ private fun PlanHeroCard(
     val todayLabel = stringResource(R.string.label_today)
     val tomorrowLabel = stringResource(R.string.label_tomorrow)
     val yesterdayLabel = stringResource(R.string.label_yesterday)
-    val label = when (selectedDate) {
+    val dayTag = when (selectedDate) {
         today -> todayLabel
         today.plusDays(1) -> tomorrowLabel
         today.minusDays(1) -> yesterdayLabel
@@ -959,38 +948,11 @@ private fun PlanHeroCard(
             .replaceFirstChar { it.titlecase(Locale("tr", "TR")) }
     }
     val dateStr = selectedDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("tr", "TR")))
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
-        Column(
-            Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(
-                        stringResource(R.string.plan_title),
-                        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.ExtraBold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(dateStr, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                Box(
-                    Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(CandyPrimary.copy(.10f))
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
-                ) {
-                    Text(label, style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold), color = CandyPrimary)
-                }
-            }
+
+    com.benimgunlerim.ui.components.ScreenHeroCard(
+        title = stringResource(R.string.plan_title),
+        subtitle = "$dateStr • $dayTag",
+        metricRow = {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 PlanSummaryTile(
                     value = taskCount.toString(),
@@ -1011,20 +973,15 @@ private fun PlanHeroCard(
                     modifier = Modifier.weight(1f),
                 )
             }
-        }
-    }
+        },
+    )
 }
 
 @Composable
 private fun PlanSummaryTile(value: String, label: String, color: Color, modifier: Modifier) {
     Column(
-        modifier
-            .height(58.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(color.copy(.08f))
-            .border(1.dp, color.copy(.14f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 10.dp, vertical = 7.dp),
-        verticalArrangement = Arrangement.Center,
+        modifier.padding(vertical = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
     ) {
         Text(
             value,
@@ -1071,13 +1028,13 @@ private fun WeekDatePicker(
                     .background(
                         when {
                             isSelected -> CandyPrimary
-                            isToday -> CandyPrimary.copy(.10f)
+                            isToday -> CandyPrimary.copy(.14f)
                             else -> MaterialTheme.colorScheme.surface
                         },
                     )
                     .border(
                         width = if (isToday && !isSelected) 1.dp else 0.dp,
-                        color = if (isToday && !isSelected) CandyPrimary.copy(.30f) else Color.Transparent,
+                        color = if (isToday && !isSelected) CandyPrimary.copy(.40f) else Color.Transparent,
                         shape = RoundedCornerShape(14.dp),
                     )
                     .clickable { onSelectDate(date) }
@@ -1100,7 +1057,7 @@ private fun WeekDatePicker(
                     Box(
                         Modifier
                             .clip(RoundedCornerShape(6.dp))
-                            .background(if (isSelected) Color.White.copy(.18f) else CandyPrimary.copy(.10f))
+                            .background(if (isSelected) Color.White.copy(.22f) else CandyPrimary.copy(.14f))
                             .padding(horizontal = 6.dp, vertical = 1.dp),
                     ) {
                         Text(

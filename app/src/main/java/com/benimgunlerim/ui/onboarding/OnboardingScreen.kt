@@ -80,44 +80,44 @@ private data class IntensityOption(
     val recommended: Boolean = false,
 )
 
-private data class SuggestedRoutine(val name: String, val defaultSelected: Boolean = true)
+private data class SuggestedRoutine(val nameRes: Int, val defaultSelected: Boolean = true)
 
 private fun suggestedRoutines(needId: String, intensityId: String): List<SuggestedRoutine> =
     when (needId) {
         "duzen" -> listOf(
-            SuggestedRoutine("Sabah rutini yap"),
-            SuggestedRoutine("Günlük plan yap"),
-            SuggestedRoutine("Akşam günü kapat", intensityId != "hafif"),
+            SuggestedRoutine(R.string.onboarding_suggest_morning_routine),
+            SuggestedRoutine(R.string.onboarding_suggest_daily_plan),
+            SuggestedRoutine(R.string.onboarding_suggest_close_day, intensityId != "hafif"),
         )
         "duzenli" -> listOf(
-            SuggestedRoutine("Bugün önceliklerimi belirle"),
-            SuggestedRoutine("Görev listemi güncelle"),
-            SuggestedRoutine("Haftalık özet", intensityId == "yogun"),
+            SuggestedRoutine(R.string.onboarding_suggest_priorities),
+            SuggestedRoutine(R.string.onboarding_suggest_update_tasks),
+            SuggestedRoutine(R.string.onboarding_suggest_weekly_review, intensityId == "yogun"),
         )
         "saglik" -> listOf(
-            SuggestedRoutine("Su iç (2L hedefi)"),
-            SuggestedRoutine("5 dk yürüyüş"),
-            SuggestedRoutine("Nefes egzersizi", intensityId != "hafif"),
+            SuggestedRoutine(R.string.onboarding_suggest_water),
+            SuggestedRoutine(R.string.onboarding_suggest_walk),
+            SuggestedRoutine(R.string.onboarding_suggest_breathing, intensityId != "hafif"),
         )
         "odak" -> listOf(
-            SuggestedRoutine("Pomodoro seansı (25 dk)"),
-            SuggestedRoutine("Dikkat dağıtıcıları kapat"),
-            SuggestedRoutine("Günlük öğrenme notu", intensityId != "hafif"),
+            SuggestedRoutine(R.string.onboarding_suggest_pomodoro),
+            SuggestedRoutine(R.string.onboarding_suggest_remove_distractions),
+            SuggestedRoutine(R.string.onboarding_suggest_learning_note, intensityId != "hafif"),
         )
         "basit" -> listOf(
-            SuggestedRoutine("Sabah listemi hazırla"),
-            SuggestedRoutine("Akşam günü kapat", intensityId != "hafif"),
+            SuggestedRoutine(R.string.onboarding_suggest_morning_list),
+            SuggestedRoutine(R.string.onboarding_suggest_close_day, intensityId != "hafif"),
         )
         else -> emptyList()
     }
 
-private fun suggestedTaskTitle(needId: String): String = when (needId) {
-    "duzen" -> "Günümü planla"
-    "duzenli" -> "Bugünkü 3 önceliğimi belirle"
-    "saglik" -> "1 bardak su iç"
-    "odak" -> "Bugünün odak konusunu seç"
-    "basit" -> "Yapılacaklar listemi hazırla"
-    else -> "İlk görev"
+private fun suggestedTaskTitle(needId: String): Int = when (needId) {
+    "duzen" -> R.string.onboarding_task_plan_day
+    "duzenli" -> R.string.onboarding_task_set_priorities
+    "saglik" -> R.string.onboarding_task_drink_water
+    "odak" -> R.string.onboarding_task_choose_focus
+    "basit" -> R.string.onboarding_task_prepare_list
+    else -> R.string.onboarding_task_first
 }
 
 // ── Main Composable ───────────────────────────────────────────────────────────
@@ -144,11 +144,15 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
     val routineSuggestions = remember(selectedNeed, selectedIntensity) {
         suggestedRoutines(selectedNeed.id, selectedIntensity.id)
     }
-    var selectedRoutineNames by remember(selectedNeed, selectedIntensity) {
-        mutableStateOf(routineSuggestions.filter { it.defaultSelected }.map { it.name }.toSet())
+    val localizedRoutineSuggestions = routineSuggestions.map { suggestion ->
+        suggestion to stringResource(suggestion.nameRes)
     }
+    var selectedRoutineNames by remember(selectedNeed, selectedIntensity) {
+        mutableStateOf(localizedRoutineSuggestions.filter { it.first.defaultSelected }.map { it.second }.toSet())
+    }
+    val suggestedTaskTitleText = stringResource(suggestedTaskTitle(selectedNeed.id))
     var taskTitle by remember(selectedNeed) {
-        mutableStateOf(suggestedTaskTitle(selectedNeed.id))
+        mutableStateOf(suggestedTaskTitleText)
     }
     var taskSelected by remember(selectedNeed) { mutableStateOf(true) }
 
@@ -327,20 +331,20 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                 ExplainerCard(
                     icon = Icons.Rounded.DateRange,
                     color = CandySecondary,
-                    title = "Rutin",
-                    description = "Her gün tekrar eden alışkanlık. Su iç, yürüyüş yap, ilaç al. Seri takibi yapar.",
+                    title = stringResource(R.string.onboarding_explainer_routine_title),
+                    description = stringResource(R.string.onboarding_explainer_routine_body),
                 )
                 VerticalSpacer(14)
                 ExplainerCard(
                     icon = Icons.Rounded.Refresh,
                     color = CandyPrimary,
-                    title = "Görev",
-                    description = "Tek seferlik yapılacak iş. Toplantı, alışveriş, fatura ödeme. Tamamlandı, bitti.",
+                    title = stringResource(R.string.onboarding_explainer_task_title),
+                    description = stringResource(R.string.onboarding_explainer_task_body),
                 )
                 VerticalSpacer(28)
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                     OutlinedButton(onClick = { page = 2 }, modifier = Modifier.weight(1f).height(56.dp), shape = RoundedCornerShape(20.dp)) {
-                        Text("Geri")
+                        Text(stringResource(R.string.onboarding_back))
                     }
                     Button(
                         onClick = { page = 4 },
@@ -348,7 +352,7 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                         shape = RoundedCornerShape(20.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = CandyPrimary),
                     ) {
-                        Text("Anladım", style = MaterialTheme.typography.titleMedium, color = Color.White)
+                        Text(stringResource(R.string.onboarding_understood), style = MaterialTheme.typography.titleMedium, color = Color.White)
                     }
                 }
             }
@@ -371,16 +375,16 @@ fun OnboardingScreen(onComplete: (String, String, List<String>, String?) -> Unit
                     textAlign = TextAlign.Center,
                 )
                 VerticalSpacer(24)
-                routineSuggestions.forEach { suggestion ->
-                    val isSelected = suggestion.name in selectedRoutineNames
+                localizedRoutineSuggestions.forEach { (suggestion, suggestionName) ->
+                    val isSelected = suggestionName in selectedRoutineNames
                     SelectableRoutineRow(
-                        name = suggestion.name,
+                        name = suggestionName,
                         selected = isSelected,
                         onToggle = {
                             selectedRoutineNames = if (isSelected) {
-                                selectedRoutineNames - suggestion.name
+                                selectedRoutineNames - suggestionName
                             } else {
-                                selectedRoutineNames + suggestion.name
+                                selectedRoutineNames + suggestionName
                             }
                         },
                     )

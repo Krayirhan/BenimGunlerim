@@ -1,5 +1,7 @@
 # Production Readiness Planı
 
+> Güncel proje ve sprint durumu için önce [`docs/PROJECT_STATUS.md`](../PROJECT_STATUS.md) okunmalıdır. Bu dosya production kalite checklist'idir; tarihsel audit sonuçları bugünkü durum yerine geçmez.
+
 Bu plan production hazırlığını takip etmek için yaşayan kontrol listesidir.
 
 ## Build & Release

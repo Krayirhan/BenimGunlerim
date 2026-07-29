@@ -45,6 +45,14 @@ build_connected_tests*.txt
 build_perf/
 build_notification_matrix/
 
+# Graphify generated knowledge graph
+# Keep the portable graph artifacts; ignore machine-local extraction caches.
+graphify-out/cache/
+graphify-out/.graphify_*
+graphify-out/cost.json
+graphify-out/memory/
+graphify-out/reflections/
+
 # Temp / patch leftovers
 *.tmp
 *.temp

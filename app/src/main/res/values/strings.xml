@@ -1,4 +1,44 @@
 <resources>
+
+    <string name="label_active">Aktif</string>
+    <string name="today_status_no_steps">Bugün için adım yok</string>
+    <string name="today_status_none_completed">Henüz tamamlanan yok</string>
+    <string name="today_status_all_completed">Bugünün tüm adımları tamam</string>
+    <string name="today_status_completed_count">%1$d / %2$d tamamlandı</string>
+    <string name="today_support_steps_remaining">%1$d adım seni bekliyor</string>
+    <string name="today_support_add_first_step">Yeni bir görev ya da rutin ekleyebilirsin</string>
+    <string name="today_streak_pill">Seri %1$d</string>
+    <string name="today_mood_pill">Moral %1$d</string>
+    <string name="onboarding_explainer_routine_title">Rutin</string>
+    <string name="onboarding_explainer_routine_body">Her gün tekrar eden alışkanlık. Su iç, yürüyüş yap, ilaç al. Seri takibi yapar.</string>
+    <string name="onboarding_explainer_task_title">Görev</string>
+    <string name="onboarding_explainer_task_body">Tek seferlik yapılacak iş. Toplantı, alışveriş, fatura ödeme. Tamamlandı, bitti.</string>
+    <string name="onboarding_back">Geri</string>
+    <string name="onboarding_understood">Anladım</string>
+    <string name="onboarding_suggest_morning_routine">Sabah rutini yap</string>
+    <string name="onboarding_suggest_daily_plan">Günlük plan yap</string>
+    <string name="onboarding_suggest_close_day">Akşam günü kapat</string>
+    <string name="onboarding_suggest_priorities">Bugün önceliklerimi belirle</string>
+    <string name="onboarding_suggest_update_tasks">Görev listemi güncelle</string>
+    <string name="onboarding_suggest_weekly_review">Haftalık özet</string>
+    <string name="onboarding_suggest_water">Su iç (2L hedefi)</string>
+    <string name="onboarding_suggest_walk">5 dk yürüyüş</string>
+    <string name="onboarding_suggest_breathing">Nefes egzersizi</string>
+    <string name="onboarding_suggest_pomodoro">Pomodoro seansı (25 dk)</string>
+    <string name="onboarding_suggest_remove_distractions">Dikkat dağıtıcıları kapat</string>
+    <string name="onboarding_suggest_learning_note">Günlük öğrenme notu</string>
+    <string name="onboarding_suggest_morning_list">Sabah listemi hazırla</string>
+    <string name="onboarding_task_plan_day">Günümü planla</string>
+    <string name="onboarding_task_set_priorities">Bugünkü 3 önceliğimi belirle</string>
+    <string name="onboarding_task_drink_water">1 bardak su iç</string>
+    <string name="onboarding_task_choose_focus">Bugünün odak konusunu seç</string>
+    <string name="onboarding_task_prepare_list">Yapılacaklar listemi hazırla</string>
+    <string name="onboarding_task_first">İlk görev</string>
+    <string name="nav_today">Bugün</string>
+    <string name="nav_plan">Plan</string>
+    <string name="nav_routines">Rutinler</string>
+    <string name="nav_progress">İlerlemen</string>
+    <string name="nav_settings">Ayarlar</string>
     <string name="app_name">BenimGünlerim</string>
 
     <!-- Bildirim kanal adları -->
@@ -396,7 +436,7 @@
     <string name="today_error_delete_task">Görev silinemedi. Tekrar deneyin.</string>
     <string name="today_error_save_day">Gün özeti kaydedilemedi. Tekrar deneyin.</string>
     <string name="today_error_generic">İşlem tamamlanamadı. Tekrar deneyin.</string>
-    <string name="today_missed_emphasis">%1$s tarihi için gün özeti henüz yok.</string>
+    <string name="today_missed_emphasis">%1$s için gün özeti yok.</string>
     <string name="today_closed_energy_preview">Kayıtlı enerji: %1$d / 5</string>
     <string name="today_closed_note_preview">Not: %1$s</string>
     <string name="today_priority_short_high">Öncelik yüksek</string>
@@ -407,8 +447,8 @@
     <string name="today_routine_done_target_result">Bugünkü sonuç: %1$d / %2$d %3$s</string>
     <string name="today_routine_done_pill">Tamam</string>
     <string name="today_routine_streak_pill">Seri</string>
-    <string name="today_routine_streak_count">Seri %1$d</string>
-    <string name="today_routine_best_streak_count">En iyi seri %1$d</string>
+    <string name="today_routine_streak_count">%1$d günlük seri</string>
+    <string name="today_routine_best_streak_count">En iyi seri %1$d gün</string>
     <string name="today_routine_streak_risk_badge">Seri riski</string>
     <string name="today_routine_label">Rutin</string>
     <string name="today_routine_open_detail_cd">Rutin detayını aç</string>
@@ -433,14 +473,14 @@
     <string name="today_closed_update_btn">Özeti güncelle</string>
     <string name="today_locked_pill">Gün sonu</string>
     <string name="today_locked_title">Günü kapat</string>
-    <string name="today_locked_desc">Aktif olacak: %1$s\'dan sonra</string>
+    <string name="today_locked_desc">%1$s\'dan sonra aktif olacak.</string>
     <string name="today_locked_btn">Günü değerlendir</string>
     <string name="today_active_title">Günü kapat</string>
     <string name="today_active_desc">Bugün %1$d / %2$d adım tamamlandı. Günü değerlendir.</string>
     <string name="today_active_btn">Günü değerlendir</string>
-    <string name="today_missed_label">Değerlendirilmemiş gün</string>
+    <string name="today_missed_label">Dünü tamamla</string>
     <string name="today_missed_review_btn">Değerlendir</string>
-    <string name="today_missed_skip_btn">Geç</string>
+    <string name="today_missed_skip_btn">Atla</string>
     <string name="today_add_task_title">Yeni görev</string>
     <string name="today_advanced_show">Gelişmiş alanları göster</string>
     <string name="today_advanced_hide">Gelişmiş alanları gizle</string>
