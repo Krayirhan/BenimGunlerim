@@ -45,6 +45,17 @@ build_connected_tests*.txt
 build_perf/
 build_notification_matrix/
 
+# Local UI capture outputs (keep production assets under app/src/main/res/)
+/current_screen.png
+/phone-*.png
+/screen_after.png
+/s_*.png
+/u_*.png
+/v_*.png
+/today2.png
+/today_live*.png
+/fullpage-captures/
+
 # Graphify generated knowledge graph
 # Keep the portable graph artifacts; ignore machine-local extraction caches.
 graphify-out/cache/
