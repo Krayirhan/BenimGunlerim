@@ -1,5 +1,7 @@
 package com.benimgunlerim.ui.settings
 
+import androidx.compose.ui.tooling.preview.Preview
+
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
@@ -300,10 +302,8 @@ private fun SettingsHeader(preferences: UserPreferences) {
         "normal" -> stringResource(R.string.settings_notif_mode_normal)
         else -> stringResource(R.string.settings_notif_mode_light)
     }
-    com.benimgunlerim.ui.components.ScreenHeroCard(
-        title = stringResource(R.string.settings_title),
-        subtitle = stringResource(R.string.settings_subtitle),
-        metricRow = {
+    com.benimgunlerim.ui.components.ScreenSummaryCard(
+        content = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -830,6 +830,12 @@ private fun AppInfoCard() {
     }
 }
 
+@Preview(showBackground = true, name = "Settings App Info")
+@Composable
+private fun SettingsAppInfoPreview() {
+    com.benimgunlerim.ui.theme.BenimGunlerimTheme { AppInfoCard() }
+}
+
 @Composable
 private fun SettingsCard(
     accent: Color,
@@ -838,10 +844,10 @@ private fun SettingsCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(26.dp),
+        shape = RoundedCornerShape(com.benimgunlerim.ui.theme.AppTokens.Radius.md),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Row(modifier = Modifier.fillMaxWidth()) {
             Box(

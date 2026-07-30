@@ -80,14 +80,15 @@ fun DayTasksCard(
         color = LevelSky,
         actionLabel = addAction,
         onAction = onAdd,
+        container = tasks.size > 1,
     ) {
         if (tasks.isEmpty()) {
             Box(
                 Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(12.dp))
                     .background(LevelSky.copy(.08f))
-                    .border(1.dp, LevelSky.copy(.14f), RoundedCornerShape(14.dp))
+                    .border(1.dp, LevelSky.copy(.14f), RoundedCornerShape(12.dp))
                     .padding(14.dp),
             ) {
                 Text(
@@ -107,6 +108,7 @@ fun DayTasksCard(
                     dateLabel = null,
                     rowTag = TestTags.planTaskRow(task.id),
                     secondaryAction = null,
+                    surface = tasks.size == 1,
                 )
             }
         }
@@ -135,6 +137,7 @@ fun PlanOverdueCard(
         color = StreakCoral,
         actionLabel = null,
         onAction = null,
+        container = true,
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
@@ -165,6 +168,7 @@ fun PlanOverdueCard(
                 dateLabel = task.relativePlannedDateLabel(today),
                 rowTag = TestTags.planOverdueRow(task.id),
                 secondaryAction = { onMoveToSelected(task.id) },
+                surface = false,
             )
         }
         if (tasks.size > MAX_COLLAPSED_OVERDUE_TASKS) {
@@ -214,6 +218,7 @@ private fun PlanTaskRow(
     dateLabel: String? = task.plannedDate,
     rowTag: String,
     secondaryAction: (() -> Unit)?,
+    surface: Boolean,
 ) {
     val done = task.isCompleted
     val toggleDescription = if (done) {
@@ -225,10 +230,17 @@ private fun PlanTaskRow(
         modifier = Modifier
             .fillMaxWidth()
             .testTag(rowTag)
-            .clip(RoundedCornerShape(12.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 8.dp, vertical = 8.dp),
+            .then(
+                if (surface) {
+                    Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 10.dp, vertical = 8.dp)
+                } else {
+                    Modifier.padding(horizontal = 4.dp, vertical = 10.dp)
+                },
+            ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
     ) {
@@ -340,17 +352,13 @@ private fun PlanSectionShell(
     color: Color,
     actionLabel: String?,
     onAction: (() -> Unit)?,
+    container: Boolean,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(18.dp)),
-        shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -389,8 +397,21 @@ private fun PlanSectionShell(
                     }
                 }
             }
-            content()
-        }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(
+                        if (container) {
+                            Modifier
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(MaterialTheme.colorScheme.surface)
+                                .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
+                                .padding(horizontal = 12.dp)
+                        } else Modifier,
+                    ),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
+                content = content,
+            )
     }
 }
 

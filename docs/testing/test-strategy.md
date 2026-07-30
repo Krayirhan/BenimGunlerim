@@ -50,3 +50,17 @@ Bu doküman production öncesi kalite kapısını risk odaklı hale getirmek iç
 - Retry varsayilan cozum degildir.
 - Flaky test goruldugunde logcat, test raporu ve ilgili screenshot artifact'i incelenir.
 - Kök neden bulunmadan release gate'ten muafiyet verilmez.
+## UI ve Görsel Doğrulama Standardı
+
+Her ana ekran değişikliğinde şu matris kontrol edilir:
+
+- 360dp, 411dp ve tablet genişliği.
+- Varsayılan ve büyük font ölçeği.
+- Açık/koyu tema ve sistem status bar inset'i.
+- Loading, empty, error, disabled, partial ve completed durumları.
+- Tek öğeli ve çok öğeli liste yüzeyleri.
+- Ortak topbar, bottom navigation ve FAB çakışması.
+- Metin, ikon, checkbox ve overflow menü dikey hizası/baseline tutarlılığı.
+- En az 48dp dokunma alanı ve anlamlı ikonlarda content description.
+
+Görsel fark bulunduğunda ilgili spacing, radius veya typography token kaynağı da incelenir; ekran kendi değerlerini uydurmaz.

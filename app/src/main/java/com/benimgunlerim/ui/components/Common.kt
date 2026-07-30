@@ -68,9 +68,9 @@ import com.benimgunlerim.ui.theme.XpGold
 @Composable
 fun SurfaceCard(
     modifier: Modifier = Modifier,
-    radius: androidx.compose.ui.unit.Dp = 24.dp,
-    padding: androidx.compose.ui.unit.Dp = 16.dp,
-    elevation: androidx.compose.ui.unit.Dp = 2.dp,
+    radius: androidx.compose.ui.unit.Dp = AppTokens.Radius.md,
+    padding: androidx.compose.ui.unit.Dp = AppTokens.Spacing.cardInner,
+    elevation: androidx.compose.ui.unit.Dp = AppTokens.Elevation.flat,
     content: @Composable androidx.compose.foundation.layout.ColumnScope.() -> Unit,
 ) {
     androidx.compose.material3.Card(
@@ -98,9 +98,9 @@ fun HeroCardShell(
     androidx.compose.foundation.layout.Column(
         modifier = modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(28.dp))
+            .clip(RoundedCornerShape(AppTokens.Radius.md))
             .background(Brush.verticalGradient(gradientColors))
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(0.10f), RoundedCornerShape(28.dp))
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(0.10f), RoundedCornerShape(AppTokens.Radius.md))
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         content = content,
@@ -254,56 +254,15 @@ fun AnimatedProgressBar(
     )
 }
 
-// ── XP Badge (Altın parıltı) ─────────────────────────────────────────────────
-
+// ── XP Badge → gamification/XpBadge.kt ──────────────────────────────────────
 @Composable
-fun XpBadge(xp: Int, modifier: Modifier = Modifier) {
-    val pulse = rememberInfiniteTransition(label = "xpPulse")
-    val scale by pulse.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.05f,
-        animationSpec = infiniteRepeatable(tween(800), RepeatMode.Reverse),
-        label = "xpScale",
-    )
-    Box(
-        modifier = modifier
-            .scale(scale)
-            .clip(RoundedCornerShape(50))
-            .background(Brush.linearGradient(listOf(XpGold, Color(0xFFFF8A65))))
-            .padding(horizontal = 12.dp, vertical = 5.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = "$xp XP",
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White,
-        )
-    }
-}
+fun XpBadge(xp: Int, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.XpBadge(xp = xp, modifier = modifier)
 
-// ── Streak Badge (Ateş gradient) ─────────────────────────────────────────────
-
+// ── Streak Badge → gamification/StreakBadge.kt ───────────────────────────────
 @Composable
-fun StreakBadge(streak: Int, modifier: Modifier = Modifier) {
-    val bgBrush = when {
-        streak >= 30  -> Brush.linearGradient(listOf(LevelSky, CandyPrimary))
-        streak >= 7   -> Brush.linearGradient(listOf(StreakCoral, Color(0xFFFF8A65)))
-        else          -> Brush.linearGradient(listOf(StreakCoral.copy(alpha = 0.8f), StreakCoral))
-    }
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(50))
-            .background(bgBrush)
-            .padding(horizontal = 14.dp, vertical = 7.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = "$streak günlük seri",
-            style = MaterialTheme.typography.labelLarge,
-            color = Color.White,
-        )
-    }
-}
+fun StreakBadge(streak: Int, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.StreakBadge(streak = streak, modifier = modifier)
 
 // ── Inline Empty State ────────────────────────────────────────────────────────
 
@@ -391,24 +350,12 @@ fun StatusBadge(label: String, color: Color, modifier: Modifier = Modifier) {
     }
 }
 
-// ── Level Dot Row ─────────────────────────────────────────────────────────────
-
+// ── Level Dot Row → gamification/LevelDots.kt ────────────────────────────────
 @Composable
-fun LevelDots(filled: Int, total: Int, dotSize: Dp = 8.dp, modifier: Modifier = Modifier) {
-    Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-        repeat(total) { i ->
-            Box(
-                modifier = Modifier
-                    .size(dotSize)
-                    .clip(CircleShape)
-                    .background(
-                        if (i < filled) CandyPrimary
-                        else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
-                    ),
-            )
-        }
-    }
-}
+fun LevelDots(filled: Int, total: Int, dotSize: Dp = 8.dp, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.LevelDots(
+        filled = filled, total = total, modifier = modifier, dotSize = dotSize,
+    )
 
 // ── Gradient Brush helper ─────────────────────────────────────────────────────
 
@@ -523,76 +470,24 @@ fun ProgressSummaryCard(
     }
 }
 
-// ── Gold Badge (Coin göstergesi) ──────────────────────────────────────────────
-
+// ── Gold Badge → gamification/GoldBadge.kt ───────────────────────────────────
 @Composable
-fun GoldBadge(gold: Int, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(50))
-            .background(XpGold.copy(alpha = 0.15f))
-            .padding(horizontal = 10.dp, vertical = 5.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .size(18.dp)
-                .clip(CircleShape)
-                .background(XpGold),
-        )
-        Text(
-            text = "$gold",
-            style = MaterialTheme.typography.labelLarge,
-            color = XpGold,
-        )
-    }
-}
+fun GoldBadge(gold: Int, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.GoldBadge(gold = gold, modifier = modifier)
 
-// ── Level Badge ───────────────────────────────────────────────────────────────
-
+// ── Level Badge → gamification/LevelBadge.kt ─────────────────────────────────
 @Composable
-fun LevelBadge(level: Int, title: String, modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(50))
-            .background(Brush.linearGradient(listOf(LevelSky, CandyPrimary)))
-            .padding(horizontal = 12.dp, vertical = 5.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-    ) {
-        Box(
-            modifier = Modifier
-                .size(14.dp)
-                .clip(CircleShape)
-                .background(Color.White),
-        )
-        Text(
-            text = "Lv.$level $title",
-            style = MaterialTheme.typography.labelMedium,
-            color = Color.White,
-        )
-    }
-}
+fun LevelBadge(level: Int, title: String, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.LevelBadge(
+        level = level, title = title, modifier = modifier,
+    )
 
-// ── Companion Speech Bubble ───────────────────────────────────────────────────
-
+// ── Companion Bubble → gamification/CompanionBubble.kt ───────────────────────
 @Composable
-fun CompanionBubble(message: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
-            .padding(horizontal = 14.dp, vertical = 10.dp),
-    ) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-        )
-    }
-}
+fun CompanionBubble(message: String, modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.gamification.CompanionBubble(
+        message = message, modifier = modifier,
+    )
 
 // ── Stat Pill (Compact stat indicator) ────────────────────────────────────────
 
@@ -617,9 +512,8 @@ fun StatPill(emoji: String, value: String, label: String, modifier: Modifier = M
 //  Tüm yeni ekranlar bu bölümdeki component'leri kullanmalı.
 // ════════════════════════════════════════════════════════════════════════════
 
-// ── AppButton — Unified CTA (Primary / Secondary / Ghost) ────────────────────
-
-enum class AppButtonVariant { Primary, Secondary, Ghost }
+// ── AppButton → core/AppButton.kt ────────────────────────────────────────────
+typealias AppButtonVariant = com.benimgunlerim.ui.components.core.AppButtonVariant
 
 @Composable
 fun AppButton(
@@ -628,54 +522,10 @@ fun AppButton(
     modifier: Modifier = Modifier,
     variant: AppButtonVariant = AppButtonVariant.Primary,
     enabled: Boolean = true,
-) {
-    val shape = RoundedCornerShape(AppTokens.Radius.md)
-    when (variant) {
-        AppButtonVariant.Primary -> Button(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            shape = shape,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = CandyPrimary,
-                contentColor = Color.White,
-                disabledContainerColor = CandyPrimary.copy(alpha = 0.4f),
-                disabledContentColor = Color.White.copy(alpha = 0.6f),
-            ),
-        ) {
-            Text(text = text, style = MaterialTheme.typography.labelLarge)
-        }
-        AppButtonVariant.Secondary -> OutlinedButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            shape = shape,
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = CandyPrimary,
-                disabledContentColor = CandyPrimary.copy(alpha = 0.4f),
-            ),
-            border = androidx.compose.foundation.BorderStroke(
-                1.dp,
-                if (enabled) CandyPrimary else CandyPrimary.copy(alpha = 0.3f),
-            ),
-        ) {
-            Text(text = text, style = MaterialTheme.typography.labelLarge)
-        }
-        AppButtonVariant.Ghost -> TextButton(
-            onClick = onClick,
-            modifier = modifier,
-            enabled = enabled,
-            shape = shape,
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.labelLarge,
-                color = if (enabled) MaterialTheme.colorScheme.onSurfaceVariant
-                        else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f),
-            )
-        }
-    }
-}
+) = com.benimgunlerim.ui.components.core.AppButton(
+    text = text, onClick = onClick, modifier = modifier,
+    variant = variant, enabled = enabled,
+)
 
 // ── SectionHeader — Unified section başlığı ──────────────────────────────────
 //  accentColor verilirse sol tarafta renkli dikey çizgi gösterir.
@@ -739,9 +589,9 @@ fun AppCard(
     Card(
         modifier = if (onClick != null) modifier.fillMaxWidth().clickable(onClick = onClick)
                    else modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(AppTokens.Radius.lg),
+        shape = RoundedCornerShape(AppTokens.Radius.md),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.92f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = AppTokens.Elevation.flat),
         border = androidx.compose.foundation.BorderStroke(
             1.dp,
             MaterialTheme.colorScheme.outline.copy(alpha = 0.18f),
@@ -799,16 +649,10 @@ fun EmptyStateView(
     }
 }
 
-// ── AppDivider — Tutarlı ayırıcı çizgi ───────────────────────────────────────
-
+// ── AppDivider → core/AppDivider.kt ──────────────────────────────────────────
 @Composable
-fun AppDivider(modifier: Modifier = Modifier) {
-    HorizontalDivider(
-        modifier = modifier.padding(horizontal = AppTokens.Spacing.screenHorizontal),
-        thickness = 1.dp,
-        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f),
-    )
-}
+fun AppDivider(modifier: Modifier = Modifier) =
+    com.benimgunlerim.ui.components.core.AppDivider(modifier = modifier)
 
 // ── WarningCard — Sarı uyarı kartı ("Gün sonu" gibi) ────────────────────────
 
@@ -920,7 +764,7 @@ fun AlertCard(
 
 // ════════════════════════════════════════════════════════════════════════════
 //  Design System v2 — Screen-level unified shell
-//  Her sekme ScreenBackground + ScreenHeroCard + SectionBlock kullanır.
+//  Her sekme ScreenBackground + ScreenSummaryCard + SectionBlock kullanır.
 // ════════════════════════════════════════════════════════════════════════════
 
 // ── ScreenBackground — Tüm sekmeler için ortak gradient ──────────────────────
@@ -929,30 +773,26 @@ fun AlertCard(
 fun ScreenBackground(): androidx.compose.ui.graphics.Brush =
     androidx.compose.ui.graphics.Brush.verticalGradient(
         listOf(
-            com.benimgunlerim.ui.theme.CandyPrimaryLight,
-            com.benimgunlerim.ui.theme.AccentPurpleSoft,
             MaterialTheme.colorScheme.background,
             MaterialTheme.colorScheme.background,
         ),
     )
 
-// ── ScreenHeroCard — Her sekmede aynı zarif hero başlık ──────────────────────
+// ── ScreenSummaryCard — Başlıksız, yalnızca işlevsel özet yüzeyi ─────────────
 
 @Composable
-fun ScreenHeroCard(
-    title: String,
-    subtitle: String,
+fun ScreenSummaryCard(
     modifier: Modifier = Modifier,
-    metricRow: (@Composable () -> Unit)? = null,
+    content: @Composable () -> Unit,
 ) {
     androidx.compose.material3.Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(AppTokens.Radius.xxl),
+        shape = RoundedCornerShape(AppTokens.Radius.sm),
         colors = androidx.compose.material3.CardDefaults.cardColors(
             containerColor = Color.White,
         ),
         elevation = androidx.compose.material3.CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
+            defaultElevation = 0.dp,
         ),
         border = androidx.compose.foundation.BorderStroke(
             1.dp,
@@ -965,21 +805,7 @@ fun ScreenHeroCard(
                 .padding(AppTokens.Spacing.cardInnerHero),
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.xs),
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.displayLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.ExtraBold,
-            )
-            Text(
-                text = subtitle,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            if (metricRow != null) {
-                Spacer(Modifier.height(AppTokens.Spacing.xxs))
-                metricRow()
-            }
+            content()
         }
     }
 }

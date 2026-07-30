@@ -50,6 +50,7 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -61,6 +62,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
@@ -95,6 +97,7 @@ import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandySecondary
 import com.benimgunlerim.ui.theme.LevelSky
 import com.benimgunlerim.ui.theme.StreakCoral
+import com.benimgunlerim.ui.theme.BenimGunlerimTheme
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -294,6 +297,12 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 containerColor = CandyPrimary,
                 contentColor = Color.White,
                 shape = CircleShape,
+                elevation = FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp,
+                    focusedElevation = 0.dp,
+                    hoveredElevation = 0.dp,
+                ),
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.plan_add_task_cd))
             }
@@ -305,8 +314,8 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 .testTag(TestTags.PlanRoot)
                 .background(com.benimgunlerim.ui.components.ScreenBackground())
                 .padding(padding),
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 14.dp, bottom = 106.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 140.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             item {
                 if (state.snapshotLoadError) {
@@ -314,31 +323,15 @@ fun PlanScreen(viewModel: PlanViewModel = hiltViewModel()) {
                 }
             }
             item {
-                PlanHeroCard(
-                    selectedDate = state.selectedDate,
-                    today = today,
-                    taskCount = state.tasksForDay.size,
-                    completedCount = state.tasksForDay.count { it.isCompleted },
-                    overdueCount = state.overdueTasks.size,
-                )
-            }
-            item {
                 PlanDateNavigationRow(
                     weekStart = state.weekStart,
                     selectedDate = state.selectedDate,
                     today = today,
+                    taskCounts = state.weeklyTaskCounts,
                     onPreviousWeek = viewModel::selectPreviousWeek,
                     onNextWeek = viewModel::selectNextWeek,
                     onToday = viewModel::selectToday,
                     onPickDate = { showDatePicker = true },
-                )
-            }
-            item {
-                WeekDatePicker(
-                    weekStart = state.weekStart,
-                    selectedDate = state.selectedDate,
-                    today = today,
-                    taskCounts = state.weeklyTaskCounts,
                     onSelectDate = { viewModel.selectDate(it) },
                 )
             }
@@ -866,10 +859,12 @@ private fun PlanDateNavigationRow(
     weekStart: LocalDate,
     selectedDate: LocalDate,
     today: LocalDate,
+    taskCounts: Map<LocalDate, Int>,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
     onToday: () -> Unit,
     onPickDate: () -> Unit,
+    onSelectDate: (LocalDate) -> Unit,
 ) {
     val weekEnd = weekStart.plusDays(6)
     val weekLabel = stringResource(
@@ -880,122 +875,64 @@ private fun PlanDateNavigationRow(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(16.dp)),
-        shape = RoundedCornerShape(16.dp),
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            IconButton(onClick = onPreviousWeek, modifier = Modifier.size(40.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+            ) {
+                IconButton(onClick = onPreviousWeek, modifier = Modifier.size(44.dp)) {
                 Icon(
                     Icons.Rounded.ChevronLeft,
                     contentDescription = stringResource(R.string.plan_previous_week_cd),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Text(
-                weekLabel,
-                modifier = Modifier.weight(1f),
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            if (selectedDate != today) {
-                TextButton(onClick = onToday, contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
-                    Text(
-                        stringResource(R.string.plan_today_action),
-                        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                Text(
+                    weekLabel,
+                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                if (selectedDate != today) {
+                    TextButton(onClick = onToday, contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp)) {
+                        Text(
+                            stringResource(R.string.plan_today_action),
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                        )
+                    }
+                }
+                IconButton(onClick = onPickDate, modifier = Modifier.size(44.dp)) {
+                    Icon(
+                        Icons.Outlined.CalendarToday,
+                        contentDescription = stringResource(R.string.plan_pick_date_cd),
+                        tint = CandyPrimary,
+                    )
+                }
+                IconButton(onClick = onNextWeek, modifier = Modifier.size(44.dp)) {
+                    Icon(
+                        Icons.Rounded.ChevronRight,
+                        contentDescription = stringResource(R.string.plan_next_week_cd),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
-            IconButton(onClick = onPickDate, modifier = Modifier.size(40.dp)) {
-                Icon(
-                    Icons.Outlined.CalendarToday,
-                    contentDescription = stringResource(R.string.plan_pick_date_cd),
-                    tint = CandyPrimary,
-                )
-            }
-            IconButton(onClick = onNextWeek, modifier = Modifier.size(40.dp)) {
-                Icon(
-                    Icons.Rounded.ChevronRight,
-                    contentDescription = stringResource(R.string.plan_next_week_cd),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            WeekDatePicker(
+                weekStart = weekStart,
+                selectedDate = selectedDate,
+                today = today,
+                taskCounts = taskCounts,
+                onSelectDate = onSelectDate,
+            )
         }
-    }
-}
-
-@Composable
-private fun PlanHeroCard(
-    selectedDate: LocalDate,
-    today: LocalDate,
-    taskCount: Int,
-    completedCount: Int,
-    overdueCount: Int,
-) {
-    val todayLabel = stringResource(R.string.label_today)
-    val tomorrowLabel = stringResource(R.string.label_tomorrow)
-    val yesterdayLabel = stringResource(R.string.label_yesterday)
-    val dayTag = when (selectedDate) {
-        today -> todayLabel
-        today.plusDays(1) -> tomorrowLabel
-        today.minusDays(1) -> yesterdayLabel
-        else -> selectedDate.format(DateTimeFormatter.ofPattern("EEEE", Locale("tr", "TR")))
-            .replaceFirstChar { it.titlecase(Locale("tr", "TR")) }
-    }
-    val dateStr = selectedDate.format(DateTimeFormatter.ofPattern("d MMMM yyyy", Locale("tr", "TR")))
-
-    com.benimgunlerim.ui.components.ScreenHeroCard(
-        title = stringResource(R.string.plan_title),
-        subtitle = "$dateStr • $dayTag",
-        metricRow = {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                PlanSummaryTile(
-                    value = taskCount.toString(),
-                    label = stringResource(R.string.plan_summary_total),
-                    color = LevelSky,
-                    modifier = Modifier.weight(1f),
-                )
-                PlanSummaryTile(
-                    value = completedCount.toString(),
-                    label = stringResource(R.string.plan_summary_completed),
-                    color = CandyPrimary,
-                    modifier = Modifier.weight(1f),
-                )
-                PlanSummaryTile(
-                    value = overdueCount.toString(),
-                    label = stringResource(R.string.plan_summary_overdue),
-                    color = StreakCoral,
-                    modifier = Modifier.weight(1f),
-                )
-            }
-        },
-    )
-}
-
-@Composable
-private fun PlanSummaryTile(value: String, label: String, color: Color, modifier: Modifier) {
-    Column(
-        modifier.padding(vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Text(
-            value,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-            color = color,
-            maxLines = 1,
-        )
-        Text(
-            label,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
     }
 }
 
@@ -1024,7 +961,7 @@ private fun WeekDatePicker(
             Column(
                 modifier = Modifier
                     .width(50.dp)
-                    .clip(RoundedCornerShape(14.dp))
+                    .clip(RoundedCornerShape(8.dp))
                     .background(
                         when {
                             isSelected -> CandyPrimary
@@ -1035,7 +972,7 @@ private fun WeekDatePicker(
                     .border(
                         width = if (isToday && !isSelected) 1.dp else 0.dp,
                         color = if (isToday && !isSelected) CandyPrimary.copy(.40f) else Color.Transparent,
-                        shape = RoundedCornerShape(14.dp),
+                        shape = RoundedCornerShape(8.dp),
                     )
                     .clickable { onSelectDate(date) }
                     .semantics { contentDescription = dayCd }

@@ -610,8 +610,8 @@
     "semantic_hash": "f2e52d53a2cce43ccf38345004616b22"
   },
   "app/src/main/java/com/benimgunlerim/ui/components/Common.kt": {
-    "mtime": 1785431610.3041863,
-    "ast_hash": "82bf06ea3742d126c6b294f737a196e7",
+    "mtime": 1785427587.3238335,
+    "ast_hash": "95d1cc71426164ce51484414a6e8f6e6",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/onboarding/OnboardingScreen.kt": {
@@ -1187,66 +1187,6 @@
   "CLAUDE.md": {
     "mtime": 1785431150.5927525,
     "ast_hash": "9bc29fff09cd0a0ed25fa75ae0a6bf77",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppBadge.kt": {
-    "mtime": 1785431490.908459,
-    "ast_hash": "2753e12a9d3a4549728585cb01a612a9",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppButton.kt": {
-    "mtime": 1785431471.3283303,
-    "ast_hash": "d8046f3fe7db240eff2bb87a11e0781a",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppChip.kt": {
-    "mtime": 1785431479.2244575,
-    "ast_hash": "5ec04e7a14b26df9abac63e2e0470763",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppDivider.kt": {
-    "mtime": 1785431499.2091954,
-    "ast_hash": "6502ca473a44c37e793a816de38c1697",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppIcon.kt": {
-    "mtime": 1785431505.1614113,
-    "ast_hash": "1c0d58a0a16427ecb55005311c04105d",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/core/AppSurface.kt": {
-    "mtime": 1785431457.9367242,
-    "ast_hash": "70737150cc282871c69e06bb3eadcdf4",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/CompanionBubble.kt": {
-    "mtime": 1785431550.7732625,
-    "ast_hash": "961a6c6ab57f0c2c34bf7ef2413bb765",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/GoldBadge.kt": {
-    "mtime": 1785431543.2577274,
-    "ast_hash": "25ae335e42ef66d588215d2698dc93f2",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/LevelBadge.kt": {
-    "mtime": 1785431534.3729467,
-    "ast_hash": "0a114f2add9c3647d3c9b50b1acb2dd5",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/LevelDots.kt": {
-    "mtime": 1785431557.884128,
-    "ast_hash": "14232e72a78bc9ae7cc7ba75d6b39f7a",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/StreakBadge.kt": {
-    "mtime": 1785431659.3212721,
-    "ast_hash": "aa2af4f619e78f0866986321cffa5f98",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/components/gamification/XpBadge.kt": {
-    "mtime": 1785431515.803183,
-    "ast_hash": "9ced8068f97715ed411496e4d864cfad",
     "semantic_hash": ""
   }
 }

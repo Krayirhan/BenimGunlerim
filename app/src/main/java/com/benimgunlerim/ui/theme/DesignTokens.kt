@@ -5,103 +5,104 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 // ═══════════════════════════════════════════════════════════════════════════════
-//  BenimGünlerim — Design Token System v1
-//  Tüm hardcoded spacing/radius/elevation/motion değerleri buradan gelir.
-//  Ekranlarda asla "16.dp" yazmayın; AppTokens.spacing.md kullanın.
+//  BenimGünlerim — Design Token System v2
+//  Katı kural: Ekran ve bileşen dosyalarında asla DP literal yazmayın.
+//  Her ölçü buradan gelir veya buradan türetilir.
+//  Ölçek: 4dp grid. xxs=4 xs=8 sm=12 md=16 lg=20 xl=24 xxl=32
 // ═══════════════════════════════════════════════════════════════════════════════
 
 object AppTokens {
 
     // ── Spacing ──────────────────────────────────────────────────────────────
     object Spacing {
-        /** 4.dp — ikon-metin arası, badge iç boşluk */
+        /** 4dp — mikro: badge iç boşluk, ikon-metin arası */
         val xxs: Dp = 4.dp
-        /** 8.dp — kompakt liste öğesi, chip iç padding */
-        val xs: Dp = 8.dp
-        /** 12.dp — kart iç boşluklar, liste gap */
-        val sm: Dp = 12.dp
-        /** 16.dp — standart ekran yatay padding */
-        val md: Dp = 16.dp
-        /** 20.dp — hero kart iç padding */
-        val lg: Dp = 20.dp
-        /** 24.dp — section aralığı, büyük kart padding */
-        val xl: Dp = 24.dp
-        /** 32.dp — ekran üst boşluk */
+        /** 8dp — kompakt: chip iç dolgu, liste gap */
+        val xs:  Dp = 8.dp
+        /** 12dp — küçük: yoğun kart dolgu, eleman grubu */
+        val sm:  Dp = 12.dp
+        /** 16dp — standart: kart iç dolgu, yatay padding */
+        val md:  Dp = 16.dp
+        /** 20dp — orta: hero kart dolgu, navigasyon yüksekliği */
+        val lg:  Dp = 20.dp
+        /** 24dp — büyük: section arası, bölüm boşluğu */
+        val xl:  Dp = 24.dp
+        /** 32dp — ekstra: ekran üst boşluğu */
         val xxl: Dp = 32.dp
 
-        /** Standart ekran yatay kenar boşluğu */
-        val screenHorizontal: Dp = md
-        /** Ekran üst başlık boşluğu */
-        val screenTop: Dp = xxl
-        /** Card iç padding (normal) */
+        /** Standart ekran yatay kenar boşluğu — 20dp */
+        val screenHorizontal: Dp = lg
+        /** Ekran içerik üst boşluğu — 24dp */
+        val screenTop: Dp = xl
+        /** Kart iç dolgu (normal) — 16dp */
         val cardInner: Dp = md
-        /** Card iç padding (hero) */
+        /** Kart iç dolgu (hero) — 20dp */
         val cardInnerHero: Dp = lg
-        /** Listede öğeler arası gap */
+        /** Liste öğeleri arası gap — 8dp */
         val listGap: Dp = xs
-        /** Section'lar arası boşluk */
+        /** Section'lar arası boşluk — 24dp */
         val sectionGap: Dp = xl
     }
 
     // ── Border Radius ────────────────────────────────────────────────────────
     object Radius {
-        /** 8.dp — küçük chip, tag */
-        val xs: Dp = 8.dp
-        /** 12.dp — küçük kart, compact badge */
-        val sm: Dp = 12.dp
-        /** 16.dp — orta kart, sheet */
-        val md: Dp = 16.dp
-        /** 20.dp — standart kart */
-        val lg: Dp = 20.dp
-        /** 24.dp — hero kart */
-        val xl: Dp = 24.dp
-        /** 28.dp — büyük hero panel */
-        val xxl: Dp = 28.dp
-        /** 99.dp — tam yuvarlak (pill) */
+        /** 4dp — çok küçük: dot göstergesi, mikro badge */
+        val xs:   Dp = 4.dp
+        /** 8dp — küçük: chip, tag, kompakt badge */
+        val sm:   Dp = 8.dp
+        /** 12dp — standart: kart, buton */
+        val md:   Dp = 12.dp
+        /** 16dp — büyük: modal, bottom sheet, büyük kart */
+        val lg:   Dp = 16.dp
+        /** 20dp — ekstra büyük: hero kart */
+        val xl:   Dp = 20.dp
+        /** 28dp — maksimum: büyük hero panel */
+        val xxl:  Dp = 28.dp
+        /** 99dp — tam yuvarlak (pill) */
         val pill: Dp = 99.dp
     }
 
     // ── Elevation ────────────────────────────────────────────────────────────
     object Elevation {
-        /** 0.dp — içi dolu / borderli kartlar */
-        val flat: Dp = 0.dp
-        /** 2.dp — standart kart gölgesi */
-        val card: Dp = 2.dp
-        /** 4.dp — vurgulu kart */
-        val cardEmphasized: Dp = 4.dp
-        /** 8.dp — modal, bottom sheet */
-        val modal: Dp = 8.dp
+        /** 0dp — gölgesiz: border/arka plan ile ayrılan kartlar */
+        val flat:           Dp = 0.dp
+        /** 0dp — standart kart (border ile ayrışır) */
+        val card:           Dp = 0.dp
+        /** 0dp — vurgulu kart (renk ile ayrışır) */
+        val cardEmphasized: Dp = 0.dp
+        /** 8dp — modal yüzeyler, bottom sheet */
+        val modal:          Dp = 8.dp
     }
 
-    // ── Motion (animation durationMillis) ───────────────────────────────────
+    // ── Motion (animasyon süresi — ms) ──────────────────────────────────────
     object Motion {
-        /** 150ms — micro-interaction, renk geçişi */
-        const val fast: Int = 150
-        /** 300ms — kart açılma, buton tap */
-        const val normal: Int = 300
-        /** 500ms — progress bar, hero transition */
-        const val slow: Int = 500
-        /** 800ms — pulse/infinite animation turu */
-        const val pulse: Int = 800
+        /** 150ms — mikro: renk geçişi, opacity */
+        const val fast:     Int = 150
+        /** 300ms — standart: kart açılma, buton tap */
+        const val normal:   Int = 300
+        /** 500ms — yavaş: progress bar, hero geçişi */
+        const val slow:     Int = 500
+        /** 800ms — infinite animasyon turu (pulse, shimmer) */
+        const val pulse:    Int = 800
     }
 
     // ── Icon Sizes ───────────────────────────────────────────────────────────
     object IconSize {
-        /** 16.dp — inline/badge ikon */
+        /** 16dp — inline / badge ikon */
         val xs: Dp = 16.dp
-        /** 20.dp — liste satır ikonu */
+        /** 20dp — liste satır ikonu */
         val sm: Dp = 20.dp
-        /** 24.dp — standart nav/toolbar ikonu */
+        /** 24dp — standart nav / toolbar ikonu */
         val md: Dp = 24.dp
-        /** 32.dp — kart başlık ikonu */
+        /** 32dp — kart başlık ikonu */
         val lg: Dp = 32.dp
-        /** 48.dp — empty state / hero illüstrasyonu */
+        /** 48dp — empty state / hero illüstrasyon ikonu */
         val xl: Dp = 48.dp
     }
 
     // ── Bottom Nav ───────────────────────────────────────────────────────────
     object BottomNav {
-        /** Sekme etiketi altındaki dot göstergesi boyutu */
-        val indicatorDot: Dp = 4.dp
+        /** Seçili sekme üstündeki dot gösterge boyutu */
+        val indicatorDot: Dp = 6.dp
     }
 }

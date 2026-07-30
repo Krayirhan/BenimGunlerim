@@ -198,7 +198,7 @@ private fun ShopItemCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(com.benimgunlerim.ui.theme.AppTokens.Radius.md),
         colors = CardDefaults.cardColors(containerColor = bgColor),
         border = androidx.compose.foundation.BorderStroke(
             0.5.dp,

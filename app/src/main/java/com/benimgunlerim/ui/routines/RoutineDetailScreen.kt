@@ -2,6 +2,8 @@
 
 package com.benimgunlerim.ui.routines
 
+import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -299,6 +301,14 @@ private fun StatCard(label: String, value: String, color: Color, modifier: Modif
     ) {
         Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = color)
         Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Preview(showBackground = true, name = "Routine Detail Stat")
+@Composable
+private fun RoutineDetailStatPreview() {
+    com.benimgunlerim.ui.theme.BenimGunlerimTheme {
+        StatCard(label = "Bu hafta", value = "6/7", color = com.benimgunlerim.ui.theme.CandyPrimary)
     }
 }
 

@@ -1,5 +1,7 @@
 package com.benimgunlerim.ui.achievements
 
+import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -107,6 +109,14 @@ private fun SummaryPill(
     ) {
         Text(title, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Text(value, style = MaterialTheme.typography.titleLarge, color = color)
+    }
+}
+
+@Preview(showBackground = true, name = "Achievements Summary")
+@Composable
+private fun AchievementsSummaryPreview() {
+    com.benimgunlerim.ui.theme.BenimGunlerimTheme {
+        SummaryPill(title = "Açılan", value = "12", color = CompletedGreen)
     }
 }
 

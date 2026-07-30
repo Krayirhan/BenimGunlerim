@@ -105,3 +105,6 @@ Repo dışı ayarları kontrol etmek için:
 ```
 
 Bu script lokal release signing değişkenlerini kontrol eder ve GitHub/Play Console tarafında manuel doğrulanması gereken adımları listeler.
+## UI Tasarım Kapısı
+
+UI değişiklikleri için `DESIGN.md` içindeki Global UI Kuralları ve UI/Görsel Doğrulama Standardı uygulanır. Ortak scaffold, sistem bar inset'i, responsive genişlikler, büyük font, erişilebilirlik ve tek/çok öğeli liste durumları kontrol edilmeden değişiklik tamamlanmış kabul edilmez.

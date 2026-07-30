@@ -1,9 +1,9 @@
 package com.benimgunlerim.ui.today.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 
 @Immutable
@@ -30,32 +30,53 @@ data class TodayColorTokens(
 )
 
 private val LightTodayColorTokens = TodayColorTokens(
-    backgroundTop = Color(0xFFFFFFFF),
-    backgroundBottom = Color(0xFFFFFFFF),
-    headerSurface = Color(0xFF6BBF8E),
-    headerBorder = Color(0xFF6BBF8E),
-    tasksSectionSurface = Color(0xFFFFFFFF),
-    tasksSectionBorder = Color(0xFFBEC9BF),
+    backgroundTop          = Color(0xFFF7F9FF),
+    backgroundBottom       = Color(0xFFF7F9FF),
+    headerSurface          = Color(0xFFFFFFFF),
+    headerBorder           = Color(0xFFBEC9BF),
+    tasksSectionSurface    = Color(0xFFFFFFFF),
+    tasksSectionBorder     = Color(0xFFBEC9BF),
     routinesSectionSurface = Color(0xFFFFFFFF),
-    routinesSectionBorder = Color(0xFFBEC9BF),
-    itemSurface = Color(0xFFFFFFFF),
-    itemBorder = Color(0xFFBEC9BF),
-    chipSurface = Color(0xFFE8F5EE),
-    chipBorder = Color(0xFFBEC9BF),
-    chipText = Color(0xFF004C2D),
-    overdueSurface = Color(0xFFFFF4E5),
-    overdueBorder = Color(0xFFDBA36D),
-    closeDaySurface = Color(0xFFFFFFFF),
-    closeDayBorder = Color(0xFFBEC9BF),
-    missedDaySurface = Color(0xFFFFF4E5),
-    missedDayBorder = Color(0xFFDBA36D),
+    routinesSectionBorder  = Color(0xFFBEC9BF),
+    itemSurface            = Color(0xFFFFFFFF),
+    itemBorder             = Color(0xFFBEC9BF),
+    chipSurface            = Color(0xFFE8F5EE),
+    chipBorder             = Color(0xFFBEC9BF),
+    chipText               = Color(0xFF004C2D),
+    overdueSurface         = Color(0xFFFFF4E5),
+    overdueBorder          = Color(0xFFDBA36D),
+    closeDaySurface        = Color(0xFFFFFFFF),
+    closeDayBorder         = Color(0xFFBEC9BF),
+    missedDaySurface       = Color(0xFFFFF4E5),
+    missedDayBorder        = Color(0xFFDBA36D),
+)
+
+private val DarkTodayColorTokens = TodayColorTokens(
+    backgroundTop          = Color(0xFF0F1512),
+    backgroundBottom       = Color(0xFF0F1512),
+    headerSurface          = Color(0xFF161E19),
+    headerBorder           = Color(0xFF3E4A40),
+    tasksSectionSurface    = Color(0xFF161E19),
+    tasksSectionBorder     = Color(0xFF3E4A40),
+    routinesSectionSurface = Color(0xFF161E19),
+    routinesSectionBorder  = Color(0xFF3E4A40),
+    itemSurface            = Color(0xFF1E2921),
+    itemBorder             = Color(0xFF3E4A40),
+    chipSurface            = Color(0xFF00311C),
+    chipBorder             = Color(0xFF3E4A40),
+    chipText               = Color(0xFF6BBF8E),
+    overdueSurface         = Color(0xFF2D1E00),
+    overdueBorder          = Color(0xFF8A5E20),
+    closeDaySurface        = Color(0xFF0A1012),
+    closeDayBorder         = Color(0xFF2A3840),
+    missedDaySurface       = Color(0xFF2D1E00),
+    missedDayBorder        = Color(0xFF8A5E20),
 )
 
 val LocalTodayColorTokens = staticCompositionLocalOf { LightTodayColorTokens }
 
 val MaterialTheme.todayColorTokens: TodayColorTokens
-    @Composable
-    get() = LocalTodayColorTokens.current
+    @Composable get() = LocalTodayColorTokens.current
 
-@Composable
-fun todayColorTokens(): TodayColorTokens = LightTodayColorTokens
+fun todayColorTokens(isDark: Boolean = false): TodayColorTokens =
+    if (isDark) DarkTodayColorTokens else LightTodayColorTokens

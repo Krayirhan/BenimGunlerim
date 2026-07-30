@@ -1,9 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 package com.benimgunlerim.ui
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -11,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.border
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BarChart
@@ -58,6 +56,7 @@ import com.benimgunlerim.ui.routines.RoutinesScreen
 import com.benimgunlerim.ui.settings.SettingsScreen
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.today.TodayRoute
+import com.benimgunlerim.ui.today.AppTopBar
 
 private enum class Destination(
     val route: String,
@@ -102,22 +101,38 @@ fun BenimGunlerimApp(
     }
 
     Scaffold(
+        topBar = {
+            if (showBottomBar) {
+                AppTopBar(
+                    onOpenProfile = {
+                        navController.navigate(Destination.Settings.route) {
+                            popUpTo(Destination.Today.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                    onOpenNotifications = {
+                        navController.navigate(Destination.Settings.route) {
+                            popUpTo(Destination.Today.route) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
+                    },
+                )
+            }
+        },
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar(
+                    modifier = Modifier.border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.60f),
+                    ),
                     containerColor = MaterialTheme.colorScheme.surface,
                     tonalElevation = 0.dp,
                 ) {
                     Destination.entries.forEach { destination ->
                         val selected = currentRoute == destination.route
-                        val scale by animateFloatAsState(
-                            targetValue = if (selected) 1.1f else 1f,
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow,
-                            ),
-                            label = "navScale",
-                        )
                         NavigationBarItem(
                             selected = selected,
                             modifier = Modifier.testTag(
@@ -147,7 +162,7 @@ fun BenimGunlerimApp(
                                     Icon(
                                         imageVector = if (selected) destination.selectedIcon else destination.icon,
                                         contentDescription = stringResource(destination.labelRes),
-                                        modifier = Modifier.scale(scale),
+                                        modifier = Modifier,
                                     )
                                     if (selected) {
                                         Surface(

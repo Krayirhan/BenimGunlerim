@@ -1,0 +1,28 @@
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [
+      {
+        "text": "{\"name\":\"projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060\",\"title\":\"Bug\u00fcn Ekran\u0131\",\"screenshot\":{\"name\":\"projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060/fileEntries/screenshot\",\"downloadUrl\":\"https://lh3.googleusercontent.com/aida/AP1WRLupsoub2yEtAGizi1bKPWdUOf-uKYGKE00gbhEtTc_1lCxkcP-hSaCPQ8KvhqI6G9AqCAF35w4XE5rxY8ewwQIRD_lv3CJh9hBNbZk3m4o5LPgIr39omltJyocgl4njz9nBXWf6W1SOlukAW-3ckrhF2O-GPWRYR7SsFWdfKMPODiFijfiHcQlaRSP2wOJ5RbKLewZ3-ci_p_ORs4Atl89fy7GYdMVhiZaE1pyCKW6h97MiEquNKqcd-gY\"},\"htmlCode\":{\"name\":\"projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060/fileEntries/html\",\"downloadUrl\":\"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1N2M3ZGZiYTlkY2MwNDVhZDVmMGE4MGU2YjM2EgsSBxDQs5Seqw4YAZIBIwoKcHJvamVjdF9pZBIVQhM4NjY3ODUwMzUyNjgzNTI1MTk2&filename=&opi=89354086\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"1768\",\"deviceType\":\"MOBILE\"}",
+        "type": "text"
+      }
+    ],
+    "structuredContent": {
+      "deviceType": "MOBILE",
+      "height": "1768",
+      "htmlCode": {
+        "downloadUrl": "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1N2M3ZGZiYTlkY2MwNDVhZDVmMGE4MGU2YjM2EgsSBxDQs5Seqw4YAZIBIwoKcHJvamVjdF9pZBIVQhM4NjY3ODUwMzUyNjgzNTI1MTk2&filename=&opi=89354086",
+        "mimeType": "text/html",
+        "name": "projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060/fileEntries/html"
+      },
+      "name": "projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060",
+      "screenshot": {
+        "downloadUrl": "https://lh3.googleusercontent.com/aida/AP1WRLupsoub2yEtAGizi1bKPWdUOf-uKYGKE00gbhEtTc_1lCxkcP-hSaCPQ8KvhqI6G9AqCAF35w4XE5rxY8ewwQIRD_lv3CJh9hBNbZk3m4o5LPgIr39omltJyocgl4njz9nBXWf6W1SOlukAW-3ckrhF2O-GPWRYR7SsFWdfKMPODiFijfiHcQlaRSP2wOJ5RbKLewZ3-ci_p_ORs4Atl89fy7GYdMVhiZaE1pyCKW6h97MiEquNKqcd-gY",
+        "name": "projects/8667850352683525196/screens/ff59ef7d9cb54eb3a50834cfe8fc4060/fileEntries/screenshot"
+      },
+      "title": "Bug\u00fcn Ekran\u0131",
+      "width": "780"
+    }
+  }
+}

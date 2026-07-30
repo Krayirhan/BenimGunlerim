@@ -48,6 +48,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -75,6 +76,7 @@ import com.benimgunlerim.ui.theme.AccentSkySoft
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.CandyPrimaryDark
 import com.benimgunlerim.ui.theme.CandyPrimaryLight
+import com.benimgunlerim.ui.theme.BenimGunlerimTheme
 import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.R
 import java.time.DayOfWeek
@@ -86,14 +88,6 @@ fun RoutinesScreen(
     onNavigateToDetail: (String) -> Unit = {},
 ) {
     val routines by viewModel.routines.collectAsState()
-    val today = viewModel.todayDayOfWeek()
-    val todayRoutineCount = routines.count { today in it.targetDays }
-    val weeklyCompletion = routines
-        .flatMap { it.last7Days }
-        .takeIf { it.isNotEmpty() }
-        ?.let { days -> (days.count { it } * 100) / days.size }
-        ?: 0
-
     var showAddSheet by remember { mutableStateOf(false) }
     var editingRoutineId by remember { mutableStateOf<String?>(null) }
     var editedRoutineName by remember { mutableStateOf("") }
@@ -138,14 +132,6 @@ fun RoutinesScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            item(key = "header") {
-                RoutineHeaderCard(
-                    routineCount = routines.size,
-                    todayRoutineCount = todayRoutineCount,
-                    weeklyCompletion = weeklyCompletion,
-                )
-            }
-
             item(key = "definition") {
                 RoutineDefinitionCard()
             }
@@ -206,60 +192,6 @@ fun RoutinesScreen(
 
 @Composable
 private fun RoutinesBackground(): Brush = com.benimgunlerim.ui.components.ScreenBackground()
-
-@Composable
-private fun RoutineHeaderCard(
-    routineCount: Int,
-    todayRoutineCount: Int,
-    weeklyCompletion: Int,
-) {
-    com.benimgunlerim.ui.components.ScreenHeroCard(
-        title = stringResource(R.string.routines_header_title),
-        subtitle = stringResource(R.string.routines_header_subtitle),
-        metricRow = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(com.benimgunlerim.ui.theme.AppTokens.Spacing.xs),
-            ) {
-                HeaderMetric(
-                    label = stringResource(R.string.label_active),
-                    value = routineCount.toString(),
-                    modifier = Modifier.weight(1f),
-                )
-                HeaderMetric(
-                    label = stringResource(R.string.label_today),
-                    value = todayRoutineCount.toString(),
-                    modifier = Modifier.weight(1f),
-                )
-                HeaderMetric(
-                    label = stringResource(R.string.routines_week_label),
-                    value = "%$weeklyCompletion",
-                    modifier = Modifier.weight(1f),
-                )
-            }
-        },
-    )
-}
-
-@Composable
-private fun HeaderMetric(label: String, value: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(vertical = 4.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp),
-    ) {
-        Text(
-            text = value,
-            style = MaterialTheme.typography.titleLarge,
-            color = CandyPrimary,
-            fontWeight = FontWeight.ExtraBold,
-        )
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            maxLines = 1,
-        )
-    }
-}
 
 @Composable
 private fun RoutineDefinitionCard() {
@@ -831,10 +763,10 @@ private fun BaseCard(
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(26.dp),
+        shape = RoundedCornerShape(com.benimgunlerim.ui.theme.AppTokens.Radius.md),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(
             modifier = Modifier

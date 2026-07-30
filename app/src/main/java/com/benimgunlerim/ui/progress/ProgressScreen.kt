@@ -1,5 +1,7 @@
 package com.benimgunlerim.ui.progress
 
+import androidx.compose.ui.tooling.preview.Preview
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -85,9 +87,6 @@ fun ProgressScreen(
         verticalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         item {
-            HeaderCard()
-        }
-        item {
             LevelOverviewCard(
                 totalXp = state.gameState.totalXp,
                 level = level.level,
@@ -154,14 +153,6 @@ fun ProgressScreen(
 
 @Composable
 private fun ProgressBackground(): Brush = com.benimgunlerim.ui.components.ScreenBackground()
-
-@Composable
-private fun HeaderCard() {
-    com.benimgunlerim.ui.components.ScreenHeroCard(
-        title = stringResource(R.string.progress_header_title),
-        subtitle = stringResource(R.string.progress_header_subtitle),
-    )
-}
 
 @Composable
 private fun LevelOverviewCard(
@@ -236,7 +227,7 @@ private fun MetricGrid(
 
 @Composable
 private fun MetricCard(title: String, value: String, subtitle: String, icon: ImageVector, color: Color, modifier: Modifier) {
-    SurfaceCard(modifier = modifier, radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(modifier = modifier, radius = 12.dp, padding = 16.dp) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Box(
                 Modifier
@@ -258,7 +249,7 @@ private fun MetricCard(title: String, value: String, subtitle: String, icon: Ima
 
 @Composable
 private fun WeeklyChartCard(days: List<ProgressDayUi>, average: Int) {
-    SurfaceCard(radius = 28.dp, padding = 18.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
@@ -310,7 +301,7 @@ private fun WeeklyChartCard(days: List<ProgressDayUi>, average: Int) {
 
 @Composable
 private fun ConsistencyCard(streak: Int, bestStreak: Int, bestDay: ProgressDayUi?, averageScore: Int) {
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.progress_consistency_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             InsightRow(
@@ -372,7 +363,7 @@ private fun TaskRoutineBalanceCard(taskCount: Int, routineCount: Int) {
     val total = (taskCount + routineCount).coerceAtLeast(1)
     val taskRatio = taskCount.toFloat() / total
     val routineRatio = routineCount.toFloat() / total
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text(stringResource(R.string.progress_balance_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             Text(stringResource(R.string.progress_balance_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -431,7 +422,7 @@ private fun MoodEnergyTrendCard(
     )
     val moodUnknown = stringResource(R.string.progress_mood_unknown)
     val moodLabel: (String?) -> String = { mood -> moodLabels[mood] ?: moodUnknown }
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text(stringResource(R.string.progress_mood_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             Text(stringResource(R.string.progress_mood_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -488,7 +479,7 @@ private fun PerformanceCard(
     taskCount: Int,
     routineCount: Int,
 ) {
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Text(stringResource(R.string.progress_perf_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             Text(stringResource(R.string.progress_perf_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -509,7 +500,7 @@ private fun PerformanceCard(
 
 @Composable
 private fun XpEconomyCard() {
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.progress_xp_economy_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             Text(stringResource(R.string.progress_xp_economy_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -545,7 +536,7 @@ private fun AchievementsCard(
     ratio: Float,
     onOpenAchievements: () -> Unit,
 ) {
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Column {
@@ -593,7 +584,7 @@ private fun AchievementItem(achievement: AchievementDef) {
 
 @Composable
 private fun RecentDaysCard(days: List<ProgressDayUi>) {
-    SurfaceCard(radius = 24.dp, padding = 16.dp) {
+    SurfaceCard(radius = 12.dp, padding = 16.dp) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(stringResource(R.string.progress_recent_days_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))
             if (days.isEmpty()) {
@@ -690,7 +681,7 @@ private fun SurfaceCard(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(radius),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
     ) {
         Column(Modifier.fillMaxWidth().padding(padding), content = content)
@@ -706,4 +697,3 @@ private fun formatDayName(raw: String): String {
     val date = runCatching { LocalDate.parse(raw) }.getOrNull() ?: return ""
     return date.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale("tr"))
 }
-

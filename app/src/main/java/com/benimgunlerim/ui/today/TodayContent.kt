@@ -2,6 +2,7 @@ package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,15 +10,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.ui.components.ScreenBackground
 import com.benimgunlerim.ui.theme.CandyPrimary
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 internal fun TodayContent(
@@ -53,7 +59,7 @@ internal fun TodayContent(
             .fillMaxSize()
             .background(ScreenBackground())
             .padding(padding),
-        contentPadding = PaddingValues(start = 24.dp, end = 24.dp, top = 16.dp, bottom = 140.dp),
+        contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 14.dp, bottom = 140.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         if (state.snapshotLoadError) {
@@ -62,14 +68,22 @@ internal fun TodayContent(
             }
         }
         item(key = "header") {
-            TodayHeaderCard(
-                today = today,
-                streak = state.currentStreak,
-                happiness = state.gameState.happiness,
-                completed = completed,
-                total = total,
-                progress = state.progress,
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = today.format(DateTimeFormatter.ofPattern("d MMMM", Locale("tr", "TR"))),
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = androidx.compose.ui.text.font.FontWeight.SemiBold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                TodayHeaderCard(
+                    today = today,
+                    streak = state.currentStreak,
+                    happiness = state.gameState.happiness,
+                    completed = completed,
+                    total = total,
+                    // Today ilerlemesi yalnızca bugünkü görev + rutin tamamlanmalarını temsil eder.
+                    progress = if (total == 0) 0f else completed.toFloat() / total,
+                )
+            }
         }
         item(key = "list") {
             val listActions = TodayListActions(
