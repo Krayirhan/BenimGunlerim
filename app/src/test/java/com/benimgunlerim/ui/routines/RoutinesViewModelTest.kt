@@ -39,6 +39,7 @@ class RoutinesViewModelTest {
     private val updateRoutineUseCase: UpdateRoutineUseCase = mockk(relaxed = true)
     private val archiveRoutineUseCase: ArchiveRoutineUseCase = mockk(relaxed = true)
     private val skipRoutineUseCase: SkipRoutineUseCase = mockk(relaxed = true)
+    private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase = mockk(relaxed = true)
     private val analyticsTracker: AnalyticsTracker = mockk(relaxed = true)
 
     private lateinit var viewModel: RoutinesViewModel
@@ -57,6 +58,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
+            toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,
         )
     }
@@ -90,6 +92,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase,
             archiveRoutineUseCase,
             skipRoutineUseCase,
+            toggleRoutineUseCase,
             analyticsTracker,
         )
 
@@ -124,6 +127,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase,
             archiveRoutineUseCase,
             skipRoutineUseCase,
+            toggleRoutineUseCase,
             analyticsTracker,
         )
 
@@ -186,6 +190,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
+            toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,
         )
         val job = launch { vm.routines.collect {} }
@@ -212,6 +217,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
+            toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,
         )
         val job = launch { vm.routines.collect {} }
