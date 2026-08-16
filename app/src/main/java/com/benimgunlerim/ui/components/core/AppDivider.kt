@@ -12,7 +12,7 @@ fun AppDivider(modifier: Modifier = Modifier) {
     HorizontalDivider(
         modifier = modifier,
         thickness = 1.dp,
-        color = MaterialTheme.colorScheme.outlineVariant,
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
     )
 }
 
@@ -21,6 +21,6 @@ fun AppVerticalDivider(modifier: Modifier = Modifier) {
     VerticalDivider(
         modifier = modifier,
         thickness = 1.dp,
-        color = MaterialTheme.colorScheme.outlineVariant,
+        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f),
     )
 }

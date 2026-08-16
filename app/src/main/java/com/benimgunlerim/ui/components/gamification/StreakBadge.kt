@@ -10,32 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.benimgunlerim.ui.theme.AppTokens
-import com.benimgunlerim.ui.theme.CandyPrimary
-import com.benimgunlerim.ui.theme.LevelSky
-import com.benimgunlerim.ui.theme.StreakCoral
+import com.benimgunlerim.ui.theme.Streak
+import com.benimgunlerim.ui.theme.StreakSoft
 
 @Composable
 fun StreakBadge(streak: Int, modifier: Modifier = Modifier) {
-    val brush = when {
-        streak >= 30 -> Brush.linearGradient(listOf(LevelSky, CandyPrimary))
-        streak >= 7  -> Brush.linearGradient(listOf(StreakCoral, Color(0xFFFF8A65)))
-        else         -> Brush.linearGradient(listOf(StreakCoral.copy(alpha = 0.8f), StreakCoral))
-    }
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(AppTokens.Radius.pill))
-            .background(brush)
-            .padding(horizontal = AppTokens.Spacing.md, vertical = AppTokens.Spacing.xs - 1.dp),
+            .background(StreakSoft)
+            .padding(horizontal = AppTokens.Spacing.sm, vertical = AppTokens.Spacing.xxs),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "$streak günlük seri",
-            style = MaterialTheme.typography.labelLarge,
-            color = Color.White,
+            text = "🔥 Seri $streak gün",
+            style = MaterialTheme.typography.labelMedium,
+            color = Streak,
         )
     }
 }
+

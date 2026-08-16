@@ -33,134 +33,181 @@ val Nunito = FontFamily(
 )
 
 // ═════════════════════════════════════════════════════════════════════════════
-//  BenimGünlerim — Çekirdek Palet
-//  Warm Companion: sage yeşil (primary), destekleyici mavi (secondary),
-//  sıcak kayısı (tertiary).
+//  BenimGünlerim — Role-Based Design Token System
 // ═════════════════════════════════════════════════════════════════════════════
 
-val CandyPrimary      = Color(0xFF0B6C43)
-val CandyPrimaryLight = Color(0xFFE8F5EE)
-val CandyPrimaryDark  = Color(0xFF004C2D)
-val CandySecondary    = Color(0xFF396282)
-val CandySecondaryLt  = Color(0xFFB0D9FD)
-val CandyTertiary     = Color(0xFF815526)
-val CandyTertiaryLt   = Color(0xFFFFF4E5)
+// ── Brand ─────────────────────────────────────────────────────────────────────
+val BrandPrimary       = Color(0xFF0B6C43)
+val BrandPrimarySoft   = Color(0xFFE8F5EE)
+val BrandPrimaryDark   = Color(0xFF004C2D)
 
-// Semantik renkler
-val SemanticSuccess   = CandyPrimary
-val SemanticWarning   = CandyTertiary
-val SemanticError     = Color(0xFFBA1A1A)
-val SemanticInfo      = CandySecondary
-val SemanticDisabled  = Color(0xFF9CA3AF)
+// ── Success ───────────────────────────────────────────────────────────────────
+val Success            = Color(0xFF138A55)
+val SuccessSoft        = Color(0xFFEAF8F0)
+val SuccessBorder      = Color(0xFFBFE8CF)
 
-// Accent takma adları (tek kaynak: yukarıdaki sabitler)
-val AccentAmber       = CandyTertiary
-val AccentAmberSoft   = CandyTertiaryLt
-val AccentCoral       = SemanticError
-val AccentCoralSoft   = Color(0xFFFDE8E8)
-val AccentSky         = CandySecondary
-val AccentSkySoft     = Color(0xFFCBE6FF)
-val AccentPurple      = CandySecondary
-val AccentPurpleSoft  = CandySecondaryLt
+// ── Info ──────────────────────────────────────────────────────────────────────
+val Info               = Color(0xFF396282)
+val InfoSoft           = Color(0xFFE3F0FF)
+val InfoBorder         = Color(0xFFBFD7EF)
 
-// Oyunlaştırma renkleri
-val XpGold            = AccentAmber
-val StreakCoral        = CandyTertiary
-val LevelSky          = CandySecondary
-val HeartPink         = AccentCoral
+// ── Warning / Attention ───────────────────────────────────────────────────────
+val Warning            = Color(0xFFB45309)
+val WarningSoft        = Color(0xFFFFF4E5)
+val WarningBorder      = Color(0xFFF3D6B0)
+
+// ── XP / Reward ───────────────────────────────────────────────────────────────
+val XpGold             = Color(0xFFD97706)
+val XpGoldSoft         = Color(0xFFFEF3C7)
+val XpGoldBorder       = Color(0xFFF7D98B)
+
+// ── Streak ────────────────────────────────────────────────────────────────────
+val Streak             = Color(0xFFEA580C)
+val StreakSoft         = Color(0xFFFFEDD5)
+val StreakBorder       = Color(0xFFFDBA74)
+
+// ── Error / Destructive ───────────────────────────────────────────────────────
+val SemanticError      = Color(0xFFBA1A1A)
+val ErrorSoft          = Color(0xFFFFE4E6)
+val ErrorBorder        = Color(0xFFFCA5A5)
+val SemanticDisabled   = Color(0xFF9CA3AF)
+
+// ── Night / End of day ────────────────────────────────────────────────────────
+val NightSurface       = Color(0xFF172536)
+val NightSurfaceAlt    = Color(0xFF1E2F42)
+val NightText          = Color(0xFFFFFFFF)
+val NightMuted         = Color(0xFFCBD5E1)
+val NightAccent        = Color(0xFFFBBF24)
+
+// ── Text ──────────────────────────────────────────────────────────────────────
+val TextPrimary        = Color(0xFF1A1C1E)
+val TextSecondary      = Color(0xFF44474A)
+val TextTertiary       = Color(0xFF6B7280)
+val TextDisabled       = Color(0xFF9CA3AF)
+
+// ── Surface & Border ──────────────────────────────────────────────────────────
+val BackgroundNeutral  = Color(0xFFF8FAFC)
+val SurfaceWhite       = Color(0xFFFFFFFF)
+val SurfaceMuted       = Color(0xFFF1F5F9)
+val Outline            = Color(0xFFBEC9BF)
+val OutlineSubtle      = Color(0xFFE2E8F0)
+val Divider            = Color(0xFFE8EDF2)
+
+// ── Semantik alias'lar (eski çağrılarla tam uyumluluk) ───────────────────────
+val CandyPrimary       = BrandPrimary
+val CandyPrimaryLight  = BrandPrimarySoft
+val CandyPrimaryDark   = BrandPrimaryDark
+val CandySecondary     = Info
+val CandySecondaryLt   = InfoSoft
+val CandyTertiary      = Warning
+val CandyTertiaryLt    = WarningSoft
+
+val SemanticSuccess    = Success
+val SemanticWarning    = Warning
+val SemanticInfo       = Info
+
+val AccentAmber        = XpGold
+val AccentAmberSoft    = XpGoldSoft
+val AccentCoral        = SemanticError
+val AccentCoralSoft    = ErrorSoft
+val AccentSky          = Info
+val AccentSkySoft      = InfoSoft
+val AccentPurple       = Color(0xFF7C3AED)
+val AccentPurpleSoft   = Color(0xFFF3E8FF)
+
+val StreakCoral        = Streak
+val LevelSky           = Info
+val HeartPink          = SemanticError
 
 // Kategori renkleri
-val CatHealth         = CandyPrimary
-val CatDevelop        = CandySecondary
-val CatWork           = CandySecondary
-val CatSocial         = CandyTertiary
-val CatPersonal       = SemanticError
-val CatHealthLight    = CandyPrimaryLight
-val CatDevelopLight   = CandySecondaryLt
-val CatWorkLight      = AccentSkySoft
-val CatSocialLight    = CandyTertiaryLt
-val CatPersonalLight  = AccentCoralSoft
+val CatHealth          = Success
+val CatDevelop         = Info
+val CatWork            = Info
+val CatSocial          = Streak
+val CatPersonal        = SemanticError
+val CatHealthLight     = SuccessSoft
+val CatDevelopLight    = InfoSoft
+val CatWorkLight       = InfoSoft
+val CatSocialLight     = StreakSoft
+val CatPersonalLight   = ErrorSoft
 
 // Gradients
-val HeroGradient      = Brush.linearGradient(listOf(CandyPrimary, CandySecondary))
-val XpGradient        = Brush.linearGradient(listOf(XpGold, CandyPrimary))
-val StreakGradient     = Brush.linearGradient(listOf(StreakCoral, AccentAmber))
-val LevelGradient     = Brush.linearGradient(listOf(LevelSky, CandyPrimary))
-val BannerStart       = CandyPrimary
-val BannerEnd         = CandySecondary
-
-// Container renkleri (soft)
-val SuccessSoft       = Color(0xFFE8F5EE)
-val WarningSoft       = Color(0xFFFFF4E5)
-val ErrorSoft         = Color(0xFFFDE8E8)
-val TextPrimary       = Color(0xFF1A1C1E)
-val TextSecondary     = Color(0xFF44474A)
+val HeroGradient       = Brush.linearGradient(listOf(BrandPrimary, Info))
+val XpGradient         = Brush.linearGradient(listOf(XpGold, BrandPrimary))
+val StreakGradient     = Brush.linearGradient(listOf(Streak, XpGold))
+val LevelGradient      = Brush.linearGradient(listOf(Info, BrandPrimary))
+val BannerStart        = BrandPrimary
+val BannerEnd          = Info
 
 // Uyumluluk takma adları — eski importlar için korunuyor
-val GpPrimary         = CandyPrimary
-val GpPrimaryDark     = CandyPrimaryDark
-val GpPrimaryLight    = CandyPrimaryLight
-val GpPrimaryMid      = CandyPrimaryLight
-val StreakOrange       = StreakCoral
-val LevelPurple        = CandyPrimary
-val CompletedGreen     = CandyPrimary
+val GpPrimary          = BrandPrimary
+val GpPrimaryDark      = BrandPrimaryDark
+val GpPrimaryLight     = BrandPrimarySoft
+val GpPrimaryMid       = BrandPrimarySoft
+val StreakOrange       = Streak
+val LevelPurple        = BrandPrimary
+val CompletedGreen     = Success
 
 // ── Açık renk şeması ─────────────────────────────────────────────────────────
 private val LightColors = lightColorScheme(
-    primary              = CandyPrimary,
+    primary              = BrandPrimary,
     onPrimary            = Color.White,
-    primaryContainer     = Color(0xFF6BBF8E),
-    onPrimaryContainer   = Color(0xFF004C2D),
-    secondary            = CandySecondary,
+    primaryContainer     = BrandPrimarySoft,
+    onPrimaryContainer   = BrandPrimaryDark,
+    secondary            = Info,
     onSecondary          = Color.White,
-    secondaryContainer   = CandySecondaryLt,
-    onSecondaryContainer = Color(0xFF365F7F),
-    tertiary             = CandyTertiary,
+    secondaryContainer   = InfoSoft,
+    onSecondaryContainer = Info,
+    tertiary             = Warning,
     onTertiary           = Color.White,
-    tertiaryContainer    = Color(0xFFDBA36D),
-    onTertiaryContainer  = Color(0xFF5F390B),
-    background           = Color(0xFFF7F9FF),
-    surface              = Color(0xFFFFFFFF),
-    surfaceVariant       = Color(0xFFDCE3EC),
-    surfaceContainer     = Color(0xFFE8EEF8),
-    surfaceContainerHigh = Color(0xFFE2E9F2),
-    surfaceContainerLow  = Color(0xFFEEF4FD),
+    tertiaryContainer    = WarningSoft,
+    onTertiaryContainer  = Warning,
+    background           = BackgroundNeutral,
+    surface              = SurfaceWhite,
+    surfaceVariant       = SurfaceMuted,
+    surfaceContainer     = SurfaceWhite,
+    surfaceContainerHigh = SurfaceMuted,
+    surfaceContainerLow  = BackgroundNeutral,
     onBackground         = TextPrimary,
     onSurface            = TextPrimary,
     onSurfaceVariant     = TextSecondary,
-    outline              = Color(0xFF6F7A71),
-    outlineVariant       = Color(0xFFBEC9BF),
+    outline              = Outline,
+    outlineVariant       = OutlineSubtle,
     error                = SemanticError,
     onError              = Color.White,
+    errorContainer       = ErrorSoft,
+    onErrorContainer     = SemanticError,
 )
 
 // ── Koyu renk şeması ─────────────────────────────────────────────────────────
 private val DarkColors = darkColorScheme(
-    primary              = Color(0xFF6BBF8E),
+    primary              = Color(0xFF7DDDA5),
     onPrimary            = Color(0xFF003922),
-    primaryContainer     = Color(0xFF00522F),
+    primaryContainer     = Color(0xFF0F3D2A),
     onPrimaryContainer   = Color(0xFF8EDBB0),
-    secondary            = Color(0xFF7DC2F4),
+    secondary            = Color(0xFF93C5FD),
     onSecondary          = Color(0xFF00344F),
     secondaryContainer   = Color(0xFF1D4D6A),
     onSecondaryContainer = Color(0xFFB0D9FD),
-    tertiary             = Color(0xFFDBA36D),
+    tertiary             = Color(0xFFFBBF24),
     onTertiary           = Color(0xFF462A00),
     tertiaryContainer    = Color(0xFF633D00),
     onTertiaryContainer  = Color(0xFFFDBC73),
     background           = Color(0xFF0F1512),
     surface              = Color(0xFF161E19),
-    surfaceVariant       = Color(0xFF3E4A40),
+    surfaceVariant       = Color(0xFF253128),
     surfaceContainer     = Color(0xFF1E2921),
     surfaceContainerHigh = Color(0xFF253128),
     surfaceContainerLow  = Color(0xFF18221B),
     onBackground         = Color(0xFFE2E8E4),
     onSurface            = Color(0xFFE2E8E4),
-    onSurfaceVariant     = Color(0xFFA8B5AC),
+    onSurfaceVariant     = Color(0xFFB7C2BB),
     outline              = Color(0xFF72807A),
     outlineVariant       = Color(0xFF3E4A40),
-    error                = Color(0xFFF28B82),
+    error                = Color(0xFFFCA5A5),
     onError              = Color(0xFF690005),
+    errorContainer       = Color(0xFF5C1414),
+    onErrorContainer     = Color(0xFFFCA5A5),
 )
 
 // ── Tipografi ─────────────────────────────────────────────────────────────────

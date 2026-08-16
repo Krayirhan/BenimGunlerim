@@ -22,7 +22,7 @@ fun AppSurface(
     modifier: Modifier = Modifier,
     radius: Dp = AppTokens.Radius.md,
     color: Color = MaterialTheme.colorScheme.surface,
-    borderColor: Color = MaterialTheme.colorScheme.outlineVariant,
+    borderColor: Color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.50f),
     borderWidth: Dp = 1.dp,
     elevation: Dp = AppTokens.Elevation.flat,
     padding: Dp = AppTokens.Spacing.cardInner,

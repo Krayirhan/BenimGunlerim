@@ -15,6 +15,8 @@ object AppTokens {
 
     // ── Spacing ──────────────────────────────────────────────────────────────
     object Spacing {
+        /** 0dp — AppSurface'i iç boşluksuz kullanmak için, örn. bölünmüş satır listeleri */
+        val none: Dp = 0.dp
         /** 4dp — mikro: badge iç boşluk, ikon-metin arası */
         val xxs: Dp = 4.dp
         /** 8dp — kompakt: chip iç dolgu, liste gap */
@@ -98,11 +100,35 @@ object AppTokens {
         val lg: Dp = 32.dp
         /** 48dp — empty state / hero illüstrasyon ikonu */
         val xl: Dp = 48.dp
+        /** 36dp — dairesel ikon konteyneri (örn. gün kapatma ok butonu) */
+        val container: Dp = 36.dp
     }
 
     // ── Bottom Nav ───────────────────────────────────────────────────────────
     object BottomNav {
         /** Seçili sekme üstündeki dot gösterge boyutu */
         val indicatorDot: Dp = 6.dp
+    }
+
+    // ── Touch Target ─────────────────────────────────────────────────────────
+    object TouchTarget {
+        /** 48dp — birincil dokunma alanı asgari boyutu */
+        val min: Dp = 48.dp
+        /** 44dp — ikincil/kompakt eylem dokunma alanı (banner aksiyonu vb.) */
+        val compact: Dp = 44.dp
+    }
+
+    // ── Border Width ─────────────────────────────────────────────────────────
+    object BorderWidth {
+        /** 1dp — standart ince kenarlık */
+        val thin: Dp = 1.dp
+    }
+
+    // ── Layout ───────────────────────────────────────────────────────────────
+    object Layout {
+        /** 32dp — FAB'ın ekranın alt kenarından offseti */
+        val fabBottomOffset: Dp = 32.dp
+        /** 72dp — Snackbar'ın ekranın alt kenarından offseti */
+        val snackbarBottomOffset: Dp = 72.dp
     }
 }
