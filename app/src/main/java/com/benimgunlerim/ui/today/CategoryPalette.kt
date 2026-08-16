@@ -1,10 +1,10 @@
 package com.benimgunlerim.ui.today
 
 import androidx.compose.ui.graphics.Color
-import com.benimgunlerim.ui.theme.CandyPrimary
-import com.benimgunlerim.ui.theme.CandySecondary
-import com.benimgunlerim.ui.theme.LevelSky
-import com.benimgunlerim.ui.theme.StreakCoral
+import com.benimgunlerim.ui.theme.BrandPrimary
+import com.benimgunlerim.ui.theme.Info
+import com.benimgunlerim.ui.theme.Streak
+import com.benimgunlerim.ui.theme.Success
 import com.benimgunlerim.ui.theme.XpGold
 import java.util.Locale
 import kotlin.math.abs
@@ -13,45 +13,54 @@ import kotlin.math.abs
  * Stable category to accent colors (keyword match first, then deterministic fallback palette).
  */
 object CategoryPalette {
+    private val CategoryPurple = Color(0xFF7C3AED)
+    private val CategoryBlue   = Color(0xFF2563EB)
+    private val CategorySlate  = Color(0xFF64748B)
+
     private val FALLBACK: List<Color> = listOf(
-        CandyPrimary,
-        CandySecondary,
-        LevelSky,
-        StreakCoral,
+        Success,
+        Info,
+        CategoryPurple,
+        Streak,
         XpGold,
+        CategoryBlue,
+        CategorySlate,
     )
 
     /** Order matters: first keyword match wins (Turkish-focused defaults). */
     private val KEYWORD_COLORS: List<Pair<String, Color>> = listOf(
-        "alışveriş" to CandySecondary,
-        "iş" to LevelSky,
-        "işler" to LevelSky,
-        "toplantı" to LevelSky,
-        "sunum" to LevelSky,
-        "spor" to CandyPrimary,
-        "sağlık" to CandyPrimary,
-        "egzersiz" to CandyPrimary,
-        "yürüyüş" to CandyPrimary,
-        "beslenme" to CandyPrimary,
-        "oku" to CandySecondary,
-        "ders" to CandySecondary,
-        "öğren" to CandySecondary,
-        "kitap" to CandySecondary,
-        "dil" to CandySecondary,
-        "kişisel" to StreakCoral,
-        "not" to StreakCoral,
-        "günlük" to StreakCoral,
-        "ev" to LevelSky,
-        "temizlik" to LevelSky,
-        "market" to CandySecondary,
-        "fatura" to LevelSky,
+        "spor" to Success,
+        "sağlık" to Success,
+        "egzersiz" to Success,
+        "yürüyüş" to Success,
+        "beslenme" to Success,
+        "iş" to Info,
+        "işler" to Info,
+        "toplantı" to Info,
+        "sunum" to Info,
+        "proje" to Info,
+        "fatura" to Info,
+        "gelişim" to CategoryPurple,
+        "kişisel" to CategoryPurple,
+        "not" to CategoryPurple,
+        "günlük" to CategoryPurple,
+        "oku" to CategoryBlue,
+        "ders" to CategoryBlue,
+        "öğren" to CategoryBlue,
+        "kitap" to CategoryBlue,
+        "dil" to CategoryBlue,
+        "sosyal" to Streak,
+        "aile" to Streak,
+        "çocuk" to Streak,
+        "arkadaş" to Streak,
         "para" to XpGold,
         "finans" to XpGold,
-        "aile" to StreakCoral,
-        "çocuk" to StreakCoral,
-        "sosyal" to CandySecondary,
-        "proje" to LevelSky,
-        "bugün" to CandyPrimary,
+        "yatırım" to XpGold,
+        "ev" to CategorySlate,
+        "temizlik" to CategorySlate,
+        "market" to CategorySlate,
+        "alışveriş" to CategorySlate,
+        "bugün" to BrandPrimary,
     )
 
     fun colorFor(seed: String): Color {
@@ -62,3 +71,4 @@ object CategoryPalette {
         return FALLBACK[abs(v.hashCode()) % FALLBACK.size]
     }
 }
+

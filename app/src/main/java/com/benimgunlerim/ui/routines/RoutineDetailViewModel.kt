@@ -8,6 +8,7 @@ import com.benimgunlerim.data.RoutineRepository
 import com.benimgunlerim.data.currentStreakForEntity
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.isScheduledFor
 import com.benimgunlerim.data.targetDaySet
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.model.CompletionEntityType
@@ -75,8 +76,7 @@ class RoutineDetailViewModel @Inject constructor(
         }
         val scheduledIn30 = (0..29).count { offset ->
             val date = today.minusDays(offset.toLong())
-            val dow = date.dayOfWeek.name
-            routine.targetDays.split(",").contains(dow)
+            routine.isScheduledFor(date.dayOfWeek)
         }.coerceAtLeast(1)
         val completedIn30 = (0..29).count { offset ->
             val date = today.minusDays(offset.toLong()).toString()

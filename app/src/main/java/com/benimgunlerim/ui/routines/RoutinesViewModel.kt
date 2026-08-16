@@ -1,4 +1,4 @@
-﻿package com.benimgunlerim.ui.routines
+package com.benimgunlerim.ui.routines
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,6 +36,7 @@ class RoutinesViewModel @Inject constructor(
     private val updateRoutineUseCase: UpdateRoutineUseCase,
     private val archiveRoutineUseCase: ArchiveRoutineUseCase,
     private val skipRoutineUseCase: SkipRoutineUseCase,
+    private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase,
     private val analyticsTracker: AnalyticsTracker,
 ) : ViewModel() {
     fun todayDayOfWeek(): DayOfWeek = dateTimeProvider.today().dayOfWeek
@@ -125,5 +126,22 @@ class RoutinesViewModel @Inject constructor(
     fun skipRoutine(routineId: String) {
         val routine = routineEntitiesById.value[routineId] ?: return
         viewModelScope.launch { skipRoutineUseCase(routine, dateTimeProvider.today()) }
+    }
+
+    fun toggleRoutine(routineId: String) {
+        val routine = routineEntitiesById.value[routineId] ?: return
+        val currentCards = routines.value
+        val isCompletedToday = currentCards.firstOrNull { it.id == routineId }?.last7Days?.lastOrNull() == true
+        val completedIds = currentCards.filter { it.last7Days.lastOrNull() == true }.map { it.id }.toSet()
+        val allIds = currentCards.map { it.id }
+        viewModelScope.launch {
+            toggleRoutineUseCase(
+                routine = routine,
+                completedToday = isCompletedToday,
+                date = dateTimeProvider.today(),
+                completedRoutineIds = completedIds,
+                allTodayRoutineIds = allIds,
+            )
+        }
     }
 }

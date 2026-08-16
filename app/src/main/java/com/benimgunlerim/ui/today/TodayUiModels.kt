@@ -1,5 +1,7 @@
 package com.benimgunlerim.ui.today
 
+import java.time.DayOfWeek
+
 data class TodayTaskUi(
     val id: String,
     val title: String,
@@ -11,7 +13,10 @@ data class TodayTaskUi(
     val priority: Int,
     val completionState: String,
     val reminderTime: String?,
-)
+) {
+    val isCompleted: Boolean
+        get() = completionState.equals(com.benimgunlerim.domain.model.TaskCompletionState.COMPLETED.value, ignoreCase = true)
+}
 
 data class TodayRoutineUi(
     val id: String,
@@ -23,4 +28,5 @@ data class TodayRoutineUi(
     val targetUnit: String?,
     val currentStreak: Int,
     val bestStreak: Int,
+    val targetDays: Set<DayOfWeek>,
 )

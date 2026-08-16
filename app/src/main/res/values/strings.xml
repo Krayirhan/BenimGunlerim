@@ -5,10 +5,58 @@
     <string name="today_status_none_completed">Henüz tamamlanan yok</string>
     <string name="today_status_all_completed">Bugünün tüm adımları tamam</string>
     <string name="today_status_completed_count">%1$d / %2$d tamamlandı</string>
+    <string name="today_status_percent">%1$d%%</string>
+    <string name="today_progress_header_question">Bugün nasıl gidiyor?</string>
     <string name="today_support_steps_remaining">%1$d adım seni bekliyor</string>
     <string name="today_support_add_first_step">Yeni bir görev ya da rutin ekleyebilirsin</string>
     <string name="today_streak_pill">Seri %1$d</string>
     <string name="today_mood_pill">Moral %1$d</string>
+    <string name="today_overdue_tasks_title">Geciken Görevler</string>
+    <string name="today_move_all_overdue_to_today">Tümünü Bugüne Taşı</string>
+    <string name="today_tasks_title">Bugünün Görevleri</string>
+    <string name="today_routines_title">Rutinler</string>
+    <string name="today_routines_view_all">Tümünü gör</string>
+    <string name="today_empty_title">Bugün için henüz görev yok</string>
+    <string name="today_empty_desc">Güne yeni bir görev veya rutin ekleyerek başlayabilirsin.</string>
+    <string name="today_empty_cta">İlk Görevi Ekle</string>
+    <string name="today_missed_day_title">Kapatılmamış günün var</string>
+    <string name="today_missed_day_msg">%1$s özeti henüz tamamlanmadı.</string>
+    <string name="today_missed_day_action">Değerlendir</string>
+    <string name="missed_day_sheet_title">Dünü Toparla</string>
+    <string name="missed_day_sheet_subtitle">%1$s günü özetin ve tamamlanan adımların</string>
+    <string name="missed_day_progress_summary">%1$d / %2$d adım tamamlandı (%3$d%%)</string>
+    <string name="missed_day_mood_title">Dün nasıldı?</string>
+    <string name="missed_day_carry_tasks">Dünden kalan %1$d görevi bugüne aktar</string>
+    <string name="missed_day_close_and_continue">Dünü Kapat ve Bugüne Başla</string>
+    <string name="missed_day_archive_as_is">Olduğu gibi arşive kaldır</string>
+    <string name="today_close_day_title">Günü kapat</string>
+    <string name="today_close_day_desc">Bugünkü ilerlemeni kaydet ve XP kazan.</string>
+    <string name="today_close_day_inactive_hint">21:00’dan sonra aktif olacak.</string>
+    <string name="today_close_day_inactive_snack">Gün değerlendirmesi 21:00’dan sonra açılacak.</string>
+    <string name="today_close_day_done_title">Günün Kapatıldı 🎉</string>
+    <string name="today_close_day_done_desc">Harika iş çıkardın! Yarın yeni hedefler seni bekliyor.</string>
+    <string name="today_close_day_action">Günü kapat</string>
+    <string name="today_level_default_title">Gelişimci</string>
+    <string name="today_daily_progress_title">Günlük İlerleme</string>
+    <string name="today_add_task_fab_cd">Yeni görev ekle</string>
+    <string name="today_routine_streak_format">Seri %1$d</string>
+    <string name="today_routine_daily_repeat">Her gün tekrar eder</string>
+    <string name="today_routine_daily_short">Her gün</string>
+    <string name="routine_row_mark_complete_cd">Rutini tamamla</string>
+    <string name="routine_row_mark_incomplete_cd">Rutini tamamlandı işaretini kaldır</string>
+    <string name="routine_row_details_cd">Rutin detayları</string>
+    <string name="today_routine_meta_format">Her gün · %1$d günlük seri</string>
+    <string name="today_task_deleted_undo">Görev silindi</string>
+    <string name="plan_screen_title">Plan</string>
+    <string name="plan_overdue_tasks_title">Geciken Görevler</string>
+    <string name="plan_move_overdue_to_selected">Seçili Güne Taşı</string>
+    <string name="plan_tasks_for_day_title">Planlanan Görevler</string>
+    <string name="plan_empty_day_title">Bu gün için plan yok</string>
+    <string name="plan_empty_day_desc">Seçilen tarihe yeni bir görev ekleyerek planlayabilirsin.</string>
+    <string name="plan_empty_day_cta">Bu Güne Görev Ekle</string>
+    <string name="plan_add_task_fab_cd">Planlanan Görev Ekle</string>
+    <string name="plan_task_deleted_undo">Görev silindi</string>
+    <string name="plan_day_summary_format">%1$d Görev Planlandı</string>
     <string name="onboarding_explainer_routine_title">Rutin</string>
     <string name="onboarding_explainer_routine_body">Her gün tekrar eden alışkanlık. Su iç, yürüyüş yap, ilaç al. Seri takibi yapar.</string>
     <string name="onboarding_explainer_task_title">Görev</string>
@@ -22,24 +70,24 @@
     <string name="onboarding_suggest_update_tasks">Görev listemi güncelle</string>
     <string name="onboarding_suggest_weekly_review">Haftalık özet</string>
     <string name="onboarding_suggest_water">Su iç (2L hedefi)</string>
-    <string name="onboarding_suggest_walk">5 dk yürüyüş</string>
+    <string name="onboarding_suggest_walk">10 dk yürüyüş</string>
     <string name="onboarding_suggest_breathing">Nefes egzersizi</string>
-    <string name="onboarding_suggest_pomodoro">Pomodoro seansı (25 dk)</string>
-    <string name="onboarding_suggest_remove_distractions">Dikkat dağıtıcıları kapat</string>
+    <string name="onboarding_suggest_pomodoro">25 dk odaklan (Pomodoro)</string>
+    <string name="onboarding_suggest_remove_distractions">Dikkat dağıtanları kapat</string>
     <string name="onboarding_suggest_learning_note">Günlük öğrenme notu</string>
     <string name="onboarding_suggest_morning_list">Sabah listemi hazırla</string>
     <string name="onboarding_task_plan_day">Günümü planla</string>
     <string name="onboarding_task_set_priorities">Bugünkü 3 önceliğimi belirle</string>
     <string name="onboarding_task_drink_water">1 bardak su iç</string>
-    <string name="onboarding_task_choose_focus">Bugünün odak konusunu seç</string>
-    <string name="onboarding_task_prepare_list">Yapılacaklar listemi hazırla</string>
+    <string name="onboarding_task_choose_focus">Günün ilk odağını belirle</string>
+    <string name="onboarding_task_prepare_list">Tek öncelik belirle</string>
     <string name="onboarding_task_first">İlk görev</string>
     <string name="nav_today">Bugün</string>
     <string name="nav_plan">Plan</string>
     <string name="nav_routines">Rutinler</string>
-    <string name="nav_progress">İlerlemen</string>
+    <string name="nav_progress">İstatistik</string>
     <string name="nav_settings">Ayarlar</string>
-    <string name="app_name">BenimGünlerim</string>
+    <string name="app_name">Benim Günlerim</string>
     <string name="today_profile_cd">Profil ve ayarlar</string>
     <string name="today_notifications_cd">Bildirim ayarları</string>
 
@@ -154,6 +202,12 @@
 
     <!-- Rutinler ekranı -->
     <string name="routines_add_cd">Rutin ekle</string>
+    <string name="routine_menu_edit">Düzenle</string>
+    <string name="routine_menu_skip">Bugün atla</string>
+    <string name="routine_sheet_add_title">Yeni Rutin Ekle</string>
+    <string name="routine_sheet_edit_title">Rutini Düzenle</string>
+    <string name="routine_sheet_name_label">Rutin Adı</string>
+    <string name="routine_sheet_repeat_days_label">Tekrar Günleri</string>
     <string name="routines_header_title">Rutinler</string>
     <string name="routines_header_subtitle">Her gün tekrar eden alışkanlıklarını burada yönet.</string>
     <string name="routines_active_count">Aktif %1$d</string>
@@ -193,17 +247,21 @@
     <string name="routines_goal_unit_generic">birim</string>
     <string name="routines_save_btn">Rutini kaydet</string>
     <string name="routines_streak_days">Seri %1$d gün</string>
-    <string name="routines_streak_waiting">Seri bekliyor</string>
     <string name="routines_last7">Son 7 gün</string>
+    <string name="routines_summary_today_done">Bugün %1$d / %2$d Tamamlandı</string>
+    <string name="routines_summary_streak_title">Alışkanlık Karnesi</string>
 
     <!-- İlerleme ekranı -->
     <string name="progress_header_title">İlerlemen</string>
     <string name="progress_header_subtitle">Rutin istikrarını, görev üretimini ve haftalık ritmini buradan takip et.</string>
     <string name="progress_level">Seviye %1$d</string>
+    <string name="progress_level_progress_title">Seviye İlerlemesi</string>
     <string name="progress_total_xp">%1$d toplam XP</string>
     <string name="progress_xp_next">%1$d / %2$d sonraki seviye</string>
     <string name="progress_metric_active_streak">Aktif Seri</string>
     <string name="progress_metric_streak_days">%1$d gün</string>
+    <string name="progress_unit_days">gün</string>
+    <string name="progress_unit_completed">Tamamlandı</string>
     <string name="progress_metric_streak_sub">Kesintisiz gün</string>
     <string name="progress_metric_best_streak">En İyi Seri</string>
     <string name="progress_metric_best_streak_sub">Tüm zamanlarda</string>
@@ -270,6 +328,8 @@
     <string name="progress_day_note_empty">Not eklenmedi</string>
 
     <!-- Onboarding ekranı -->
+    <string name="onboarding_skip">Atla</string>
+    <string name="onboarding_step_format">Adım %1$d / %2$d</string>
     <string name="onboarding_need_organize">Günümü toparlamak istiyorum</string>
     <string name="onboarding_need_organize_sub">Sabah-akşam dengesi, küçük adımlar</string>
     <string name="onboarding_need_regular">Daha düzenli olmak istiyorum</string>
@@ -278,38 +338,46 @@
     <string name="onboarding_need_health_sub">Su, hareket, nefes — her gün biraz</string>
     <string name="onboarding_need_focus">Odaklanmak istiyorum</string>
     <string name="onboarding_need_focus_sub">Az ama kaliteli. Dikkat dağılmasını azalt</string>
-    <string name="onboarding_need_simple">Basit bir planlayıcı istiyorum</string>
-    <string name="onboarding_need_simple_sub">Fazlasına gerek yok, sade ve hızlı</string>
+    <string name="onboarding_need_simple">Basit başlamak istiyorum</string>
+    <string name="onboarding_need_simple_sub">Sade, hızlı ve yorulmadan</string>
     <string name="onboarding_intensity_light">Hafif başlangıç</string>
-    <string name="onboarding_intensity_light_sub">2-3 küçük adım. Kolay sürer.</string>
+    <string name="onboarding_intensity_light_sub">2-3 küçük adım. Sürdürmesi kolay.</string>
     <string name="onboarding_intensity_balanced">Dengeli başlangıç</string>
     <string name="onboarding_intensity_balanced_sub">4-5 rutin ve görev. Orta tempo.</string>
     <string name="onboarding_intensity_intense">Yoğun başlangıç</string>
-    <string name="onboarding_intensity_intense_sub">6+ adım. Hızlı başla, çok yap.</string>
-    <string name="onboarding_p0_title">Gününü daha sakin\nve düzenli yaşa</string>
-    <string name="onboarding_p0_subtitle">Küçük ama sürdürülebilir bir başlangıç hazırlayalım.\nSadece birkaç adım.</string>
-    <string name="onboarding_p0_btn">Başlayalım</string>
+    <string name="onboarding_intensity_intense_sub">6+ adım. Hızlı başla, güçlü ilerle.</string>
     <string name="onboarding_p1_title">Şu an neye ihtiyacın var?</string>
     <string name="onboarding_p1_subtitle">Seçimin önerilen rutinleri ve görevleri belirler.\nSonra istediğin gibi değiştirebilirsin.</string>
     <string name="onboarding_p2_title">Nasıl bir tempoyla başlamak istersin?</string>
     <string name="onboarding_p2_subtitle">Hafif başlangıç daha kolay sürer.\nİstediğin zaman artırabilirsin.</string>
-    <string name="onboarding_p3_title">İki kavramı tanı</string>
-    <string name="onboarding_p3_subtitle">Bu uygulama görevleri ve rutinleri birbirinden ayırır.</string>
-    <string name="onboarding_concept_routine_title">Rutin</string>
-    <string name="onboarding_concept_routine_body">Her gün tekrar eden alışkanlık. Su iç, yürüyüş yap, ilaç al. Seri takibi yapar.</string>
-    <string name="onboarding_concept_task_title">Görev</string>
-    <string name="onboarding_concept_task_body">Tek seferlik yapılacak iş. Toplantı, alışveriş, fatura ödeme. Tamamlandı, bitti.</string>
-    <string name="onboarding_p3_understood">Anladım</string>
-    <string name="onboarding_p4_title">Hangi rutinleri ekleyelim?</string>
-    <string name="onboarding_p4_subtitle">Seçtiğin rutinler her gün listene eklenir.\nİstemeyen kutucukları kaldırabilirsin.</string>
-    <string name="onboarding_p5_title">Son birkaç adım</string>
-    <string name="onboarding_p5_subtitle">Başlangıç görevi eklemek ister misin?\nEklemeden de devam edebilirsin.</string>
-    <string name="onboarding_today_task_badge">Bugünkü görev</string>
-    <string name="onboarding_notif_title">Hatırlatmalar açık olsun mu?</string>
-    <string name="onboarding_notif_body">Görev ve rutin hatırlatmaları için bildirim iznine ihtiyacımız var.</string>
-    <string name="onboarding_notif_btn">Bildirimlere İzin Ver</string>
+    <string name="onboarding_routines_title">Sana önerdiğimiz rutinler</string>
+    <string name="onboarding_routines_subtitle">Seçtiklerin her gün listene eklenecek.\nİstemediğin kutucukları kaldırabilirsin.</string>
+    <string name="onboarding_concept_mini_tip">Rutinler her gün tekrar eder. Görevler tek seferliktir.</string>
+    <string name="onboarding_ready_title">Hazırsın</string>
+    <string name="onboarding_ready_subtitle">İlk görevini ve rutinlerini hazırladık.\nİstersen hatırlatmaları da açabilirsin.</string>
+    <string name="onboarding_ready_summary_title">Başlangıç planın hazır:</string>
+    <string name="onboarding_ready_summary_format">%1$d rutin · %2$d görev</string>
+    <string name="onboarding_today_task_badge">İlk görev</string>
+    <string name="onboarding_notif_soft_title">Hatırlatmaları açmak ister misin?</string>
+    <string name="onboarding_notif_soft_body">Görev ve rutinleri zamanında hatırlatır.</string>
+    <string name="onboarding_notif_later">Şimdilik Geç</string>
+    <string name="onboarding_notif_grant">İzin Ver</string>
+    <string name="onboarding_notif_granted_badge">✓ Hatırlatmalar Açık</string>
     <string name="onboarding_finish_btn">Başlayalım</string>
     <string name="onboarding_recommended">Önerilen</string>
+
+    <!-- Duygu / Enerji Check-in -->
+    <string name="mood_title">Bugün nasıl hissettin?</string>
+    <string name="mood_calm">Sakin</string>
+    <string name="mood_good">İyi</string>
+    <string name="mood_tired">Yorgun</string>
+    <string name="mood_scattered">Dağınık</string>
+    <string name="mood_stressed">Gergin</string>
+    <string name="dayclose_pre_breathe_title">Önce kısa bir nefes alalım mı?</string>
+    <string name="dayclose_pre_breathe_btn">30 sn nefes</string>
+    <string name="dayclose_pre_breathe_skip">Direkt devam et</string>
+    <string name="dayclose_tomorrow_step_title">Yarın için tek küçük adımın ne olsun?</string>
+    <string name="dayclose_completed_quote">Bugün kendin için bir adım attın. Yarın için küçük adımın hazır.</string>
 
     <!-- Ayarlar ekranı -->
     <string name="settings_title">Ayarlar</string>
@@ -317,6 +385,7 @@
     <string name="settings_status_notification">Bildirim</string>
     <string name="settings_status_day_end">Gün sonu</string>
     <string name="settings_status_data">Veri</string>
+    <string name="settings_version_format">v%1$s (Build %2$d)</string>
     <string name="settings_data_local">Yerel</string>
     <string name="settings_section_experience">Bugün ekranı</string>
     <string name="settings_section_experience_sub">Kutlamalar ve görsel geri bildirim</string>
@@ -355,6 +424,7 @@
     <string name="settings_analytics_off_desc">Anonim ölçüm kapalı. Temel özellikler aynı şekilde çalışır.</string>
     <string name="settings_privacy_pii_note">Görev başlığı, rutin adı, not ve gün özeti içeriği gönderilmez.</string>
     <string name="settings_data_title">Yerel veri yönetimi</string>
+    <string name="settings_clear_data_row_title">Tüm verileri temizle</string>
     <string name="settings_data_desc">Görevler, rutinler, ilerleme kayıtları ve ayarlar bu cihazda tutulur.</string>
     <string name="settings_data_export_warning">Dışa aktarılan JSON dosyası görev başlığı, rutin adı, not ve günlük içerik taşıyabilir. Dosyayı yalnızca güvendiğin yerde sakla veya paylaş.</string>
     <string name="settings_msg_cleared">Yerel veriler temizlendi.</string>
@@ -564,4 +634,48 @@
 
     <!-- Dükkan - İkon stringi -->
     <string name="shop_purchase_button_icon">🤙</string>
+
+    <!-- Sakinleşme ve Zihinsel Destek Mikro Araçları -->
+    <string name="reset_title">1 Dakikalık Reset</string>
+    <string name="reset_subtitle">Telefonu biraz aşağı indir. Omuzlarını gevşet. Yavaşça nefes al.</string>
+    <string name="reset_start">Başlat</string>
+    <string name="reset_breathe_in">Nefes al</string>
+    <string name="reset_breathe_out">Nefes ver</string>
+    <string name="reset_completed_title">Kısa bir duraklama iyi geldi mi?</string>
+    <string name="reset_completed_subtitle">Şimdi tek bir küçük adımla devam edebilirsin.</string>
+    <string name="reset_pick_task">Bir görev seç</string>
+    <string name="reset_light_day">Bugünü hafiflet</string>
+    <string name="reset_continue">Devam et</string>
+    <string name="reset_contextual_title">Bugün biraz yoğun mu görünüyor?</string>
+    <string name="reset_contextual_body">1 dakikalık reset yapıp tek küçük adıma dönebilirsin.</string>
+    <string name="reset_contextual_light_body">Bugünü hafiflettik. İstersen kısa bir nefesle devam edebilirsin.</string>
+    <string name="reset_action_btn">1 Dk Reset</string>
+
+    <!-- Hafif Gün Modu -->
+    <string name="light_day_title">Bugünü hafiflet</string>
+    <string name="light_day_active_title">Bugün hafif moddasın</string>
+    <string name="light_day_active_subtitle">Bir küçük adım yeterli. Kendine yüklenmeden ilerle.</string>
+    <string name="light_day_quote">Bugünü iptal etmiyoruz, sadece hafifletiyoruz.</string>
+    <string name="light_day_disable_btn">Normal moda dön</string>
+    <string name="light_day_progress_status">Bugün küçük bir adım yeter</string>
+    <string name="light_day_progress_steps">Bugünü hafiflettik · Bir küçük adım seçebilirsin</string>
+    <string name="light_day_progress_done">%1$d küçük adım tamamlandı · Harika tempo</string>
+
+    <!-- Kafam Dolu (Brain Dump) -->
+    <string name="braindump_title">Kafam dolu</string>
+    <string name="braindump_subtitle">Aklındakileri alt alta yaz. Düzenli olmak zorunda değil. Sonra istersen bunları bugünün görevlerine dönüştürebilirsin.</string>
+    <string name="braindump_hint">Market alışverişi\nAnnemi ara\nRapor taslağını hazırla...</string>
+    <string name="braindump_convert_tasks">Göreve dönüştür</string>
+    <string name="braindump_tasks_title">Göreve dönüşecekleri seç</string>
+    <string name="braindump_tasks_subtitle">Seçilenler bugünün görevlerine eklenecek.</string>
+    <string name="braindump_add_selected">Seçilenleri Bugünün Görevlerine Ekle</string>
+    <string name="braindump_tasks_added_snackbar">%1$d görev bugünün planına eklendi</string>
+
+    <!-- FAB Hızlı Eylemler -->
+    <string name="quick_actions_title">Bugün ne yapmak istersin?</string>
+
+    <!-- Ayarlar - Sakinleşme -->
+    <string name="settings_calm_section">Sakinleşme ve Destek</string>
+    <string name="settings_show_reset_suggestions">Sakinleşme ve Reset Önerileri</string>
+    <string name="settings_show_reset_suggestions_desc">Yoğun günlerde nefes ve toparlanma önerileri gösterilsin.</string>
 </resources>

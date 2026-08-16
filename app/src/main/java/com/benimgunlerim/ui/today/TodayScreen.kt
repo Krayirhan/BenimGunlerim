@@ -1,73 +1,51 @@
-@file:Suppress("SpellCheckingInspection")
+@file:Suppress("SpellCheckingInspection", "LongMethod")
 
 package com.benimgunlerim.ui.today
 
-import android.provider.Settings
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CalendarToday
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Bedtime
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.DeleteOutline
-import androidx.compose.material.icons.rounded.MoreHoriz
-import androidx.compose.material.icons.rounded.NotificationsNone
-import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.LightMode
+import androidx.compose.material.icons.rounded.Psychology
+import androidx.compose.material.icons.rounded.SelfImprovement
+import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -77,91 +55,39 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.heading
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.sp
-import com.benimgunlerim.data.local.entity.CompletionLogEntity
-import com.benimgunlerim.domain.model.CompletionEntityType
-import com.benimgunlerim.domain.model.GameEvent
-import com.benimgunlerim.domain.model.RoutineTargetType
-import com.benimgunlerim.domain.model.TaskCompletionState
-import com.benimgunlerim.ui.components.AchievementUnlockOverlay
-import com.benimgunlerim.ui.components.ConfettiIntensity
-import com.benimgunlerim.ui.components.ConfettiOverlay
-import com.benimgunlerim.ui.components.FloatingRewardText
-import com.benimgunlerim.ui.components.LevelUpOverlay
-import com.benimgunlerim.ui.theme.CandyPrimary
-import com.benimgunlerim.ui.theme.CandyPrimaryDark
-import com.benimgunlerim.ui.theme.CandySecondary
-import com.benimgunlerim.ui.theme.CompletedGreen
-import com.benimgunlerim.ui.theme.LevelSky
-import com.benimgunlerim.ui.theme.StreakCoral
-import com.benimgunlerim.ui.theme.XpGold
-import com.benimgunlerim.ui.today.theme.todayColorTokens
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.benimgunlerim.R
-import com.benimgunlerim.domain.validation.TimeInputValidator
-import java.time.LocalDate
+import com.benimgunlerim.ui.TestTags
+import com.benimgunlerim.ui.components.calm.BrainDumpDialog
+import com.benimgunlerim.ui.components.calm.ResetDialog
+import com.benimgunlerim.ui.components.core.AppButton
+import com.benimgunlerim.ui.components.layout.ScreenScaffold
+import com.benimgunlerim.ui.components.molecules.AlertBanner
+import com.benimgunlerim.ui.components.molecules.AlertBannerSeverity
+import com.benimgunlerim.ui.components.molecules.EmptyState
+import com.benimgunlerim.ui.components.molecules.SectionBlock
+import com.benimgunlerim.ui.components.organisms.AddRoutineSheet
+import com.benimgunlerim.ui.components.organisms.AddTaskSheet
+import com.benimgunlerim.ui.components.organisms.CloseDayCard
+import com.benimgunlerim.ui.components.organisms.HeaderProgressCard
+import com.benimgunlerim.ui.components.organisms.RoutineActionsSheet
+import com.benimgunlerim.ui.theme.AppTokens
+import com.benimgunlerim.ui.theme.BrandPrimary
+import com.benimgunlerim.ui.theme.BrandPrimarySoft
+import com.benimgunlerim.ui.theme.Info
+import com.benimgunlerim.ui.theme.InfoSoft
+import com.benimgunlerim.ui.theme.Warning
+import com.benimgunlerim.ui.theme.WarningSoft
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import java.util.Locale
-
-/** Developer option “Animator duration scale” = off → skip decorative motion for header/check UI. */
-@Composable
-private fun rememberSystemAnimationsDisabled(): Boolean {
-    val context = LocalContext.current
-    return remember(context) {
-        runCatching {
-            Settings.Global.getFloat(context.contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1f) < 0.01f
-        }.getOrDefault(false)
-    }
-}
-
-@Composable
-internal fun SnapshotErrorBanner(onRetry: () -> Unit) {
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(com.benimgunlerim.ui.TestTags.TodaySnapshotErrorBanner),
-        shape = RoundedCornerShape(14.dp),
-        color = MaterialTheme.colorScheme.errorContainer,
-    ) {
-        Row(
-            Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                stringResource(R.string.today_snapshot_load_error),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onErrorContainer,
-                modifier = Modifier.weight(1f),
-            )
-            TextButton(onClick = onRetry) {
-                Text(stringResource(R.string.today_retry))
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -174,228 +100,491 @@ fun TodayScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val today = viewModel.today()
-    val snackbarHost = remember { SnackbarHostState() }
-    val haptic = LocalHapticFeedback.current
+    val context = LocalContext.current
 
-    val msgTaskMovedTomorrow = stringResource(R.string.today_task_moved_tomorrow)
-    val msgOverdueMoved = stringResource(R.string.today_overdue_moved_count)
-    val msgTaskDeleted = stringResource(R.string.today_task_deleted)
-    val msgTaskCompleted = stringResource(R.string.today_task_completed)
-    val msgDaySaved = stringResource(R.string.today_day_saved)
-    val msgUndoLabel = stringResource(R.string.action_undo)
-    val msgErrDelete = stringResource(R.string.today_error_delete_task)
-    val msgErrSave = stringResource(R.string.today_error_save_day)
-    val msgErrGeneric = stringResource(R.string.today_error_generic)
-
-    var addText by remember { mutableStateOf("") }
-    var addNote by remember { mutableStateOf("") }
-    var addTime by remember { mutableStateOf("") }
-    var addCategory by remember { mutableStateOf("") }
-    var addPriority by remember { mutableStateOf(2) }
-    var plannedTaskDate by remember(today) { mutableStateOf(today) }
-    var addReminderEnabled by remember { mutableStateOf(true) }
-    var showAddSheet by remember { mutableStateOf(false) }
+    var showFabMenu by remember { mutableStateOf(false) }
+    var showAddTaskSheet by remember { mutableStateOf(false) }
+    var showResetDialog by remember { mutableStateOf(false) }
+    var showBrainDumpDialog by remember { mutableStateOf(false) }
     var showCloseSheet by remember { mutableStateOf(false) }
     var showMissedDaySheet by remember { mutableStateOf(false) }
-    var selectedTaskId by remember { mutableStateOf<String?>(null) }
-    var pendingDeleteTask by remember { mutableStateOf<TodayTaskUi?>(null) }
+    var dismissContextualReset by remember { mutableStateOf(false) }
 
-    var showConfetti by remember { mutableStateOf(false) }
-    var confettiIntensity by remember { mutableStateOf(ConfettiIntensity.Mini) }
-    var showReward by remember { mutableStateOf(false) }
-    var rewardText by remember { mutableStateOf("") }
-    var showLevelUp by remember { mutableStateOf(false) }
-    var levelUpLevel by remember { mutableStateOf(0) }
-    var levelUpTitle by remember { mutableStateOf("") }
-    var showAchievement by remember { mutableStateOf(false) }
-    var achievementEmoji by remember { mutableStateOf("") }
-    var achievementTitle by remember { mutableStateOf("") }
+    var levelUpEvent by remember { mutableStateOf<com.benimgunlerim.domain.model.GameEvent.LevelUp?>(null) }
+    var achievementEvent by remember { mutableStateOf<com.benimgunlerim.domain.model.GameEvent.AchievementUnlocked?>(null) }
+    var blockCompletionData by remember { mutableStateOf<Triple<String, String, String>?>(null) }
+    var miniBannerData by remember { mutableStateOf<Pair<String, String>?>(null) }
+
+    var menuRoutineId by remember { mutableStateOf<String?>(null) }
+    var editingRoutine by remember { mutableStateOf<TodayRoutineUi?>(null) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     val dayIsClosed = state.todayState?.closedAt != null
-    val emptyForFab =
-        !state.isLoading &&
-            state.tasks.isEmpty() &&
-            state.routines.isEmpty() &&
-            state.overdueTasks.isEmpty()
+    val isEmptyToday = state.tasks.isEmpty() && state.routines.isEmpty()
+    val totalCount = state.tasks.size + state.routines.size
+    val activeRoutineIds = remember(state.routines) { state.routines.mapTo(mutableSetOf()) { it.id } }
+    val completedCount = state.tasks.count { it.isCompleted } +
+        state.completedRoutineIds.count { it in activeRoutineIds }
+    val userLevel = (state.gameState.totalXp / 100) + 1
 
-    LaunchedEffect(showAddSheet, today) {
-        if (showAddSheet) {
-            plannedTaskDate = today
-            addReminderEnabled = true
-        }
-    }
+    val undoLabel = stringResource(R.string.action_undo)
+    val taskDeletedMsg = stringResource(R.string.today_task_deleted_undo)
 
-    LaunchedEffect(Unit) {
-        viewModel.gameEvents.collect { event ->
-            val confettiOn = viewModel.uiState.value.gameState.celebrationEffectsEnabled
-            when (event) {
-                is GameEvent.RewardEarned -> {
-                    rewardText = "+${event.xp} XP"
-                    showReward = true
-                    if (confettiOn) {
-                        showConfetti = true
-                        confettiIntensity = ConfettiIntensity.Mini
-                    }
-                }
-                is GameEvent.LevelUp -> {
-                    levelUpLevel = event.level
-                    levelUpTitle = event.title
-                    showLevelUp = true
-                    if (confettiOn) {
-                        showConfetti = true
-                        confettiIntensity = ConfettiIntensity.LevelUp
-                    }
-                }
-                is GameEvent.AchievementUnlocked -> {
-                    achievementEmoji = event.emoji
-                    achievementTitle = event.title
-                    showAchievement = true
-                    if (confettiOn) {
-                        showConfetti = true
-                        confettiIntensity = ConfettiIntensity.Medium
-                    }
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.uiEffects.collect { effect ->
             when (effect) {
-                is TodayUiEffect.TaskMovedTomorrow -> {
-                    snackbarHost.showSnackbar(msgTaskMovedTomorrow)
-                }
-                is TodayUiEffect.OverdueTasksMoved -> {
-                    snackbarHost.showSnackbar(msgOverdueMoved.format(effect.count))
-                }
                 is TodayUiEffect.TaskDeleted -> {
-                    val result = snackbarHost.showSnackbar(
-                        message = msgTaskDeleted,
-                        actionLabel = msgUndoLabel,
-                        duration = SnackbarDuration.Long,
+                    val result = snackbarHostState.showSnackbar(
+                        message = taskDeletedMsg,
+                        actionLabel = undoLabel,
+                        duration = SnackbarDuration.Short,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
                         viewModel.restoreDeletedTask(effect.taskId)
                     }
                 }
                 is TodayUiEffect.TaskCompletedUndo -> {
-                    val result = snackbarHost.showSnackbar(
-                        message = msgTaskCompleted,
-                        actionLabel = msgUndoLabel,
+                    val result = snackbarHostState.showSnackbar(
+                        message = "✓ Görev tamamlandı · +10 XP",
+                        actionLabel = undoLabel,
                         duration = SnackbarDuration.Short,
                     )
                     if (result == SnackbarResult.ActionPerformed) {
                         viewModel.undoTaskToggle(effect.taskId)
                     }
                 }
-                is TodayUiEffect.DaySaved -> {
-                    snackbarHost.showSnackbar(msgDaySaved)
-                }
                 is TodayUiEffect.ActionFailed -> {
-                    val msg = when (effect.messageRes) {
-                        R.string.today_error_delete_task -> msgErrDelete
-                        R.string.today_error_save_day -> msgErrSave
-                        else -> msgErrGeneric
-                    }
-                    snackbarHost.showSnackbar(msg)
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(effect.messageRes),
+                        duration = SnackbarDuration.Short,
+                    )
                 }
+                else -> Unit
             }
         }
     }
 
-    if (showAddSheet) {
-        ModalBottomSheet(onDismissRequest = { showAddSheet = false }) {
-            AddTaskSheet(
-                today = today,
-                plannedDate = plannedTaskDate,
-                onPlannedDateChange = { plannedTaskDate = it },
-                text = addText,
-                note = addNote,
-                time = addTime,
-                category = addCategory,
-                priority = addPriority,
-                onTextChange = { addText = it },
-                onNoteChange = { addNote = it },
-                onTimeChange = { addTime = TimeInputValidator.sanitize(it) },
-                onCategoryChange = { addCategory = it },
-                onPriorityChange = { addPriority = it },
-                reminderEnabled = addReminderEnabled,
-                onReminderEnabledChange = { addReminderEnabled = it },
-                onSave = {
-                    if (addText.isNotBlank() && TimeInputValidator.isValid(addTime)) {
-                        val timeOrNull = addTime.takeIf { it.isNotBlank() }
-                        viewModel.addTask(
-                            title = addText,
-                            note = addNote,
-                            date = plannedTaskDate,
-                            startTime = timeOrNull,
-                            category = addCategory.takeIf { it.isNotBlank() },
-                            priority = addPriority,
-                            reminderTime = if (addReminderEnabled) timeOrNull else null,
+    LaunchedEffect(viewModel) {
+        viewModel.gameEvents.collect { event ->
+            when (event) {
+                is com.benimgunlerim.domain.model.GameEvent.LevelUp -> {
+                    levelUpEvent = event
+                }
+                is com.benimgunlerim.domain.model.GameEvent.AchievementUnlocked -> {
+                    achievementEvent = event
+                }
+                is com.benimgunlerim.domain.model.GameEvent.AllTasksCompleted -> {
+                    blockCompletionData = Triple(
+                        "Bugünün görevleri tamamlandı 🎉",
+                        "${event.totalCount} / ${event.totalCount} görev tamamlandı",
+                        "+${event.xpBonus} XP Bonusu",
+                    )
+                }
+                is com.benimgunlerim.domain.model.GameEvent.AllRoutinesCompleted -> {
+                    blockCompletionData = Triple(
+                        "Bugünün rutinleri tamamlandı",
+                        "Ritmini korudun. Seri: ${event.streak} gün",
+                        "+${event.xpBonus} XP Bonusu",
+                    )
+                }
+                is com.benimgunlerim.domain.model.GameEvent.MiniBanner -> {
+                    miniBannerData = event.message to event.icon
+                    kotlinx.coroutines.delay(2800)
+                    miniBannerData = null
+                }
+                is com.benimgunlerim.domain.model.GameEvent.RewardEarned -> Unit
+            }
+        }
+    }
+
+    ScreenScaffold(
+        modifier = Modifier.testTag(TestTags.TodayRoot),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        floatingActionButton = if (!dayIsClosed) {
+            {
+                FloatingActionButton(
+                    onClick = { showFabMenu = true },
+                    containerColor = BrandPrimary,
+                    contentColor = Color.White,
+                    modifier = Modifier.testTag(TestTags.TodayFab),
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(R.string.today_add_task_fab_cd),
+                    )
+                }
+            }
+        } else {
+            null
+        },
+    ) { contentPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(contentPadding),
+            verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
+        ) {
+            miniBannerData?.let { (msg, icon) ->
+                com.benimgunlerim.ui.components.gamification.MiniCelebrationBanner(
+                    message = msg,
+                    icon = icon,
+                    visible = true,
+                )
+            }
+            if (state.missedDay != null) {
+                val missed = state.missedDay!!
+                val dayFormatter = remember { DateTimeFormatter.ofPattern("d MMMM", Locale("tr")) }
+                AlertBanner(
+                    message = stringResource(R.string.today_missed_day_msg, missed.format(dayFormatter)),
+                    severity = AlertBannerSeverity.Warning,
+                    title = stringResource(R.string.today_missed_day_title),
+                    actionLabel = stringResource(R.string.today_missed_day_action),
+                    action = { showMissedDaySheet = true },
+                    modifier = Modifier.testTag(TestTags.TodayMissedDayBanner),
+                )
+            }
+
+            // ── Hafif Gün Modu Banner'ı (Aktifse) ──
+            if (state.isLightDayMode) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(BrandPrimarySoft)
+                        .border(1.5.dp, BrandPrimary.copy(alpha = 0.35f), RoundedCornerShape(20.dp))
+                        .padding(16.dp),
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(32.dp)
+                                        .clip(CircleShape)
+                                        .background(BrandPrimary),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Spa,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(18.dp),
+                                    )
+                                }
+                                Text(
+                                    text = stringResource(R.string.light_day_active_title),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                    color = BrandPrimary,
+                                )
+                            }
+
+                            TextButton(
+                                onClick = { viewModel.toggleLightDayMode(false) },
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.light_day_disable_btn),
+                                    style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = BrandPrimary,
+                                )
+                            }
+                        }
+
+                        Text(
+                            text = stringResource(R.string.light_day_active_subtitle),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
-                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                        addText = ""
-                        addNote = ""
-                        addTime = ""
-                        addCategory = ""
-                        addPriority = 2
-                        plannedTaskDate = today
-                        showAddSheet = false
+
+                        Text(
+                            text = "“" + stringResource(R.string.light_day_quote) + "”",
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                fontStyle = FontStyle.Italic,
+                                fontWeight = FontWeight.Medium,
+                            ),
+                            color = BrandPrimary,
+                        )
                     }
-                },
+                }
+            } else if (!dismissContextualReset && totalCount >= 4 && completedCount == 0) {
+                // ── Bağlamsal Sakinleşme / Reset Öneri Kartı ──
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f))
+                        .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(18.dp))
+                        .padding(14.dp),
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(38.dp)
+                                .clip(CircleShape)
+                                .background(BrandPrimarySoft),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.SelfImprovement,
+                                contentDescription = null,
+                                tint = BrandPrimary,
+                                modifier = Modifier.size(22.dp),
+                            )
+                        }
+
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = stringResource(R.string.reset_contextual_title),
+                                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface,
+                            )
+                            Text(
+                                text = if (state.isLightDayMode) {
+                                    stringResource(R.string.reset_contextual_light_body)
+                                } else {
+                                    stringResource(R.string.reset_contextual_body)
+                                },
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+
+                        Button(
+                            onClick = { showResetDialog = true },
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = BrandPrimary),
+                            modifier = Modifier.height(36.dp),
+                        ) {
+                            Text(
+                                text = stringResource(R.string.reset_action_btn),
+                                style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                                color = Color.White,
+                            )
+                        }
+
+                        IconButton(
+                            onClick = { dismissContextualReset = true },
+                            modifier = Modifier.size(24.dp),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = stringResource(R.string.action_cancel),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.size(16.dp),
+                            )
+                        }
+                    }
+                }
+            }
+
+            HeaderProgressCard(
+                streakCount = state.currentStreak,
+                completedTasks = completedCount,
+                totalTasks = totalCount,
+                level = userLevel,
+                xp = state.gameState.totalXp,
+                isLightDayMode = state.isLightDayMode,
+            )
+
+            if (state.overdueTasks.isNotEmpty()) {
+                SectionBlock(
+                    title = stringResource(R.string.today_overdue_tasks_title),
+                    trailingContent = {
+                        TextButton(
+                            onClick = { viewModel.moveAllOverdueTo(today) },
+                            modifier = Modifier.heightIn(min = AppTokens.TouchTarget.min),
+                        ) {
+                            Text(stringResource(R.string.today_move_all_overdue_to_today))
+                        }
+                    },
+                ) {
+                    TaskListContainer(
+                        tasks = state.overdueTasks,
+                        onToggleTask = { viewModel.toggleTask(it) },
+                        onDeleteTask = { viewModel.deleteTask(it) },
+                    )
+                }
+            }
+
+            if (isEmptyToday) {
+                EmptyState(
+                    emoji = "✨",
+                    title = stringResource(R.string.today_empty_title),
+                    description = stringResource(R.string.today_empty_desc),
+                    action = {
+                        AppButton(
+                            text = stringResource(R.string.today_empty_cta),
+                            onClick = { showAddTaskSheet = true },
+                        )
+                    },
+                )
+            } else {
+                if (state.tasks.isNotEmpty()) {
+                    SectionBlock(title = stringResource(R.string.today_tasks_title)) {
+                        TaskListContainer(
+                            tasks = state.tasks,
+                            onToggleTask = { viewModel.toggleTask(it) },
+                            onDeleteTask = { viewModel.deleteTask(it) },
+                        )
+                    }
+                }
+
+                if (state.routines.isNotEmpty()) {
+                    SectionBlock(
+                        title = stringResource(R.string.today_routines_title),
+                        trailingContent = {
+                            TextButton(
+                                onClick = onNavigateToRoutines,
+                                modifier = Modifier.heightIn(min = AppTokens.TouchTarget.min),
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.today_routines_view_all),
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = BrandPrimary,
+                                )
+                            }
+                        },
+                    ) {
+                        RoutineListContainer(
+                            routines = state.routines,
+                            completedRoutineIds = state.completedRoutineIds,
+                            onToggleRoutine = { id, done -> viewModel.toggleRoutine(id, done) },
+                            onOpenRoutineMenu = { menuRoutineId = it },
+                        )
+                    }
+                }
+            }
+
+            CloseDayCard(
+                isDayClosed = dayIsClosed,
+                onCloseDayClick = { showCloseSheet = true },
             )
         }
     }
 
-    selectedTaskId?.let { taskId ->
-        val task = (state.tasks + state.overdueTasks).firstOrNull { it.id == taskId } ?: return@let
-        val subtasks by viewModel.subTasksFlow(task.id).collectAsState(initial = emptyList())
-        ModalBottomSheet(onDismissRequest = { selectedTaskId = null }) {
-            TaskDetailSheet(
-                task = task,
-                today = today,
-                subtasks = subtasks,
-                interactionLocked = dayIsClosed,
-                onSave = { title, note, date, startTime, category, priority, reminderTime ->
-                    viewModel.updateTask(
-                        taskId = task.id,
-                        title = title,
-                        note = note,
-                        date = date,
-                        startTime = startTime,
-                        category = category,
-                        priority = priority,
-                        reminderTime = reminderTime,
-                    )
-                    selectedTaskId = null
-                },
-                onMoveTomorrow = {
-                    viewModel.moveTaskToTomorrow(task.id)
-                    selectedTaskId = null
-                },
-                onDelete = {
-                    if (task.completionState == TaskCompletionState.COMPLETED.value) {
-                        pendingDeleteTask = task
-                    } else {
-                        viewModel.deleteTask(task.id)
-                    }
-                    selectedTaskId = null
-                },
-                onAddSubTask = { title -> viewModel.addSubTask(task.id, title) },
-                onToggleSubTask = { st -> viewModel.toggleSubTask(st) },
-                onDeleteSubTask = { st -> viewModel.deleteSubTask(st) },
-            )
+    // ── FAB Hızlı Eylemler Menüsü ──
+    if (showFabMenu) {
+        ModalBottomSheet(
+            onDismissRequest = { showFabMenu = false },
+            containerColor = MaterialTheme.colorScheme.surface,
+            shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(
+                    text = stringResource(R.string.quick_actions_title),
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+
+                // 1. Görev Ekle
+                QuickActionRow(
+                    title = "Görev Ekle",
+                    subtitle = "Bugün için tek seferlik yapılacak iş",
+                    icon = Icons.Rounded.Add,
+                    iconTint = BrandPrimary,
+                    iconBg = BrandPrimarySoft,
+                    onClick = {
+                        showFabMenu = false
+                        showAddTaskSheet = true
+                    },
+                )
+
+                // 2. Kafam Dolu (Zihin Boşaltma)
+                QuickActionRow(
+                    title = stringResource(R.string.braindump_title),
+                    subtitle = "Aklındakileri dök ve göreve dönüştür",
+                    icon = Icons.Rounded.Psychology,
+                    iconTint = Info,
+                    iconBg = InfoSoft,
+                    onClick = {
+                        showFabMenu = false
+                        showBrainDumpDialog = true
+                    },
+                )
+
+                // 3. 1 Dakikalık Reset & Nefes
+                QuickActionRow(
+                    title = stringResource(R.string.reset_title),
+                    subtitle = "Zihnini boşalt, nefes al, toparlan",
+                    icon = Icons.Rounded.SelfImprovement,
+                    iconTint = BrandPrimary,
+                    iconBg = BrandPrimarySoft,
+                    onClick = {
+                        showFabMenu = false
+                        showResetDialog = true
+                    },
+                )
+
+                // 4. Hafif Gün Modu
+                QuickActionRow(
+                    title = if (state.isLightDayMode) stringResource(R.string.light_day_disable_btn) else stringResource(R.string.light_day_title),
+                    subtitle = if (state.isLightDayMode) "Normal tempoya geri dön" else "Bugünü iptal etmiyoruz, hafifletiyoruz",
+                    icon = Icons.Rounded.Spa,
+                    badge = if (state.isLightDayMode) "Aktif" else null,
+                    iconTint = if (state.isLightDayMode) BrandPrimary else Warning,
+                    iconBg = if (state.isLightDayMode) BrandPrimarySoft else WarningSoft,
+                    onClick = {
+                        showFabMenu = false
+                        viewModel.toggleLightDayMode(!state.isLightDayMode)
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
+    }
+
+    // ── 1 Dakikalık Reset Diyaloğu ──
+    if (showResetDialog) {
+        ResetDialog(
+            onDismiss = { showResetDialog = false },
+            onEnableLightDay = { viewModel.toggleLightDayMode(true) },
+            onPickTask = { /* user continues to task list */ },
+        )
+    }
+
+    // ── Kafam Dolu (Brain Dump) Diyaloğu ──
+    if (showBrainDumpDialog) {
+        BrainDumpDialog(
+            onDismiss = { showBrainDumpDialog = false },
+            onAddTasks = { titles ->
+                viewModel.addTasksFromBrainDump(titles)
+            },
+        )
+    }
+
+    if (showAddTaskSheet) {
+        AddTaskSheet(
+            onDismiss = { showAddTaskSheet = false },
+            onSave = { title, date, startTime, category, priority, reminderTime ->
+                viewModel.addTask(title, null, today, startTime, category, priority, reminderTime)
+            },
+            initialDate = today.toString(),
+        )
     }
 
     if (showCloseSheet) {
         ModalBottomSheet(onDismissRequest = { showCloseSheet = false }) {
             CloseDaySheet(
-                completedCount = state.tasks.count {
-                    it.completionState == TaskCompletionState.COMPLETED.value
-                } + state.routines.count { it.id in state.completedRoutineIds },
-                totalCount = state.tasks.size + state.routines.size,
-                progress = state.progress,
+                completedCount = completedCount,
+                totalCount = totalCount,
+                progress = if (totalCount > 0) completedCount.toFloat() / totalCount else 0f,
                 overdueCount = state.overdueTasks.size,
                 onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, carryTasks ->
                     viewModel.saveDailySummaryWithOptionalCarry(
@@ -414,1357 +603,165 @@ fun TodayScreen(
     }
 
     if (showMissedDaySheet && state.missedDay != null) {
-        val missedDate = state.missedDay!!
-        ModalBottomSheet(onDismissRequest = { showMissedDaySheet = false }) {
-            CloseDaySheet(
-                completedCount = 0,
-                totalCount = 0,
-                progress = 0f,
-                overdueCount = 0,
-                onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, _ ->
-                    viewModel.saveMissedDaySummary(missedDate, note, mood, energy, bestMoment, challenge, tomorrowIntention)
-                    showMissedDaySheet = false
-                },
-            )
-        }
-    }
-
-    val completedTasks = state.tasks.count { it.completionState == TaskCompletionState.COMPLETED.value }
-    val completedRoutines = state.routines.count { it.id in state.completedRoutineIds }
-    val total = state.tasks.size + state.routines.size
-    val completed = completedTasks + completedRoutines
-    Box(Modifier.fillMaxSize().testTag(com.benimgunlerim.ui.TestTags.TodayRoot)) {
-        Scaffold(
-            contentWindowInsets = WindowInsets(0),
-            containerColor = MaterialTheme.colorScheme.background,
-            snackbarHost = { SnackbarHost(snackbarHost) },
-            floatingActionButton = {
-                if (emptyForFab) {
-                    ExtendedFloatingActionButton(
-                        onClick = { showAddSheet = true },
-                        containerColor = CandyPrimary,
-                        contentColor = Color.White,
-                        shape = CircleShape,
-                        elevation = FloatingActionButtonDefaults.elevation(
-                            defaultElevation = 0.dp,
-                            pressedElevation = 0.dp,
-                            focusedElevation = 0.dp,
-                            hoveredElevation = 0.dp,
-                        ),
-                        modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayFab),
-                    ) {
-                        Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_add_cd))
-                        Spacer(Modifier.width(10.dp))
-                        Text(stringResource(R.string.today_empty_fab_extended), style = MaterialTheme.typography.labelLarge)
-                    }
-                } else {
-                    FloatingActionButton(
-                        onClick = { showAddSheet = true },
-                        containerColor = CandyPrimary,
-                        contentColor = Color.White,
-                        shape = CircleShape,
-                        elevation = FloatingActionButtonDefaults.elevation(
-                            defaultElevation = 0.dp,
-                            pressedElevation = 0.dp,
-                            focusedElevation = 0.dp,
-                            hoveredElevation = 0.dp,
-                        ),
-                        modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayFab),
-                    ) {
-                        Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_add_cd))
-                    }
-                }
+        val missed = state.missedDay!!
+        MissedDayReviewSheet(
+            date = missed,
+            completedCount = state.missedDayCompletedCount,
+            totalCount = state.missedDayTotalCount,
+            pendingTaskCount = state.missedDayPendingTaskCount,
+            onDismiss = { showMissedDaySheet = false },
+            onCloseAndStart = { mood, carryOver ->
+                viewModel.closeMissedDayWithReview(
+                    date = missed,
+                    mood = mood,
+                    carryOverPendingTasks = carryOver,
+                )
+                showMissedDaySheet = false
             },
-        ) { padding ->
-            TodayContent(
-                state = state,
-                today = today,
-                completed = completed,
-                total = total,
-                dayIsClosed = dayIsClosed,
-                padding = padding,
-                haptic = haptic,
-                viewModel = viewModel,
-                onNavigateToRoutines = onNavigateToRoutines,
-                onNavigateToPlan = onNavigateToPlan,
-                onOpenRoutineDetail = onOpenRoutineDetail,
-                onOpenTask = { selectedTaskId = it },
-                onShowAddTaskSheet = { showAddSheet = true },
-                onShowMissedDaySheet = { showMissedDaySheet = true },
-                onShowCloseDaySheet = { showCloseSheet = true },
-                onConfirmDeleteCompletedTask = { pendingDeleteTask = it },
-            )
-        }
-
-        ConfettiOverlay(showConfetti, confettiIntensity) { showConfetti = false }
-        FloatingRewardText(rewardText, showReward, Modifier.align(Alignment.Center)) { showReward = false }
-        LevelUpOverlay(showLevelUp, levelUpLevel, levelUpTitle) { showLevelUp = false }
-        AchievementUnlockOverlay(showAchievement, achievementEmoji, achievementTitle) { showAchievement = false }
-
-        pendingDeleteTask?.let { task ->
-            AlertDialog(
-                onDismissRequest = { pendingDeleteTask = null },
-                title = { Text(stringResource(R.string.today_delete_completed_title)) },
-                text = { Text(stringResource(R.string.today_delete_completed_body, task.title)) },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            viewModel.deleteTask(task.id)
-                            pendingDeleteTask = null
-                        },
-                    ) {
-                        Text(stringResource(R.string.today_delete_label), color = StreakCoral)
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { pendingDeleteTask = null }) {
-                        Text(stringResource(R.string.action_dismiss))
-                    }
-                },
-            )
-        }
+            onArchiveAsIs = {
+                viewModel.autoSaveMissedDay(missed)
+                showMissedDaySheet = false
+            },
+        )
     }
-}
 
-@Composable
-internal fun HomeBackground(): Brush = Brush.verticalGradient(
-    listOf(
-        MaterialTheme.todayColorTokens.backgroundTop,
-        MaterialTheme.todayColorTokens.backgroundBottom,
-    ),
-)
+    menuRoutineId?.let { routineId ->
+        RoutineActionsSheet(
+            onDismiss = { menuRoutineId = null },
+            onEdit = {
+                menuRoutineId = null
+                editingRoutine = state.routines.firstOrNull { it.id == routineId }
+            },
+            onSkip = {
+                viewModel.skipRoutine(routineId)
+                menuRoutineId = null
+            },
+            onDelete = {
+                viewModel.archiveRoutine(routineId)
+                menuRoutineId = null
+            },
+        )
+    }
 
-@Composable
-private fun mutedAccent(color: Color): Color = lerp(color, MaterialTheme.colorScheme.surface, 0.40f)
+    editingRoutine?.let { routine ->
+        AddRoutineSheet(
+            onDismiss = { editingRoutine = null },
+            onSave = { title, targetDays, reminderTime, _, _, _ ->
+                viewModel.updateRoutine(routine.id, title, targetDays, reminderTime)
+            },
+            isEditMode = true,
+            initialTitle = routine.name,
+            initialDays = routine.targetDays,
+            initialReminderTime = routine.preferredTime,
+        )
+    }
 
-private data class TodayLayoutMetrics(
-    val isCompact: Boolean,
-    val headerCorner: Dp,
-    val headerPadding: Dp,
-    val headerSpacing: Dp,
-    val headerMetaSpacing: Dp,
-    val headerProgressHeight: Dp,
-    val sectionCorner: Dp,
-    val sectionPaddingHorizontal: Dp,
-    val sectionPaddingVertical: Dp,
-    val sectionItemSpacing: Dp,
-    val listBlockSpacing: Dp,
-    val summaryBlockSpacing: Dp,
-    val dividerTopPadding: Dp,
-    val dividerBottomPadding: Dp,
-    val itemCorner: Dp,
-    val itemMinHeight: Dp,
-    val itemContentHorizontal: Dp,
-    val itemContentVertical: Dp,
-    val accentRailWidth: Dp,
-    val accentRailHeight: Dp,
-    val iconButtonSize: Dp,
-    val metaChipVertical: Dp,
-    val routineControlCorner: Dp,
-    val routineProgressHeight: Dp,
-)
+    // ── 4. Kademe Büyük Kutlamalar & Modallar ──
+    levelUpEvent?.let { ev ->
+        com.benimgunlerim.ui.components.gamification.LevelUpDialog(
+            level = ev.level,
+            title = ev.title,
+            xpBonus = ev.xpBonus,
+            onDismiss = { levelUpEvent = null },
+        )
+    }
 
-@Composable
-private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics {
-    val screenWidthDp = LocalConfiguration.current.screenWidthDp
-    val isCompact = screenWidthDp < 380
-    val scale = (screenWidthDp / 411f).coerceIn(if (isCompact) 0.9f else 0.94f, if (isCompact) 1.0f else 1.1f)
-    fun s(value: Float): Dp = (value * scale).dp
-    return remember(screenWidthDp, isCompact) {
-        TodayLayoutMetrics(
-            isCompact = isCompact,
-            headerCorner = 0.dp,
-            headerPadding = s(20f),
-            headerSpacing = s(if (isCompact) 8f else 10f),
-            headerMetaSpacing = s(if (isCompact) 2f else 3f),
-            headerProgressHeight = s(if (isCompact) 7f else 8f),
-            sectionCorner = s(12f),
-            sectionPaddingHorizontal = s(20f),
-            sectionPaddingVertical = s(16f),
-            sectionItemSpacing = s(if (isCompact) 7f else 8f),
-            listBlockSpacing = s(if (isCompact) 9f else 10f),
-            summaryBlockSpacing = s(2f),
-            dividerTopPadding = s(4f),
-            dividerBottomPadding = s(2f),
-            itemCorner = s(12f),
-            itemMinHeight = s(if (isCompact) 78f else 82f),
-            itemContentHorizontal = s(12f),
-            itemContentVertical = s(if (isCompact) 10f else 11f),
-            accentRailWidth = s(2f),
-            accentRailHeight = s(if (isCompact) 64f else 68f),
-            iconButtonSize = s(40f),
-            metaChipVertical = s(2f),
-            routineControlCorner = s(12f),
-            routineProgressHeight = s(5f),
+    achievementEvent?.let { ev ->
+        com.benimgunlerim.ui.components.gamification.AchievementDialog(
+            emoji = ev.emoji,
+            title = ev.title,
+            description = ev.description,
+            xpReward = ev.xpReward,
+            onDismiss = { achievementEvent = null },
+        )
+    }
+
+    blockCompletionData?.let { (title, subtitle, badge) ->
+        com.benimgunlerim.ui.components.gamification.BlockCompletionSheet(
+            title = title,
+            subtitle = subtitle,
+            badgeText = badge,
+            isLightDayMode = state.isLightDayMode,
+            onCloseDayClick = {
+                blockCompletionData = null
+                showCloseSheet = true
+            },
+            onContinueClick = {
+                blockCompletionData = null
+            },
+            onDismiss = {
+                blockCompletionData = null
+            },
         )
     }
 }
 
 @Composable
-internal fun TodayHeaderCard(
-    @Suppress("UNUSED_PARAMETER") today: LocalDate = LocalDate.now(),
-    streak: Int,
-    happiness: Int,
-    completed: Int,
-    total: Int,
-    progress: Float,
-) {
-    val metrics = rememberTodayLayoutMetrics()
-    val instantTransition = rememberSystemAnimationsDisabled()
-    val targetProgress = progress.coerceIn(0f, 1f)
-    val animated by animateFloatAsState(
-        targetProgress,
-        if (instantTransition) snap() else tween(800, easing = FastOutSlowInEasing),
-        label = "headerProgress",
-    )
-    val percent = (animated * 100).toInt()
-    val statusLine = when {
-        total <= 0 -> stringResource(R.string.today_status_no_steps)
-        completed <= 0 -> stringResource(R.string.today_status_none_completed)
-        completed >= total -> stringResource(R.string.today_status_all_completed)
-        else -> stringResource(R.string.today_status_completed_count, completed, total)
-    }
-    val supportLine = if (total > 0) {
-        stringResource(R.string.today_support_steps_remaining, (total - completed).coerceAtLeast(0))
-    } else {
-        stringResource(R.string.today_support_add_first_step)
-    }
-
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .border(
-                1.dp,
-                MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.38f),
-                RoundedCornerShape(metrics.headerCorner),
-            ),
-        shape = RoundedCornerShape(metrics.headerCorner),
-        color = MaterialTheme.colorScheme.surface,
-        tonalElevation = 0.dp,
-        shadowElevation = 0.dp,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(if (metrics.isCompact) 14.dp else 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp),
-                ) {
-                    Text(
-                        statusLine,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    Text(
-                        if (total > 0) "$completed / $total adım tamamlandı" else supportLine,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Pill(stringResource(R.string.today_streak_pill, streak), MaterialTheme.colorScheme.primary)
-                        Pill(stringResource(R.string.today_mood_pill, happiness), MaterialTheme.colorScheme.secondary)
-                    }
-                }
-
-                Spacer(Modifier.width(12.dp))
-
-                Box(
-                    modifier = Modifier.size(72.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(
-                        progress = { animated },
-                        modifier = Modifier.fillMaxSize(),
-                        color = MaterialTheme.colorScheme.primary,
-                        trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f),
-                        strokeWidth = 6.dp,
-                    )
-                    Text("%$percent", style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.primary)
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun TodayStat(label: String, value: String, color: Color) {
-    Column(
-        modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(color.copy(alpha = 0.08f))
-            .border(1.dp, color.copy(alpha = 0.16f), RoundedCornerShape(12.dp))
-            .padding(horizontal = 8.dp, vertical = 6.dp),
-        verticalArrangement = Arrangement.spacedBy(1.dp),
-    ) {
-        Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(value, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = color)
-    }
-}
-
-@Composable
-fun AppTopBar(
-    onOpenProfile: () -> Unit,
-    onOpenNotifications: () -> Unit,
-) {
-    val profileDescription = stringResource(R.string.today_profile_cd)
-    val notificationsDescription = stringResource(R.string.today_notifications_cd)
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .statusBarsPadding()
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.65f),
-                shape = RoundedCornerShape(0.dp),
-            ),
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 0.dp,
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(68.dp)
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .heightIn(min = 48.dp)
-                    .clickable(onClick = onOpenProfile)
-                    .semantics { contentDescription = profileDescription },
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.55f))
-                        .border(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.25f), CircleShape),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        Icons.Rounded.Person,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(22.dp),
-                    )
-                }
-                Text(
-                    text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.titleLarge.copy(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
-                )
-            }
-            Box(
-                Modifier
-                    .height(28.dp)
-                    .width(1.dp)
-                    .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f)),
-            )
-            IconButton(
-                onClick = onOpenNotifications,
-                modifier = Modifier
-                    .size(44.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.48f))
-                    .semantics { contentDescription = notificationsDescription },
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.NotificationsNone,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            }
-        }
-    }
-}
-
-
-@Composable
-internal fun TodayList(
-    today: LocalDate,
-    routines: List<TodayRoutineUi>,
-    tasks: List<TodayTaskUi>,
-    overdueTasks: List<TodayTaskUi>,
-    completedRoutineIds: Set<String>,
-    completionLogs: List<CompletionLogEntity>,
-    snapshotLoadError: Boolean,
-    dayLocked: Boolean,
-    actions: TodayListActions,
-) {
-    var completedExpanded by remember { mutableStateOf(false) }
-    val metrics = rememberTodayLayoutMetrics()
-    val openTasks = tasks.filterNot { it.completionState == TaskCompletionState.COMPLETED.value }
-    val completedTasks = tasks.filter { it.completionState == TaskCompletionState.COMPLETED.value }
-    // Rutinler tamamlandığında "Tamamlananlar" alanına taşınmaz; aynı sırada
-    // kalır ve yalnızca tamamlanmış görünümü alır. Böylece dokunma sonrası
-    // bölümün boşalması ya da yüzey hiyerarşisinin kopması engellenir.
-    val visibleRoutines = routines
-    val sortedOpenTasks = remember(openTasks) { openTasks.sortedWith(todayTaskComparator()) }
-    val sortedOverdueTasks = remember(overdueTasks, today) { overdueTasks.sortedWith(overdueTaskComparator(today)) }
-    val sortedOpenRoutines = remember(visibleRoutines) {
-        visibleRoutines.sortedWith(
-            compareBy<TodayRoutineUi> { it.preferredTime.isNullOrBlank() }
-                .thenBy { it.preferredTime ?: "99:99" }
-                .thenBy { it.name.lowercase(Locale("tr", "TR")) },
-        )
-    }
-    val completedTotal = completedTasks.size
-    val completedHeavy = completedTotal > 3
-    val visibleCompletedTasks = if (completedExpanded) completedTasks else completedTasks.take(2)
-    val routineLogsById = remember(completionLogs) {
-        completionLogs
-            .filter { it.entityType == CompletionEntityType.ROUTINE.value }
-            .associateBy { it.entityId }
-    }
-
-    val summary = listOfNotNull(
-        if (overdueTasks.isNotEmpty()) {
-            stringResource(R.string.today_summary_overdue, overdueTasks.size)
-        } else null,
-        if (openTasks.isNotEmpty()) {
-            stringResource(R.string.today_summary_tasks, openTasks.size)
-        } else null,
-        if (visibleRoutines.isNotEmpty()) {
-            stringResource(R.string.today_summary_routines, visibleRoutines.count { it.id !in completedRoutineIds })
-        } else null,
-    ).joinToString(" · ").ifBlank { stringResource(R.string.today_summary_all_done) }
-
-    val readableSummary = normalizeMiddleDot(summary)
-    Column(verticalArrangement = Arrangement.spacedBy(metrics.listBlockSpacing)) {
-        if (overdueTasks.isNotEmpty()) {
-            Text(
-                text = stringResource(R.string.today_guidance_overdue),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 2.dp),
-            )
-        }
-
-        if (tasks.isEmpty() && routines.isEmpty() && overdueTasks.isEmpty()) {
-            if (snapshotLoadError) {
-                EmptyBox(stringResource(R.string.today_snapshot_load_error), StreakCoral)
-                return@Column
-            }
-            EmptyTodayOnboarding(
-                onAddTask = actions.onAddTask,
-                onNavigateToPlan = actions.onNavigateToPlan,
-                onNavigateToRoutines = actions.onNavigateToRoutines,
-            )
-            return@Column
-        }
-
-            if (overdueTasks.isNotEmpty()) {
-                SectionCard(
-                    title = stringResource(R.string.today_overdue_title),
-                    tint = MaterialTheme.colorScheme.tertiary,
-                    containerColor = MaterialTheme.todayColorTokens.overdueSurface,
-                    borderColor = MaterialTheme.todayColorTokens.overdueBorder,
-                    metrics = metrics,
-                ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    TextButton(onClick = actions.onMoveAllOverdueToday, enabled = !dayLocked) {
-                        Text(stringResource(R.string.today_bulk_all_today))
-                    }
-                    TextButton(onClick = actions.onMoveAllOverdueTomorrow, enabled = !dayLocked) {
-                        Text(stringResource(R.string.today_bulk_all_tomorrow))
-                    }
-                }
-                sortedOverdueTasks.forEachIndexed { index, task ->
-                    Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayOverdueRow(task.id))) {
-                        OverdueTaskRow(
-                            task = task,
-                            today = today,
-                            interactionLocked = dayLocked,
-                            onToggle = actions.onToggleTask,
-                            onOpen = actions.onOpenTask,
-                            onMoveToday = actions.onMoveOverdueToday,
-                        )
-                    }
-                    if (index != sortedOverdueTasks.lastIndex) {
-                        SectionListDivider()
-                    }
-                }
-            }
-        }
-
-        if (openTasks.isNotEmpty() || visibleRoutines.isNotEmpty()) {
-            if (!dayLocked && sortedOpenTasks.size >= 2) {
-                Text(
-                    stringResource(R.string.today_swipe_delete_hint),
-                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodaySwipeHint),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(0.62f),
-                )
-            }
-            if (sortedOpenTasks.isNotEmpty()) {
-                FlatSection(
-                    title = stringResource(R.string.today_tasks_subsection),
-                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayTasksSection),
-                ) {
-                    sortedOpenTasks.forEachIndexed { index, task ->
-                        Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayTaskRow(task.id))) {
-                            SwipeableTaskRow(
-                                task = task,
-                                interactionLocked = dayLocked,
-                                onToggle = actions.onToggleTask,
-                                onOpen = actions.onOpenTask,
-                                onDelete = actions.onDeleteTask,
-                            )
-                        }
-                        if (index != sortedOpenTasks.lastIndex) {
-                            SectionListDivider()
-                        }
-                    }
-                }
-            }
-            if (sortedOpenRoutines.isNotEmpty()) {
-                FlatSection(
-                    title = stringResource(R.string.today_routines_subsection),
-                    card = sortedOpenRoutines.size > 1,
-                    modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayRoutinesSection),
-                ) {
-                    sortedOpenRoutines.forEachIndexed { index, routine ->
-                        Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayRoutineRow(routine.id))) {
-                            RoutineRow(
-                                routine = routine,
-                                log = routineLogsById[routine.id],
-                                done = routine.id in completedRoutineIds,
-                                interactionLocked = dayLocked,
-                                onToggle = actions.onToggleRoutine,
-                                onProgressChange = actions.onRoutineProgressChange,
-                                onOpenDetail = actions.onOpenRoutineDetail,
-                            )
-                        }
-                        if (index != sortedOpenRoutines.lastIndex) {
-                            SectionListDivider()
-                        }
-                    }
-                }
-            }
-        }
-
-        if (completedTasks.isNotEmpty()) {
-            SectionCard(
-                title = stringResource(R.string.today_completed_label),
-                tint = MaterialTheme.colorScheme.primary,
-                containerColor = MaterialTheme.colorScheme.surface,
-                borderColor = MaterialTheme.colorScheme.outlineVariant,
-                metrics = metrics,
-                modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayCompletedSection),
-            ) {
-                if (!completedExpanded) {
-                    Row(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.today_completed_summary, completedTotal),
-                            style = MaterialTheme.typography.labelLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        )
-                        TextButton(onClick = { completedExpanded = true }) {
-                            Text(stringResource(R.string.today_completed_show_more, completedTotal))
-                        }
-                    }
-                } else {
-                    visibleCompletedTasks.forEachIndexed { index, task ->
-                        Box(Modifier.testTag(com.benimgunlerim.ui.TestTags.todayTaskRow(task.id))) {
-                            SwipeableTaskRow(
-                                task = task,
-                                interactionLocked = dayLocked,
-                                onToggle = actions.onToggleTask,
-                                onOpen = actions.onOpenTask,
-                                onDelete = actions.onDeleteTask,
-                            )
-                        }
-                        if (index != visibleCompletedTasks.lastIndex) {
-                            SectionListDivider()
-                        }
-                    }
-                    TextButton(onClick = { completedExpanded = false }) {
-                        Text(stringResource(R.string.today_completed_show_less))
-                    }
-                }
-            }
-        }
-    }
-}
-
-
-@Composable
-private fun EmptyTodayOnboarding(
-    onAddTask: () -> Unit,
-    onNavigateToPlan: () -> Unit,
-    onNavigateToRoutines: () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(18.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(1.dp, LevelSky.copy(.24f), RoundedCornerShape(18.dp))
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(stringResource(R.string.today_tasks_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = onAddTask, colors = ButtonDefaults.buttonColors(CandyPrimary, Color.White)) {
-                Text(stringResource(R.string.today_empty_cta_task))
-            }
-            OutlinedButton(onClick = onNavigateToPlan) {
-                Text(stringResource(R.string.today_empty_cta_plan))
-            }
-        }
-        OutlinedButton(onClick = onNavigateToRoutines) {
-            Text(stringResource(R.string.today_empty_cta_routine))
-        }
-    }
-}
-
-@Composable
-private fun QuietDivider(label: String, modifier: Modifier = Modifier) {
-    val metrics = rememberTodayLayoutMetrics()
-    Text(
-        text = label,
-        style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.78f),
-        modifier = modifier
-            .padding(top = metrics.dividerTopPadding, bottom = metrics.dividerBottomPadding)
-            .semantics { heading() },
-    )
-}
-
-@Composable
-private fun QuietSubLabel(label: String) {
-    Text(
-        text = label,
-        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold),
-        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.62f),
-        modifier = Modifier.padding(top = 2.dp),
-    )
-}
-
-@Composable
-private fun SectionCard(
+private fun QuickActionRow(
     title: String,
-    tint: Color,
-    containerColor: Color,
-    borderColor: Color,
-    metrics: TodayLayoutMetrics,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 2.dp),
-        verticalArrangement = Arrangement.spacedBy(metrics.sectionItemSpacing),
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.ExtraBold),
-            color = tint,
-            modifier = Modifier.padding(horizontal = 2.dp),
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(metrics.sectionCorner))
-                .background(containerColor)
-                .border(1.dp, borderColor.copy(alpha = 0.58f), RoundedCornerShape(metrics.sectionCorner))
-                .padding(horizontal = metrics.sectionPaddingHorizontal, vertical = metrics.sectionPaddingVertical),
-            verticalArrangement = Arrangement.spacedBy(metrics.sectionItemSpacing),
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun FlatSection(
-    title: String,
-    card: Boolean = false,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.semantics { heading() },
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(
-                    if (card) Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.72f))
-                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.7f), RoundedCornerShape(12.dp))
-                        .padding(horizontal = 12.dp)
-                    else Modifier,
-                ),
-            verticalArrangement = Arrangement.spacedBy(0.dp),
-            content = content,
-        )
-    }
-}
-
-@Composable
-private fun SectionListDivider() {
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 2.dp)
-            .height(1.dp)
-            .background(MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.55f)),
-    )
-}
-
-@Composable
-private fun MetaTag(text: String) {
-    val metrics = rememberTodayLayoutMetrics()
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(999.dp))
-            .background(MaterialTheme.colorScheme.surface)
-            .border(
-                width = 1.dp,
-                color = MaterialTheme.colorScheme.outline.copy(alpha = 0.28f),
-                shape = RoundedCornerShape(999.dp),
-            )
-            .padding(horizontal = 8.dp, vertical = metrics.metaChipVertical),
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-        )
-    }
-}
-
-@Composable
-private fun OverdueTaskRow(
-    task: TodayTaskUi,
-    today: LocalDate,
-    interactionLocked: Boolean,
-    onToggle: (TodayTaskUi) -> Unit,
-    onOpen: (TodayTaskUi) -> Unit,
-    onMoveToday: (TodayTaskUi) -> Unit,
-) {
-    val done = task.completionState == TaskCompletionState.COMPLETED.value
-    val openTaskLabel = stringResource(R.string.today_task_open_cd)
-    val plannedLabel = runCatching { LocalDate.parse(task.plannedDate) }.getOrNull()?.let { date ->
-        val days = ChronoUnit.DAYS.between(date, today).toInt()
-        when {
-            days <= 0 -> task.plannedDate
-            days == 1 -> stringResource(R.string.today_relative_yesterday)
-            else -> stringResource(R.string.today_relative_days_ago, days)
-        }
-    } ?: task.plannedDate
-    ItemRow(done = done, color = StreakCoral) {
-        CheckCircle(done, StreakCoral, enabled = !interactionLocked) { onToggle(task) }
-        Column(
-            modifier = Modifier.weight(1f).clickable(onClickLabel = openTaskLabel) { onOpen(task) },
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                task.title,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.SemiBold,
-                    textDecoration = if (done) TextDecoration.LineThrough else null,
-                ),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Text(
-                plannedLabel,
-                style = MaterialTheme.typography.labelSmall,
-                color = StreakCoral.copy(.85f),
-                maxLines = 1,
-            )
-        }
-        IconButton(onClick = { onMoveToday(task) }, enabled = !interactionLocked) {
-            Icon(
-                Icons.Outlined.CalendarToday,
-                contentDescription = stringResource(R.string.today_move_to_today_cd),
-                tint = StreakCoral,
-                modifier = Modifier.size(18.dp),
-            )
-        }
-    }
-}
-
-@Composable
-private fun TaskRow(
-    task: TodayTaskUi,
-    interactionLocked: Boolean,
-    onToggle: (TodayTaskUi) -> Unit,
-    onOpen: (TodayTaskUi) -> Unit,
-    onDelete: (TodayTaskUi) -> Unit,
-) {
-    val metrics = rememberTodayLayoutMetrics()
-    var menuOpen by remember(task.id) { mutableStateOf(false) }
-    val done = task.completionState == TaskCompletionState.COMPLETED.value
-    val color = mutedAccent(task.color?.let(::parseColorOrNull) ?: CategoryPalette.colorFor(task.category ?: task.title))
-    val overflowCd = stringResource(R.string.today_task_overflow_cd)
-    val openTaskLabel = stringResource(R.string.today_task_open_cd)
-    val timeNone = stringResource(R.string.today_task_time_none_short)
-    val priorityLabel = when (task.priority) {
-        1 -> stringResource(R.string.today_priority_short_high)
-        2 -> stringResource(R.string.today_priority_short_normal)
-        else -> stringResource(R.string.today_priority_short_low)
-    }
-    val categoryText = task.category?.trim()?.takeIf { it.isNotEmpty() }
-    val timeText = task.startTime ?: timeNone
-    val notePreview = task.note?.trim()?.takeIf { it.isNotEmpty() }
-    ItemRow(done = done, color = color) {
-        CheckCircle(done, color, enabled = !interactionLocked) { onToggle(task) }
-        Column(
-            Modifier
-                .weight(1f)
-                .align(Alignment.CenterVertically)
-                .clickable(onClickLabel = openTaskLabel) { onOpen(task) },
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            Text(
-                task.title,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, textDecoration = if (done) TextDecoration.LineThrough else null),
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (done) .58f else 1f),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                MetaTag(text = priorityLabel)
-                categoryText?.let { MetaTag(text = it) }
-                MetaTag(text = timeText)
-            }
-            notePreview?.let {
-                Text(
-                    stringResource(R.string.today_note_preview, it),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(.72f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        }
-        Box {
-            IconButton(
-                onClick = { menuOpen = true },
-                modifier = Modifier.size(metrics.iconButtonSize),
-            ) {
-                Icon(
-                    Icons.Rounded.MoreHoriz,
-                    contentDescription = overflowCd,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(22.dp),
-                )
-            }
-            DropdownMenu(
-                expanded = menuOpen,
-                onDismissRequest = { menuOpen = false },
-            ) {
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.today_task_menu_open_detail)) },
-                    onClick = {
-                        menuOpen = false
-                        onOpen(task)
-                    },
-                )
-                DropdownMenuItem(
-                    text = { Text(stringResource(R.string.today_delete_label)) },
-                    leadingIcon = {
-                        Icon(Icons.Rounded.DeleteOutline, contentDescription = null, tint = StreakCoral)
-                    },
-                    onClick = {
-                        menuOpen = false
-                        if (!interactionLocked) onDelete(task)
-                    },
-                )
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SwipeableTaskRow(
-    task: TodayTaskUi,
-    interactionLocked: Boolean,
-    onToggle: (TodayTaskUi) -> Unit,
-    onOpen: (TodayTaskUi) -> Unit,
-    onDelete: (TodayTaskUi) -> Unit,
-) {
-    val metrics = rememberTodayLayoutMetrics()
-    val swipeDeleteCd = stringResource(R.string.today_swipe_to_delete_cd)
-    val dismissState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { value ->
-            if (interactionLocked) return@rememberSwipeToDismissBoxState false
-            if (value == SwipeToDismissBoxValue.EndToStart) {
-                onDelete(task)
-                true
-            } else {
-                false
-            }
-        },
-        positionalThreshold = { it * 0.4f },
-    )
-    SwipeToDismissBox(
-        state = dismissState,
-        backgroundContent = {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .clip(RoundedCornerShape(metrics.itemCorner))
-                    .background(StreakCoral.copy(.15f))
-                    .semantics { contentDescription = swipeDeleteCd },
-                contentAlignment = Alignment.CenterEnd,
-            ) {
-                Row(
-                    Modifier.padding(end = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(20.dp))
-                    Text(stringResource(R.string.today_delete_label), style = MaterialTheme.typography.labelMedium, color = StreakCoral)
-                }
-            }
-        },
-        enableDismissFromStartToEnd = false,
-        enableDismissFromEndToStart = !interactionLocked,
-    ) {
-        TaskRow(
-            task = task,
-            interactionLocked = interactionLocked,
-            onToggle = onToggle,
-            onOpen = onOpen,
-            onDelete = onDelete,
-        )
-    }
-}
-
-@Composable
-@Suppress("CyclomaticComplexMethod")
-private fun RoutineRow(
-    routine: TodayRoutineUi,
-    log: CompletionLogEntity?,
-    done: Boolean,
-    interactionLocked: Boolean,
-    onToggle: (TodayRoutineUi) -> Unit,
-    onProgressChange: (TodayRoutineUi, Float, Boolean) -> Unit,
-    onOpenDetail: (TodayRoutineUi) -> Unit,
-) {
-    val metrics = rememberTodayLayoutMetrics()
-    val color = mutedAccent(routine.color?.let(::parseColorOrNull) ?: CandyPrimary)
-    val isCheckType = routine.targetType == RoutineTargetType.CHECK.value
-    val routineName = remember(routine.name) {
-        routine.name.trim().replaceFirstChar { ch ->
-            if (ch.isLowerCase()) ch.titlecase(Locale("tr", "TR")) else ch.toString()
-        }
-    }
-    val streakLabel = if (routine.currentStreak > 0) {
-        stringResource(R.string.today_routine_streak_count, routine.currentStreak)
-    } else if (routine.bestStreak > 0) {
-        stringResource(R.string.today_routine_best_streak_count, routine.bestStreak)
-    } else {
-        "0 günlük seri"
-    }
-    val currentValue = log?.value ?: 0f
-    val targetValue = routine.targetValue?.toFloat()
-    val unit = routine.targetUnit?.trim().orEmpty().lowercase(Locale("tr", "TR"))
-    val progressLabel = if (!isCheckType && routine.targetValue != null) {
-        "${currentValue.toInt()} / ${routine.targetValue}${if (unit.isNotEmpty()) " $unit" else ""} · $streakLabel"
-    } else {
-        streakLabel
-    }
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            CheckCircle(done, color, enabled = !interactionLocked) { onToggle(routine) }
-            Column(
-                Modifier
-                    .weight(1f)
-                    .align(Alignment.CenterVertically),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                Text(
-                    routineName,
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, textDecoration = if (done) TextDecoration.LineThrough else null),
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (done) .58f else 1f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Text(
-                    if (done && !isCheckType && routine.targetValue != null) {
-                        stringResource(R.string.today_routine_done_target_result, currentValue.toInt(), routine.targetValue, unit)
-                    } else if (done) {
-                        "${stringResource(R.string.today_routine_done_pill)} · $streakLabel"
-                    } else if (isCheckType) {
-                        routine.preferredTime?.let { stringResource(R.string.today_routine_time_format, it) }
-                            ?: "$streakLabel · ${stringResource(R.string.today_routine_daily_no_time)}"
-                    } else {
-                        progressLabel
-                    },
-                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
-                    color = if (done) CompletedGreen else MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-            IconButton(onClick = { onOpenDetail(routine) }, modifier = Modifier.size(metrics.iconButtonSize)) {
-                Icon(
-                    Icons.Rounded.MoreHoriz,
-                    contentDescription = stringResource(R.string.today_routine_open_detail_cd),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
-        if (!isCheckType && targetValue != null && !done) {
-            val target = targetValue
-            val step = if (routine.targetType == "count") 1f else (target / 4f).coerceAtLeast(1f)
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                TextButton(
-                    onClick = { onProgressChange(routine, (currentValue - step).coerceAtLeast(0f), done) },
-                    enabled = !interactionLocked && currentValue > 0f,
-                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.today_routine_decrease),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = if (currentValue > 0f) color else MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.48f),
-                    )
-                }
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(metrics.routineProgressHeight + 3.dp)
-                            .clip(RoundedCornerShape(99.dp))
-                            .background(color.copy(.20f)),
-                    ) {
-                        Box(
-                            Modifier
-                                .fillMaxWidth((currentValue / target).coerceIn(0f, 1f))
-                                .height(metrics.routineProgressHeight + 3.dp)
-                                .clip(RoundedCornerShape(99.dp))
-                                .background(color.copy(alpha = 0.96f)),
-                        )
-                    }
-                    Text(
-                        stringResource(R.string.today_routine_target_hint),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                TextButton(
-                    onClick = { onProgressChange(routine, (currentValue + step).coerceAtMost(target), done) },
-                    enabled = !interactionLocked,
-                    contentPadding = PaddingValues(horizontal = 4.dp, vertical = 0.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.today_routine_increase),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = color,
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ItemRow(
-    done: Boolean,
-    color: Color,
-    tone: Color? = null,
-    content: @Composable RowScope.() -> Unit,
-) {
-    val metrics = rememberTodayLayoutMetrics()
-    val reduceMotion = rememberSystemAnimationsDisabled()
-    val animatedBg by animateColorAsState(
-        targetValue = if (done) {
-            MaterialTheme.colorScheme.surface.copy(alpha = 0.65f)
-        } else {
-            MaterialTheme.colorScheme.surface
-        },
-        animationSpec = if (reduceMotion) snap() else tween(durationMillis = 220),
-        label = "itemRowBg",
-    )
-    val animatedBorder by animateColorAsState(
-        targetValue = if (done) {
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.30f)
-        } else {
-            MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.72f)
-        },
-        animationSpec = if (reduceMotion) snap() else tween(durationMillis = 180),
-        label = "itemRowBorder",
-    )
-    val shape = RoundedCornerShape(metrics.itemCorner)
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape)
-            .background(animatedBg)
-            .border(1.dp, animatedBorder, shape)
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        content = content,
-    )
-}
-
-@Composable
-private fun CheckCircle(done: Boolean, color: Color, enabled: Boolean = true, onClick: () -> Unit) {
-    val markDone = stringResource(R.string.today_mark_done_label)
-    val unmarkDone = stringResource(R.string.today_unmark_done_label)
-    val instantTransition = rememberSystemAnimationsDisabled()
-    val animatedFill by animateColorAsState(
-        targetValue = if (done) color else color.copy(.10f),
-        animationSpec = if (instantTransition) snap() else tween(durationMillis = 140),
-        label = "checkFill",
-    )
-    val animatedScale by animateFloatAsState(
-        targetValue = if (done) 1.06f else 1f,
-        animationSpec = if (instantTransition) snap() else tween(durationMillis = 170, easing = FastOutSlowInEasing),
-        label = "checkScale",
-    )
-    Box(
-        Modifier
-            .minimumInteractiveComponentSize()
-            .alpha(if (enabled) 1f else 0.42f),
-        contentAlignment = Alignment.Center,
-    ) {
-        Box(
-            Modifier
-                .size(32.dp)
-                .graphicsLayer {
-                    scaleX = animatedScale
-                    scaleY = animatedScale
-                }
-                .clip(CircleShape)
-                .background(animatedFill)
-                .border(2.dp, color.copy(if (done) 1f else .45f), CircleShape)
-                .semantics {
-                    role = Role.Checkbox
-                    contentDescription = if (done) unmarkDone else markDone
-                }
-                .clickable(
-                    enabled = enabled,
-                    onClickLabel = if (done) unmarkDone else markDone,
-                    onClick = onClick,
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (done) Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.today_done_cd), tint = Color.White, modifier = Modifier.size(19.dp))
-        }
-    }
-}
-
-@Composable
-private fun EmptyBox(text: String, color: Color) {
-    Row(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(color.copy(.08f)).border(1.dp, color.copy(.14f), RoundedCornerShape(18.dp)).padding(14.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(Modifier.size(28.dp).clip(CircleShape).background(color.copy(.12f)), contentAlignment = Alignment.Center) {
-            Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_empty_hint_icon_cd), tint = color, modifier = Modifier.size(16.dp))
-        }
-        Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    }
-}
-
-@Composable
-internal fun CloseDayCard(
-    completed: Int,
-    total: Int,
-    progress: Float,
-    isClosed: Boolean,
-    mood: String?,
-    closedNote: String?,
-    closedEnergyLevel: Int?,
-    canCloseDay: Boolean,
-    dailySummaryTime: String,
+    subtitle: String,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    badge: String? = null,
+    iconTint: Color = BrandPrimary,
+    iconBg: Color = BrandPrimarySoft,
     onClick: () -> Unit,
 ) {
-    val metrics = rememberTodayLayoutMetrics()
-    val nightSurface = Color(0xFF1B2730)
-    val nightText = Color(0xFFF2F5F3)
-    val nightMuted = Color(0xFFB7C4C0)
-    if (isClosed) {
-        // Day is closed — show summary state
-        val moodColor = when (mood) {
-            "harika" -> CompletedGreen; "iyi" -> CandyPrimary; "kotu", "cok_kotu" -> StreakCoral; else -> CandySecondary
-        }
-        val moodLabel = when (mood) {
-            "harika" -> stringResource(R.string.today_mood_great)
-            "iyi" -> stringResource(R.string.today_mood_good)
-            "normal" -> stringResource(R.string.today_mood_normal)
-            "kotu" -> stringResource(R.string.today_mood_bad)
-            "cok_kotu" -> stringResource(R.string.today_mood_very_bad)
-            else -> stringResource(R.string.today_mood_closed)
-        }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            .border(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.3f), RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
         Box(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.sectionCorner))
-                .background(nightSurface)
-                .border(1.dp, mutedAccent(CompletedGreen).copy(.22f), RoundedCornerShape(metrics.sectionCorner))
-                .padding(if (metrics.isCompact) 14.dp else 16.dp)
-                .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .background(iconBg),
+            contentAlignment = Alignment.Center,
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Pill(stringResource(R.string.today_closed_pill), CompletedGreen)
-                    Pill(moodLabel, moodColor)
-                }
-                Text(stringResource(R.string.today_closed_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = nightText)
-                Text(stringResource(R.string.today_closed_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = nightMuted)
-                closedEnergyLevel?.takeIf { it in 1..5 }?.let { e ->
-                    Text(
-                        stringResource(R.string.today_closed_energy_preview, e),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = nightMuted,
-                    )
-                }
-                closedNote?.trim()?.takeIf { it.isNotEmpty() }?.let { n ->
-                    Text(
-                        stringResource(R.string.today_closed_note_preview, n.take(160)),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = nightMuted,
-                        maxLines = 3,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                TextButton(onClick = onClick, modifier = Modifier.fillMaxWidth().height(40.dp)) {
-                    Text(stringResource(R.string.today_closed_update_btn), color = CompletedGreen, maxLines = 1)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = iconTint,
+                modifier = Modifier.size(22.dp),
+            )
+        }
+
+        Column(modifier = Modifier.weight(1f)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold, fontSize = 15.sp),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                if (badge != null) {
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(50))
+                            .background(BrandPrimary.copy(alpha = 0.15f))
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                    ) {
+                        Text(
+                            text = badge,
+                            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
+                            color = BrandPrimary,
+                        )
+                    }
                 }
             }
-        }
-    } else if (!canCloseDay) {
-        // Before summary time — show locked state
-        com.benimgunlerim.ui.components.WarningCard(
-            modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
-            title = stringResource(R.string.today_locked_pill),
-            body = stringResource(R.string.today_locked_desc, dailySummaryTime),
-            icon = "🌙",
-        )
-    } else {
-        Box(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(metrics.sectionCorner))
-                .background(nightSurface)
-                .border(1.dp, mutedAccent(CandySecondary).copy(.22f), RoundedCornerShape(metrics.sectionCorner))
-                .padding(if (metrics.isCompact) 14.dp else 16.dp)
-                .testTag(com.benimgunlerim.ui.TestTags.TodayCloseDayCard),
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                Pill(stringResource(R.string.today_locked_pill), CandySecondary)
-                Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = nightText)
-                Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = nightMuted)
-                Box(Modifier.fillMaxWidth().height(metrics.headerProgressHeight).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
-                    Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(metrics.headerProgressHeight).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
-                }
-                Button(
-                    onClick = onClick,
-                    modifier = Modifier.fillMaxWidth().height(if (metrics.isCompact) 42.dp else 44.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = ButtonDefaults.buttonColors(CandySecondary, Color.White),
-                ) {
-                    Text(stringResource(R.string.today_active_btn), maxLines = 1)
-                }
-            }
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall.copy(fontSize = 13.sp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
-
-@Composable
-internal fun MissedDayBanner(
-    date: LocalDate,
-    onReview: () -> Unit,
-    onDismiss: () -> Unit,
-) {
-    val label = remember(date) {
-        date.format(DateTimeFormatter.ofPattern("d MMMM, EEEE", Locale("tr", "TR")))
-    }
-    com.benimgunlerim.ui.components.AlertCard(
-        modifier = Modifier.testTag(com.benimgunlerim.ui.TestTags.TodayMissedDayBanner),
-        title = stringResource(R.string.today_missed_label),
-        body = stringResource(R.string.today_missed_emphasis, label),
-        primaryCtaLabel = stringResource(R.string.today_missed_review_btn),
-        onPrimaryCtaClick = onReview,
-        secondaryCtaLabel = stringResource(R.string.today_missed_skip_btn),
-        onSecondaryCtaClick = onDismiss,
-    )
-}
-
-
-@Composable
-private fun Pill(text: String, color: Color) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Bold),
-        color = color,
-        maxLines = 1,
-        overflow = TextOverflow.Ellipsis,
-    )
-}
-
-private fun parseColorOrNull(raw: String): Color? = runCatching {
-    val hex = raw.removePrefix("#")
-    Color(("FF$hex").takeLast(8).toLong(16))
-}.getOrNull()
-
-private fun normalizeMiddleDot(raw: String): String =
-    raw
-        .replace("Â·", "·")
-        .replace("\u00C2\u00B7", "\u00B7")
-
-private fun todayTaskComparator(): Comparator<TodayTaskUi> =
-    compareBy<TodayTaskUi> { it.startTime.isNullOrBlank() }
-        .thenBy { it.startTime ?: "99:99" }
-        .thenBy { it.priority }
-        .thenBy { it.title.lowercase(Locale("tr", "TR")) }
-
-private fun overdueTaskComparator(today: LocalDate): Comparator<TodayTaskUi> =
-    compareBy<TodayTaskUi> { task ->
-        runCatching { LocalDate.parse(task.plannedDate) }.getOrElse { today }
-    }.thenBy { it.priority }
-        .thenBy { it.title.lowercase(Locale("tr", "TR")) }

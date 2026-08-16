@@ -30,25 +30,25 @@ data class TodayColorTokens(
 )
 
 private val LightTodayColorTokens = TodayColorTokens(
-    backgroundTop          = Color(0xFFF7F9FF),
-    backgroundBottom       = Color(0xFFF7F9FF),
+    backgroundTop          = Color(0xFFF8FAFC),
+    backgroundBottom       = Color(0xFFF8FAFC),
     headerSurface          = Color(0xFFFFFFFF),
-    headerBorder           = Color(0xFFBEC9BF),
+    headerBorder           = Color(0xFFE2E8F0),
     tasksSectionSurface    = Color(0xFFFFFFFF),
-    tasksSectionBorder     = Color(0xFFBEC9BF),
+    tasksSectionBorder     = Color(0xFFE2E8F0),
     routinesSectionSurface = Color(0xFFFFFFFF),
-    routinesSectionBorder  = Color(0xFFBEC9BF),
+    routinesSectionBorder  = Color(0xFFE2E8F0),
     itemSurface            = Color(0xFFFFFFFF),
-    itemBorder             = Color(0xFFBEC9BF),
+    itemBorder             = Color(0xFFE2E8F0),
     chipSurface            = Color(0xFFE8F5EE),
-    chipBorder             = Color(0xFFBEC9BF),
+    chipBorder             = Color(0xFFBFE8CF),
     chipText               = Color(0xFF004C2D),
     overdueSurface         = Color(0xFFFFF4E5),
-    overdueBorder          = Color(0xFFDBA36D),
-    closeDaySurface        = Color(0xFFFFFFFF),
-    closeDayBorder         = Color(0xFFBEC9BF),
+    overdueBorder          = Color(0xFFF3D6B0),
+    closeDaySurface        = Color(0xFF172536),
+    closeDayBorder         = Color(0xFF26394D),
     missedDaySurface       = Color(0xFFFFF4E5),
-    missedDayBorder        = Color(0xFFDBA36D),
+    missedDayBorder        = Color(0xFFF3D6B0),
 )
 
 private val DarkTodayColorTokens = TodayColorTokens(
@@ -67,8 +67,8 @@ private val DarkTodayColorTokens = TodayColorTokens(
     chipText               = Color(0xFF6BBF8E),
     overdueSurface         = Color(0xFF2D1E00),
     overdueBorder          = Color(0xFF8A5E20),
-    closeDaySurface        = Color(0xFF0A1012),
-    closeDayBorder         = Color(0xFF2A3840),
+    closeDaySurface        = Color(0xFF172536),
+    closeDayBorder         = Color(0xFF26394D),
     missedDaySurface       = Color(0xFF2D1E00),
     missedDayBorder        = Color(0xFF8A5E20),
 )
@@ -80,3 +80,4 @@ val MaterialTheme.todayColorTokens: TodayColorTokens
 
 fun todayColorTokens(isDark: Boolean = false): TodayColorTokens =
     if (isDark) DarkTodayColorTokens else LightTodayColorTokens
+
