@@ -1,16 +1,16 @@
 # Graph Report - BenimGunlerim  (2026-07-30)
 
 ## Corpus Check
-- 245 files · ~115,426 words
+- 263 files · ~102,562 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 2419 nodes · 3922 edges · 190 communities (108 shown, 82 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 215 edges (avg confidence: 0.8)
+- 2335 nodes · 3626 edges · 188 communities (109 shown, 79 thin omitted)
+- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 253 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3aa5b533`
+- Built from commit: `c7fa8efd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -80,7 +80,7 @@
 - AchievementTracker
 - FakeSubTaskDao
 - 9. Sprint 4 — Routine Interaction Redesign
-- ReportingUncaughtExceptionHandler
+- TodayUiEffect
 - CarryPendingTasksUseCaseTest
 - RoutineDao
 - RoutineRepository
@@ -108,35 +108,37 @@
 - Teknik Görevler
 - Teknik Görevler
 - Gizlilik Politikası Taslağı
-- Sprint 0
-- 6. Sprint 1 — Lokalizasyon ve Metin Kalitesi
+- NotificationMatrixSmokeTest
+- TimeChangeReceiver
 - AppDatabaseMigrationTest
 - .add
-- PlanUiEffect
 - TimeValidation
 - CompletionLogExtensionsTest
 - NotificationMatrixSmokeTest
-- ObserveTodaySnapshotUseCaseTest
 - BenimGunlerim Production Ready 9/10 Sprint Plani
-- Teknik Görevler
 - Kalite Kapıları
 - README.md
 - TaskCompletionState
 - RandomProvider
 - FixedIndexRandomProvider
 - AppTokens
-- CloseDayUseCase
 - Token Hızlı Başvuru
 - Sprint 13 — Room Migration & Schema Güvenliği
+- ColorRailCard
 - Teknik Görevler
 - Production Readiness Planı
 - 4. Sprint Durumu
+- ProgressBar
+- EmptyState
 - ProgressCalculatorTest
-- FakeDailyStateDao
+- SectionBlock
+- AddSubTaskUseCase
+- StatPill
+- UpdateRoutineUseCase
+- TodayActions.kt
 - Dependency ve Platform Sağlığı Politikası
 - Performans Politikası
 - Test Stratejisi
-- 10.2 Günü Kapat Kartı Polish
 - DataExportService
 - NotificationIds
 - TestTags
@@ -148,7 +150,6 @@
 - OperationResult
 - DailySummaryReceiver
 - MorningPlannerReceiver
-- RoutineReminderReceiver
 - SnoozeReceiver
 - TaskReminderReceiver
 - TimeInputValidatorTest
@@ -172,9 +173,7 @@
 - migrate
 - ProgressCalculator
 - CarryPendingTasksUseCase
-- DeleteSubTaskUseCase
 - DeleteTaskUseCase
-- MoveTaskToDateUseCase
 - ObserveSubTasksUseCase
 - RestoreTaskUseCase
 - SaveMissedDaySummaryUseCase
@@ -184,104 +183,99 @@
 - ScrollJankBenchmark
 - NotificationConstants.kt
 - TodayColorTokens.kt
-- DeleteTaskUseCaseTest
 
 ## God Nodes (most connected - your core abstractions)
 1. `TaskEntity` - 97 edges
 2. `AchievementEntity` - 60 edges
 3. `RoutineEntity` - 60 edges
-4. `CompletionLogEntity` - 56 edges
+4. `CompletionLogEntity` - 54 edges
 5. `TodayViewModelTest` - 49 edges
 6. `UserPreferencesRepository` - 47 edges
-7. `UserPreferences` - 42 edges
-8. `TodayViewModel` - 40 edges
-9. `DailyStateEntity` - 39 edges
+7. `UserPreferences` - 40 edges
+8. `DailyStateEntity` - 39 edges
+9. `TodayViewModel` - 39 edges
 10. `GameEngineTest` - 39 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `BenimGunlerimApp()` --calls--> `PlanScreen()`  [INFERRED]
-  app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/plan/PlanScreen.kt
-- `BenimGunlerimApp()` --calls--> `ProgressScreen()`  [INFERRED]
-  app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/progress/ProgressScreen.kt
-- `BenimGunlerimApp()` --calls--> `RoutineDetailScreen()`  [INFERRED]
-  app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/routines/RoutineDetailScreen.kt
-- `BenimGunlerimApp()` --calls--> `RoutinesScreen()`  [INFERRED]
-  app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/routines/RoutinesScreen.kt
-- `BenimGunlerimApp()` --calls--> `SettingsScreen()`  [INFERRED]
-  app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/settings/SettingsScreen.kt
+- `AchievementsScreen()` --calls--> `AchievementRow()`  [INFERRED]
+  app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsScreen.kt → app/src/main/java/com/benimgunlerim/ui/components/organisms/AchievementRow.kt
+- `BenimGunlerimApp()` --calls--> `AchievementsScreen()`  [INFERRED]
+  app/src/main/java/com/benimgunlerim/ui/navigation/AppNavigation.kt → app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsScreen.kt
+- `AchievementRow()` --calls--> `AppBadge()`  [INFERRED]
+  app/src/main/java/com/benimgunlerim/ui/components/organisms/AchievementRow.kt → app/src/main/java/com/benimgunlerim/ui/components/core/AppBadge.kt
+- `ShopItemCard()` --calls--> `AppBadge()`  [INFERRED]
+  app/src/main/java/com/benimgunlerim/ui/components/organisms/ShopItemCard.kt → app/src/main/java/com/benimgunlerim/ui/components/core/AppBadge.kt
+- `TaskRow()` --calls--> `AppBadge()`  [INFERRED]
+  app/src/main/java/com/benimgunlerim/ui/components/organisms/TaskRow.kt → app/src/main/java/com/benimgunlerim/ui/components/core/AppBadge.kt
 
 ## Import Cycles
 - None detected.
 
-## Communities (190 total, 82 thin omitted)
+## Communities (188 total, 79 thin omitted)
 
 ### Community 0 - "TodayScreen.kt"
-Cohesion: 0.05
-Nodes (66): AchievementUnlockOverlay(), bouncyClick(), ConfettiIntensity, Full, LevelUp, Medium, Mini, ConfettiOverlay() (+58 more)
+Cohesion: 0.16
+Nodes (16): bouncyClick(), ConfettiIntensity, Full, LevelUp, Medium, Mini, ConfettiOverlay(), ConfettiParticle (+8 more)
 
 ### Community 1 - "SettingsViewModel"
-Cohesion: 0.05
-Nodes (41): DataCleared, ExportFailed, ExportSaved, ExportWriteFailed, ImportParseFailed, ImportReadFailed, ImportSuccess, SettingsEvent (+33 more)
+Cohesion: 0.07
+Nodes (14): DataCleared, ExportFailed, ExportSaved, ExportWriteFailed, ImportParseFailed, ImportReadFailed, ImportSuccess, SettingsEvent (+6 more)
 
 ### Community 2 - "PlanViewModel"
-Cohesion: 0.07
-Nodes (31): orZero(), PlanAddTaskSheet(), PlanDateNavigationRow(), PlanEditTaskSheet(), PlanPrioritySelector(), PlanScreen(), PlanSnapshotErrorBanner(), toLocalDate() (+23 more)
+Cohesion: 0.12
+Nodes (14): AchievementsScreen(), Composable, Modifier, ScreenScaffold(), BarChart(), BarChartEntry, Dp, Modifier (+6 more)
 
 ### Community 3 - "TodayViewModel"
 Cohesion: 0.18
 Nodes (4): StateFlow, ViewModel, OverdueTasksMoved, TodayViewModel
 
 ### Community 4 - "OnboardingScreen"
-Cohesion: 0.17
-Nodes (21): AddRoutineSheet(), BaseCard(), DaySelector(), EmptyRoutinesCard(), formatRoutineDays(), InfoPill(), androidx, Brush (+13 more)
+Cohesion: 0.10
+Nodes (6): StateFlow, ViewModel, RoutinesViewModel, RoutineCardUi, RoutineDetailRoutineUi, RoutinesViewModelTest
 
 ### Community 5 - "Common.kt"
-Cohesion: 0.08
-Nodes (46): AlertCard(), AnimatedProgressBar(), AppButton(), AppCard(), AppDivider(), CategoryBadge(), CompanionBubble(), EmptyStateView() (+38 more)
+Cohesion: 0.10
+Nodes (16): AppButton(), AppButtonVariant, Danger, Ghost, Primary, Secondary, ImageVector, Modifier (+8 more)
 
 ### Community 6 - "ErrorReporterTest"
 Cohesion: 0.07
 Nodes (8): CrashlyticsErrorReporter, ErrorReporter, LocalErrorReporter, StoredErrorReport, ErrorReporterTest, RecordingReporter, LocalErrorReporterTest, FirebaseCrashlytics
 
 ### Community 8 - "AccessibilityTest"
-Cohesion: 0.04
-Nodes (16): AccessibilityTest, ActivityScenarioRule, AndroidComposeTestRule, ActivityScenarioRule, AndroidComposeTestRule, RoutinesScreenTest, ActivityScenarioRule, AndroidComposeTestRule (+8 more)
+Cohesion: 0.05
+Nodes (14): AccessibilityTest, ActivityScenarioRule, AndroidComposeTestRule, ActivityScenarioRule, AndroidComposeTestRule, RoutinesScreenTest, ActivityScenarioRule, AndroidComposeTestRule (+6 more)
 
 ### Community 9 - "UserPreferencesRepository"
 Cohesion: 0.07
 Nodes (5): Keys, Flow, UserPreferencesRepository, UserPreferencesSource, UserPreferencesWriter
 
 ### Community 10 - "DeleteTaskUseCaseTest"
-Cohesion: 0.08
-Nodes (11): NotificationMatrixSmokeTest, BootReceiver, BroadcastReceiver, Context, Intent, DailySummarySchedule, DailySummaryScheduler, PendingIntent (+3 more)
+Cohesion: 0.27
+Nodes (3): DailySummarySchedule, DailySummaryScheduler, PendingIntent
 
 ### Community 11 - "BenimGünlerim — Tasarım Standardı"
 Cohesion: 0.04
 Nodes (45): 10. Durumlar ve Geri Bildirim, 11. Erişilebilirlik Standardı, 12. İçerik Tonu, 13. Tasarım Karar Kontrol Listesi, 14. İlgili Belgeler, 15. Global UI Kuralları, 16. Tasarım Teslim Kontrolü, 1. Tasarım Vaadi (+37 more)
 
-### Community 12 - "ProgressScreen.kt"
-Cohesion: 0.15
-Nodes (32): ProgressDayUi, AchievementItem(), AchievementsCard(), BalanceBar(), BalanceStat(), ConsistencyCard(), DayRow(), EmptyPanel() (+24 more)
-
 ### Community 13 - "SubTaskEntity"
 Cohesion: 0.07
-Nodes (6): SubTaskEntity, Flow, SubTaskDao, DeleteSubTaskUseCase, FakeSubTaskDao, FakeSubTaskDao
+Nodes (6): SubTaskEntity, Flow, SubTaskDao, ToggleSubTaskUseCase, FakeSubTaskDao, FakeSubTaskDao
+
+### Community 14 - "AchievementEntity"
+Cohesion: 0.15
+Nodes (3): AchievementEntity, StubAchievementDao, FakeAchievementDao
 
 ### Community 16 - "BenimGünlerim — Ürün Felsefesi, Amaçları ve Kullanıcı Akışları"
 Cohesion: 0.07
 Nodes (30): 10. Başarı Kriterleri, 11. Geliştirme Kararları İçin Kısa Filtre, 12. Ürün Yönü, 1. Bu Belgenin Amacı, 2. Ürünün Kısa Tanımı, 3. Temel Ürün Amacı, 4.1 Küçük adımlar önemlidir, 4.2 Kullanıcı suçlanmaz (+22 more)
 
 ### Community 17 - "DailyStateEntity"
-Cohesion: 0.05
+Cohesion: 0.06
 Nodes (9): DailyStateDaoTest, DailyStateRepository, Flow, DailyStateDao, Flow, DailyStateEntity, StubDailyStateDao, FakeDailyStateDao (+1 more)
 
 ### Community 18 - "TaskEntity"
 Cohesion: 0.12
 Nodes (3): TaskEntity, Flow, TaskRepository
-
-### Community 19 - "DataImportService"
-Cohesion: 0.22
-Nodes (10): AppBadge(), AppBadgeVariant, Error, Info, Neutral, Success, Warning, AppColorBadge() (+2 more)
 
 ### Community 21 - "quietHoursActive"
 Cohesion: 0.13
@@ -304,8 +298,8 @@ Cohesion: 0.09
 Nodes (6): AddRoutineUseCase, AddTaskUseCase, StateFlow, ViewModel, OnboardingViewModel, OnboardingViewModelTest
 
 ### Community 27 - "RoutinesViewModelTest"
-Cohesion: 0.12
-Nodes (4): StateFlow, ViewModel, RoutinesViewModel, RoutinesViewModelTest
+Cohesion: 0.07
+Nodes (20): DayTasksCard(), Color, Modifier, PlanMetaPill(), PlanOverdueActionButton(), PlanOverdueCard(), PlanSectionShell(), PlanTaskRow() (+12 more)
 
 ### Community 28 - "CompletionLogEntity"
 Cohesion: 0.15
@@ -317,47 +311,51 @@ Nodes (3): Result, ToggleTaskUseCase, ToggleTaskUseCaseTest
 
 ### Community 30 - "ProgressViewModel"
 Cohesion: 0.06
-Nodes (10): DataImportResult, DataImportService, ImportPayload, JSONArray, T, FakeCompletionLogDao, FakeLocalDataClearer, FakePreferencesWriter (+2 more)
+Nodes (10): DataImportResult, DataImportService, ImportPayload, JSONArray, T, FakeAchievementDao, FakeLocalDataClearer, FakePreferencesWriter (+2 more)
 
 ### Community 31 - "CloseDayUseCaseTest"
 Cohesion: 0.10
 Nodes (3): CloseDayUseCase, Result, CloseDayUseCaseTest
 
 ### Community 33 - "RoutineDetailViewModelTest"
-Cohesion: 0.16
-Nodes (5): StateFlow, ViewModel, RoutineDetailUiState, RoutineDetailViewModel, RoutineDetailViewModelTest
+Cohesion: 0.06
+Nodes (17): DateTimeProvider, FixedDateTimeProvider, SystemDateTimeProvider, BroadcastReceiver, Context, Intent, RoutineReminderReceiver, DetailPill() (+9 more)
 
 ### Community 34 - "TodayViewModelTest"
 Cohesion: 0.10
-Nodes (4): AddSubTaskUseCase, AutoCloseMissedDayUseCase, ObserveDailyStateUseCase, TodayViewModelTest
+Nodes (4): AddSubTaskUseCase, AutoCloseMissedDayUseCase, MoveTaskToDateUseCase, TodayViewModelTest
 
 ### Community 36 - "FakeAchievementDao"
 Cohesion: 0.16
 Nodes (3): AchievementTrackerTest, FakeAchievementDao, Flow
 
+### Community 42 - "Plan Sayfası Uçtan Uca Derin İnceleme (2026-04-30)"
+Cohesion: 0.32
+Nodes (6): AppChoiceChip(), AppFilterChip(), ImageVector, Modifier, AddTaskSheet(), Modifier
+
 ### Community 43 - "ToggleRoutineUseCaseTest"
-Cohesion: 0.19
-Nodes (3): Result, ToggleRoutineUseCase, ToggleRoutineUseCaseTest
+Cohesion: 0.05
+Nodes (14): AchievementUnlocked, GameEvent, LevelUp, RewardEarned, Flow, RewardDisplayService, AlreadyGranted, Granted (+6 more)
 
 ### Community 46 - "FakeCompletionLogDao"
-Cohesion: 0.33
-Nodes (5): AppIcon(), Color, Dp, ImageVector, Modifier
+Cohesion: 0.09
+Nodes (18): AppIcon(), Color, Dp, ImageVector, Modifier, GoldBadge(), Modifier, InfoCard() (+10 more)
 
 ### Community 48 - "Plan Sayfası Sprint Planı (2026-04-30)"
-Cohesion: 0.53
-Nodes (5): DetailPill(), Color, Modifier, RoutineDetailScreen(), StatCard()
+Cohesion: 0.05
+Nodes (14): CompletionLogDaoTest, DatabaseTransactionRunner, T, AppDatabase, LocalDataClearer, LocalDataClearerImpl, AppModule, Context (+6 more)
 
 ### Community 49 - "NotificationHelper.kt"
-Cohesion: 0.06
-Nodes (27): AppCrashHandler, ReportingUncaughtExceptionHandler, BenimGunlerimApplication, RestoreRemindersUseCase, buildSnoozeAction(), ensureMorningNotificationChannel(), ensureRoutineNotificationChannel(), ensureTaskNotificationChannel() (+19 more)
+Cohesion: 0.11
+Nodes (19): AppCrashHandler, ReportingUncaughtExceptionHandler, BenimGunlerimApplication, buildSnoozeAction(), ensureMorningNotificationChannel(), ensureRoutineNotificationChannel(), ensureTaskNotificationChannel(), PendingIntent (+11 more)
 
 ### Community 50 - "10. Sprint 5 — Header, Günü Kapat ve Dünü Tamamla Polish"
 Cohesion: 0.15
 Nodes (13): Faz B — Core Atomlar + Gamification Atomlar, `ui/components/core/AppBadge.kt`, `ui/components/core/AppButton.kt`, `ui/components/core/AppChip.kt`, `ui/components/core/AppDivider.kt`, `ui/components/core/AppIcon.kt`, `ui/components/core/AppSurface.kt`, `ui/components/gamification/CompanionBubble.kt` (+5 more)
 
-### Community 51 - "CompletionLogDao"
-Cohesion: 0.18
-Nodes (3): CompletionLogDao, Flow, CompletionLogEntity
+### Community 54 - "RewardGrantServiceTest"
+Cohesion: 0.11
+Nodes (13): EmptyState(), Composable, Modifier, CloseDayCard(), Modifier, Modifier, TaskRow(), Modifier (+5 more)
 
 ### Community 56 - "today_ui_agent_sprint_sistemi.md"
 Cohesion: 0.17
@@ -366,10 +364,6 @@ Nodes (11): 7 Katmanlı Mimari, BenimGünlerim — Agent Kılavuzu, Demir Kurall
 ### Community 58 - "CompletionLogDaoTest"
 Cohesion: 0.17
 Nodes (12): Faz C — Moleküller + Layout Katmanı, `ui/components/layout/AppTopBar.kt`, `ui/components/layout/ScreenScaffold.kt`, `ui/components/molecules/AlertBanner.kt`, `ui/components/molecules/BarChart.kt`, `ui/components/molecules/ColorRailCard.kt`, `ui/components/molecules/EmptyState.kt`, `ui/components/molecules/InfoCard.kt` (+4 more)
-
-### Community 60 - "DateTimeProvider"
-Cohesion: 0.19
-Nodes (3): DateTimeProvider, FixedDateTimeProvider, SystemDateTimeProvider
 
 ### Community 61 - "TickerProvider"
 Cohesion: 0.22
@@ -384,16 +378,16 @@ Cohesion: 0.16
 Nodes (10): bestStreak(), hitRate(), Flow, ObserveProgressSnapshotUseCase, ProgressSnapshot, StateFlow, ViewModel, ProgressUiState (+2 more)
 
 ### Community 64 - "9. Sprint 4 — Routine Interaction Redesign"
-Cohesion: 0.14
-Nodes (6): AppDatabase, AppModule, Context, CoroutineDispatcher, CoroutineScope, RoomDatabase
+Cohesion: 0.13
+Nodes (11): AppTopBar(), Modifier, BenimGunlerimApp(), Destination, Plan, Progress, Routines, Settings (+3 more)
 
-### Community 65 - "ReportingUncaughtExceptionHandler"
-Cohesion: 0.60
-Nodes (4): AppChoiceChip(), AppFilterChip(), ImageVector, Modifier
-
-### Community 66 - "CarryPendingTasksUseCaseTest"
+### Community 65 - "TodayUiEffect"
 Cohesion: 0.17
 Nodes (7): ActionFailed, DaySaved, TaskCompletedUndo, TaskDeleted, TaskMovedTomorrow, TodayUiEffect, TodayUiState
+
+### Community 66 - "CarryPendingTasksUseCaseTest"
+Cohesion: 0.30
+Nodes (13): androidx, ExplainerCard(), IntensityCard(), IntensityOption, Color, NeedCard(), NeedOption, OnboardingScreen() (+5 more)
 
 ### Community 67 - "RoutineDao"
 Cohesion: 0.13
@@ -412,44 +406,64 @@ Cohesion: 0.23
 Nodes (3): PendingIntent, RoutineReminderScheduler, RoutineReminderSchedulerContract
 
 ### Community 73 - "FakeTaskDao"
-Cohesion: 0.06
-Nodes (31): AchievementRow(), AchievementsScreen(), Color, Modifier, SummaryPill(), AchievementsUiState, AchievementsViewModel, AchievementWithStatus (+23 more)
+Cohesion: 0.14
+Nodes (6): AchievementsUiState, AchievementsViewModel, AchievementWithStatus, StateFlow, ViewModel, AchievementsViewModelTest
 
 ### Community 75 - "FakeTaskDao"
-Cohesion: 0.40
-Nodes (4): AppSurface(), Color, Dp, Modifier
+Cohesion: 0.29
+Nodes (3): PendingIntent, MorningPlannerSchedule, MorningPlannerScheduler
+
+### Community 76 - "BenimGunlerim Production Readiness Denetimi"
+Cohesion: 0.31
+Nodes (5): completedRoutineIds(), Flow, ObserveTodaySnapshotUseCase, TodaySnapshot, Flow
 
 ### Community 77 - "Release Checklist - BenimGünlerim"
 Cohesion: 0.17
 Nodes (11): 10. Supply Chain ve Repo Kontrolleri, 1. Signing Kurulumu, 2. Versioning, 3. Zorunlu Kalite Kapısı, 4. Cihaz Smoke Test, 5. Backup ve Gizlilik Kontrolü, 6. Play Store Akışı, 7. Post-Release (+3 more)
-
-### Community 78 - "11. Sprint 6 — Accessibility ve Hitbox Pass"
-Cohesion: 0.31
-Nodes (5): completedRoutineIds(), Flow, ObserveTodaySnapshotUseCase, TodaySnapshot, Flow
 
 ### Community 79 - "7. Sprint 2 — Semantic Color System"
 Cohesion: 0.67
 Nodes (3): AppDivider(), AppVerticalDivider(), Modifier
 
 ### Community 82 - "AppDestination"
-Cohesion: 0.18
-Nodes (9): Achievements, AppDestination, Onboarding, Plan, Progress, RoutineDetailPattern, Routines, Settings (+1 more)
+Cohesion: 0.17
+Nodes (10): Achievements, AppDestination, Onboarding, Plan, Progress, RoutineDetailPattern, Routines, Settings (+2 more)
 
 ### Community 88 - "6. Birimleri 9/10'a Tasima Plani"
 Cohesion: 0.50
 Nodes (3): Dp, Modifier, LevelDots()
 
+### Community 89 - "Teknik Görevler"
+Cohesion: 0.33
+Nodes (6): AlertBanner(), AlertBannerSeverity, Error, Info, Warning, Modifier
+
+### Community 90 - "Teknik Görevler"
+Cohesion: 0.29
+Nodes (4): BootReceiver, BroadcastReceiver, Context, Intent
+
 ### Community 92 - "Gizlilik Politikası Taslağı"
 Cohesion: 0.18
 Nodes (10): Analitik, Dışa Aktarma ve Geri Yükleme, Gizlilik Politikası Taslağı, Hata Raporlama, İletişim, İzinler, Toplanan Veriler, Veri Silme (+2 more)
+
+### Community 94 - "TimeChangeReceiver"
+Cohesion: 0.33
+Nodes (4): BroadcastReceiver, Context, Intent, TimeChangeReceiver
 
 ### Community 95 - "AppDatabaseMigrationTest"
 Cohesion: 0.29
 Nodes (3): AppDatabaseMigrationTest, Context, SupportSQLiteDatabase
 
+### Community 96 - ".add"
+Cohesion: 0.14
+Nodes (10): AchievementEvaluationService, CloseDaySheet(), Color, Modifier, OutlinedSmallButton(), SheetSectionHeader(), SummaryTile(), TaskDetailSheet() (+2 more)
+
 ### Community 98 - "TimeValidation"
 Cohesion: 0.22
 Nodes (6): TimeInputValidator, TimeValidation, Incomplete, InvalidClock, InvalidFormat, Ok
+
+### Community 102 - "BenimGunlerim Production Ready 9/10 Sprint Plani"
+Cohesion: 0.07
+Nodes (6): PendingIntent, TaskReminderScheduler, TaskReminderSchedulerContract, AddTaskUseCaseTest, DeleteTaskUseCaseTest, UpdateTaskUseCaseTest
 
 ### Community 104 - "Kalite Kapıları"
 Cohesion: 0.18
@@ -479,9 +493,13 @@ Nodes (9): Bildirim ve Background İşleri, Build & Release, CI/CD ve Kalite Kap
 Cohesion: 0.22
 Nodes (9): 4. Sprint Durumu, Sprint 0 — Temel davranış ve davranış kilidi, Sprint 1 — Lokalizasyon ve metin kalitesi, Sprint 2 — Semantic color system, Sprint 3 — Card ve button system, Sprint 4 — Rutin etkileşimi, Sprint 5 — Header, gün kapatma ve missed day polish, Sprint 6 — Erişilebilirlik ve hitbox (+1 more)
 
-### Community 121 - "FakeDailyStateDao"
-Cohesion: 0.46
-Nodes (4): AlreadyGranted, Granted, GrantResult, RewardGrantService
+### Community 117 - "ProgressBar"
+Cohesion: 0.07
+Nodes (23): AppSurface(), Color, Dp, Modifier, Modifier, LevelBadge(), Modifier, StreakBadge() (+15 more)
+
+### Community 118 - "EmptyState"
+Cohesion: 0.22
+Nodes (10): AppBadge(), AppBadgeVariant, Error, Info, Neutral, Success, Warning, AppColorBadge() (+2 more)
 
 ### Community 135 - "Dependency ve Platform Sağlığı Politikası"
 Cohesion: 0.25
@@ -494,10 +512,6 @@ Nodes (7): Büyük Veri Senaryoları (Manual Deep Gate), CI Deep Gate, Gate Komu
 ### Community 137 - "Test Stratejisi"
 Cohesion: 0.22
 Nodes (8): Flaky Test Politikasi, Kısa Vadeli Hedefler, Nightly veya Manual Deep Gate, PR Gate, Release Gate, Risk Odakli Test Alanlari, Test Stratejisi, UI ve Görsel Doğrulama Standardı
-
-### Community 139 - "10.2 Günü Kapat Kartı Polish"
-Cohesion: 0.15
-Nodes (3): AchievementEntity, FakeAchievementDao, FakeAchievementDao
 
 ### Community 152 - "Dış Release Kurulum Kontrolü"
 Cohesion: 0.29
@@ -527,10 +541,6 @@ Nodes (4): DailySummaryReceiver, BroadcastReceiver, Context, Intent
 Cohesion: 0.33
 Nodes (4): BroadcastReceiver, Context, Intent, MorningPlannerReceiver
 
-### Community 161 - "RoutineReminderReceiver"
-Cohesion: 0.33
-Nodes (4): BroadcastReceiver, Context, Intent, RoutineReminderReceiver
-
 ### Community 162 - "SnoozeReceiver"
 Cohesion: 0.33
 Nodes (4): BroadcastReceiver, Context, Intent, SnoozeReceiver
@@ -559,28 +569,20 @@ Nodes (4): fromString(), RoutineTargetType, CHECK, GOAL
 Cohesion: 0.83
 Nodes (3): gradlew script, die(), warn()
 
-### Community 208 - "DeleteSubTaskUseCase"
-Cohesion: 0.40
-Nodes (4): AchievementUnlocked, GameEvent, LevelUp, RewardEarned
-
-### Community 249 - "DeleteTaskUseCaseTest"
-Cohesion: 0.05
-Nodes (11): DatabaseTransactionRunner, T, PendingIntent, TaskReminderScheduler, TaskReminderSchedulerContract, CarryPendingTasksUseCaseTest, DeleteTaskUseCaseTest, UpdateTaskUseCaseTest (+3 more)
-
 ## Knowledge Gaps
-- **261 isolated node(s):** `Keys`, `ValidationError`, `Failure`, `TASK`, `ROUTINE` (+256 more)
+- **268 isolated node(s):** `Keys`, `ValidationError`, `Failure`, `TASK`, `ROUTINE` (+263 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **82 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **79 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `UserPreferences` connect `UserPreferences` to `SettingsViewModel`, `TodayViewModelTest`, `DataExportServiceTest`, `UserPreferencesRepository`, `ToggleRoutineUseCaseTest`, `BenimGunlerim Production Readiness Denetimi`, `11. Sprint 6 — Accessibility ve Hitbox Pass`, `ObserveProgressSnapshotUseCaseTest`, `FakeSubTaskDao`, `FakeAchievementDao`, `ShopViewModelTest`, `JSONObject`, `OnboardingViewModelTest`, `RoutineEntity`, `ProgressViewModel`, `CloseDayUseCaseTest`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
-- **Why does `TaskEntity` connect `TaskEntity` to `PlanViewModel`, `TodayViewModel`, `PlanViewModelTest`, `JSONObject`, `OnboardingViewModelTest`, `RoutineEntity`, `ProgressViewModel`, `TodayViewModelTest`, `TaskDaoTest`, `TaskRepositoryImpl`, `DataExportServiceTest`, `StubTaskDao`, `SettingsViewModelTest`, `TaskDao`, `FakeCompletionLogDao`, `FakePrefs`, `UserPreferences`, `CarryPendingTasksUseCaseTest`, `BenimGunlerim Production Readiness Denetimi`, `DailyStateRepository`, `DeleteTaskUseCase`, `MoveTaskToDateUseCase`, `AddTaskUseCaseTest`, `RestoreTaskUseCase`, `UpdateTaskTitleUseCase`, `UpdateTaskUseCase`, `TaskCompletionState`, `DeleteTaskUseCaseTest`?**
-  _High betweenness centrality (0.098) - this node is a cross-community bridge._
-- **Why does `BenimGunlerimApp()` connect `FakeTaskDao` to `TodayScreen.kt`, `SettingsViewModel`, `PlanViewModel`, `OnboardingScreen`, `AccessibilityTest`, `ProgressScreen.kt`, `Plan Sayfası Sprint Planı (2026-04-30)`, `OnboardingViewModelTest`?**
-  _High betweenness centrality (0.086) - this node is a cross-community bridge._
+- **Why does `TaskEntity` connect `TaskEntity` to `TodayViewModel`, `PlanViewModelTest`, `JSONObject`, `OnboardingViewModelTest`, `RoutinesViewModelTest`, `RoutineEntity`, `ProgressViewModel`, `TodayViewModelTest`, `TaskDaoTest`, `TaskRepositoryImpl`, `DataExportServiceTest`, `SettingsViewModelTest`, `TaskDao`, `FakeCompletionLogDao`, `FakePrefs`, `UserPreferences`, `DateTimeProvider`, `TodayUiEffect`, `DailyStateRepository`, `DeleteTaskUseCase`, `AddTaskUseCaseTest`, `RestoreTaskUseCase`, `UpdateTaskTitleUseCase`, `UpdateTaskUseCase`, `BenimGunlerim Production Ready 9/10 Sprint Plani`, `TaskCompletionState`?**
+  _High betweenness centrality (0.104) - this node is a cross-community bridge._
+- **Why does `UserPreferences` connect `UserPreferences` to `SettingsViewModel`, `TodayViewModelTest`, `DataExportServiceTest`, `UserPreferencesRepository`, `ToggleRoutineUseCaseTest`, `BenimGunlerim Production Readiness Denetimi`, `ObserveProgressSnapshotUseCaseTest`, `FakeSubTaskDao`, `FakeAchievementDao`, `ShopViewModelTest`, `JSONObject`, `OnboardingViewModelTest`, `DateTimeProvider`, `RoutineEntity`, `ProgressViewModel`, `CloseDayUseCaseTest`?**
+  _High betweenness centrality (0.094) - this node is a cross-community bridge._
+- **Why does `TodayViewModelTest` connect `TodayViewModelTest` to `TodayViewModel`, `UserPreferencesRepository`, `SubTaskEntity`, `SystemFeedbackManager`, `OnboardingViewModelTest`, `RoutineEntity`, `CloseDayUseCaseTest`, `RoutineDetailViewModelTest`, `ToggleRoutineUseCaseTest`, `TickerProvider`, `AchievementTracker`, `UpdateRoutineProgressUseCase`, `8. Sprint 3 — Card & Button System`, `BenimGunlerim Production Readiness Denetimi`, `CarryPendingTasksUseCase`, `DeleteTaskUseCase`, `ObserveSubTasksUseCase`, `RestoreTaskUseCase`, `SaveMissedDaySummaryUseCase`, `UpdateTaskTitleUseCase`, `UpdateTaskUseCase`, `ColorRailCard`, `SectionBlock`, `AddSubTaskUseCase`?**
+  _High betweenness centrality (0.077) - this node is a cross-community bridge._
 - **Are the 10 inferred relationships involving `TaskEntity` (e.g. with `.task()` and `.persistedTask()`) actually correct?**
   _`TaskEntity` has 10 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 10 inferred relationships involving `RoutineEntity` (e.g. with `.schedulers_scheduleAndCancel_withoutCrash()` and `.routineIsScheduledFor_returnsFalseWhenTokenHasWhitespace()`) actually correct?**
@@ -588,4 +590,4 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 11 inferred relationships involving `CompletionLogEntity` (e.g. with `.log()` and `.setProgress()`) actually correct?**
   _`CompletionLogEntity` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Keys`, `ValidationError`, `Failure` to the rest of the system?**
-  _261 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _268 weakly-connected nodes found - possible documentation gaps or missing edges._

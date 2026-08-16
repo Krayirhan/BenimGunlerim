@@ -55,8 +55,8 @@
     "semantic_hash": "83a18310d227ca7519c720e43db2e065"
   },
   "app/src/main/java/com/benimgunlerim/MainActivity.kt": {
-    "mtime": 1785423415.85228,
-    "ast_hash": "b9839053d98d8176de6085669ceba751",
+    "mtime": 1785435507.6191638,
+    "ast_hash": "3c3aa51743d988d01d17c046ef23a6e8",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/analytics/AnalyticsTracker.kt": {
@@ -580,13 +580,8 @@
     "semantic_hash": "5c32f55805c6bf9ec612cfe20d1357bb"
   },
   "app/src/main/java/com/benimgunlerim/ui/AppDestination.kt": {
-    "mtime": 1777496092.1373482,
-    "ast_hash": "89fc5f6287bfa2399ccdb46627f1cf01",
-    "semantic_hash": "89fc5f6287bfa2399ccdb46627f1cf01"
-  },
-  "app/src/main/java/com/benimgunlerim/ui/AppNavigation.kt": {
-    "mtime": 1785426836.9980788,
-    "ast_hash": "01febecf3408d19af6029610df349992",
+    "mtime": 1785438188.8699744,
+    "ast_hash": "716baaa4528d49d601f339bff9c6f55d",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/TestTags.kt": {
@@ -595,8 +590,8 @@
     "semantic_hash": "b61d96e7b03afa5cf75292baa7b41283"
   },
   "app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsScreen.kt": {
-    "mtime": 1785404811.5610993,
-    "ast_hash": "04e7c4a7091dffbb6e6f5c77fd87214b",
+    "mtime": 1785435910.443775,
+    "ast_hash": "f2e3827c3e34563174ccd8f35a2cbb07",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/achievements/AchievementsViewModel.kt": {
@@ -609,14 +604,9 @@
     "ast_hash": "f2e52d53a2cce43ccf38345004616b22",
     "semantic_hash": "f2e52d53a2cce43ccf38345004616b22"
   },
-  "app/src/main/java/com/benimgunlerim/ui/components/Common.kt": {
-    "mtime": 1785427587.3238335,
-    "ast_hash": "95d1cc71426164ce51484414a6e8f6e6",
-    "semantic_hash": ""
-  },
   "app/src/main/java/com/benimgunlerim/ui/onboarding/OnboardingScreen.kt": {
-    "mtime": 1785362940.3776257,
-    "ast_hash": "765c692f66bef986779053e569c3e90e",
+    "mtime": 1785435465.1438818,
+    "ast_hash": "32ad71ba2192f1498ecfbe6ad80bd162",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/onboarding/OnboardingViewModel.kt": {
@@ -625,8 +615,8 @@
     "semantic_hash": "5368008d5971f33d2a24b9458ca67c2c"
   },
   "app/src/main/java/com/benimgunlerim/ui/plan/PlanScreen.kt": {
-    "mtime": 1785428429.0793605,
-    "ast_hash": "4bce49134417e0ef49b94319ee62016c",
+    "mtime": 1785438389.6172235,
+    "ast_hash": "864e53c9498ab223b4976ee1fdb4a569",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/plan/PlanTaskListComponents.kt": {
@@ -650,8 +640,8 @@
     "semantic_hash": "60afe0dd06acebc7e5554d21e3beb616"
   },
   "app/src/main/java/com/benimgunlerim/ui/progress/ProgressScreen.kt": {
-    "mtime": 1785427546.6078205,
-    "ast_hash": "e267d68b749af8928781a9fc08178074",
+    "mtime": 1785435902.637815,
+    "ast_hash": "02c3b16aa1993331b636f9a4acea89e0",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/progress/ProgressViewModel.kt": {
@@ -675,8 +665,8 @@
     "semantic_hash": "3efc2f7f52b86d6b6b5f6765d5a2bc4a"
   },
   "app/src/main/java/com/benimgunlerim/ui/routines/RoutinesScreen.kt": {
-    "mtime": 1785428429.083927,
-    "ast_hash": "1eb93e3ae1dee7cca245130c0a585e2e",
+    "mtime": 1785435854.9692967,
+    "ast_hash": "59f412df2e3b3253cf15996e8d98e593",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/routines/RoutinesViewModel.kt": {
@@ -690,8 +680,8 @@
     "semantic_hash": "4e2f98a4e235ee8dc96552cf52b26a05"
   },
   "app/src/main/java/com/benimgunlerim/ui/settings/SettingsScreen.kt": {
-    "mtime": 1785427546.6052928,
-    "ast_hash": "81bbb4467d407cd7349ec0ee99790c78",
+    "mtime": 1785435952.098768,
+    "ast_hash": "bd9f13d70176683cbb75e3bc2b3edd01",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/settings/SettingsViewModel.kt": {
@@ -700,8 +690,8 @@
     "semantic_hash": "6d87f85cd0b33190e317045bfecb5d59"
   },
   "app/src/main/java/com/benimgunlerim/ui/shop/ShopScreen.kt": {
-    "mtime": 1785426828.6844623,
-    "ast_hash": "9fb4da432001abbc28ad3003f1e24b86",
+    "mtime": 1785435933.571063,
+    "ast_hash": "905637651b0c5bec65d271ba652ae4e6",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/shop/ShopViewModel.kt": {
@@ -729,24 +719,14 @@
     "ast_hash": "33b41cb475e32925919830d9ac1bf142",
     "semantic_hash": "33b41cb475e32925919830d9ac1bf142"
   },
-  "app/src/main/java/com/benimgunlerim/ui/today/TodayContent.kt": {
-    "mtime": 1785420435.940206,
-    "ast_hash": "17437749d5d9c8e3253a97a8ceb534e3",
-    "semantic_hash": ""
-  },
-  "app/src/main/java/com/benimgunlerim/ui/today/TodayPreviews.kt": {
-    "mtime": 1778435396.228533,
-    "ast_hash": "ee8e6746825278b222c8870f84ec86cb",
-    "semantic_hash": "ee8e6746825278b222c8870f84ec86cb"
-  },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayRoute.kt": {
     "mtime": 1785365428.5884984,
     "ast_hash": "e80edce502f1e2505abc1f5741221750",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodayScreen.kt": {
-    "mtime": 1785423892.5045617,
-    "ast_hash": "4a22a1e97feeac08393b377f0f397a62",
+    "mtime": 1785436724.0756054,
+    "ast_hash": "98d46a9bde0e21ba796d9216f64cee82",
     "semantic_hash": ""
   },
   "app/src/main/java/com/benimgunlerim/ui/today/TodaySheets.kt": {
@@ -1185,8 +1165,178 @@
     "semantic_hash": ""
   },
   "CLAUDE.md": {
-    "mtime": 1785431150.5927525,
-    "ast_hash": "9bc29fff09cd0a0ed25fa75ae0a6bf77",
+    "mtime": 1785435533.9324737,
+    "ast_hash": "98dfd356a2ecb938eb09eba4c5876514",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppBadge.kt": {
+    "mtime": 1785431490.908459,
+    "ast_hash": "2753e12a9d3a4549728585cb01a612a9",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppButton.kt": {
+    "mtime": 1785431471.3283303,
+    "ast_hash": "d8046f3fe7db240eff2bb87a11e0781a",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppChip.kt": {
+    "mtime": 1785431479.2244575,
+    "ast_hash": "5ec04e7a14b26df9abac63e2e0470763",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppDivider.kt": {
+    "mtime": 1785431499.2091954,
+    "ast_hash": "6502ca473a44c37e793a816de38c1697",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppIcon.kt": {
+    "mtime": 1785431505.1614113,
+    "ast_hash": "1c0d58a0a16427ecb55005311c04105d",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/core/AppSurface.kt": {
+    "mtime": 1785431457.9367242,
+    "ast_hash": "70737150cc282871c69e06bb3eadcdf4",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/CompanionBubble.kt": {
+    "mtime": 1785431550.7732625,
+    "ast_hash": "961a6c6ab57f0c2c34bf7ef2413bb765",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/GoldBadge.kt": {
+    "mtime": 1785431543.2577274,
+    "ast_hash": "25ae335e42ef66d588215d2698dc93f2",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/LevelBadge.kt": {
+    "mtime": 1785431534.3729467,
+    "ast_hash": "0a114f2add9c3647d3c9b50b1acb2dd5",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/LevelDots.kt": {
+    "mtime": 1785431557.884128,
+    "ast_hash": "14232e72a78bc9ae7cc7ba75d6b39f7a",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/StreakBadge.kt": {
+    "mtime": 1785431659.3212721,
+    "ast_hash": "aa2af4f619e78f0866986321cffa5f98",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/gamification/XpBadge.kt": {
+    "mtime": 1785431515.803183,
+    "ast_hash": "9ced8068f97715ed411496e4d864cfad",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/layout/AppTopBar.kt": {
+    "mtime": 1785438113.105556,
+    "ast_hash": "336ed96d2b5a6f8b9934f86628345ceb",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/layout/ScreenScaffold.kt": {
+    "mtime": 1785437595.7815843,
+    "ast_hash": "17d2121241c91789f28e57dd7b9fd734",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/AlertBanner.kt": {
+    "mtime": 1785432276.2831788,
+    "ast_hash": "945365a87b9623d175d2dcecc89b6e52",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/BarChart.kt": {
+    "mtime": 1785432287.2587621,
+    "ast_hash": "b050d494b3de5bf25b26dd06242cded2",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/ColorRailCard.kt": {
+    "mtime": 1785432280.143209,
+    "ast_hash": "ca80d3066e1ac8d51f4b9c06e1cb0fb2",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/EmptyState.kt": {
+    "mtime": 1785432269.9231696,
+    "ast_hash": "0336cbdd654432f0c65e1d9994e83bc9",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/InfoCard.kt": {
+    "mtime": 1785432294.6870885,
+    "ast_hash": "4e5f18e1b1c2f764262031b69baec09e",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/MetricCard.kt": {
+    "mtime": 1785432247.9581707,
+    "ast_hash": "f1a0991295ca725a893dee7195e0098a",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/ProgressBar.kt": {
+    "mtime": 1785432260.7754762,
+    "ast_hash": "764252e2a1539a7f39a4f9358777d155",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/SectionBlock.kt": {
+    "mtime": 1785432242.2731974,
+    "ast_hash": "7f613ecbbd7fd077a30c4481fcd55eff",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/molecules/StatPill.kt": {
+    "mtime": 1785432254.1911943,
+    "ast_hash": "5ee28a5cee09f6bcdf7dca5362276ede",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/AchievementRow.kt": {
+    "mtime": 1785435207.69451,
+    "ast_hash": "772145223339044257419a001bfe8d1a",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/AddRoutineSheet.kt": {
+    "mtime": 1785435174.4616444,
+    "ast_hash": "cf7c86599aeefe54e20d2f951fef6f26",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/AddTaskSheet.kt": {
+    "mtime": 1785435164.770536,
+    "ast_hash": "633e61060b9253a1fe00828154eff36e",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/CloseDayCard.kt": {
+    "mtime": 1785435187.5140963,
+    "ast_hash": "fe9253d612826d8376387096216997d0",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/HeaderProgressCard.kt": {
+    "mtime": 1785435179.7050211,
+    "ast_hash": "23ec8fbca424b851ca16d35da033756b",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/LevelHeroCard.kt": {
+    "mtime": 1785435193.701082,
+    "ast_hash": "a951f6f8b5b2b92f0a2e3df75e1c20ef",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/RoutineRow.kt": {
+    "mtime": 1785435024.3752353,
+    "ast_hash": "fbf970631d11c152c35929a28300984b",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/ShopItemCard.kt": {
+    "mtime": 1785435200.4979997,
+    "ast_hash": "3f78b7e52ca767b1a09f09edff33b901",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/TaskRow.kt": {
+    "mtime": 1785435565.5614555,
+    "ast_hash": "c439608cc99cc84bdfb1c3f126688bb0",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/components/organisms/WeekPicker.kt": {
+    "mtime": 1785435158.9414341,
+    "ast_hash": "1888a151334fd442a8c6f6faebb5da18",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/com/benimgunlerim/ui/navigation/AppNavigation.kt": {
+    "mtime": 1785438256.596154,
+    "ast_hash": "ee14ebbcf17208236cf18d3e5fa11489",
     "semantic_hash": ""
   }
 }
