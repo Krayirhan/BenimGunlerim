@@ -5,7 +5,7 @@
 Bu belge uygulamanın tek tasarım kaynağıdır. Yeni ya da değişen hiçbir ekran aşağıdaki kurallardan istisna oluşturamaz; istisna ancak önce bu belge güncellenirse geçerlidir.
 
 - Ana sekmeler (`Bugün`, `Plan`, `Rutinler`, `İlerleme`, `Ayarlar`) aynı uygulama iskeletini kullanır: durum çubuğunun altında ortak `AppTopBar`, altta ortak navigation bar. Sayfa ismi ayrıca büyük bir ekran başlığı olarak tekrar edilmez.
-- Hero/header yüzeyinde **hiçbir başlık veya açıklama metni render edilmez**. Hero kullanılacaksa yalnızca tarih seçici, yüzde, sayaç ya da durum özeti gibi işlevsel içerik taşır; başlıksız özet yüzeyi `ScreenSummaryCard` kullanılır.
+- Hero/header yüzeyinde **ekran adını tekrarlayan bir başlık veya süs amaçlı açıklama metni render edilmez**. Hero kullanılacaksa yalnızca tarih seçici, yüzde, sayaç, durum özeti ya da canlı bir metrikle (yüzde/sayaç) birlikte görünen kısa bir durum sorusu (örn. Today ilerleme kartındaki "Bugün nasıl gidiyor?") gibi işlevsel içerik taşır; başlıksız özet yüzeyi `ScreenSummaryCard` kullanılır.
 - Ekranlar 4dp/8dp ritmi, standart yatay 16dp boşluk ve bölüm arası 24dp boşluk kullanır. Metin ve ikonlar kapsayıcılarında dikey olarak ortalanır; font padding kapalıdır.
 - Kart, satır yüzeyi, dialog ve seçim kontrollerinin temel yarıçapı 12dp; küçük seçim/chip yarıçapı 8dp'dir. Header gerektiğinde tamamen dikdörtgendir. Daha yuvarlak yüzey kullanılmaz.
 - Kartlar gölgesizdir. Ayrım; 1dp düşük kontrastlı border, yüzey tonu ve 8dp boşlukla kurulur.
@@ -103,7 +103,7 @@ Uygulanan token kaynakları:
 ### Renk kuralları
 
 1. Aynı durum, tüm ekranlarda aynı renk ailesiyle anlatılır.
-2. Bir kartta en fazla bir baskın vurgu rengi kullanılır.
+2. Bir kartta en fazla bir baskın vurgu rengi kullanılır. Bu kural kartın büyük yüzey/dolgu rengini hedefler; Level/Seri/XP gibi küçük, bağımsız anlam taşıyan rozet/chip grupları bu kuralın kapsamı dışındadır ve her biri kendi semantik rengini korur.
 3. Sadece renge dayanarak anlam verilmez; metin, ikon veya şekil desteklenir.
 4. Pasif öğeler düşük kontrastta kaybolmamalıdır.
 5. Kırmızı tonlar yalnızca gerçek uyarı/hata durumlarında kullanılır.
@@ -327,7 +327,7 @@ Yeni bir ekran, bileşen veya değişiklik aşağıdaki sorulara olumlu cevap ve
 Teknik mimari ve veri katmanı açıklamaları bu belgenin kapsamı dışındadır; bunlar kod, Graphify grafiği ve production dokümanlarında tutulur.
 ## Today kart standardı (2026-07-30)
 
-Today ekranındaki kartlar düşük radius ile, köşeye yakın fakat tamamen köşeli olmayan tek bir görsel dil kullanır. Ortak kart radius değeri 12dp'dir; görev satırları flat kalır, rutinler iki veya daha fazla öğe olduğunda düşük radius'lu tek dış kapsayıcı içinde gösterilir. Tek öğeli görev veya rutin bölümünde ikinci bir yüzey katmanı kullanılmaz. Today header ilerleme grafiği yalnızca bugünkü görev ve rutinlerin tamamlanma oranını gösterir; dairesel grafiğin merkezinde yüzde bulunur. Header özet kartı bilerek radius'suz, dikdörtgen bir yüzeydir. Gün sonu alanı pasif, aktif ve tamamlanmış durumların tamamında gece temalı koyu yüzey kullanır; eylem metni günü değerlendirme/kapatma amacını açıkça belirtir.
+Today ekranındaki kartlar düşük radius ile, köşeye yakın fakat tamamen köşeli olmayan tek bir görsel dil kullanır. Ortak kart radius değeri 12dp'dir; görev satırları flat kalır, rutinler iki veya daha fazla öğe olduğunda düşük radius'lu tek dış kapsayıcı içinde gösterilir. Tek öğeli görev veya rutin bölümünde ikinci bir yüzey katmanı kullanılmaz. Today header ilerleme grafiği yalnızca bugünkü görev ve rutinlerin tamamlanma oranını gösterir; dairesel grafiğin merkezinde yüzde bulunur. Header özet kartı bilerek radius'suz, dikdörtgen bir yüzeydir. Gün sonu alanı pasif, aktif ve tamamlanmış durumların tamamında gece temalı koyu yüzey kullanır; eylem metni günü değerlendirme/kapatma amacını açıkça belirtir. Bu koyu yüzey, uygulama temasından (açık/koyu) bağımsız olarak sabit kalır — `Color(0xFF1E293B)` arka plan ve beyaz metin/ikon tonu `CloseDayCard.kt` içinde adlandırılmış sabitler olarak tanımlanır; bu, "hardcoded renk yasak" kuralının tek belgelenmiş istisnasıdır.
 ## Uygulama çerçevesi standardı (2026-07-30)
 
 Ana uygulama sekmelerinin tamamı — Bugün, Plan, Rutinler, İlerleme ve Ayarlar — tek, ortak scaffold içinde aynı `AppTopBar` ve bottom navigation bileşenini kullanır. Topbar; profil, uygulama adı, bildirim aksiyonu ve net alt ayırıcıdan oluşur. Sayfalar kendi içerik başlıklarını taşıyabilir; ancak uygulama düzeyindeki navigasyon çerçevesini yeniden oluşturmaz.

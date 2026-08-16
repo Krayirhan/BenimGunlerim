@@ -20,12 +20,12 @@ Proje **7 katmanlı modüler mimari**ye geçiş sürecinde.
 | Faz | Ne | Durum |
 |-----|-----|-------|
 | **A** | Token sistemi + tema (karanlık mod) | ✅ TAMAMLANDI |
-| **B** | Core atomlar + gamification atomlar | ⬜ Bekliyor |
-| **C** | Moleküller + layout katmanı | ⬜ Bekliyor |
-| **D** | Organizmalar (paylaşımlı bloklar) | ⬜ Bekliyor |
-| **E** | Ekranların baştan yazılması + Common.kt silme | ⬜ Bekliyor |
+| **B** | Core atomlar + gamification atomlar | ✅ TAMAMLANDI |
+| **C** | Moleküller + layout katmanı | ✅ TAMAMLANDI |
+| **D** | Organizmalar (paylaşımlı bloklar) | ✅ TAMAMLANDI |
+| **E** | Ekranların baştan yazılması + Common.kt silme | ✅ TAMAMLANDI |
 
-> Faz A tamamlandı (30 Temmuz 2026). `DesignTokens.kt` doğru değerlere sahip, `Theme.kt` karanlık mod destekliyor.
+> Projenin 7 katmanlı mimariye geçiş süreci (Faz A-E) başarıyla tamamlandı (30 Temmuz 2026).
 
 ---
 
