@@ -47,41 +47,24 @@ object GameEngine {
     )
 
     private val levelThresholds = listOf(
-        100 to "Çaylak",
-        200 to "Başlangıç",
-        350 to "Alışkanlık Avcısı",
-        350 to "Alışkanlık Avcısı",
-        500 to "Rutin Ustası",
-        500 to "Rutin Ustası",
-        500 to "Rutin Ustası",
-        500 to "Rutin Ustası",
-        500 to "Rutin Ustası",
-        750 to "Günlük Kahraman",
-        750 to "Günlük Kahraman",
-        750 to "Günlük Kahraman",
-        750 to "Günlük Kahraman",
-        750 to "Günlük Kahraman",
-        1000 to "Zaman Lordu",
-        1000 to "Zaman Lordu",
-        1000 to "Zaman Lordu",
-        1000 to "Zaman Lordu",
-        1000 to "Zaman Lordu",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
-        1500 to "Efsane",
+        100 to "Başlayan",       // Seviye 1 (0-99 XP)
+        100 to "Gelişimci",      // Seviye 2 (100-199 XP)
+        100 to "İstikrarlı",     // Seviye 3 (200-299 XP)
+        100 to "Ritmini Bulan",  // Seviye 4 (300-399 XP)
+        100 to "Gün Ustası",     // Seviye 5 (400-499 XP)
+        100 to "Dengeli",        // Seviye 6 (500-599 XP)
+        100 to "Kararlı",        // Seviye 7 (600-699 XP)
+        100 to "Yolunda",        // Seviye 8 (700-799 XP)
+        100 to "Güçlü Ritim",    // Seviye 9 (800-899 XP)
+        100 to "Gün Mimarı",     // Seviye 10 (900-999 XP)
+        200 to "Gün Mimarı",     // Seviye 11
+        200 to "Efsane",         // Seviye 12+
     )
 
     fun calculateLevel(totalXp: Int): LevelInfo {
         var remaining = totalXp
         var level = 1
-        var title = "Çaylak"
+        var title = "Başlayan"
 
         for ((threshold, t) in levelThresholds) {
             if (remaining < threshold) {

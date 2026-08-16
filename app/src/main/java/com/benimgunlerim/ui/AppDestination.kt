@@ -8,6 +8,7 @@ sealed class AppDestination(val route: String) {
     data object Progress : AppDestination("progress")
     data object Settings : AppDestination("settings")
     data object Achievements : AppDestination("achievements")
+    data object Shop : AppDestination("shop")
     data object RoutineDetailPattern : AppDestination("routine_detail/{routineId}") {
         const val ARG_ROUTINE_ID: String = "routineId"
         fun createRoute(routineId: String): String = "routine_detail/$routineId"

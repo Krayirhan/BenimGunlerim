@@ -47,6 +47,8 @@ data class UserPreferences(
     val quietHoursEnd: String = "07:00",
     /** XP/kutlama konfeti ve tam ekran kutlama efektleri */
     val celebrationEffectsEnabled: Boolean = true,
+    /** Hafif gün modu aktif olan gün tarihi (yyyy-MM-dd) */
+    val lightDayModeDate: String = "",
 )
 
 /** Exposes user preferences as a [Flow]. Exists to keep [DataExportService] testable without Android context. */
@@ -71,6 +73,7 @@ interface UserPreferencesAccess : UserPreferencesSource {
     suspend fun setQuietHoursStart(time: String)
     suspend fun setQuietHoursEnd(time: String)
     suspend fun setCelebrationEffectsEnabled(enabled: Boolean)
+    suspend fun setLightDayMode(enabled: Boolean, dateStr: String)
 }
 
 @Singleton
@@ -104,6 +107,7 @@ class UserPreferencesRepository @Inject constructor(
         val quietHoursStart = stringPreferencesKey("quiet_hours_start")
         val quietHoursEnd = stringPreferencesKey("quiet_hours_end")
         val celebrationEffectsEnabled = booleanPreferencesKey("celebration_effects_enabled")
+        val lightDayModeDate = stringPreferencesKey("light_day_mode_date")
     }
 
     override val preferences: Flow<UserPreferences> = context.userPreferencesDataStore.data.map { prefs ->
@@ -133,6 +137,7 @@ class UserPreferencesRepository @Inject constructor(
             quietHoursStart = prefs[Keys.quietHoursStart] ?: "22:00",
             quietHoursEnd = prefs[Keys.quietHoursEnd] ?: "07:00",
             celebrationEffectsEnabled = prefs[Keys.celebrationEffectsEnabled] ?: true,
+            lightDayModeDate = prefs[Keys.lightDayModeDate] ?: "",
         )
     }
 
@@ -340,6 +345,12 @@ class UserPreferencesRepository @Inject constructor(
         }
     }
 
+    override suspend fun setLightDayMode(enabled: Boolean, dateStr: String) {
+        context.userPreferencesDataStore.edit { prefs ->
+            prefs[Keys.lightDayModeDate] = if (enabled) dateStr else ""
+        }
+    }
+
     override suspend fun replacePreferences(preferences: UserPreferences) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.onboardingCompleted] = preferences.onboardingCompleted
@@ -368,6 +379,7 @@ class UserPreferencesRepository @Inject constructor(
             prefs[Keys.quietHoursStart] = preferences.quietHoursStart
             prefs[Keys.quietHoursEnd] = preferences.quietHoursEnd
             prefs[Keys.celebrationEffectsEnabled] = preferences.celebrationEffectsEnabled
+            prefs[Keys.lightDayModeDate] = preferences.lightDayModeDate
         }
     }
 }

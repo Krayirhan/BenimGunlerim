@@ -1,6 +1,7 @@
 package com.benimgunlerim.domain.service
 
 import android.util.Log
+import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.FeedbackManager
 import com.benimgunlerim.domain.model.GameEvent
 import kotlinx.coroutines.flow.Flow
@@ -9,21 +10,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Orchestrates reward and achievement display events.
- * Extracted from TodayViewModel to separate UI display logic from state management.
- *
- * Responsibilities:
- * - Emit GameEvent (RewardEarned, LevelUp) based on GrantResult
- * - Coordinate with FeedbackManager for haptic/audio feedback
- * - Handle achievement unlock display
- * - Deduplicate already-granted rewards
- */
 @Singleton
 class RewardDisplayService @Inject constructor(
     private val feedbackManager: FeedbackManager,
 ) {
-    private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
+    private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 16)
     val gameEvents: Flow<GameEvent> = _gameEvents.asSharedFlow()
 
     companion object {
@@ -31,23 +22,17 @@ class RewardDisplayService @Inject constructor(
         private const val TAG = "RewardDisplayService"
     }
 
-    /**
-     * Process task completion grant result and emit appropriate display events.
-     * Handles task completion reward, all-tasks bonus, and level-up indicators.
-     */
     suspend fun onTaskCompleted(
         taskId: String,
         taskReward: GrantResult,
         allTasksBonus: GrantResult? = null,
     ) {
-        // Emit main task completion reward
         processGrantResult(
             grantResult = taskReward,
             eventLabel = "task_completion",
             logContextId = taskId,
         )
 
-        // Emit all-tasks bonus if applicable
         allTasksBonus?.let {
             processGrantResult(
                 grantResult = it,
@@ -57,9 +42,6 @@ class RewardDisplayService @Inject constructor(
         }
     }
 
-    /**
-     * Process routine completion grant result and emit appropriate display events.
-     */
     suspend fun onRoutineCompleted(
         routineId: String,
         grantResult: GrantResult,
@@ -71,20 +53,49 @@ class RewardDisplayService @Inject constructor(
         )
     }
 
-    /**
-     * Process achievement unlock and emit display event.
-     */
+    suspend fun onAchievementUnlocked(
+        def: AchievementDef,
+    ) {
+        feedbackManager.celebrationBurst()
+        _gameEvents.tryEmit(
+            GameEvent.AchievementUnlocked(
+                id = def.id,
+                emoji = def.emoji,
+                title = def.title,
+                description = def.description,
+                xpReward = def.xpReward,
+            ),
+        )
+    }
+
     suspend fun onAchievementUnlocked(
         emoji: String,
         title: String,
     ) {
         feedbackManager.celebrationBurst()
-        _gameEvents.tryEmit(GameEvent.AchievementUnlocked(emoji, title))
+        _gameEvents.tryEmit(
+            GameEvent.AchievementUnlocked(
+                emoji = emoji,
+                title = title,
+            ),
+        )
     }
 
-    /**
-     * Process daily bonus (e.g., perfect day, all routines completed).
-     */
+    suspend fun emitMiniBanner(message: String, icon: String = "✨") {
+        feedbackManager.tapLight()
+        _gameEvents.tryEmit(GameEvent.MiniBanner(message, icon))
+    }
+
+    suspend fun emitAllTasksCompleted(totalCount: Int, xpBonus: Int = 25) {
+        feedbackManager.celebrationBurst()
+        _gameEvents.tryEmit(GameEvent.AllTasksCompleted(totalCount, xpBonus))
+    }
+
+    suspend fun emitAllRoutinesCompleted(streak: Int, xpBonus: Int = 30) {
+        feedbackManager.celebrationBurst()
+        _gameEvents.tryEmit(GameEvent.AllRoutinesCompleted(streak, xpBonus))
+    }
+
     suspend fun onDailyBonusEarned(
         xp: Int,
         gold: Int,
@@ -100,13 +111,9 @@ class RewardDisplayService @Inject constructor(
     ) {
         when (grantResult) {
             is GrantResult.Granted -> {
-                // Haptic feedback for reward
                 feedbackManager.tapMedium()
-
-                // Emit reward earned event
                 _gameEvents.tryEmit(GameEvent.RewardEarned(grantResult.xpGranted, grantResult.goldGranted))
 
-                // Handle level up if applicable
                 grantResult.leveledUp?.let { level ->
                     feedbackManager.levelUpVibration()
                     _gameEvents.tryEmit(
@@ -117,13 +124,15 @@ class RewardDisplayService @Inject constructor(
                     )
                 }
 
-                Log.d(TAG, "Reward displayed: $eventLabel (xp=${grantResult.xpGranted}, " +
-                    "gold=${grantResult.goldGranted}, levelUp=${grantResult.leveledUp?.level})")
+                Log.d(
+                    TAG,
+                    "Reward displayed: $eventLabel (xp=${grantResult.xpGranted}, " +
+                        "gold=${grantResult.goldGranted}, levelUp=${grantResult.leveledUp?.level})",
+                )
             }
 
             is GrantResult.AlreadyGranted -> {
                 Log.d(TAG, "Reward already granted for: $eventLabel (context=$logContextId)")
-                // No display event for duplicate rewards
             }
         }
     }

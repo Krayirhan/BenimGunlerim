@@ -10,7 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.ui.onboarding.OnboardingViewModel
-import com.benimgunlerim.ui.BenimGunlerimApp
+import com.benimgunlerim.ui.navigation.BenimGunlerimApp
 import com.benimgunlerim.ui.theme.BenimGunlerimTheme
 import com.benimgunlerim.notifications.NotificationConstants
 import dagger.hilt.android.AndroidEntryPoint
