@@ -146,6 +146,29 @@ val coverageExclusions = listOf(
     "**/data/local/entity/**",
     "**/MainActivity*.*",
     "**/BenimGunlerimApplication*.*",
+    // ui/today: saf Compose UI parçaları (2026-08-17 TodayScreen bölünmesiyle
+    // eklendi). Bu dosyalar iş mantığı içermez, dalları androidTest/Compose UI
+    // testiyle ölçülmeli — JVM JaCoCo branch oranını yapay olarak boğmasınlar.
+    // TodayViewModel/TodayTaskActions/TodayRoutineActions/TodayDayCloseActions/
+    // TodayUiModelMappers/TodayMissedDayFlow BİLEREK bu listede DEĞİL — onlar
+    // gerçek iş mantığı, TodayViewModelTest ile kapsanıyor.
+    "**/ui/today/TodayRoute*.*",
+    "**/ui/today/TodayContentList*.*",
+    "**/ui/today/TodayModalsHost*.*",
+    "**/ui/today/TodayEventEffects*.*",
+    "**/ui/today/TodayBanners*.*",
+    "**/ui/today/TodayFabMenu*.*",
+    "**/ui/today/TodayListContainers*.*",
+    "**/ui/today/CloseDaySheet*.*",
+    "**/ui/today/CloseDayStep*.*",
+    "**/ui/today/CloseSheetModal*.*",
+    "**/ui/today/SheetCommonComponents*.*",
+    "**/ui/today/TaskDetailSheet*.*",
+    "**/ui/today/TaskDetailDialogs*.*",
+    "**/ui/today/TaskDetailFormFields*.*",
+    "**/ui/today/TaskDetailOptionsSection*.*",
+    "**/ui/today/TaskDetailSubtasksSection*.*",
+    "**/ui/today/MissedDayReviewSheet*.*",
 )
 
 tasks.register<JacocoReport>("jacocoDebugUnitTestReport") {
