@@ -2,9 +2,13 @@ package com.benimgunlerim.domain.usecase
 
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.DailyStateRepository
+import com.benimgunlerim.data.RoutineRepository
+import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
+import com.benimgunlerim.data.local.entity.RoutineEntity
+import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.DateTimeProvider
 import io.mockk.every
@@ -18,6 +22,8 @@ import org.junit.Before
 import org.junit.Test
 
 class ObserveProgressSnapshotUseCaseTest {
+    private val taskRepository: TaskRepository = mockk()
+    private val routineRepository: RoutineRepository = mockk()
     private val dailyStateRepository: DailyStateRepository = mockk()
     private val completionLogRepository: CompletionLogRepository = mockk()
     private val prefsRepository: UserPreferencesRepository = mockk()
@@ -27,6 +33,8 @@ class ObserveProgressSnapshotUseCaseTest {
     private val fixedDate = LocalDate.of(2026, 4, 29)
 
     private val useCase = ObserveProgressSnapshotUseCase(
+        taskRepository = taskRepository,
+        routineRepository = routineRepository,
         dailyStateRepository = dailyStateRepository,
         completionLogRepository = completionLogRepository,
         prefsRepository = prefsRepository,
@@ -36,6 +44,8 @@ class ObserveProgressSnapshotUseCaseTest {
 
     @Before
     fun setUp() {
+        every { taskRepository.observeRange(any(), any()) } returns flowOf(emptyList())
+        every { routineRepository.observeActive() } returns flowOf(emptyList())
         every { dailyStateRepository.observeRecent(any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         every { prefsRepository.preferences } returns flowOf(UserPreferences())
@@ -76,11 +86,47 @@ class ObserveProgressSnapshotUseCaseTest {
 
     @Test
     fun invoke_calculatesHitRatesFromLogs() = runTest {
+        val createdMillis = fixedDate.atStartOfDay(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+        val routine = RoutineEntity(
+            id = "r1",
+            name = "Rutin 1",
+            description = null,
+            targetDays = fixedDate.dayOfWeek.name,
+            preferredTime = null,
+            color = null,
+            isArchived = false,
+            createdAt = createdMillis,
+            updatedAt = createdMillis,
+        )
+        val task1 = TaskEntity(
+            id = "t1",
+            title = "Görev 1",
+            note = null,
+            plannedDate = fixedDate.toString(),
+            startTime = null,
+            endTime = null,
+            category = null,
+            color = null,
+            completionState = "completed",
+            completedAt = 100L,
+            sourceTemplateId = null,
+            createdAt = createdMillis,
+            updatedAt = createdMillis,
+        )
+        val task2 = task1.copy(
+            id = "t2",
+            title = "Görev 2",
+            completionState = "pending",
+            completedAt = null,
+        )
         val logs = listOf(
             CompletionLogEntity("a", "task", "t1", fixedDate.toString(), 1L, "completed", null, null),
             CompletionLogEntity("b", "task", "t2", fixedDate.toString(), 2L, "skipped", null, null),
             CompletionLogEntity("c", "routine", "r1", fixedDate.toString(), 3L, "completed", null, null),
         )
+
+        every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        every { taskRepository.observeRange(any(), any()) } returns flowOf(listOf(task1, task2))
         every { completionLogRepository.observeAll() } returns flowOf(logs)
 
         val snapshot = useCase().first()

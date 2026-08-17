@@ -23,9 +23,16 @@ class CompletionLogExtensionsTest {
     }
 
     @Test
-    fun currentStreakReturnsZeroWhenTodayIsMissing() {
+    fun currentStreakPreservesYesterdayStreakWhenTodayNotCompletedYet() {
         val today = LocalDate.of(2026, 4, 12)
         val logs = listOf(completionLog(today.minusDays(1)), completionLog(today.minusDays(2)))
+        assertEquals(2, logs.currentStreak(today))
+    }
+
+    @Test
+    fun currentStreakReturnsZeroWhenStreakIsBroken() {
+        val today = LocalDate.of(2026, 4, 12)
+        val logs = listOf(completionLog(today.minusDays(2)), completionLog(today.minusDays(3)))
         assertEquals(0, logs.currentStreak(today))
     }
 

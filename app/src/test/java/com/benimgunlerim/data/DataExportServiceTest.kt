@@ -81,6 +81,7 @@ class DataExportServiceTest {
     private class StubSubTaskDao(private val records: List<SubTaskEntity>) : SubTaskDao {
         override suspend fun getAll() = records
         override fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>> = error("stub")
+        override suspend fun getByTaskId(taskId: String): List<SubTaskEntity> = error("stub")
         override suspend fun insert(subTask: SubTaskEntity) = error("stub")
         override suspend fun insertAll(subTasks: List<SubTaskEntity>) = error("stub")
         override suspend fun update(subTask: SubTaskEntity) = error("stub")

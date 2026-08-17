@@ -6,7 +6,24 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 /**
  * Room veritabanı migration geçmişi.
  *
- * KURAL: Her schema değişikliğinde:
+ * ## Politika kararı (Sprint 1 — Stabilizasyon, 2026-08-16)
+ *
+ * v1-v6 için migration nesnesi yoktur ve bilerek yazılmayacaktır: uygulama
+ * versionCode=1 / versionName=0.1.0 ile hâlâ pre-release aşamasındadır — hiçbir
+ * Play Store track'ine (internal dahil) yayınlanmamıştır, `app/schemas/` altında
+ * yalnızca `7.json` bulunur (v1-6 için şema anlık görüntüsü hiç commit edilmemiş),
+ * repoda release tag'i yoktur. Yani "gerçek kullanıcıda v1-6 şemasıyla veri var"
+ * senaryosu yoktur; bu geçmişi yapay migration'larla üretmenin katma değeri yok.
+ *
+ * Karar: v1-6 "desteklenmeyen pre-release şema" sayılır.
+ * `AppModule.provideDatabase()` bu aralık için `fallbackToDestructiveMigrationFrom`
+ * kullanır — eski bir dev/test cihazında v1-6 şema bulunursa veritabanı sessizce
+ * yeniden oluşturulur (crash yerine).
+ *
+ * Bu karardan sonraki (v7 → v8 ve devamı, yani ilk gerçek yayından itibaren)
+ * HER schema değişikliği migration zorunludur — fallback bir daha genişletilmez.
+ *
+ * KURAL: Her schema değişikliğinde (v7'den itibaren):
  * 1. AppDatabase.version artırılır.
  * 2. Burada yeni bir MIGRATION_ nesnesi yazılır.
  * 3. AppModule.provideDatabase() içine .addMigrations(MIGRATION_X_Y) eklenir.

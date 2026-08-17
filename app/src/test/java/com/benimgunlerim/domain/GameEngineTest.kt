@@ -256,8 +256,8 @@ class GameEngineTest {
 
     @Test
     fun calculateLevel_atLevel3Threshold_isLevel3() {
-        // Level 1→100, Level 2→200, so 300 total XP = level 3
-        val info = GameEngine.calculateLevel(300)
+        // Level 1 requires 100 XP (0-99), Level 2 requires 100 XP (100-199), so 200 total XP = level 3
+        val info = GameEngine.calculateLevel(200)
         assertEquals(3, info.level)
         assertEquals(0, info.currentXp)
     }

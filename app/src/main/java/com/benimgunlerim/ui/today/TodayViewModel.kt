@@ -17,10 +17,12 @@ import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
+import com.benimgunlerim.domain.LightDayMode
 import com.benimgunlerim.domain.TickerProvider
 import com.benimgunlerim.domain.model.GameEvent
 import com.benimgunlerim.domain.service.RewardDisplayService
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
+import com.benimgunlerim.domain.usecase.AddTasksBatchUseCase
 import com.benimgunlerim.domain.usecase.AddSubTaskUseCase
 import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.AutoCloseMissedDayUseCase
@@ -106,6 +108,12 @@ sealed class TodayUiEffect {
     data class ActionFailed(val messageRes: Int) : TodayUiEffect()
 }
 
+/** Snapshot of a deleted task and its subtasks, kept in memory to power Undo. */
+private data class DeletedTaskSnapshot(
+    val task: TaskEntity,
+    val subTasks: List<SubTaskEntity>,
+)
+
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodayViewModel @Inject constructor(
@@ -116,6 +124,7 @@ class TodayViewModel @Inject constructor(
     private val rewardDisplayService: RewardDisplayService,
     private val dateTimeProvider: DateTimeProvider,
     private val addTaskUseCase: AddTaskUseCase,
+    private val addTasksBatchUseCase: AddTasksBatchUseCase,
     private val updateTaskTitleUseCase: UpdateTaskTitleUseCase,
     private val moveTaskToDateUseCase: MoveTaskToDateUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
@@ -145,7 +154,7 @@ class TodayViewModel @Inject constructor(
 ) : ViewModel() {
     private var taskEntitiesById: Map<String, TaskEntity> = emptyMap()
     private var routineEntitiesById: Map<String, RoutineEntity> = emptyMap()
-    private val deletedTasksById = mutableMapOf<String, TaskEntity>()
+    private val deletedTasksById = mutableMapOf<String, DeletedTaskSnapshot>()
     private val _uiEffects = MutableSharedFlow<TodayUiEffect>(extraBufferCapacity = 16)
     val uiEffects = _uiEffects.asSharedFlow()
 
@@ -244,7 +253,7 @@ class TodayViewModel @Inject constructor(
         routineEntitiesById = snapshot.routines.associateBy { it.id }
         val summaryTime = snapshot.gameState.dailySummaryTime
         val canClose = runCatching { dateTimeProvider.currentTime() >= java.time.LocalTime.parse(summaryTime) }.getOrDefault(false)
-        val isLightDay = snapshot.gameState.lightDayModeDate == dateTimeProvider.today().toString()
+        val isLightDay = LightDayMode.isActiveOn(snapshot.gameState.lightDayModeDate, dateTimeProvider.today())
         TodayUiState(
             tasks = snapshot.tasks.map { it.toUiModel() },
             routines = snapshot.routines.map { it.toUiModel(snapshot.routineStreaks[it.id] ?: 0) },
@@ -276,15 +285,10 @@ class TodayViewModel @Inject constructor(
 
     fun addTasksFromBrainDump(taskTitles: List<String>) {
         viewModelScope.launch {
-            val today = dateTimeProvider.today()
-            taskTitles.forEach { title ->
-                if (title.isNotBlank()) {
-                    addTaskUseCase(
-                        title = title.trim(),
-                        date = today,
-                        priority = 1,
-                    )
-                }
+            runCatching {
+                addTasksBatchUseCase(titles = taskTitles, date = dateTimeProvider.today(), priority = 1)
+            }.onFailure {
+                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_generic))
             }
         }
     }
@@ -437,8 +441,8 @@ class TodayViewModel @Inject constructor(
         if (isTodayClosed()) return
         viewModelScope.launch {
             runCatching { deleteTaskUseCase(task) }
-                .onSuccess {
-                    deletedTasksById[task.id] = task
+                .onSuccess { subTasks ->
+                    deletedTasksById[task.id] = DeletedTaskSnapshot(task, subTasks)
                     _uiEffects.tryEmit(TodayUiEffect.TaskDeleted(task.id))
                 }
                 .onFailure {
@@ -452,14 +456,14 @@ class TodayViewModel @Inject constructor(
         deleteTask(task)
     }
 
-    fun restoreTask(task: TaskEntity) {
+    fun restoreTask(task: TaskEntity, subTasks: List<SubTaskEntity> = emptyList()) {
         if (isTodayClosed()) return
-        viewModelScope.launch { restoreTaskUseCase(task) }
+        viewModelScope.launch { restoreTaskUseCase(task, subTasks) }
     }
 
     fun restoreDeletedTask(taskId: String) {
         val deleted = deletedTasksById.remove(taskId) ?: return
-        restoreTask(deleted)
+        restoreTask(deleted.task, deleted.subTasks)
     }
 
     fun undoTaskToggle(taskId: String) {

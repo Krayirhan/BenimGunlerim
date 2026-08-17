@@ -13,6 +13,9 @@ interface SubTaskDao {
     @Query("SELECT * FROM subtasks WHERE taskId = :taskId ORDER BY sortOrder ASC, createdAt ASC")
     fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>>
 
+    @Query("SELECT * FROM subtasks WHERE taskId = :taskId ORDER BY sortOrder ASC, createdAt ASC")
+    suspend fun getByTaskId(taskId: String): List<SubTaskEntity>
+
     @Query("SELECT * FROM subtasks ORDER BY taskId ASC, sortOrder ASC, createdAt ASC")
     suspend fun getAll(): List<SubTaskEntity>
 

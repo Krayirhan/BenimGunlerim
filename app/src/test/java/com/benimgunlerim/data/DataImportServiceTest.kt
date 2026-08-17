@@ -63,6 +63,7 @@ class DataImportServiceTest {
     private class FakeSubTaskDao : SubTaskDao {
         val records = mutableListOf<SubTaskEntity>()
         override fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>> = flowOf(records.filter { it.taskId == taskId })
+        override suspend fun getByTaskId(taskId: String): List<SubTaskEntity> = records.filter { it.taskId == taskId }
         override suspend fun getAll(): List<SubTaskEntity> = records.toList()
         override suspend fun insert(subTask: SubTaskEntity) { records.add(subTask) }
         override suspend fun insertAll(subTasks: List<SubTaskEntity>) { records.addAll(subTasks) }

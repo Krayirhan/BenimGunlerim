@@ -18,6 +18,7 @@ import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.domain.service.GrantResult
 import com.benimgunlerim.domain.service.RewardDisplayService
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
+import com.benimgunlerim.domain.usecase.AddTasksBatchUseCase
 import com.benimgunlerim.domain.usecase.AddSubTaskUseCase
 import com.benimgunlerim.domain.usecase.AutoCloseMissedDayUseCase
 import com.benimgunlerim.domain.usecase.CarryPendingTasksUseCase
@@ -37,6 +38,9 @@ import com.benimgunlerim.domain.usecase.ToggleSubTaskUseCase
 import com.benimgunlerim.domain.usecase.ToggleRoutineUseCase
 import com.benimgunlerim.domain.usecase.ToggleTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase
+import com.benimgunlerim.domain.usecase.UpdateRoutineUseCase
+import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
+import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
 import com.benimgunlerim.ui.theme.CandyPrimary
@@ -86,6 +90,7 @@ class TodayViewModelTest {
     private val feedbackManager: FeedbackManager = mockk(relaxed = true)
     private val dateTimeProvider: DateTimeProvider = mockk()
     private val addTaskUseCase: AddTaskUseCase = mockk(relaxed = true)
+    private val addTasksBatchUseCase: AddTasksBatchUseCase = mockk(relaxed = true)
     private val updateTaskTitleUseCase: UpdateTaskTitleUseCase = mockk(relaxed = true)
     private val moveTaskToDateUseCase: MoveTaskToDateUseCase = mockk(relaxed = true)
     private val updateTaskUseCase: UpdateTaskUseCase = mockk(relaxed = true)
@@ -99,11 +104,17 @@ class TodayViewModelTest {
     private val toggleTaskUseCase: ToggleTaskUseCase = mockk(relaxed = true)
     private val toggleRoutineUseCase: ToggleRoutineUseCase = mockk(relaxed = true)
     private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase = mockk(relaxed = true)
+    private val updateRoutineUseCase: UpdateRoutineUseCase = mockk(relaxed = true)
+    private val skipRoutineUseCase: SkipRoutineUseCase = mockk(relaxed = true)
+    private val archiveRoutineUseCase: ArchiveRoutineUseCase = mockk(relaxed = true)
     private val closeDayUseCase: CloseDayUseCase = mockk(relaxed = true)
     private val carryPendingTasksUseCase: CarryPendingTasksUseCase = mockk(relaxed = true)
     private val observeDailyStateUseCase: ObserveDailyStateUseCase = mockk(relaxed = true)
     private val autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase = mockk(relaxed = true)
     private val saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase = mockk(relaxed = true)
+    private val taskRepository: com.benimgunlerim.data.TaskRepository = mockk(relaxed = true)
+    private val routineRepository: com.benimgunlerim.data.RoutineRepository = mockk(relaxed = true)
+    private val completionLogRepository: com.benimgunlerim.data.CompletionLogRepository = mockk(relaxed = true)
     private val tickerProvider: TickerProvider = mockk()
     private val observeTodaySnapshotUseCase: ObserveTodaySnapshotUseCase = mockk()
     private val rewardDisplayService: RewardDisplayService = mockk(relaxed = true)
@@ -132,8 +143,8 @@ class TodayViewModelTest {
                 }
             }
         }
-        coEvery { rewardDisplayService.onAchievementUnlocked(any(), any()) } coAnswers {
-            gameEventFlow.tryEmit(GameEvent.AchievementUnlocked(firstArg(), secondArg()))
+        coEvery { rewardDisplayService.onAchievementUnlocked(any<String>(), any<String>()) } coAnswers {
+            gameEventFlow.tryEmit(GameEvent.AchievementUnlocked(emoji = firstArg(), title = secondArg()))
         }
 
         every { tickerProvider.minuteTicker() } returns flowOf(Unit)
@@ -164,6 +175,32 @@ class TodayViewModelTest {
         advanceUntilIdle()
 
         coVerify { addTaskUseCase("Alışveriş yap", fixedDate, any(), any(), any(), any(), any()) }
+    }
+
+    // ── addTasksFromBrainDump ────────────────────────────────────────────────
+
+    @Test
+    fun addTasksFromBrainDump_delegatesToBatchUseCase() = runTest {
+        val titles = listOf("Su iç", "Kitap oku")
+
+        viewModel.addTasksFromBrainDump(titles)
+        advanceUntilIdle()
+
+        coVerify { addTasksBatchUseCase(titles = titles, date = fixedDate, priority = 1) }
+    }
+
+    @Test
+    fun addTasksFromBrainDump_batchFailure_emitsActionFailed() = runTest {
+        coEvery { addTasksBatchUseCase(any(), any(), any()) } throws RuntimeException("db error")
+
+        val effects = mutableListOf<TodayUiEffect>()
+        val collectJob = launch { viewModel.uiEffects.toList(effects) }
+
+        viewModel.addTasksFromBrainDump(listOf("Su iç"))
+        advanceUntilIdle()
+
+        assertTrue(effects.any { it is TodayUiEffect.ActionFailed })
+        collectJob.cancel()
     }
 
     // ── toggleTask ────────────────────────────────────────────────────────────
@@ -254,6 +291,7 @@ class TodayViewModelTest {
             rewardDisplayService,
             dateTimeProvider,
             addTaskUseCase,
+            addTasksBatchUseCase,
             updateTaskTitleUseCase,
             moveTaskToDateUseCase,
             updateTaskUseCase,
@@ -267,11 +305,17 @@ class TodayViewModelTest {
             toggleTaskUseCase,
             toggleRoutineUseCase,
             updateRoutineProgressUseCase,
+            updateRoutineUseCase,
+            skipRoutineUseCase,
+            archiveRoutineUseCase,
             closeDayUseCase,
             carryPendingTasksUseCase,
             observeDailyStateUseCase,
             autoCloseMissedDayUseCase,
             saveMissedDaySummaryUseCase,
+            taskRepository,
+            routineRepository,
+            completionLogRepository,
             tickerProvider,
             observeTodaySnapshotUseCase,
         )
@@ -522,6 +566,7 @@ class TodayViewModelTest {
         rewardDisplayService,
         dateTimeProvider,
         addTaskUseCase,
+        addTasksBatchUseCase,
         updateTaskTitleUseCase,
         moveTaskToDateUseCase,
         updateTaskUseCase,
@@ -535,11 +580,17 @@ class TodayViewModelTest {
         toggleTaskUseCase,
         toggleRoutineUseCase,
         updateRoutineProgressUseCase,
+        updateRoutineUseCase,
+        skipRoutineUseCase,
+        archiveRoutineUseCase,
         closeDayUseCase,
         carryPendingTasksUseCase,
         observeDailyStateUseCase,
         autoCloseMissedDayUseCase,
         saveMissedDaySummaryUseCase,
+        taskRepository,
+        routineRepository,
+        completionLogRepository,
         tickerProvider,
         observeTodaySnapshotUseCase,
     )

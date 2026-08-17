@@ -43,7 +43,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +54,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.benimgunlerim.R
+import com.benimgunlerim.domain.BrainDumpParser
 import com.benimgunlerim.ui.theme.BrandPrimary
 import com.benimgunlerim.ui.theme.BrandPrimarySoft
 
@@ -69,10 +70,10 @@ fun BrainDumpDialog(
     onAddTasks: (List<String>) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var currentStep by remember { mutableStateOf(BrainDumpStep.WRITE) }
-    var textInput by remember { mutableStateOf("") }
-    var parsedLines by remember { mutableStateOf<List<String>>(emptyList()) }
-    var selectedLines by remember { mutableStateOf<Set<String>>(emptySet()) }
+    var currentStep by rememberSaveable { mutableStateOf(BrainDumpStep.WRITE) }
+    var textInput by rememberSaveable { mutableStateOf("") }
+    var parsedLines by rememberSaveable { mutableStateOf<List<String>>(emptyList()) }
+    var selectedLines by rememberSaveable { mutableStateOf<Set<String>>(emptySet()) }
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
@@ -168,11 +169,7 @@ fun BrainDumpDialog(
 
                             Button(
                                 onClick = {
-                                    val lines = textInput
-                                        .lines()
-                                        .map { it.trim().removePrefix("-").removePrefix("•").trim() }
-                                        .filter { it.isNotBlank() }
-                                        .distinct()
+                                    val lines = BrainDumpParser.parse(textInput)
                                     if (lines.isNotEmpty()) {
                                         parsedLines = lines
                                         selectedLines = lines.toSet()

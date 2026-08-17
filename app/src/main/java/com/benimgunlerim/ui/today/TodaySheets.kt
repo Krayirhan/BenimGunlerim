@@ -653,14 +653,16 @@ internal fun CloseDaySheet(
     overdueCount: Int,
     onSave: (mood: Int, energy: Int, note: String, bestMoment: String, challenge: String, tomorrowIntention: String, carryTasks: Boolean) -> Unit,
 ) {
-    var step by remember { mutableStateOf(0) }
-    var mood by remember { mutableStateOf(3) }
-    var energy by remember { mutableStateOf(3) }
-    var note by remember { mutableStateOf("") }
-    var bestMoment by remember { mutableStateOf("") }
-    var challenge by remember { mutableStateOf("") }
-    var tomorrowIntention by remember { mutableStateOf("") }
-    var carryTasks by remember { mutableStateOf(overdueCount > 0) }
+    // rememberSaveable: process death / config change sırasında kullanıcının
+    // yazdığı gün kapatma özeti (mood, best moment, challenge, note...) kaybolmasın.
+    var step by rememberSaveable { mutableStateOf(0) }
+    var mood by rememberSaveable { mutableStateOf(3) }
+    var energy by rememberSaveable { mutableStateOf(3) }
+    var note by rememberSaveable { mutableStateOf("") }
+    var bestMoment by rememberSaveable { mutableStateOf("") }
+    var challenge by rememberSaveable { mutableStateOf("") }
+    var tomorrowIntention by rememberSaveable { mutableStateOf("") }
+    var carryTasks by rememberSaveable { mutableStateOf(overdueCount > 0) }
 
     val moodLabels = listOf(
         stringResource(R.string.today_close_step1_mood_very_bad),

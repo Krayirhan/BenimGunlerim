@@ -3,6 +3,7 @@ package com.benimgunlerim.domain.usecase
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.DatabaseTransactionRunner
 import com.benimgunlerim.data.TaskRepository
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.model.CompletionEntityType
 import com.benimgunlerim.notifications.TaskReminderSchedulerContract
@@ -12,6 +13,7 @@ import io.mockk.coVerifyOrder
 import io.mockk.mockk
 import java.time.LocalDate
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -45,14 +47,28 @@ class DeleteTaskUseCaseTest {
         updatedAt = 1_000L,
     )
 
+    private val subTasks = listOf(
+        SubTaskEntity(id = "s1", taskId = "t1", title = "Alt görev A", createdAt = 1_000L),
+        SubTaskEntity(id = "s2", taskId = "t1", title = "Alt görev B", createdAt = 1_000L),
+    )
+
     @Before
     fun setUp() {
         coEvery { taskRepository.delete(any()) } returns Unit
+        coEvery { taskRepository.getSubTasks(any()) } returns subTasks
         coEvery { completionLogRepository.deleteForEntity(any(), any()) } returns Unit
         coEvery { transactionRunner.runInTransaction<Unit>(any()) } coAnswers {
             val block: suspend () -> Unit = firstArg()
             block()
         }
+    }
+
+    @Test
+    fun invoke_returnsSubTaskSnapshot_beforeCascadeDelete() = runTest {
+        val result = useCase(task)
+
+        assertEquals(subTasks, result)
+        coVerify { taskRepository.getSubTasks("t1") }
     }
 
     @Test

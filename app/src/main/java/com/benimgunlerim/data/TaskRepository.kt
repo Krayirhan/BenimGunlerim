@@ -62,6 +62,8 @@ interface TaskRepository {
     suspend fun toggleSubTask(subTask: SubTaskEntity)
     suspend fun deleteSubTask(subTask: SubTaskEntity)
     suspend fun deleteAllSubTasks()
+    suspend fun getSubTasks(taskId: String): List<SubTaskEntity>
+    suspend fun restoreSubTasks(subTasks: List<SubTaskEntity>)
     suspend fun count(): Int
     suspend fun deleteTemplateTasks()
 }
@@ -270,6 +272,14 @@ class TaskRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllSubTasks() = subTaskDao.deleteAll()
+
+    override suspend fun getSubTasks(taskId: String): List<SubTaskEntity> =
+        subTaskDao.getByTaskId(taskId)
+
+    override suspend fun restoreSubTasks(subTasks: List<SubTaskEntity>) {
+        if (subTasks.isEmpty()) return
+        subTaskDao.insertAll(subTasks)
+    }
 
     // ── Count ────────────────────────────────────────────────────────────────
 

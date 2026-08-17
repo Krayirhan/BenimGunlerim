@@ -97,6 +97,13 @@ android {
         compose = true
         buildConfig = true
     }
+
+    testOptions {
+        unitTests.all {
+            it.maxHeapSize = "2048m"
+            it.jvmArgs("-XX:+UseG1GC")
+        }
+    }
 }
 
 tasks.register("verifyReleaseSigning") {

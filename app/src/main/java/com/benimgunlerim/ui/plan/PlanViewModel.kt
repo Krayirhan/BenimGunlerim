@@ -3,6 +3,7 @@ package com.benimgunlerim.ui.plan
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
@@ -61,7 +62,7 @@ class PlanViewModel @Inject constructor(
     private val _selectedDate = MutableStateFlow(today)
     private var latestTasksById: Map<String, TaskEntity> = emptyMap()
     private var latestOverdueTasks: List<TaskEntity> = emptyList()
-    private val deletedTasksById = mutableMapOf<String, TaskEntity>()
+    private val deletedTasksById = mutableMapOf<String, Pair<TaskEntity, List<SubTaskEntity>>>()
     private val _uiEffects = MutableSharedFlow<PlanUiEffect>(extraBufferCapacity = 16)
     private val retrySnapshotTrigger = MutableStateFlow(0)
     val uiEffects = _uiEffects.asSharedFlow()
@@ -232,8 +233,8 @@ class PlanViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 deleteTaskUseCase(task)
-            }.onSuccess {
-                deletedTasksById[task.id] = task
+            }.onSuccess { subTasks ->
+                deletedTasksById[task.id] = task to subTasks
                 _uiEffects.tryEmit(PlanUiEffect.TaskDeleted(task.id))
             }.onFailure {
                 _uiEffects.tryEmit(PlanUiEffect.ActionFailed)
@@ -242,10 +243,10 @@ class PlanViewModel @Inject constructor(
     }
 
     fun restoreDeletedTask(taskId: String) {
-        val task = deletedTasksById.remove(taskId) ?: return
+        val (task, subTasks) = deletedTasksById.remove(taskId) ?: return
         viewModelScope.launch {
             runCatching {
-                restoreTaskUseCase(task)
+                restoreTaskUseCase(task, subTasks)
             }.onFailure {
                 _uiEffects.tryEmit(PlanUiEffect.ActionFailed)
             }

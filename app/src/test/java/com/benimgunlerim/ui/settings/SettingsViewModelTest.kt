@@ -74,6 +74,8 @@ class SettingsViewModelTest {
         var quietHoursStart: String? = null
         var quietHoursEnd: String? = null
         var dailySummaryTime: String? = null
+        var lightDayModeEnabled: Boolean? = null
+        var lightDayModeDate: String? = null
 
         override suspend fun setNotificationMode(mode: String) { notificationMode = mode }
         override suspend fun setDailySummaryTime(time: String) { dailySummaryTime = time }
@@ -86,6 +88,10 @@ class SettingsViewModelTest {
         override suspend fun setQuietHoursStart(time: String) { quietHoursStart = time }
         override suspend fun setQuietHoursEnd(time: String) { quietHoursEnd = time }
         override suspend fun setCelebrationEffectsEnabled(enabled: Boolean) { /* tracked via preferences flow in tests if needed */ }
+        override suspend fun setLightDayMode(enabled: Boolean, dateStr: String) {
+            lightDayModeEnabled = enabled
+            lightDayModeDate = dateStr
+        }
     }
 
     private class FakeLocalDataClearer : LocalDataClearer {
@@ -133,6 +139,7 @@ class SettingsViewModelTest {
 
     private inner class FakeSubTaskDao : SubTaskDao {
         override fun observeByTaskId(taskId: String): Flow<List<SubTaskEntity>> = flowOf(emptyList())
+        override suspend fun getByTaskId(taskId: String): List<SubTaskEntity> = emptyList()
         override suspend fun getAll(): List<SubTaskEntity> = emptyList()
         override suspend fun insert(subTask: SubTaskEntity) = Unit
         override suspend fun insertAll(subTasks: List<SubTaskEntity>) = Unit
