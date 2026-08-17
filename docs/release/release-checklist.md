@@ -87,13 +87,11 @@ Fiziksel cihaz veya emülatörde:
 1. Signed AAB dosyasını Internal Testing track'e yükle.
 2. Türkçe release notlarını gir.
 3. Internal tester cihazında smoke test çalıştır.
-4. Crash/ANR sinyallerini kontrol et.
-5. Firebase Crashlytics içinde test non-fatal event'in düştüğünü doğrula.
-6. Firebase Crashlytics içinde test crash event'inin düştüğünü doğrula.
-7. Play Console Android Vitals içinden ANR rate'i kontrol et.
-8. Crash-free users oranının ilk 24 saatte %99.5 üstünde kaldığını doğrula.
-9. Aynı startup/import/data-loss stack trace'i 3+ kullanıcı etkiliyorsa rollout pause et.
-10. Sorun yoksa staged rollout ile production'a ilerle.
+4. Crash/ANR sinyallerini kontrol et (uygulama hiçbir crash reporting servisine bağlı değil — `LocalErrorReporter` hata kayıtlarını yalnızca cihaz içi `SharedPreferences`'ta tutar, merkezi bir panel yok).
+5. Play Console Android Vitals içinden ANR rate'i kontrol et.
+6. Crash-free users oranının ilk 24 saatte %99.5 üstünde kaldığını doğrula.
+7. Aynı startup/import/data-loss stack trace'i 3+ kullanıcı etkiliyorsa rollout pause et.
+8. Sorun yoksa staged rollout ile production'a ilerle.
 
 ## 7. Post-Release
 

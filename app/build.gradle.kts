@@ -13,11 +13,6 @@ plugins {
     jacoco
 }
 
-if (file("google-services.json").exists()) {
-    apply(plugin = "com.google.gms.google-services")
-    apply(plugin = "com.google.firebase.crashlytics")
-}
-
 val keystoreProperties = Properties().also { props ->
     val localKeystoreFile = rootProject.file("keystore.properties")
     if (localKeystoreFile.exists()) {
@@ -298,8 +293,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
     implementation(libs.konfetti.compose)
 
     detektPlugins(project(":detekt-rules"))

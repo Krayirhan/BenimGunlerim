@@ -3,9 +3,8 @@ package com.benimgunlerim.analytics
 /**
  * Centralises non-fatal error recording and user-property tagging.
  *
- * Production implementation can delegate to Firebase Crashlytics or any other
- * crash provider. The local implementation logs to Logcat only so no data
- * leaves the device in development.
+ * The only implementation ([LocalErrorReporter]) keeps everything on-device —
+ * no crash reporting service is wired in.
  */
 interface ErrorReporter {
     /**

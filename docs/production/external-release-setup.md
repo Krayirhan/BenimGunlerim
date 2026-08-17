@@ -52,15 +52,10 @@ Internal testing release kontrolü:
 
 ## Monitoring
 
-Repo içinde `ErrorReporter` ve uncaught exception hook hazırdır. Production'da şu kararlardan biri uygulanmalıdır:
+Repo içinde `ErrorReporter` ve uncaught exception hook hazırdır. Karar verildi (2026-08-17): **tamamen lokal/offline tanı modeli** — uygulama hiçbir üçüncü taraf crash reporting servisine (Crashlytics, Sentry vb.) bağlı değil, `LocalErrorReporter` çökme/hata kayıtlarını yalnızca cihazda tutar.
 
-- Crashlytics entegrasyonu
-- Sentry entegrasyonu
-- Tamamen lokal/offline tanı modeli
+Bu karar nedeniyle:
 
-Seçilen provider için görevler:
-
-- Crash-free users takip edilir.
-- ANR oranı takip edilir.
-- Version bazlı release health izlenir.
+- Crash-free users / ANR oranı gibi merkezi metrikler bu araçla izlenemez; Play Console Android Vitals tek kaynak olur.
+- Version bazlı release health, Play Console üzerinden izlenir.
 - Kritik artışlarda rollback veya rollout pause uygulanır.

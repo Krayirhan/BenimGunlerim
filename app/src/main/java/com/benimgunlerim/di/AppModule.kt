@@ -3,14 +3,12 @@ package com.benimgunlerim.di
 import android.content.Context
 import androidx.room.Room
 import androidx.room.withTransaction
-import com.benimgunlerim.BuildConfig
 import com.benimgunlerim.data.CompletionLogRepository
 import com.benimgunlerim.data.CompletionLogRepositoryImpl
 import com.benimgunlerim.data.DatabaseTransactionRunner
 import com.benimgunlerim.data.TaskRepository
 import com.benimgunlerim.data.TaskRepositoryImpl
 import com.benimgunlerim.analytics.AnalyticsTracker
-import com.benimgunlerim.analytics.CrashlyticsErrorReporter
 import com.benimgunlerim.analytics.ErrorReporter
 import com.benimgunlerim.analytics.LocalAnalyticsTracker
 import com.benimgunlerim.analytics.LocalErrorReporter
@@ -106,10 +104,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideErrorReporter(
-        local: LocalErrorReporter,
-        crashlytics: CrashlyticsErrorReporter,
-    ): ErrorReporter = if (BuildConfig.DEBUG) local else crashlytics
+    fun provideErrorReporter(local: LocalErrorReporter): ErrorReporter = local
 
     @Provides
     @Singleton

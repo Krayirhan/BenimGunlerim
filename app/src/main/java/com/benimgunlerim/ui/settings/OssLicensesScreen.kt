@@ -95,12 +95,6 @@ private val LIBRARIES = listOf(
         license = "Apache License 2.0",
         description = "Dependency injection for Android applications.",
     ),
-    OpenSourceLibrary(
-        name = "Firebase Crashlytics",
-        author = "Google LLC",
-        license = "Apache License 2.0",
-        description = "Real-time crash reporting (release builds only, opt-in).",
-    ),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)

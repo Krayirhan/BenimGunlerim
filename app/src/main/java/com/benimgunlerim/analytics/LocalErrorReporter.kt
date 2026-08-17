@@ -13,11 +13,10 @@ private const val KEY_REPORTS = "reports"
 private const val MAX_REPORTS = 20
 
 /**
- * Local [ErrorReporter] implementation.
+ * Local [ErrorReporter] implementation — the only one wired in the app.
  *
  * Debug builds log to Logcat. All builds keep a bounded on-device history of
  * non-fatal reports so diagnostics exist without sending user data off-device.
- * The [ErrorReporter] interface can still be backed by Crashlytics/Sentry later.
  */
 @Singleton
 class LocalErrorReporter @Inject constructor(

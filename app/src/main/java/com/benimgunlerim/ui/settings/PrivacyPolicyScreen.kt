@@ -69,11 +69,11 @@ private val PRIVACY_SECTIONS = listOf(
         ),
     ),
     PrivacySection(
-        title = "Hata Raporlama (Crashlytics)",
+        title = "Hata Raporlama",
         icon = Icons.Rounded.BugReport,
-        description = "Uygulama kararlılığını artırmak için çökme anında teknik loglar toplanır.",
+        description = "Uygulama çökme/hata kayıtları tamamen cihazınızda tutulur.",
         bulletPoints = listOf(
-            "Yalnızca işletim sistemi sürümü ve hata yığın izi (stack trace) gibi anonim teknik veriler iletilir.",
+            "Hiçbir çökme raporu veya teknik log sunuculara ya da üçüncü taraflara gönderilmez.",
         ),
     ),
     PrivacySection(
