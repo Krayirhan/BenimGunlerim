@@ -1,5 +1,7 @@
 # Audit Raporu — Ürün / UX
 
+> ⚠️ **2026-08-17 güncellemesi:** Bu raporun P0 maddelerinin çoğu (rutin artır/azalt kontrolü, 200 satır kuralı ihlalleri, ölü kod) kapandı. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 6 / 10
 

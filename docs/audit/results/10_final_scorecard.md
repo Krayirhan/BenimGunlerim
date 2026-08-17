@@ -1,6 +1,8 @@
 # Benim Günlerim — Full Project Scorecard
 
-## Genel Puan
+> ⚠️ **Bu doküman 2026-08-17 tarihli bir güncelleme almıştır.** Aşağıdaki tüm içerik, audit paketinin ilk üretildiği tarihteki (bu commit'ten önceki) durumun **tarihsel bir kaydıdır** — bilinçli olarak yeniden yazılmamıştır. Güncel puanlama ve P0 durumu için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Özet: eski 5.5/10 puanını süren en büyük etken (kırık test paketi) ve Privacy Policy/export-import/analytics-toggle eksiklikleri kapandı; Internal/Closed Beta için artık uygun görülüyor.
+
+## Genel Puan (tarihsel — bkz. not yukarıda)
 
 **5.5 / 10**
 

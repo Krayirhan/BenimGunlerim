@@ -1,5 +1,7 @@
 # Audit Raporu — Testing & QA
 
+> ⚠️ **2026-08-17 güncellemesi:** Bu raporun 4 P0 maddesi de kapandı: test paketi derleniyor ve geçiyor (50 test sınıfı, 0 hata), `BrainDumpParserTest`/`LightDayModeTest`/`UserPreferencesRepositoryTest` eklendi. CI artık gerçekten yeşil. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 5 / 10
 

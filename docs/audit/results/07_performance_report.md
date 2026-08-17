@@ -1,5 +1,7 @@
 # Audit Raporu — Performans
 
+> ⚠️ **2026-08-17 güncellemesi:** `completion_logs.observeAll()` sınırsız tarama `observeBetween` ile tarih-sınırlı hale getirildi, Brain Dump toplu ekleme transaction'a alındı. "LazyColumn yok" bulgusu geçersiz — ekranlar zaten dış `LazyColumn` içinde çalışıyor (bkz. incremental rapor notu). Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 6 / 10
 

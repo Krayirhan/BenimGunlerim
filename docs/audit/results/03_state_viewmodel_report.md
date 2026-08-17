@@ -1,5 +1,7 @@
 # Audit Raporu — State / ViewModel
 
+> ⚠️ **2026-08-17 güncellemesi:** `CloseDaySheet`/`TodayScreen` dialog state'leri `rememberSaveable`'a taşındı, kutlama event pipeline'ı `AppEventCoordinator` ile ekran bağımsız hale geldi, `TodayViewModel` alt sınıflara bölündü. Toggle race condition guard'ı hâlâ açık. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 7 / 10
 

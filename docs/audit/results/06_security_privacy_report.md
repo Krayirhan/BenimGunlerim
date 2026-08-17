@@ -1,5 +1,7 @@
 # Audit Raporu — Güvenlik & Gizlilik
 
+> ⚠️ **2026-08-17 güncellemesi:** Bu raporun 3 P0 maddesi de kapandı: Privacy Policy eklendi, export/import UI'a bağlandı, analytics toggle render ediliyor. Ayrıca **Firebase Crashlytics tamamen kaldırıldı** — raporun Crashlytics consent/aktivasyon önerileri artık geçersiz, hata kayıtları tamamen cihaz-içi. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 6 / 10
 

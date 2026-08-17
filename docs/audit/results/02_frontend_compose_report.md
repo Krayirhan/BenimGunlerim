@@ -1,5 +1,7 @@
 # Audit Raporu — Frontend / Jetpack Compose
 
+> ⚠️ **2026-08-17 güncellemesi:** `TodayScreen.kt`/`TodayViewModel.kt`/`TodaySheets.kt` artık bölünmüş durumda, hardcoded dp/renk/string için CI'a bağlı bir Detekt kuralı eklendi, `TaskRow`/`RoutineRow` için `@Preview` seti eklendi. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 6.5 / 10
 

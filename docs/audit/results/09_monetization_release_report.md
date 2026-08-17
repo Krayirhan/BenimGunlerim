@@ -1,5 +1,7 @@
 # Audit Raporu — Monetizasyon & Release Hazırlığı
 
+> ⚠️ **2026-08-17 güncellemesi:** Privacy Policy, export/import UI ve analytics toggle P0 maddeleri kapandı; OSS lisans listesi senkronize edildi. Billing/IAP hâlâ bilinçli olarak yok. Ayrıca **Firebase Crashlytics tamamen kaldırıldı** — bu raporun "Crashlytics'i prod'da aktifleştir" önerisi (release checklist madde 6.5-6.6 dahil) artık geçersiz; `docs/release/release-checklist.md` bu değişikliği yansıtacak şekilde ayrıca güncellendi. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 4 / 10
 

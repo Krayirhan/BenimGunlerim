@@ -1,5 +1,7 @@
 # Audit Raporu — Data / Database
 
+> ⚠️ **2026-08-17 güncellemesi:** Room migration politikası dokümante edildi, subtask restore veri kaybı kapandı, Brain Dump toplu ekleme transaction'a alındı, `lightDayModeDate` export/import'a eklendi. `ToggleRoutineUseCase` transaction ve soft-delete maddeleri hâlâ açık. Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 7 / 10
 

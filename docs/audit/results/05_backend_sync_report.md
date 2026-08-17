@@ -1,5 +1,7 @@
 # Audit Raporu — Backend / Sync Hazırlığı
 
+> ⚠️ **2026-08-17 güncellemesi:** Export/import UI'a bağlandı. Ayrıca bu raporun atıfta bulunduğu Firebase Crashlytics **tamamen kaldırıldı** — `INTERNET` izninin artık hiçbir teknik gerekçesi kalmadı (bkz. incremental rapordaki "Yeni Bulunan Regresyonlar"). Güncel durum için bkz. [`INCREMENTAL_REAUDIT_2026-08-17.md`](INCREMENTAL_REAUDIT_2026-08-17.md). Bu doküman tarihsel kayıt olarak değiştirilmemiştir.
+
 ## Genel Puan
 7 / 10
 
