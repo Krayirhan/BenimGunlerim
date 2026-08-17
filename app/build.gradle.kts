@@ -218,6 +218,28 @@ tasks.register<JacocoCoverageVerification>("jacocoDebugUnitTestCoverageVerificat
                 minimum = "0.22".toBigDecimal()
             }
         }
+        // Paket bazlı eşikler (2026-08-17): domain/ ve data/ ölçülen kapsamı
+        // (sırasıyla ~%62.5 / ~%58 LINE) global %42 tabanının üzerinde bir
+        // tavana bağlar. Audit hedefi %70+ — coverage arttıkça bu sayılar
+        // yukarı çekilmeli (aşağı çekilmemeli).
+        rule {
+            element = "BUNDLE"
+            includes = listOf("com.benimgunlerim.domain.**")
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.55".toBigDecimal()
+            }
+        }
+        rule {
+            element = "BUNDLE"
+            includes = listOf("com.benimgunlerim.data.**")
+            limit {
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.50".toBigDecimal()
+            }
+        }
     }
 }
 
@@ -256,6 +278,8 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.konfetti.compose)
+
+    detektPlugins(project(":detekt-rules"))
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)

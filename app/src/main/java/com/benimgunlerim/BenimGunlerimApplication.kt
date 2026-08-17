@@ -5,6 +5,7 @@ import android.os.StrictMode
 import com.benimgunlerim.analytics.AppCrashHandler
 import com.benimgunlerim.notifications.ReminderBootstrapper
 import com.benimgunlerim.notifications.ensureRoutineNotificationChannel
+import com.benimgunlerim.domain.service.AppEventCoordinator
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class BenimGunlerimApplication : Application() {
     @Inject lateinit var appCrashHandler: AppCrashHandler
     @Inject lateinit var reminderBootstrapper: ReminderBootstrapper
+    @Inject lateinit var appEventCoordinator: AppEventCoordinator
 
     override fun onCreate() {
         super.onCreate()
@@ -33,5 +35,6 @@ class BenimGunlerimApplication : Application() {
         appCrashHandler.install()
         ensureRoutineNotificationChannel()
         reminderBootstrapper.rescheduleReminders()
+        appEventCoordinator.start()
     }
 }

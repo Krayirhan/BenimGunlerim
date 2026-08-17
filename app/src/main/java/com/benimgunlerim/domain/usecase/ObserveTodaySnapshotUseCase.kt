@@ -49,7 +49,7 @@ class ObserveTodaySnapshotUseCase @Inject constructor(
         routineRepository.observeActive(),
         combine(
             completionLogRepository.observeByDate(today),
-            completionLogRepository.observeAll(),
+            completionLogRepository.observeBetween(today.minusDays(60), today),
         ) { todayLogs, allLogs -> todayLogs to allLogs },
         prefsRepository.preferences,
         combine(dailyStateRepository.observeToday(), taskRepository.observeOverdue(today)) { ds, ov -> ds to ov },

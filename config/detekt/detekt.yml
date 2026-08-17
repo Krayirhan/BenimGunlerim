@@ -6,6 +6,18 @@ config:
   validation: true
   warningsAsErrors: false
 
+# BenimGunlerim custom rules — CLAUDE.md Demir Kural #1/#2 (dp/renk literal yasağı)
+BenimGunlerimRules:
+  active: true
+  NoHardcodedDpRule:
+    active: true
+    excludes:
+      - '**/theme/**'
+  NoHardcodedColorRule:
+    active: true
+    excludes:
+      - '**/theme/**'
+
 # Complexity rules — project-specific thresholds
 complexity:
   active: true

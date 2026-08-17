@@ -48,6 +48,7 @@ class RoutineDetailViewModelTest {
         Dispatchers.setMain(testDispatcher)
         every { dateTimeProvider.today() } returns LocalDate.of(2025, 6, 9)
         every { routineRepository.observeActive() } returns flowOf(emptyList())
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         viewModel = RoutineDetailViewModel(
             routineRepository,
@@ -112,6 +113,7 @@ class RoutineDetailViewModelTest {
             note = null,
         )
         every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(listOf(log))
         every { completionLogRepository.observeAll() } returns flowOf(listOf(log))
         val vm = RoutineDetailViewModel(
             routineRepository,

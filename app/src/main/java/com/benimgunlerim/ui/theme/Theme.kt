@@ -78,6 +78,9 @@ val NightSurfaceAlt    = Color(0xFF1E2F42)
 val NightText          = Color(0xFFFFFFFF)
 val NightMuted         = Color(0xFFCBD5E1)
 val NightAccent        = Color(0xFFFBBF24)
+val NightSurfaceContainer = Color(0xFF1E2921)
+val NightPrimaryContainer = Color(0xFF0F3D2A)
+val NightPrimary          = Color(0xFF7DDDA5)
 
 // ── Text ──────────────────────────────────────────────────────────────────────
 val TextPrimary        = Color(0xFF1A1C1E)
@@ -92,6 +95,9 @@ val SurfaceMuted       = Color(0xFFF1F5F9)
 val Outline            = Color(0xFFBEC9BF)
 val OutlineSubtle      = Color(0xFFE2E8F0)
 val Divider            = Color(0xFFE8EDF2)
+val DividerDark        = Color(0xFF2A372E)
+val SuccessBorderDark  = Color(0xFF1E5E3E)
+val SlateText          = Color(0xFF334155)
 
 // ── Semantik alias'lar (eski çağrılarla tam uyumluluk) ───────────────────────
 val CandyPrimary       = BrandPrimary

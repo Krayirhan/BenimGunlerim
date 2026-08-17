@@ -29,14 +29,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.benimgunlerim.R
+import com.benimgunlerim.ui.theme.AppTokens
+import com.benimgunlerim.ui.theme.BrandPrimary
+import com.benimgunlerim.ui.theme.BrandPrimarySoft
+import com.benimgunlerim.ui.theme.Divider
+import com.benimgunlerim.ui.theme.DividerDark
+import com.benimgunlerim.ui.theme.NightMuted
+import com.benimgunlerim.ui.theme.NightPrimary
+import com.benimgunlerim.ui.theme.NightPrimaryContainer
+import com.benimgunlerim.ui.theme.NightSurfaceContainer
+import com.benimgunlerim.ui.theme.SemanticError
+import com.benimgunlerim.ui.theme.SlateText
+import com.benimgunlerim.ui.theme.SuccessBorder
+import com.benimgunlerim.ui.theme.SuccessBorderDark
+import com.benimgunlerim.ui.theme.SurfaceMuted
 
 /**
  * Profesyonel, bağlamsal ve sakin tasarıma sahip merkezi AppTopBar bileşeni.
@@ -60,63 +74,64 @@ fun AppTopBar(
     }
 
     val topBarBg = MaterialTheme.colorScheme.surface
-    val dividerColor = if (isDark) Color(0xFF2A372E) else Color(0xFFE8EDF2)
-    val avatarBg = if (isDark) Color(0xFF0F3D2A) else Color(0xFFE8F5EE)
-    val avatarStroke = if (isDark) Color(0xFF1E5E3E) else Color(0xFFBFE8CF)
-    val avatarIconColor = if (isDark) Color(0xFF7DDDA5) else Color(0xFF0B6C43)
-    val bellBg = if (isDark) Color(0xFF1E2921) else Color(0xFFF1F5F9)
-    val bellIconColor = if (isDark) Color(0xFFCBD5E1) else Color(0xFF334155)
-    val badgeColor = Color(0xFFBA1A1A)
+    val dividerColor = if (isDark) DividerDark else Divider
+    val avatarBg = if (isDark) NightPrimaryContainer else BrandPrimarySoft
+    val avatarStroke = if (isDark) SuccessBorderDark else SuccessBorder
+    val avatarIconColor = if (isDark) NightPrimary else BrandPrimary
+    val bellBg = if (isDark) NightSurfaceContainer else SurfaceMuted
+    val bellIconColor = if (isDark) NightMuted else SlateText
+    val badgeColor = SemanticError
 
     Surface(
         modifier = modifier
             .fillMaxWidth()
             .statusBarsPadding(),
         color = topBarBg,
-        shadowElevation = 0.dp,
+        shadowElevation = AppTokens.Elevation.flat,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(68.dp)
-                    .padding(horizontal = 20.dp),
+                    .height(AppTokens.Layout.topBarHeight)
+                    .padding(horizontal = AppTokens.Spacing.lg),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 // ── Sol: Profil / Avatar ──
                 if (showProfile) {
+                    val profileCd = stringResource(R.string.today_profile_cd)
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(AppTokens.TouchTarget.min)
                             .clip(CircleShape)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple(bounded = true, radius = 24.dp),
+                                indication = ripple(bounded = true, radius = AppTokens.Spacing.xl),
                                 onClick = onProfileClick,
                             )
                             .semantics {
                                 role = Role.Button
-                                contentDescription = "Profil"
+                                contentDescription = profileCd
                             },
                         contentAlignment = Alignment.Center,
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(AppTokens.Layout.topBarAvatarDiameter)
                                 .clip(CircleShape)
                                 .background(avatarBg)
-                                .border(1.dp, avatarStroke, CircleShape),
+                                .border(AppTokens.BorderWidth.thin, avatarStroke, CircleShape),
                             contentAlignment = Alignment.Center,
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Person,
                                 contentDescription = null,
                                 tint = avatarIconColor,
-                                modifier = Modifier.size(20.dp),
+                                modifier = Modifier.size(AppTokens.IconSize.sm),
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(AppTokens.Spacing.sm))
                 }
 
                 // ── Orta: Başlık & Altyazı ──
@@ -150,24 +165,25 @@ fun AppTopBar(
 
                 // ── Sağ: Bildirim Butonu ──
                 if (showNotification) {
+                    val notificationCd = stringResource(R.string.today_notifications_cd)
                     Box(
                         modifier = Modifier
-                            .size(48.dp)
+                            .size(AppTokens.TouchTarget.min)
                             .clip(CircleShape)
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = ripple(bounded = true, radius = 24.dp),
+                                indication = ripple(bounded = true, radius = AppTokens.Spacing.xl),
                                 onClick = onNotificationClick,
                             )
                             .semantics {
                                 role = Role.Button
-                                contentDescription = "Bildirimler"
+                                contentDescription = notificationCd
                             },
                         contentAlignment = Alignment.Center,
                     ) {
                         Box(
                             modifier = Modifier
-                                .size(40.dp)
+                                .size(AppTokens.Layout.topBarAvatarDiameter)
                                 .clip(CircleShape)
                                 .background(bellBg),
                             contentAlignment = Alignment.Center,
@@ -176,14 +192,14 @@ fun AppTopBar(
                                 imageVector = Icons.Rounded.NotificationsNone,
                                 contentDescription = null,
                                 tint = bellIconColor,
-                                modifier = Modifier.size(20.dp),
+                                modifier = Modifier.size(AppTokens.IconSize.sm),
                             )
                             if (hasNotificationBadge) {
                                 Box(
                                     modifier = Modifier
-                                        .size(8.dp)
+                                        .size(AppTokens.Spacing.xs)
                                         .align(Alignment.TopEnd)
-                                        .padding(top = 8.dp, end = 8.dp)
+                                        .padding(top = AppTokens.Spacing.xs, end = AppTokens.Spacing.xs)
                                         .clip(CircleShape)
                                         .background(badgeColor),
                                 )
@@ -197,7 +213,7 @@ fun AppTopBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp)
+                    .height(AppTokens.BorderWidth.thin)
                     .background(dividerColor),
             )
         }

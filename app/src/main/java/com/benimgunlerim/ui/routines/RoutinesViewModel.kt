@@ -27,6 +27,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+import com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase
+
 @HiltViewModel
 class RoutinesViewModel @Inject constructor(
     private val routineRepository: RoutineRepository,
@@ -34,6 +36,7 @@ class RoutinesViewModel @Inject constructor(
     private val dateTimeProvider: DateTimeProvider,
     private val addRoutineUseCase: AddRoutineUseCase,
     private val updateRoutineUseCase: UpdateRoutineUseCase,
+    private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase,
     private val archiveRoutineUseCase: ArchiveRoutineUseCase,
     private val skipRoutineUseCase: SkipRoutineUseCase,
     private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase,
@@ -45,7 +48,7 @@ class RoutinesViewModel @Inject constructor(
 
     val routines: StateFlow<List<RoutineCardUi>> = combine(
         routineRepository.observeActive(),
-        completionLogRepository.observeAll(),
+        completionLogRepository.observeBetween(dateTimeProvider.today().minusDays(60), dateTimeProvider.today()),
     ) { routines, logs ->
         routineEntitiesById.value = routines.associateBy { it.id }
         val today = dateTimeProvider.today()
@@ -60,6 +63,14 @@ class RoutinesViewModel @Inject constructor(
                 val date = weekStart.plusDays(offset.toLong()).toString()
                 routineLogs.any { it.date == date }
             }
+            val todayLog = logs.firstOrNull {
+                it.entityType == CompletionEntityType.ROUTINE.value &&
+                    it.entityId == routine.id &&
+                    it.date == today.toString()
+            }
+            val isCompleted = todayLog?.status == CompletionStatus.COMPLETED.value
+            val currentValue = todayLog?.value ?: if (isCompleted) (routine.targetValue?.toFloat() ?: 1f) else 0f
+
             RoutineCardUi(
                 id = routine.id,
                 name = routine.name,
@@ -74,6 +85,7 @@ class RoutinesViewModel @Inject constructor(
                     today = today,
                 ),
                 last7Days = last7,
+                currentValue = currentValue,
             )
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
@@ -141,6 +153,24 @@ class RoutinesViewModel @Inject constructor(
                 date = dateTimeProvider.today(),
                 completedRoutineIds = completedIds,
                 allTodayRoutineIds = allIds,
+            )
+        }
+    }
+
+    fun updateRoutineProgress(routineId: String, value: Float) {
+        val routine = routineEntitiesById.value[routineId] ?: return
+        val currentCards = routines.value
+        val isCompletedToday = currentCards.firstOrNull { it.id == routineId }?.last7Days?.lastOrNull() == true
+        val completedIds = currentCards.filter { it.last7Days.lastOrNull() == true }.map { it.id }.toSet()
+        val allIds = currentCards.map { it.id }
+        viewModelScope.launch {
+            updateRoutineProgressUseCase(
+                routine = routine,
+                value = value,
+                wasCompleted = isCompletedToday,
+                allTodayRoutineIds = allIds,
+                completedRoutineIds = completedIds,
+                date = dateTimeProvider.today(),
             )
         }
     }

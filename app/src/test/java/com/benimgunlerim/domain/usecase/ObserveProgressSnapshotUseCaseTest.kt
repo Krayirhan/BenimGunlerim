@@ -47,6 +47,7 @@ class ObserveProgressSnapshotUseCaseTest {
         every { taskRepository.observeRange(any(), any()) } returns flowOf(emptyList())
         every { routineRepository.observeActive() } returns flowOf(emptyList())
         every { dailyStateRepository.observeRecent(any()) } returns flowOf(emptyList())
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         every { prefsRepository.preferences } returns flowOf(UserPreferences())
         every { achievementTracker.unlockedAchievements } returns flowOf(emptyList())
@@ -77,6 +78,7 @@ class ObserveProgressSnapshotUseCaseTest {
                 value = null,
             ),
         )
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(logs)
         every { completionLogRepository.observeAll() } returns flowOf(logs)
 
         val snapshot = useCase().first()
@@ -127,6 +129,7 @@ class ObserveProgressSnapshotUseCaseTest {
 
         every { routineRepository.observeActive() } returns flowOf(listOf(routine))
         every { taskRepository.observeRange(any(), any()) } returns flowOf(listOf(task1, task2))
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(logs)
         every { completionLogRepository.observeAll() } returns flowOf(logs)
 
         val snapshot = useCase().first()

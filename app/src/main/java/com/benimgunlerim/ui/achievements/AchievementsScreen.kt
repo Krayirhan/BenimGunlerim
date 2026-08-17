@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
 import com.benimgunlerim.ui.components.molecules.SectionBlock
 import com.benimgunlerim.ui.components.molecules.StatPill
@@ -34,7 +36,7 @@ fun AchievementsScreen(
                 .padding(contentPadding),
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
         ) {
-            SectionBlock(title = "Başarım Özeti") {
+            SectionBlock(title = stringResource(R.string.achievements_summary_title)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround,
@@ -42,12 +44,14 @@ fun AchievementsScreen(
                     StatPill(
                         emoji = "🏆",
                         value = "${state.unlockedCount} / ${state.totalCount}",
-                        label = "Kazanıldı",
+                        label = stringResource(R.string.achievements_summary_unlocked_label),
                     )
                 }
             }
 
-            SectionBlock(title = "Tüm Başarımlar") {
+            SectionBlock(title = stringResource(R.string.achievements_all_title)) {
+                val completedLabel = stringResource(R.string.achievements_status_completed)
+                val lockedLabel = stringResource(R.string.achievements_status_locked)
                 state.achievements.forEach { item ->
                     AchievementRow(
                         title = item.def.title,
@@ -55,7 +59,7 @@ fun AchievementsScreen(
                         icon = item.def.emoji,
                         isUnlocked = item.isUnlocked,
                         progress = if (item.isUnlocked) 1f else 0f,
-                        progressText = if (item.isUnlocked) "Tamamlandı" else "Kilitli",
+                        progressText = if (item.isUnlocked) completedLabel else lockedLabel,
                     )
                 }
             }

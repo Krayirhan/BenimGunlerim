@@ -196,5 +196,6 @@ open class DataExportService @Inject constructor(
         put("quietHoursStart", quietHoursStart)
         put("quietHoursEnd", quietHoursEnd)
         put("celebrationEffectsEnabled", celebrationEffectsEnabled)
+        putOpt("lightDayModeDate", lightDayModeDate.ifBlank { null })
     }
 }

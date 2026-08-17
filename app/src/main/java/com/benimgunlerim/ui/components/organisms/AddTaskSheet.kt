@@ -21,7 +21,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppButton
 import com.benimgunlerim.ui.components.core.AppButtonVariant
 import com.benimgunlerim.ui.components.core.AppFilterChip
@@ -56,7 +58,7 @@ fun AddTaskSheet(
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.md),
         ) {
             Text(
-                text = "Yeni Görev Ekle",
+                text = stringResource(R.string.add_task_sheet_title),
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 color = MaterialTheme.colorScheme.onSurface,
             )
@@ -67,7 +69,7 @@ fun AddTaskSheet(
                     title = it
                     if (it.isNotBlank()) isError = false
                 },
-                label = { Text("Görev Başlığı") },
+                label = { Text(stringResource(R.string.add_task_sheet_title_label)) },
                 isError = isError,
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
@@ -75,7 +77,7 @@ fun AddTaskSheet(
 
             Column(verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.xs)) {
                 Text(
-                    text = "Öncelik",
+                    text = stringResource(R.string.add_task_sheet_priority_label),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -84,17 +86,17 @@ fun AddTaskSheet(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AppFilterChip(
-                        label = "Yüksek",
+                        label = stringResource(R.string.add_task_sheet_priority_high),
                         selected = selectedPriority == 1,
                         onSelectedChange = { if (it) selectedPriority = 1 },
                     )
                     AppFilterChip(
-                        label = "Normal",
+                        label = stringResource(R.string.add_task_sheet_priority_normal),
                         selected = selectedPriority == 2,
                         onSelectedChange = { if (it) selectedPriority = 2 },
                     )
                     AppFilterChip(
-                        label = "Düşük",
+                        label = stringResource(R.string.add_task_sheet_priority_low),
                         selected = selectedPriority == 3,
                         onSelectedChange = { if (it) selectedPriority = 3 },
                     )
@@ -107,13 +109,13 @@ fun AddTaskSheet(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 AppButton(
-                    text = "İptal",
+                    text = stringResource(R.string.action_cancel),
                     onClick = onDismiss,
                     variant = AppButtonVariant.Ghost,
                 )
                 Spacer(modifier = Modifier.height(AppTokens.Spacing.xs))
                 AppButton(
-                    text = "Kaydet",
+                    text = stringResource(R.string.action_save),
                     onClick = {
                         if (title.isBlank()) {
                             isError = true

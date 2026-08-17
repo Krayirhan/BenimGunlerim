@@ -49,7 +49,7 @@ class RoutineDetailViewModel @Inject constructor(
 
     val uiState: StateFlow<RoutineDetailUiState> = combine(
         routineRepository.observeActive(),
-        completionLogRepository.observeAll(),
+        completionLogRepository.observeBetween(dateTimeProvider.today().minusDays(60), dateTimeProvider.today()),
     ) { routines, allLogs ->
         val routine = routines.firstOrNull { it.id == routineId }
         currentRoutine = routine

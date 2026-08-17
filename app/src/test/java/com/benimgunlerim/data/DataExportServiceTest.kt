@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -299,6 +300,7 @@ class DataExportServiceTest {
             gold = 120,
             companionType = "dog",
             companionName = "Rex",
+            lightDayModeDate = "2026-08-17",
         )
         val json = makeService(prefs = customPrefs).exportToJson()
         val prefs = JSONObject(json!!).getJSONObject("preferences")
@@ -307,6 +309,14 @@ class DataExportServiceTest {
         assertEquals(120, prefs.getInt("gold"))
         assertEquals("dog", prefs.getString("companionType"))
         assertEquals("Rex", prefs.getString("companionName"))
+        assertEquals("2026-08-17", prefs.getString("lightDayModeDate"))
+    }
+
+    @Test
+    fun exportToJson_blankLightDayModeDateOmittedFromJson() = runTest {
+        val json = makeService(prefs = UserPreferences(lightDayModeDate = "")).exportToJson()
+        val prefs = JSONObject(json!!).getJSONObject("preferences")
+        assertFalse(prefs.has("lightDayModeDate"))
     }
 
     @Test

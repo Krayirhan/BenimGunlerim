@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -92,80 +93,89 @@ fun PlanScreen(
             }
         },
     ) { contentPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
                 .padding(contentPadding),
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
         ) {
-            WeekPicker(
-                selectedDate = state.selectedDate,
-                onDateSelected = { date -> viewModel.selectDate(date) },
-                onPreviousWeek = { viewModel.selectPreviousWeek() },
-                onNextWeek = { viewModel.selectNextWeek() },
-                onSelectToday = { viewModel.selectToday() },
-                taskCountByDate = state.weeklyTaskCounts,
-                weekStart = state.weekStart,
-            )
-
-            // Selected Day Summary Info Bar
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = AppTokens.Spacing.xxs),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = state.selectedDate.format(dayFormatter),
-                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    text = stringResource(R.string.plan_day_summary_format, state.tasksForDay.size),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            item(key = "week_picker") {
+                WeekPicker(
+                    selectedDate = state.selectedDate,
+                    onDateSelected = { date -> viewModel.selectDate(date) },
+                    onPreviousWeek = { viewModel.selectPreviousWeek() },
+                    onNextWeek = { viewModel.selectNextWeek() },
+                    onSelectToday = { viewModel.selectToday() },
+                    taskCountByDate = state.weeklyTaskCounts,
+                    weekStart = state.weekStart,
                 )
             }
 
-            if (state.overdueTasks.isNotEmpty()) {
-                SectionBlock(
-                    title = stringResource(R.string.plan_overdue_tasks_title),
-                    trailingContent = {
-                        TextButton(onClick = { viewModel.moveOverdueTasksToDate(state.selectedDate) }) {
-                            Text(stringResource(R.string.plan_move_overdue_to_selected))
-                        }
-                    },
+            // Selected Day Summary Info Bar
+            item(key = "day_summary_bar") {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = AppTokens.Spacing.xxs),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    PlanTaskListContainer(
-                        tasks = state.overdueTasks,
-                        onToggleTask = { viewModel.toggleTask(it) },
-                        onDeleteTask = { viewModel.deleteTask(it) },
+                    Text(
+                        text = state.selectedDate.format(dayFormatter),
+                        style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold),
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Text(
+                        text = stringResource(R.string.plan_day_summary_format, state.tasksForDay.size),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }
 
-            if (state.tasksForDay.isEmpty() && state.overdueTasks.isEmpty()) {
-                EmptyState(
-                    iconContent = { DynamicCalendarBadge(date = state.selectedDate) },
-                    title = stringResource(R.string.plan_empty_day_title),
-                    description = stringResource(R.string.plan_empty_day_desc),
-                    action = {
-                        AppButton(
-                            text = stringResource(R.string.plan_empty_day_cta),
-                            onClick = { showAddSheet = true },
-                        )
-                    },
-                )
-            } else {
-                if (state.tasksForDay.isNotEmpty()) {
-                    SectionBlock(title = stringResource(R.string.plan_tasks_for_day_title)) {
+            if (state.overdueTasks.isNotEmpty()) {
+                item(key = "overdue_tasks") {
+                    SectionBlock(
+                        title = stringResource(R.string.plan_overdue_tasks_title),
+                        trailingContent = {
+                            TextButton(onClick = { viewModel.moveOverdueTasksToDate(state.selectedDate) }) {
+                                Text(stringResource(R.string.plan_move_overdue_to_selected))
+                            }
+                        },
+                    ) {
                         PlanTaskListContainer(
-                            tasks = state.tasksForDay,
+                            tasks = state.overdueTasks,
                             onToggleTask = { viewModel.toggleTask(it) },
                             onDeleteTask = { viewModel.deleteTask(it) },
                         )
+                    }
+                }
+            }
+
+            if (state.tasksForDay.isEmpty() && state.overdueTasks.isEmpty()) {
+                item(key = "empty_day") {
+                    EmptyState(
+                        iconContent = { DynamicCalendarBadge(date = state.selectedDate) },
+                        title = stringResource(R.string.plan_empty_day_title),
+                        description = stringResource(R.string.plan_empty_day_desc),
+                        action = {
+                            AppButton(
+                                text = stringResource(R.string.plan_empty_day_cta),
+                                onClick = { showAddSheet = true },
+                            )
+                        },
+                    )
+                }
+            } else {
+                if (state.tasksForDay.isNotEmpty()) {
+                    item(key = "tasks_for_day") {
+                        SectionBlock(title = stringResource(R.string.plan_tasks_for_day_title)) {
+                            PlanTaskListContainer(
+                                tasks = state.tasksForDay,
+                                onToggleTask = { viewModel.toggleTask(it) },
+                                onDeleteTask = { viewModel.deleteTask(it) },
+                            )
+                        }
                     }
                 }
             }

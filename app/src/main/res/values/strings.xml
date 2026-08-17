@@ -160,6 +160,14 @@
     <string name="action_back">Geri</string>
     <string name="action_delete">Sil</string>
     <string name="action_undo">Geri Al</string>
+
+    <!-- AddTaskSheet -->
+    <string name="add_task_sheet_title">Yeni Görev Ekle</string>
+    <string name="add_task_sheet_title_label">Görev Başlığı</string>
+    <string name="add_task_sheet_priority_label">Öncelik</string>
+    <string name="add_task_sheet_priority_high">Yüksek</string>
+    <string name="add_task_sheet_priority_normal">Normal</string>
+    <string name="add_task_sheet_priority_low">Düşük</string>
     <string name="action_add">Ekle</string>
     <string name="action_next">İleri</string>
     <string name="action_continue">Devam</string>
@@ -325,6 +333,16 @@
     <string name="progress_achievements_empty">Başarımlar görev tamamladıkça, rutin yaptıkça ve gün kapattıkça açılır.</string>
     <string name="progress_recent_days_title">Son günler</string>
     <string name="progress_recent_days_empty">Gün sonu değerlendirmesi yaptığında kayıtlar burada listelenir.</string>
+
+    <!-- AchievementsScreen -->
+    <string name="achievements_summary_title">Başarım Özeti</string>
+    <string name="achievements_summary_unlocked_label">Kazanıldı</string>
+    <string name="achievements_all_title">Tüm Başarımlar</string>
+    <string name="achievements_status_completed">Tamamlandı</string>
+    <string name="achievements_status_locked">Kilitli</string>
+
+    <!-- OssLicensesScreen -->
+    <string name="oss_licenses_title">Açık Kaynak Lisansları</string>
     <string name="progress_day_note_empty">Not eklenmedi</string>
 
     <!-- Onboarding ekranı -->

@@ -5,64 +5,81 @@
     <ID>CyclomaticComplexMethod:AppNavigation.kt$@Composable fun BenimGunlerimApp( requestedStartRoute: String? = null, forceOnboardingCompleted: Boolean = false, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
     <ID>CyclomaticComplexMethod:DataImportService.kt$DataImportService$private fun validateImportData( tasks: List&lt;TaskEntity&gt;, subTasks: List&lt;SubTaskEntity&gt;, routines: List&lt;RoutineEntity&gt;, logs: List&lt;CompletionLogEntity&gt;, states: List&lt;DailyStateEntity&gt;, achievements: List&lt;AchievementEntity&gt;, preferences: UserPreferences?, )</ID>
     <ID>CyclomaticComplexMethod:GameEngine.kt$GameEngine$fun companionEmoji(type: String, mood: String): String</ID>
+    <ID>CyclomaticComplexMethod:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$operator fun invoke(): Flow&lt;ProgressSnapshot&gt;</ID>
     <ID>CyclomaticComplexMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen(onComplete: (String, String, List&lt;String&gt;, String?) -&gt; Unit)</ID>
-    <ID>CyclomaticComplexMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun PlanScreen(viewModel: PlanViewModel = hiltViewModel())</ID>
-    <ID>CyclomaticComplexMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun PlanAddTaskSheet( today: LocalDate, selectedDate: LocalDate, addDate: LocalDate, addText: String, addNote: String, addTime: String, addCategory: String, addPriority: Int, addReminderEnabled: Boolean, addAttempted: Boolean, onDateChange: (LocalDate) -&gt; Unit, onTextChange: (String) -&gt; Unit, onNoteChange: (String) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCategoryChange: (String) -&gt; Unit, onPriorityChange: (Int) -&gt; Unit, onReminderEnabledChange: (Boolean) -&gt; Unit, onCancel: () -&gt; Unit, onSave: () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun PlanEditTaskSheet( task: PlanTaskUi, today: LocalDate, onCancel: () -&gt; Unit, onSave: (String, String?, LocalDate, String?, String?, Int, String?) -&gt; Unit, onDelete: () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:PlanTaskListComponents.kt$@Composable private fun PlanTaskRow( task: PlanTaskUi, accentColor: Color, onToggle: (String) -&gt; Unit, onDelete: (String) -&gt; Unit, onOpen: (String) -&gt; Unit, dateLabel: String? = task.plannedDate, rowTag: String, secondaryAction: (() -&gt; Unit)?, )</ID>
-    <ID>CyclomaticComplexMethod:ProgressScreen.kt$@Composable private fun MoodEnergyTrendCard( moodTrend: List&lt;Pair&lt;String, String?&gt;&gt;, energyTrend: List&lt;Pair&lt;String, Int?&gt;&gt;, )</ID>
+    <ID>CyclomaticComplexMethod:ResetDialog.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ResetDialog( onDismiss: () -&gt; Unit, onEnableLightDay: () -&gt; Unit, onPickTask: () -&gt; Unit, initialDurationSeconds: Int = 60, )</ID>
     <ID>CyclomaticComplexMethod:RoutineDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutineDetailScreen( routineId: String, onBack: () -&gt; Unit, viewModel: RoutineDetailViewModel = hiltViewModel(), )</ID>
-    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable internal fun CloseDayCard( completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, closedNote: String?, closedEnergyLevel: Int?, canCloseDay: Boolean, dailySummaryTime: String, onClick: () -&gt; Unit, )</ID>
-    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable internal fun TodayList( today: LocalDate, routines: List&lt;TodayRoutineUi&gt;, tasks: List&lt;TodayTaskUi&gt;, overdueTasks: List&lt;TodayTaskUi&gt;, completedRoutineIds: Set&lt;String&gt;, completionLogs: List&lt;CompletionLogEntity&gt;, snapshotLoadError: Boolean, dayLocked: Boolean, actions: TodayListActions, )</ID>
-    <ID>CyclomaticComplexMethod:TodayScreen.kt$@Composable private fun rememberTodayLayoutMetrics(): TodayLayoutMetrics</ID>
-    <ID>CyclomaticComplexMethod:TodayScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TodayScreen( viewModel: TodayViewModel, onNavigateToRoutines: () -&gt; Unit = {}, onNavigateToPlan: () -&gt; Unit = {}, onOpenRoutineDetail: (String) -&gt; Unit = {}, )</ID>
+    <ID>CyclomaticComplexMethod:RoutineRow.kt$@Composable fun RoutineRow( title: String, isCompletedToday: Boolean, onToggle: () -&gt; Unit, weekHistory: List&lt;Boolean&gt;, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.primary, streakCount: Int = 0, preferredTime: String? = null, targetDaysSummary: String? = null, targetDays: Set&lt;DayOfWeek&gt; = emptySet(), category: String? = null, targetType: String = "check", targetValue: Int? = null, targetUnit: String? = null, currentValue: Float = 0f, onProgressChange: ((Float) -&gt; Unit)? = null, useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, onMenuClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>CyclomaticComplexMethod:SettingsScreen.kt$@Composable fun SettingsScreen( viewModel: SettingsViewModel = hiltViewModel(), onNavigateToOnboarding: () -&gt; Unit = {}, )</ID>
+    <ID>CyclomaticComplexMethod:TaskRow.kt$@Composable fun TaskRow( title: String, isCompleted: Boolean, onToggleComplete: () -&gt; Unit, onDelete: () -&gt; Unit, modifier: Modifier = Modifier, dueTime: String? = null, priority: Int = 2, category: String? = null, tags: List&lt;String&gt; = emptyList(), useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>CyclomaticComplexMethod:WeekPicker.kt$@Composable fun WeekPicker( selectedDate: LocalDate, onDateSelected: (LocalDate) -&gt; Unit, onPreviousWeek: () -&gt; Unit, onNextWeek: () -&gt; Unit, onSelectToday: () -&gt; Unit, modifier: Modifier = Modifier, taskCountByDate: Map&lt;LocalDate, Int&gt; = emptyMap(), weekStart: LocalDate = selectedDate.minusDays(selectedDate.dayOfWeek.value.toLong() - 1), )</ID>
     <ID>EmptyFunctionBlock:DataExportServiceTest.kt$DataExportServiceTest.&lt;no name provided&gt;${}</ID>
     <ID>EmptyFunctionBlock:SettingsViewModelTest.kt$SettingsViewModelTest.&lt;no name provided&gt;${}</ID>
-    <ID>LargeClass:TodayViewModel.kt$TodayViewModel : ViewModel</ID>
+    <ID>ImplicitDefaultLocale:ResetDialog.kt$String.format("%02d:%02d", remainingSeconds / 60, remainingSeconds % 60)</ID>
     <ID>LargeClass:TodayViewModelTest.kt$TodayViewModelTest</ID>
+    <ID>LongMethod:AddRoutineSheet.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AddRoutineSheet( onDismiss: () -&gt; Unit, onSave: (title: String, targetDays: Set&lt;DayOfWeek&gt;, reminderTime: String?, category: String, targetCount: Int?, unit: String?) -&gt; Unit, modifier: Modifier = Modifier, isEditMode: Boolean = false, initialTitle: String = "", initialDays: Set&lt;DayOfWeek&gt; = DayOfWeek.entries.toSet(), initialReminderTime: String? = null, )</ID>
+    <ID>LongMethod:AddTaskSheet.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun AddTaskSheet( onDismiss: () -&gt; Unit, onSave: (title: String, date: String, startTime: String?, category: String?, priority: Int, reminderTime: String?) -&gt; Unit, modifier: Modifier = Modifier, initialDate: String = LocalDate.now().toString(), )</ID>
+    <ID>LongMethod:AlertBanner.kt$@Composable fun AlertBanner( message: String, modifier: Modifier = Modifier, severity: AlertBannerSeverity = AlertBannerSeverity.Info, title: String? = null, actionLabel: String? = null, action: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongMethod:AppButton.kt$@Composable fun AppButton( text: String, onClick: () -&gt; Unit, modifier: Modifier = Modifier, variant: AppButtonVariant = AppButtonVariant.Primary, enabled: Boolean = true, leadingIcon: ImageVector? = null, )</ID>
     <ID>LongMethod:AppNavigation.kt$@Composable fun BenimGunlerimApp( requestedStartRoute: String? = null, forceOnboardingCompleted: Boolean = false, viewModel: OnboardingViewModel = hiltViewModel(), )</ID>
-    <ID>LongMethod:CelebrationSystem.kt$@Composable fun ConfettiOverlay( trigger: Boolean, intensity: ConfettiIntensity = ConfettiIntensity.Medium, onFinished: () -&gt; Unit = {}, )</ID>
-    <ID>LongMethod:CelebrationSystem.kt$@Composable fun LevelUpOverlay( visible: Boolean, level: Int, title: String, onDismiss: () -&gt; Unit, )</ID>
-    <ID>LongMethod:Common.kt$@Composable fun ProgressSummaryCard( completed: Int, total: Int, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:AppTopBar.kt$@Composable fun AppTopBar( title: String, subtitle: String? = null, showProfile: Boolean = true, showNotification: Boolean = true, hasNotificationBadge: Boolean = false, onProfileClick: () -&gt; Unit = {}, onNotificationClick: () -&gt; Unit = {}, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:BrainDumpDialog.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun BrainDumpDialog( onDismiss: () -&gt; Unit, onAddTasks: (List&lt;String&gt;) -&gt; Unit, )</ID>
+    <ID>LongMethod:CelebrationModals.kt$@Composable fun AchievementDialog( id: String = "", emoji: String, title: String, description: String, xpReward: Int = 50, showParticles: Boolean = false, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:CelebrationModals.kt$@Composable fun CombinedCelebrationDialog( level: Int, levelTitle: String, achievementTitle: String, achievementEmoji: String, totalXpBonus: Int, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:CelebrationModals.kt$@Composable fun LevelUpDialog( level: Int, title: String, xpBonus: Int = 100, showParticles: Boolean = true, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:CelebrationModals.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun BlockCompletionSheet( title: String, subtitle: String, badgeText: String, isLightDayMode: Boolean = false, onCloseDayClick: () -&gt; Unit, onContinueClick: () -&gt; Unit, onDismiss: () -&gt; Unit, )</ID>
+    <ID>LongMethod:CloseDayStep23Content.kt$@Composable internal fun CloseDayStep3IntentionAndCarry( tomorrowIntention: String, onTomorrowIntentionChange: (String) -&gt; Unit, onIntentionDone: () -&gt; Unit, overdueCount: Int, carryTasks: Boolean, onCarryTasksToggle: () -&gt; Unit, )</ID>
     <ID>LongMethod:DataImportService.kt$DataImportService$private fun validateImportData( tasks: List&lt;TaskEntity&gt;, subTasks: List&lt;SubTaskEntity&gt;, routines: List&lt;RoutineEntity&gt;, logs: List&lt;CompletionLogEntity&gt;, states: List&lt;DailyStateEntity&gt;, achievements: List&lt;AchievementEntity&gt;, preferences: UserPreferences?, )</ID>
     <ID>LongMethod:DataImportServiceTest.kt$DataImportServiceTest$@Test fun exportedJson_canBeImportedIntoEmptyStore()</ID>
+    <ID>LongMethod:HeaderProgressCard.kt$@Composable fun HeaderProgressCard( streakCount: Int, completedTasks: Int, totalTasks: Int, level: Int, xp: Int, modifier: Modifier = Modifier, isLightDayMode: Boolean = false, levelTitle: String = stringResource(R.string.today_level_default_title), onMoodClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongMethod:LevelHeroCard.kt$@Composable fun LevelHeroCard( level: Int, levelTitle: String, currentXp: Int, maxXp: Int, streak: Int, gold: Int, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:MissedDayReviewSheet.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun MissedDayReviewSheet( date: LocalDate, completedCount: Int, totalCount: Int, pendingTaskCount: Int, onDismiss: () -&gt; Unit, onCloseAndStart: (mood: Int, carryOverTasks: Boolean) -&gt; Unit, onArchiveAsIs: () -&gt; Unit, )</ID>
+    <ID>LongMethod:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$operator fun invoke(): Flow&lt;ProgressSnapshot&gt;</ID>
     <ID>LongMethod:OnboardingScreen.kt$@Composable fun OnboardingScreen(onComplete: (String, String, List&lt;String&gt;, String?) -&gt; Unit)</ID>
-    <ID>LongMethod:PlanScreen.kt$@Composable private fun PlanHeroCard( selectedDate: LocalDate, today: LocalDate, taskCount: Int, completedCount: Int, overdueCount: Int, )</ID>
-    <ID>LongMethod:PlanScreen.kt$@Composable private fun WeekDatePicker( weekStart: LocalDate, selectedDate: LocalDate, today: LocalDate, taskCounts: Map&lt;LocalDate, Int&gt;, onSelectDate: (LocalDate) -&gt; Unit, )</ID>
-    <ID>LongMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun PlanScreen(viewModel: PlanViewModel = hiltViewModel())</ID>
-    <ID>LongMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun PlanAddTaskSheet( today: LocalDate, selectedDate: LocalDate, addDate: LocalDate, addText: String, addNote: String, addTime: String, addCategory: String, addPriority: Int, addReminderEnabled: Boolean, addAttempted: Boolean, onDateChange: (LocalDate) -&gt; Unit, onTextChange: (String) -&gt; Unit, onNoteChange: (String) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCategoryChange: (String) -&gt; Unit, onPriorityChange: (Int) -&gt; Unit, onReminderEnabledChange: (Boolean) -&gt; Unit, onCancel: () -&gt; Unit, onSave: () -&gt; Unit, )</ID>
-    <ID>LongMethod:PlanScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun PlanEditTaskSheet( task: PlanTaskUi, today: LocalDate, onCancel: () -&gt; Unit, onSave: (String, String?, LocalDate, String?, String?, Int, String?) -&gt; Unit, onDelete: () -&gt; Unit, )</ID>
-    <ID>LongMethod:ProgressScreen.kt$@Composable fun ProgressScreen( onOpenAchievements: () -&gt; Unit = {}, viewModel: ProgressViewModel = hiltViewModel(), )</ID>
-    <ID>LongMethod:ProgressScreen.kt$@Composable private fun MoodEnergyTrendCard( moodTrend: List&lt;Pair&lt;String, String?&gt;&gt;, energyTrend: List&lt;Pair&lt;String, Int?&gt;&gt;, )</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable private fun IntensityCard(intensity: IntensityOption, selected: Boolean, onClick: () -&gt; Unit)</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable private fun NeedCard(need: NeedOption, selected: Boolean, onClick: () -&gt; Unit)</ID>
+    <ID>LongMethod:OnboardingScreen.kt$@Composable private fun SelectableRoutineRow( name: String, icon: ImageVector? = null, selected: Boolean, onToggle: () -&gt; Unit, badge: String? = null, badgeColor: Color = BrandPrimary, )</ID>
+    <ID>LongMethod:OssLicensesScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun OssLicensesScreen( onNavigateBack: () -&gt; Unit, )</ID>
+    <ID>LongMethod:PrivacyPolicyScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun PrivacyPolicyScreen( onNavigateBack: () -&gt; Unit, webPolicyUrl: String = "https://krayirhan.github.io/BenimGunlerim/privacy.html", )</ID>
+    <ID>LongMethod:ResetDialog.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun ResetDialog( onDismiss: () -&gt; Unit, onEnableLightDay: () -&gt; Unit, onPickTask: () -&gt; Unit, initialDurationSeconds: Int = 60, )</ID>
     <ID>LongMethod:RoutineDetailScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutineDetailScreen( routineId: String, onBack: () -&gt; Unit, viewModel: RoutineDetailViewModel = hiltViewModel(), )</ID>
-    <ID>LongMethod:RoutinesScreen.kt$@Composable private fun EmptyRoutinesCard(onAddRoutine: () -&gt; Unit)</ID>
-    <ID>LongMethod:RoutinesScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun RoutinesScreen( viewModel: RoutinesViewModel = hiltViewModel(), onNavigateToDetail: (String) -&gt; Unit = {}, )</ID>
-    <ID>LongMethod:RoutinesScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable private fun AddRoutineSheet( onDismiss: () -&gt; Unit, onSave: (String, Set&lt;DayOfWeek&gt;, String?, String, Int?, String?) -&gt; Unit, )</ID>
-    <ID>LongMethod:SettingsScreen.kt$@Composable fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel())</ID>
-    <ID>LongMethod:SettingsScreen.kt$@Composable private fun LocalDataCard( preferences: UserPreferences, dataOperationMessage: SettingsEvent?, onExportData: () -&gt; Unit, onImportData: () -&gt; Unit, onClearData: () -&gt; Unit, onDismissMessage: () -&gt; Unit, )</ID>
-    <ID>LongMethod:ShopScreen.kt$@Composable fun ShopScreen(viewModel: ShopViewModel = hiltViewModel())</ID>
-    <ID>LongMethod:TodayContent.kt$@Composable internal fun TodayContent( state: TodayUiState, today: LocalDate, completed: Int, total: Int, dayIsClosed: Boolean, padding: PaddingValues, haptic: HapticFeedback, viewModel: TodayViewModel, onNavigateToRoutines: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, onOpenRoutineDetail: (String) -&gt; Unit, onOpenTask: (String) -&gt; Unit, onShowAddTaskSheet: () -&gt; Unit, onShowMissedDaySheet: () -&gt; Unit, onShowCloseDaySheet: () -&gt; Unit, onConfirmDeleteCompletedTask: (TodayTaskUi) -&gt; Unit, )</ID>
-    <ID>LongMethod:TodayPreviews.kt$@Preview(showBackground = true, name = "Today List Mixed") @Composable private fun TodayListMixedPreview()</ID>
-    <ID>LongMethod:TodayScreen.kt$@Composable @Suppress("CyclomaticComplexMethod") private fun RoutineRow( routine: TodayRoutineUi, log: CompletionLogEntity?, done: Boolean, interactionLocked: Boolean, onToggle: (TodayRoutineUi) -&gt; Unit, onProgressChange: (TodayRoutineUi, Float, Boolean) -&gt; Unit, onOpenDetail: (TodayRoutineUi) -&gt; Unit, )</ID>
-    <ID>LongMethod:TodayScreen.kt$@Composable internal fun CloseDayCard( completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, closedNote: String?, closedEnergyLevel: Int?, canCloseDay: Boolean, dailySummaryTime: String, onClick: () -&gt; Unit, )</ID>
-    <ID>LongMethod:TodayScreen.kt$@Composable internal fun TodayHeaderCard( today: LocalDate, streak: Int, happiness: Int, completed: Int, total: Int, progress: Float, )</ID>
-    <ID>LongMethod:TodayScreen.kt$@Composable internal fun TodayList( today: LocalDate, routines: List&lt;TodayRoutineUi&gt;, tasks: List&lt;TodayTaskUi&gt;, overdueTasks: List&lt;TodayTaskUi&gt;, completedRoutineIds: Set&lt;String&gt;, completionLogs: List&lt;CompletionLogEntity&gt;, snapshotLoadError: Boolean, dayLocked: Boolean, actions: TodayListActions, )</ID>
-    <ID>LongMethod:TodayScreen.kt$@Composable private fun TaskRow( task: TodayTaskUi, interactionLocked: Boolean, onToggle: (TodayTaskUi) -&gt; Unit, onOpen: (TodayTaskUi) -&gt; Unit, onDelete: (TodayTaskUi) -&gt; Unit, )</ID>
-    <ID>LongMethod:TodayScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TodayScreen( viewModel: TodayViewModel, onNavigateToRoutines: () -&gt; Unit = {}, onNavigateToPlan: () -&gt; Unit = {}, onOpenRoutineDetail: (String) -&gt; Unit = {}, )</ID>
+    <ID>LongMethod:RoutineRow.kt$@Composable fun RoutineRow( title: String, isCompletedToday: Boolean, onToggle: () -&gt; Unit, weekHistory: List&lt;Boolean&gt;, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.primary, streakCount: Int = 0, preferredTime: String? = null, targetDaysSummary: String? = null, targetDays: Set&lt;DayOfWeek&gt; = emptySet(), category: String? = null, targetType: String = "check", targetValue: Int? = null, targetUnit: String? = null, currentValue: Float = 0f, onProgressChange: ((Float) -&gt; Unit)? = null, useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, onMenuClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongMethod:TaskDetailSubtasksSection.kt$@Composable internal fun TaskDetailSubtasksSection( subtasks: List&lt;SubTaskEntity&gt;, interactionLocked: Boolean, onToggleSubTask: (SubTaskEntity) -&gt; Unit, onDeleteSubTask: (SubTaskEntity) -&gt; Unit, onAddSubTask: (String) -&gt; Unit, )</ID>
+    <ID>LongMethod:TaskRow.kt$@Composable fun TaskRow( title: String, isCompleted: Boolean, onToggleComplete: () -&gt; Unit, onDelete: () -&gt; Unit, modifier: Modifier = Modifier, dueTime: String? = null, priority: Int = 2, category: String? = null, tags: List&lt;String&gt; = emptyList(), useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongMethod:TodayBanners.kt$@Composable fun ContextualResetCard( isLightDayMode: Boolean, onResetClick: () -&gt; Unit, onDismissClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:TodayBanners.kt$@Composable fun LightDayBanner( onDisableClick: () -&gt; Unit, modifier: Modifier = Modifier, )</ID>
+    <ID>LongMethod:TodayContentList.kt$@Suppress("LongParameterList") @Composable internal fun TodayContentList( modifier: Modifier, contentPadding: PaddingValues, state: TodayUiState, today: LocalDate, viewModel: TodayViewModel, dayIsClosed: Boolean, isEmptyToday: Boolean, totalCount: Int, completedCount: Int, userLevel: Int, miniBannerData: Pair&lt;String, String&gt;?, dismissContextualReset: Boolean, onNavigateToRoutines: () -&gt; Unit, onResetClick: () -&gt; Unit, onDismissContextualReset: () -&gt; Unit, onMissedDayReviewClick: () -&gt; Unit, onAddTaskClick: () -&gt; Unit, onOpenRoutineMenu: (String) -&gt; Unit, onCloseDayClick: () -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayEventEffects.kt$@Composable internal fun TodayEventEffects( viewModel: TodayViewModel, snackbarHostState: SnackbarHostState, onLevelUp: (GameEvent.LevelUp) -&gt; Unit, onAchievementUnlocked: (GameEvent.AchievementUnlocked) -&gt; Unit, onBlockCompletion: (title: String, subtitle: String, badge: String) -&gt; Unit, onMiniBanner: (Pair&lt;String, String&gt;?) -&gt; Unit, )</ID>
+    <ID>LongMethod:TodayModalsHost.kt$@Suppress("LongParameterList") @Composable internal fun TodayModalsHost( state: TodayUiState, today: LocalDate, viewModel: TodayViewModel, completedCount: Int, totalCount: Int, showFabMenu: MutableState&lt;Boolean&gt;, showResetDialog: MutableState&lt;Boolean&gt;, showBrainDumpDialog: MutableState&lt;Boolean&gt;, showAddTaskSheet: MutableState&lt;Boolean&gt;, showCloseSheet: MutableState&lt;Boolean&gt;, showMissedDaySheet: MutableState&lt;Boolean&gt;, menuRoutineId: MutableState&lt;String?&gt;, editingRoutine: MutableState&lt;TodayRoutineUi?&gt;, levelUpEvent: MutableState&lt;GameEvent.LevelUp?&gt;, achievementEvent: MutableState&lt;GameEvent.AchievementUnlocked?&gt;, blockCompletionData: MutableState&lt;Triple&lt;String, String, String&gt;?&gt;, )</ID>
+    <ID>LongMethod:TodayScreen.kt$@OptIn(ExperimentalMaterial3Api::class) @Composable fun TodayScreen( viewModel: TodayViewModel, onNavigateToRoutines: () -&gt; Unit = {}, onNavigateToPlan: () -&gt; Unit = {}, onNavigateToSettings: () -&gt; Unit = {}, onOpenRoutineDetail: (String) -&gt; Unit = {}, )</ID>
+    <ID>LongMethod:WeekPicker.kt$@Composable fun WeekPicker( selectedDate: LocalDate, onDateSelected: (LocalDate) -&gt; Unit, onPreviousWeek: () -&gt; Unit, onNextWeek: () -&gt; Unit, onSelectToday: () -&gt; Unit, modifier: Modifier = Modifier, taskCountByDate: Map&lt;LocalDate, Int&gt; = emptyMap(), weekStart: LocalDate = selectedDate.minusDays(selectedDate.dayOfWeek.value.toLong() - 1), )</ID>
+    <ID>LongParameterList:AchievementRow.kt$( title: String, description: String, icon: String, isUnlocked: Boolean, progress: Float, progressText: String, modifier: Modifier = Modifier, unlockedDate: String? = null, )</ID>
+    <ID>LongParameterList:AppSurface.kt$( modifier: Modifier = Modifier, radius: Dp = AppTokens.Radius.md, color: Color = MaterialTheme.colorScheme.surface, borderColor: Color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.50f), borderWidth: Dp = 1.dp, elevation: Dp = AppTokens.Elevation.flat, padding: Dp = AppTokens.Spacing.cardInner, onClick: (() -&gt; Unit)? = null, content: @Composable ColumnScope.() -&gt; Unit, )</ID>
+    <ID>LongParameterList:AppTopBar.kt$( title: String, subtitle: String? = null, showProfile: Boolean = true, showNotification: Boolean = true, hasNotificationBadge: Boolean = false, onProfileClick: () -&gt; Unit = {}, onNotificationClick: () -&gt; Unit = {}, modifier: Modifier = Modifier, )</ID>
     <ID>LongParameterList:CloseDayUseCase.kt$CloseDayUseCase$( date: LocalDate = dateTimeProvider.today(), mood: Int, note: String, completionRate: Float, energy: Int = 3, bestMoment: String = "", challenge: String = "", tomorrowIntention: String = "", carriedCount: Int = 0, streak: Int = 0, )</ID>
     <ID>LongParameterList:DailyStateRepository.kt$DailyStateRepository$( date: LocalDate, mood: String, note: String, completionRate: Float, energyLevel: Int? = null, bestMoment: String? = null, challenge: String? = null, tomorrowIntention: String? = null, carriedTaskCount: Int = 0, )</ID>
     <ID>LongParameterList:DataExportService.kt$DataExportService$( private val taskDao: TaskDao, private val routineDao: RoutineDao, private val subTaskDao: SubTaskDao, private val completionLogDao: CompletionLogDao, private val dailyStateDao: DailyStateDao, private val achievementDao: AchievementDao, private val preferencesRepository: UserPreferencesSource, private val errorReporter: ErrorReporter, )</ID>
     <ID>LongParameterList:DataImportService.kt$DataImportService$( private val transactionRunner: DatabaseTransactionRunner, private val taskDao: TaskDao, private val routineDao: RoutineDao, private val subTaskDao: SubTaskDao, private val completionLogDao: CompletionLogDao, private val dailyStateDao: DailyStateDao, private val achievementDao: AchievementDao, private val preferencesWriter: UserPreferencesWriter, private val errorReporter: ErrorReporter, )</ID>
     <ID>LongParameterList:DataImportServiceTest.kt$DataImportServiceTest$( taskDao: FakeTaskDao = FakeTaskDao(), routineDao: FakeRoutineDao = FakeRoutineDao(), subTaskDao: FakeSubTaskDao = FakeSubTaskDao(), logDao: FakeCompletionLogDao = FakeCompletionLogDao(), stateDao: FakeDailyStateDao = FakeDailyStateDao(), achievementDao: FakeAchievementDao = FakeAchievementDao(), prefsWriter: FakePreferencesStore = FakePreferencesStore(), errorReporter: ErrorReporter = object : ErrorReporter { override fun recordNonFatal(error: Throwable, context: Map&lt;String, String&gt;) = Unit override fun setUserProperty(key: String, value: String) = Unit }, )</ID>
-    <ID>LongParameterList:PlanScreen.kt$( today: LocalDate, selectedDate: LocalDate, addDate: LocalDate, addText: String, addNote: String, addTime: String, addCategory: String, addPriority: Int, addReminderEnabled: Boolean, addAttempted: Boolean, onDateChange: (LocalDate) -&gt; Unit, onTextChange: (String) -&gt; Unit, onNoteChange: (String) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCategoryChange: (String) -&gt; Unit, onPriorityChange: (Int) -&gt; Unit, onReminderEnabledChange: (Boolean) -&gt; Unit, onCancel: () -&gt; Unit, onSave: () -&gt; Unit, )</ID>
-    <ID>LongParameterList:ProgressScreen.kt$( streak: Int, bestStreak: Int, weeklyScore: Int, averageScore: Int, daysClosed: Int, totalTasks: Int, totalRoutines: Int, totalPerfectDays: Int, )</ID>
-    <ID>LongParameterList:RoutinesScreen.kt$( name: String, days: Set&lt;DayOfWeek&gt;, time: String, onNameChange: (String) -&gt; Unit, onDaysChange: (Set&lt;DayOfWeek&gt;) -&gt; Unit, onTimeChange: (String) -&gt; Unit, onCancel: () -&gt; Unit, onSave: () -&gt; Unit, )</ID>
-    <ID>LongParameterList:SettingsScreen.kt$( enabled: Boolean, start: String, end: String, onEnabledChange: (Boolean) -&gt; Unit, onStartChange: (String) -&gt; Unit, onEndChange: (String) -&gt; Unit, onSaveStart: () -&gt; Unit, onSaveEnd: () -&gt; Unit, )</ID>
+    <ID>LongParameterList:HeaderProgressCard.kt$( streakCount: Int, completedTasks: Int, totalTasks: Int, level: Int, xp: Int, modifier: Modifier = Modifier, isLightDayMode: Boolean = false, levelTitle: String = stringResource(R.string.today_level_default_title), onMoodClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongParameterList:RoutineRow.kt$( title: String, isCompletedToday: Boolean, onToggle: () -&gt; Unit, weekHistory: List&lt;Boolean&gt;, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.primary, streakCount: Int = 0, preferredTime: String? = null, targetDaysSummary: String? = null, targetDays: Set&lt;DayOfWeek&gt; = emptySet(), category: String? = null, targetType: String = "check", targetValue: Int? = null, targetUnit: String? = null, currentValue: Float = 0f, onProgressChange: ((Float) -&gt; Unit)? = null, useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, onMenuClick: (() -&gt; Unit)? = null, )</ID>
+    <ID>LongParameterList:SaveMissedDaySummaryUseCase.kt$SaveMissedDaySummaryUseCase$( date: LocalDate, note: String = "", mood: Int = 2, energy: Int = 3, bestMoment: String = "", challenge: String = "", tomorrowIntention: String = "", carryOverPendingTasks: Boolean = true, )</ID>
+    <ID>LongParameterList:ShopItemCard.kt$( title: String, description: String, priceGold: Int, isPurchased: Boolean, onPurchaseClick: () -&gt; Unit, modifier: Modifier = Modifier, icon: ImageVector? = null, userGold: Int = 0, )</ID>
     <ID>LongParameterList:TaskRepository.kt$TaskRepository$( task: TaskEntity, title: String, note: String?, plannedDate: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
-    <ID>LongParameterList:TodayContent.kt$( state: TodayUiState, today: LocalDate, completed: Int, total: Int, dayIsClosed: Boolean, padding: PaddingValues, haptic: HapticFeedback, viewModel: TodayViewModel, onNavigateToRoutines: () -&gt; Unit, onNavigateToPlan: () -&gt; Unit, onOpenRoutineDetail: (String) -&gt; Unit, onOpenTask: (String) -&gt; Unit, onShowAddTaskSheet: () -&gt; Unit, onShowMissedDaySheet: () -&gt; Unit, onShowCloseDaySheet: () -&gt; Unit, onConfirmDeleteCompletedTask: (TodayTaskUi) -&gt; Unit, )</ID>
-    <ID>LongParameterList:TodayScreen.kt$( completed: Int, total: Int, progress: Float, isClosed: Boolean, mood: String?, closedNote: String?, closedEnergyLevel: Int?, canCloseDay: Boolean, dailySummaryTime: String, onClick: () -&gt; Unit, )</ID>
-    <ID>LongParameterList:TodayScreen.kt$( today: LocalDate, routines: List&lt;TodayRoutineUi&gt;, tasks: List&lt;TodayTaskUi&gt;, overdueTasks: List&lt;TodayTaskUi&gt;, completedRoutineIds: Set&lt;String&gt;, completionLogs: List&lt;CompletionLogEntity&gt;, snapshotLoadError: Boolean, dayLocked: Boolean, actions: TodayListActions, )</ID>
+    <ID>LongParameterList:TaskRow.kt$( title: String, isCompleted: Boolean, onToggleComplete: () -&gt; Unit, onDelete: () -&gt; Unit, modifier: Modifier = Modifier, dueTime: String? = null, priority: Int = 2, category: String? = null, tags: List&lt;String&gt; = emptyList(), useSurface: Boolean = true, onClick: (() -&gt; Unit)? = null, )</ID>
     <ID>LongParameterList:UpdateTaskUseCase.kt$UpdateTaskUseCase$( task: TaskEntity, title: String, note: String?, date: LocalDate, startTime: String?, category: String?, priority: Int, reminderTime: String?, )</ID>
+    <ID>LongParameterList:WeekPicker.kt$( selectedDate: LocalDate, onDateSelected: (LocalDate) -&gt; Unit, onPreviousWeek: () -&gt; Unit, onNextWeek: () -&gt; Unit, onSelectToday: () -&gt; Unit, modifier: Modifier = Modifier, taskCountByDate: Map&lt;LocalDate, Int&gt; = emptyMap(), weekStart: LocalDate = selectedDate.minusDays(selectedDate.dayOfWeek.value.toLong() - 1), )</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFF00796B</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFF2E7D32</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFF4527A0</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFE0F2F1</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFE65100</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFE8F5E9</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFEDE7F6</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFFFA000</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFFFF3E0</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$0xFFFFF8E1</ID>
+    <ID>MagicNumber:AchievementBadgeView.kt$4</ID>
     <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$10</ID>
     <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$1000</ID>
     <ID>MagicNumber:AchievementEvaluationService.kt$AchievementEvaluationService$14</ID>
@@ -77,6 +94,7 @@
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$1000</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$14</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$20</ID>
+    <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$25</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$30</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$5</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$50</ID>
@@ -84,45 +102,31 @@
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$7</ID>
     <ID>MagicNumber:AchievementTracker.kt$AchievementTracker$90</ID>
     <ID>MagicNumber:AppCrashHandler.kt$ReportingUncaughtExceptionHandler$80</ID>
+    <ID>MagicNumber:AppModule.kt$AppModule$4</ID>
+    <ID>MagicNumber:AppModule.kt$AppModule$5</ID>
+    <ID>MagicNumber:AppModule.kt$AppModule$6</ID>
     <ID>MagicNumber:AppNavigation.kt$200</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0.001f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0.05f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0.5f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0.6f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0xFF00C897</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0xFF4ECDC4</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0xFFFF6B8A</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$0xFFFF8A65</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$1.2f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$12</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$120f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$150</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$200</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$300</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$35</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$400</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$45.0</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$50</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$60</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$600</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$60f</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$8</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$80</ID>
-    <ID>MagicNumber:CelebrationSystem.kt$90</ID>
+    <ID>MagicNumber:AppTopBar.kt$0.114</ID>
+    <ID>MagicNumber:AppTopBar.kt$0.299</ID>
+    <ID>MagicNumber:AppTopBar.kt$0.5</ID>
+    <ID>MagicNumber:AppTopBar.kt$0.587</ID>
+    <ID>MagicNumber:BrainDumpDialog.kt$200</ID>
+    <ID>MagicNumber:BrainDumpDialog.kt$250</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFF0D5C3A</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFF147A4F</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFF1B5E20</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFFD97706</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFFE8F5E9</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFFFDE68A</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFFFFF3E0</ID>
+    <ID>MagicNumber:CelebrationModals.kt$0xFFFFF7E6</ID>
+    <ID>MagicNumber:CelebrationParticles.kt$0.5</ID>
+    <ID>MagicNumber:CelebrationParticles.kt$35</ID>
     <ID>MagicNumber:CloseDayUseCase.kt$CloseDayUseCase$4</ID>
     <ID>MagicNumber:CloseDayUseCase.kt$CloseDayUseCase$5</ID>
-    <ID>MagicNumber:Common.kt$0.10f</ID>
-    <ID>MagicNumber:Common.kt$0xFFEAF8F2</ID>
-    <ID>MagicNumber:Common.kt$0xFFF0EEFF</ID>
-    <ID>MagicNumber:Common.kt$0xFFFF8A65</ID>
-    <ID>MagicNumber:Common.kt$25</ID>
-    <ID>MagicNumber:Common.kt$30</ID>
-    <ID>MagicNumber:Common.kt$50</ID>
-    <ID>MagicNumber:Common.kt$7</ID>
-    <ID>MagicNumber:Common.kt$75</ID>
-    <ID>MagicNumber:Common.kt$800</ID>
     <ID>MagicNumber:DateTimeProvider.kt$FixedDateTimeProvider$12</ID>
     <ID>MagicNumber:DateTimeProvider.kt$FixedDateTimeProvider$2024</ID>
+    <ID>MagicNumber:EmptyState.kt$0xFFE11D48</ID>
     <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$150</ID>
     <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$200</ID>
     <ID>MagicNumber:FeedbackManager.kt$SystemFeedbackManager$255</ID>
@@ -137,84 +141,42 @@
     <ID>MagicNumber:GameEngine.kt$GameEngine$60</ID>
     <ID>MagicNumber:GameEngine.kt$GameEngine$7</ID>
     <ID>MagicNumber:GameEngine.kt$GameEngine$80</ID>
+    <ID>MagicNumber:GoldBadge.kt$0xFF5D4037</ID>
+    <ID>MagicNumber:GoldBadge.kt$0xFFFFD54F</ID>
+    <ID>MagicNumber:LevelHeroCard.kt$0xFF0D5C3A</ID>
+    <ID>MagicNumber:LevelHeroCard.kt$0xFF147A4F</ID>
     <ID>MagicNumber:LocalErrorReporter.kt$LocalErrorReporter$160</ID>
     <ID>MagicNumber:LocalErrorReporter.kt$LocalErrorReporter$80</ID>
+    <ID>MagicNumber:MissedDayReviewSheet.kt$4</ID>
     <ID>MagicNumber:NotificationHelper.kt$21_000</ID>
     <ID>MagicNumber:NotificationIds.kt$NotificationIds$10_000</ID>
     <ID>MagicNumber:NotificationIds.kt$NotificationIds$300_000</ID>
     <ID>MagicNumber:NotificationIds.kt$NotificationIds$500_000</ID>
     <ID>MagicNumber:NotificationIds.kt$NotificationIds$600_000</ID>
     <ID>MagicNumber:NotificationIds.kt$NotificationIds$90_000</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$0.5f</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$50</ID>
     <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$14</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$29</ID>
+    <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$30</ID>
     <ID>MagicNumber:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$7</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.07f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.08f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.12f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.15f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.18f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0.30f</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFF10B981</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFF475569</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFF6366F1</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFF64748B</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFF8B5CF6</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFFEA580C</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$0xFFF59E0B</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$10</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$12</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$14</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$16</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$20</ID>
+    <ID>MagicNumber:ObserveTodaySnapshotUseCase.kt$ObserveTodaySnapshotUseCase$60</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$180</ID>
     <ID>MagicNumber:OnboardingScreen.kt$200</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$24</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$28</ID>
+    <ID>MagicNumber:OnboardingScreen.kt$250</ID>
     <ID>MagicNumber:OnboardingScreen.kt$4</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$40</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$48</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$5</ID>
     <ID>MagicNumber:OnboardingScreen.kt$50</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$6</ID>
-    <ID>MagicNumber:OnboardingScreen.kt$8</ID>
     <ID>MagicNumber:OnboardingViewModel.kt$OnboardingViewModel$10</ID>
-    <ID>MagicNumber:PlanScreen.kt$.08f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.10f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.14f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.15f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.18f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.22f</ID>
-    <ID>MagicNumber:PlanScreen.kt$.30f</ID>
-    <ID>MagicNumber:PlanScreen.kt$5</ID>
-    <ID>MagicNumber:PlanScreen.kt$6</ID>
-    <ID>MagicNumber:PlanScreen.kt$80</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.001f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.08f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.10f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.12f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.15f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.16f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.20f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.22f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.76f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.78f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.85f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$.86f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$0xFF0E8C5C</ID>
-    <ID>MagicNumber:ProgressScreen.kt$0xFF0FA46A</ID>
-    <ID>MagicNumber:ProgressScreen.kt$0xFF19B97A</ID>
-    <ID>MagicNumber:ProgressScreen.kt$0xFFEAF8F2</ID>
-    <ID>MagicNumber:ProgressScreen.kt$0xFFF4F2FF</ID>
-    <ID>MagicNumber:ProgressScreen.kt$10</ID>
-    <ID>MagicNumber:ProgressScreen.kt$104</ID>
-    <ID>MagicNumber:ProgressScreen.kt$360f</ID>
-    <ID>MagicNumber:ProgressScreen.kt$4</ID>
-    <ID>MagicNumber:ProgressScreen.kt$50</ID>
-    <ID>MagicNumber:ProgressScreen.kt$7</ID>
-    <ID>MagicNumber:ProgressScreen.kt$700</ID>
-    <ID>MagicNumber:ProgressScreen.kt$8</ID>
-    <ID>MagicNumber:ProgressScreen.kt$80</ID>
-    <ID>MagicNumber:ProgressScreen.kt$800</ID>
-    <ID>MagicNumber:ProgressScreen.kt$90f</ID>
+    <ID>MagicNumber:ProgressBar.kt$0.005f</ID>
+    <ID>MagicNumber:ProgressScreen.kt$6</ID>
     <ID>MagicNumber:ReminderBootstrapper.kt$ReminderBootstrapper$21</ID>
+    <ID>MagicNumber:ResetDialog.kt$10</ID>
+    <ID>MagicNumber:ResetDialog.kt$1000L</ID>
+    <ID>MagicNumber:ResetDialog.kt$200</ID>
+    <ID>MagicNumber:ResetDialog.kt$250</ID>
+    <ID>MagicNumber:ResetDialog.kt$30</ID>
+    <ID>MagicNumber:ResetDialog.kt$4</ID>
+    <ID>MagicNumber:ResetDialog.kt$60</ID>
     <ID>MagicNumber:RoutineDetailScreen.kt$.05f</ID>
     <ID>MagicNumber:RoutineDetailScreen.kt$.10f</ID>
     <ID>MagicNumber:RoutineDetailScreen.kt$.12f</ID>
@@ -224,233 +186,396 @@
     <ID>MagicNumber:RoutineDetailScreen.kt$7</ID>
     <ID>MagicNumber:RoutineDetailViewModel.kt$RoutineDetailViewModel$29</ID>
     <ID>MagicNumber:RoutineDetailViewModel.kt$RoutineDetailViewModel$6</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$0xFFEAF8F2</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$0xFFF0EEFF</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$26</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$4</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$5</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$50</ID>
+    <ID>MagicNumber:RoutineRow.kt$6</ID>
+    <ID>MagicNumber:RoutineRow.kt$7</ID>
     <ID>MagicNumber:RoutinesScreen.kt$7</ID>
-    <ID>MagicNumber:RoutinesScreen.kt$8</ID>
     <ID>MagicNumber:RoutinesViewModel.kt$RoutinesViewModel$6</ID>
-    <ID>MagicNumber:SettingsScreen.kt$0xFFEAF8F2</ID>
-    <ID>MagicNumber:SettingsScreen.kt$0xFFF0EEFF</ID>
-    <ID>MagicNumber:SettingsScreen.kt$5</ID>
-    <ID>MagicNumber:SettingsScreen.kt$50</ID>
     <ID>MagicNumber:SettingsViewModel.kt$SettingsViewModel$21</ID>
     <ID>MagicNumber:SettingsViewModel.kt$SettingsViewModel$8</ID>
-    <ID>MagicNumber:ShopScreen.kt$16</ID>
-    <ID>MagicNumber:ShopScreen.kt$200</ID>
-    <ID>MagicNumber:ShopScreen.kt$50</ID>
     <ID>MagicNumber:ShopViewModel.kt$ShopViewModel$25</ID>
+    <ID>MagicNumber:TickerProvider.kt$SystemTickerProvider$500L</ID>
     <ID>MagicNumber:TickerProvider.kt$SystemTickerProvider$60_000L</ID>
     <ID>MagicNumber:TimeInputValidator.kt$TimeInputValidator$23</ID>
     <ID>MagicNumber:TimeInputValidator.kt$TimeInputValidator$5</ID>
     <ID>MagicNumber:TimeInputValidator.kt$TimeInputValidator$59</ID>
     <ID>MagicNumber:TimeText.kt$23</ID>
     <ID>MagicNumber:TimeText.kt$59</ID>
-    <ID>MagicNumber:TodayScreen.kt$.08f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.10f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.12f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.14f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.15f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.16f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.20f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.22f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.30f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.45f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.5f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.62f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.66f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.68f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.6f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.72f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.78f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.85f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.88f</ID>
-    <ID>MagicNumber:TodayScreen.kt$.90f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.01f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.40f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.42f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.62f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.94f</ID>
-    <ID>MagicNumber:TodayScreen.kt$0.9f</ID>
-    <ID>MagicNumber:TodayScreen.kt$1.1f</ID>
-    <ID>MagicNumber:TodayScreen.kt$10f</ID>
-    <ID>MagicNumber:TodayScreen.kt$11f</ID>
-    <ID>MagicNumber:TodayScreen.kt$12f</ID>
-    <ID>MagicNumber:TodayScreen.kt$14f</ID>
-    <ID>MagicNumber:TodayScreen.kt$16</ID>
-    <ID>MagicNumber:TodayScreen.kt$160</ID>
-    <ID>MagicNumber:TodayScreen.kt$16f</ID>
-    <ID>MagicNumber:TodayScreen.kt$20f</ID>
-    <ID>MagicNumber:TodayScreen.kt$24f</ID>
-    <ID>MagicNumber:TodayScreen.kt$28f</ID>
-    <ID>MagicNumber:TodayScreen.kt$380</ID>
-    <ID>MagicNumber:TodayScreen.kt$40f</ID>
-    <ID>MagicNumber:TodayScreen.kt$411f</ID>
-    <ID>MagicNumber:TodayScreen.kt$4f</ID>
-    <ID>MagicNumber:TodayScreen.kt$5</ID>
-    <ID>MagicNumber:TodayScreen.kt$5f</ID>
-    <ID>MagicNumber:TodayScreen.kt$64f</ID>
-    <ID>MagicNumber:TodayScreen.kt$68f</ID>
-    <ID>MagicNumber:TodayScreen.kt$78f</ID>
-    <ID>MagicNumber:TodayScreen.kt$7f</ID>
-    <ID>MagicNumber:TodayScreen.kt$8</ID>
-    <ID>MagicNumber:TodayScreen.kt$800</ID>
-    <ID>MagicNumber:TodayScreen.kt$82f</ID>
-    <ID>MagicNumber:TodayScreen.kt$8f</ID>
-    <ID>MagicNumber:TodayScreen.kt$9f</ID>
+    <ID>MagicNumber:TodayContentList.kt$4</ID>
+    <ID>MagicNumber:TodayEventEffects.kt$2800</ID>
+    <ID>MagicNumber:TodayFabMenu.kt$50</ID>
+    <ID>MagicNumber:WeekPicker.kt$6</ID>
+    <ID>MatchingDeclarationName:AchievementBadgeView.kt$AchievementCategory</ID>
+    <ID>MatchingDeclarationName:AlertBanner.kt$AlertBannerSeverity</ID>
+    <ID>MatchingDeclarationName:AppBadge.kt$AppBadgeVariant</ID>
+    <ID>MatchingDeclarationName:AppButton.kt$AppButtonVariant</ID>
+    <ID>MatchingDeclarationName:AppNavigation.kt$Destination</ID>
+    <ID>MatchingDeclarationName:BarChart.kt$BarChartEntry</ID>
+    <ID>MatchingDeclarationName:DesignTokens.kt$AppTokens</ID>
     <ID>MatchingDeclarationName:NotificationHelper.kt$NotificationHelperEntryPoint</ID>
+    <ID>MatchingDeclarationName:OssLicensesScreen.kt$OpenSourceLibrary</ID>
+    <ID>MatchingDeclarationName:PrivacyPolicyScreen.kt$PrivacySection</ID>
     <ID>MatchingDeclarationName:TodayActions.kt$TodayListActions</ID>
+    <ID>MaxLineLength:AddTasksBatchUseCaseTest.kt$AddTasksBatchUseCaseTest$coVerify { taskRepository.addTask(title = "Su iç", date = fixedDate, priority = 1, note = null, startTime = null, category = null, reminderTime = null) }</ID>
+    <ID>MaxLineLength:AddTasksBatchUseCaseTest.kt$AddTasksBatchUseCaseTest$coVerify { taskRepository.addTask(title = title, date = fixedDate, priority = 2, note = null, startTime = null, category = null, reminderTime = null) }</ID>
+    <ID>MaxLineLength:BrainDumpDialog.kt$if (isSelected) BrandPrimary.copy(alpha = 0.35f) else MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)</ID>
+    <ID>MaxLineLength:CloseDayStep01Content.kt$Text("$e", style = MaterialTheme.typography.titleSmall.copy(fontWeight = if (energy == e) FontWeight.ExtraBold else FontWeight.Normal), color = if (energy == e) Color.White else LevelSky)</ID>
+    <ID>MaxLineLength:CloseDayStep01Content.kt$Text(moodLabels[i], style = MaterialTheme.typography.labelSmall.copy(fontWeight = if (mood == i) FontWeight.ExtraBold else FontWeight.Normal), color = if (mood == i) Color.White else col, maxLines = 1)</ID>
+    <ID>MaxLineLength:CloseDayStep01Content.kt$Text(stringResource(R.string.today_close_step1_energy_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:CloseDayStep01Content.kt$Text(stringResource(R.string.today_close_step1_mood_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:CloseDayStep23Content.kt$Box</ID>
+    <ID>MaxLineLength:CloseDayStep23Content.kt$Text(stringResource(R.string.today_close_step3_move_overdue, overdueCount), style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold))</ID>
+    <ID>MaxLineLength:CloseDayStep23Content.kt$Text(stringResource(R.string.today_close_step3_move_overdue_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
     <ID>MaxLineLength:GameEngine.kt$GameEngine$else -&gt; random.pickFrom(listOf("Hadi maceraya başlayalım! ✨", "Yeni bir gün, yeni fırsatlar! 🌅", "Bugün ne yapacağız? 🤔"))</ID>
     <ID>MaxLineLength:Migrations.kt$&lt;no name provided&gt;$db.execSQL("CREATE UNIQUE INDEX IF NOT EXISTS `index_completion_logs_entityType_entityId_date` ON `completion_logs` (`entityType`, `entityId`, `date`)")</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("dengeli", stringResource(R.string.onboarding_intensity_balanced), stringResource(R.string.onboarding_intensity_balanced_sub))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("hafif", stringResource(R.string.onboarding_intensity_light), stringResource(R.string.onboarding_intensity_light_sub), recommended = true)</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("basit", stringResource(R.string.onboarding_need_simple), stringResource(R.string.onboarding_need_simple_sub), listOf(Color(0xFF64748B), Color(0xFF475569)))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("duzen", stringResource(R.string.onboarding_need_organize), stringResource(R.string.onboarding_need_organize_sub), listOf(CandyPrimary, CandyTertiary))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("duzenli", stringResource(R.string.onboarding_need_regular), stringResource(R.string.onboarding_need_regular_sub), listOf(Color(0xFF6366F1), Color(0xFF8B5CF6)))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("odak", stringResource(R.string.onboarding_need_focus), stringResource(R.string.onboarding_need_focus_sub), listOf(Color(0xFFF59E0B), Color(0xFFEA580C)))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$NeedOption("saglik", stringResource(R.string.onboarding_need_health), stringResource(R.string.onboarding_need_health_sub), listOf(Color(0xFF10B981), CandySecondary))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$Text(text = intensity.subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))</ID>
-    <ID>MaxLineLength:OnboardingScreen.kt$modifier = Modifier.clip(RoundedCornerShape(50)).background(CompletedGreen.copy(alpha = 0.15f)).padding(horizontal = 8.dp, vertical = 2.dp)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Box</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_active_streak), stringResource(R.string.progress_metric_streak_days, streak), stringResource(R.string.progress_metric_streak_sub), Icons.Rounded.LocalFireDepartment, CandyPrimary, Modifier.weight(1f))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_best_streak), stringResource(R.string.progress_metric_streak_days, bestStreak), stringResource(R.string.progress_metric_best_streak_sub), Icons.Rounded.LocalFireDepartment, StreakCoral, Modifier.weight(1f))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_close), stringResource(R.string.progress_metric_streak_days, daysClosed), stringResource(R.string.progress_metric_close_sub), Icons.Rounded.Flag, XpGold, Modifier.weight(1f))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$MetricCard(stringResource(R.string.progress_metric_perfect), stringResource(R.string.progress_metric_streak_days, totalPerfectDays), stringResource(R.string.progress_metric_perfect_sub), Icons.Rounded.TaskAlt, CompletedGreen, Modifier.weight(1f))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(achievement.description, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 2, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(achievement.title, style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(day.note?.takeIf { it.isNotBlank() } ?: stringResource(R.string.progress_day_note_empty), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(formatDate(day.date), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(helper, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(if (mood != null) moodLabel(mood).take(1) else "-", style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold), color = if (mood != null) Color.White else MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_achievements_subtitle, total, unlocked.size), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_achievements_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_balance_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_balance_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_chart_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_chart_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_consistency_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_energy_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_level, level), style = MaterialTheme.typography.displayLarge.copy(fontWeight = FontWeight.ExtraBold), color = Color.White)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_mood_label), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_mood_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_perf_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_recent_days_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_routine_completion, (routineHitRate * 100).toInt()), style = MaterialTheme.typography.labelMedium)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_economy_desc), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_economy_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(stringResource(R.string.progress_xp_next, currentXp, xpForNext), style = MaterialTheme.typography.labelSmall, color = Color.White.copy(.78f))</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(subtitle, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$Text(value, style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$modifier.clip(RoundedCornerShape(18.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(18.dp)).padding(12.dp)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$value = if (bestStreak &gt; 0) stringResource(R.string.progress_metric_streak_days, bestStreak) else stringResource(R.string.progress_no_data)</ID>
-    <ID>MaxLineLength:ProgressScreen.kt$value = if (streak &gt; 0) stringResource(R.string.progress_metric_streak_days, streak) else stringResource(R.string.progress_streak_not_started)</ID>
+    <ID>MaxLineLength:ObserveProgressSnapshotUseCase.kt$ObserveProgressSnapshotUseCase$)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("dengeli", R.string.onboarding_intensity_balanced, R.string.onboarding_intensity_balanced_sub, Icons.Rounded.SelfImprovement)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("hafif", R.string.onboarding_intensity_light, R.string.onboarding_intensity_light_sub, Icons.Rounded.Spa, recommended = true)</ID>
+    <ID>MaxLineLength:OnboardingScreen.kt$IntensityOption("yogun", R.string.onboarding_intensity_intense, R.string.onboarding_intensity_intense_sub, Icons.Rounded.LocalFireDepartment)</ID>
+    <ID>MaxLineLength:OnboardingSuggestions.kt$OnboardingSuggestions$SuggestedRoutine(R.string.onboarding_suggest_remove_distractions, Icons.Rounded.Notifications, defaultSelected = intensityId != "hafif")</ID>
+    <ID>MaxLineLength:ResetDialog.kt$.</ID>
+    <ID>MaxLineLength:ResetDialog.kt$text = if (!isExhaling) stringResource(R.string.reset_breathe_in) else stringResource(R.string.reset_breathe_out)</ID>
     <ID>MaxLineLength:RoutineDetailScreen.kt$Icon(Icons.Rounded.Archive, contentDescription = stringResource(R.string.routine_detail_archive_cd), tint = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
     <ID>MaxLineLength:RoutineDetailScreen.kt$Text(stringResource(R.string.routine_detail_last7), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
     <ID>MaxLineLength:RoutineDetailScreen.kt$Text(stringResource(R.string.routine_detail_repeat_days), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold))</ID>
-    <ID>MaxLineLength:RoutinesScreen.kt$Text(if (targetType == "duration") stringResource(R.string.routines_goal_unit_dk) else if (targetType == "amount") stringResource(R.string.routines_goal_unit_l) else stringResource(R.string.routines_goal_unit_generic))</ID>
-    <ID>MaxLineLength:RoutinesScreen.kt$Text(if (targetType == "limit") stringResource(R.string.routines_goal_max_label) else stringResource(R.string.routines_goal_target_label))</ID>
-    <ID>MaxLineLength:RoutinesScreen.kt$Text(stringResource(R.string.routines_skip), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:SettingsScreen.kt$Text(stringResource(R.string.settings_morning_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:SettingsScreen.kt$Text(stringResource(R.string.settings_quiet_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
+    <ID>MaxLineLength:RoutineRow.kt$color = if (isCompletedToday) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant</ID>
+    <ID>MaxLineLength:RoutineRow.kt$fontWeight = if (isCurrentDay) FontWeight.Bold else if (isTargetDay) FontWeight.SemiBold else FontWeight.Normal</ID>
+    <ID>MaxLineLength:RoutineRow.kt$tint = if (currentValue &gt; 0f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)</ID>
+    <ID>MaxLineLength:SettingsScreen.kt$is SettingsEvent.ImportSuccess -&gt; AlertBannerSeverity.Info to stringResource(R.string.settings_msg_import_success, msg.tasks, msg.routines)</ID>
     <ID>MaxLineLength:SettingsViewModel.kt$SettingsViewModel$val backupInfo: String = "Yedekleme: Görevler, rutinler, günlük özetler ve ayarlar Android bulut yedeğine dahil edilir. Gizlilik politikasını inceleyin."</ID>
+    <ID>MaxLineLength:SheetCommonComponents.kt$Text(value, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
+    <ID>MaxLineLength:SheetCommonComponents.kt$modifier = modifier.height(42.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surface).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))</ID>
+    <ID>MaxLineLength:SheetCommonComponents.kt$modifier.height(72.dp).clip(RoundedCornerShape(16.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(16.dp)).padding(10.dp)</ID>
     <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &lt; :today AND completionState = 'pending' AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, priority DESC")</ID>
     <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &gt;= :from AND plannedDate &lt;= :to AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, startTime IS NULL ASC, startTime ASC, priority DESC")</ID>
     <ID>MaxLineLength:TaskDao.kt$TaskDao$@Query("SELECT * FROM tasks WHERE plannedDate &gt;= :fromDate AND completionState = 'pending' AND reminderTime IS NOT NULL AND reminderTime != '' AND (isArchived = 0 OR isArchived IS NULL) ORDER BY plannedDate ASC, reminderTime ASC")</ID>
-    <ID>MaxLineLength:Theme.kt$displayLarge = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.ExtraBold, fontSize = 32.sp, lineHeight = 40.sp, letterSpacing = (-0.5).sp)</ID>
-    <ID>MaxLineLength:Theme.kt$headlineLarge = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = (-0.3).sp)</ID>
-    <ID>MaxLineLength:Theme.kt$headlineMedium = TextStyle(fontFamily = Nunito, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp, letterSpacing = (-0.2).sp)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Box</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Box(Modifier.fillMaxWidth((currentValue / target).coerceIn(0f, 1f)).height(metrics.routineProgressHeight).clip(RoundedCornerShape(99.dp)).background(color.copy(alpha = 0.85f)))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(metrics.headerProgressHeight).clip(RoundedCornerShape(99.dp)).background(CandySecondary))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_empty_hint_icon_cd), tint = color, modifier = Modifier.size(16.dp))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Icon(Icons.Rounded.DeleteOutline, contentDescription = stringResource(R.string.today_delete_label), tint = StreakCoral, modifier = Modifier.size(20.dp))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Modifier.clip(RoundedCornerShape(8.dp)).background(color.copy(.12f)).border(1.dp, color.copy(.20f), RoundedCornerShape(8.dp)).padding(horizontal = 9.dp, vertical = 5.dp)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Modifier.fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(color.copy(.08f)).border(1.dp, color.copy(.14f), RoundedCornerShape(18.dp)).padding(14.dp)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_active_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_active_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_closed_desc, completed, total), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_closed_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_locked_desc, dailySummaryTime), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(.72f), maxLines = 1)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_locked_title), style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold), color = MaterialTheme.colorScheme.onSurface.copy(.68f))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_missed_label), style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.ExtraBold), color = StreakCoral)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(stringResource(R.string.today_tasks_empty), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$Text(text, style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.ExtraBold), color = color, maxLines = 1, overflow = TextOverflow.Ellipsis)</ID>
-    <ID>MaxLineLength:TodayScreen.kt$TextButton(onClick = onDismiss) { Text(stringResource(R.string.today_missed_skip_btn), color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelLarge) }</ID>
-    <ID>MaxLineLength:TodayScreen.kt$TextButton(onClick = onReview) { Text(stringResource(R.string.today_missed_review_btn), color = StreakCoral, style = MaterialTheme.typography.labelLarge) }</ID>
-    <ID>MaxLineLength:TodayScreen.kt$if (done) Icon(Icons.Rounded.Check, contentDescription = stringResource(R.string.today_done_cd), tint = Color.White, modifier = Modifier.size(19.dp))</ID>
-    <ID>MaxLineLength:TodayScreen.kt$style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold, textDecoration = if (done) TextDecoration.LineThrough else null)</ID>
+    <ID>MaxLineLength:Theme.kt$bodyLarge = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$bodyMedium = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 21.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$bodySmall = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Normal, fontSize = 12.sp, lineHeight = 16.8.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$displayLarge = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.ExtraBold, fontSize = 32.sp, lineHeight = 40.sp, letterSpacing = (-0.5).sp)</ID>
+    <ID>MaxLineLength:Theme.kt$headlineLarge = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Bold, fontSize = 24.sp, lineHeight = 32.sp, letterSpacing = (-0.3).sp)</ID>
+    <ID>MaxLineLength:Theme.kt$headlineMedium = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp, letterSpacing = (-0.2).sp)</ID>
+    <ID>MaxLineLength:Theme.kt$headlineSmall = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 26.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$labelLarge = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.SemiBold, fontSize = 14.sp, letterSpacing = 0.1.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$labelMedium = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Medium, fontSize = 12.sp, letterSpacing = 0.3.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$labelSmall = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.SemiBold, fontSize = 10.sp, letterSpacing = 0.3.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$titleLarge = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.SemiBold, fontSize = 18.sp, lineHeight = 26.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$titleMedium = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.SemiBold, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.1.sp)</ID>
+    <ID>MaxLineLength:Theme.kt$titleSmall = TextStyle(fontFamily = Nunito, platformStyle = AppPlatformTextStyle, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp)</ID>
+    <ID>MaxLineLength:TodayViewModel.kt$TodayViewModel$fun updateRoutineProgress(routine: RoutineEntity, value: Float, wasCompleted: Boolean)</ID>
+    <ID>MaxLineLength:TodayViewModel.kt$TodayViewModel$fun updateRoutineProgress(routineId: String, value: Float, wasCompleted: Boolean)</ID>
     <ID>NewLineAtEndOfFile:ErrorReporterContextPolicy.kt$com.benimgunlerim.analytics.ErrorReporterContextPolicy.kt</ID>
-    <ID>NewLineAtEndOfFile:ShopScreen.kt$com.benimgunlerim.ui.shop.ShopScreen.kt</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFF00796B)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFF2E7D32)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFF4527A0)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFE0F2F1)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFE65100)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFE8F5E9)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFEDE7F6)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFFFA000)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFFFF3E0)</ID>
+    <ID>NoHardcodedColorRule:AchievementBadgeView.kt$Color(0xFFFFF8E1)</ID>
+    <ID>NoHardcodedColorRule:CategoryPalette.kt$CategoryPalette$Color(0xFF2563EB)</ID>
+    <ID>NoHardcodedColorRule:CategoryPalette.kt$CategoryPalette$Color(0xFF64748B)</ID>
+    <ID>NoHardcodedColorRule:CategoryPalette.kt$CategoryPalette$Color(0xFF7C3AED)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFF0D5C3A)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFF147A4F)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFF1B5E20)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFFD97706)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFFE8F5E9)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFFFDE68A)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFFFFF3E0)</ID>
+    <ID>NoHardcodedColorRule:CelebrationModals.kt$Color(0xFFFFF7E6)</ID>
+    <ID>NoHardcodedColorRule:CloseDayCard.kt$Color(0xFF2B3B4D)</ID>
+    <ID>NoHardcodedColorRule:EmptyState.kt$Color(0xFFE11D48)</ID>
+    <ID>NoHardcodedColorRule:GoldBadge.kt$Color(0xFF5D4037)</ID>
+    <ID>NoHardcodedColorRule:GoldBadge.kt$Color(0xFFFFD54F)</ID>
+    <ID>NoHardcodedColorRule:LevelHeroCard.kt$Color(0xFF0D5C3A)</ID>
+    <ID>NoHardcodedColorRule:LevelHeroCard.kt$Color(0xFF147A4F)</ID>
+    <ID>NoHardcodedColorRule:TodayViewModelTest.kt$TodayViewModelTest$Color(0xFF64748B)</ID>
+    <ID>NoHardcodedDpRule:AchievementBadgeView.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:AchievementBadgeView.kt$72.dp</ID>
+    <ID>NoHardcodedDpRule:AppBadge.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:AppButton.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:AppDivider.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:AppNavigation.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:AppNavigation.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:AppSurface.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:BarChart.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:BarChart.kt$100.dp</ID>
+    <ID>NoHardcodedDpRule:BarChart.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$18.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$180.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$32.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$50.dp</ID>
+    <ID>NoHardcodedDpRule:BrainDumpDialog.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$3.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$48.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$56.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$76.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:CelebrationModals.kt$96.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$3.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$50.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDaySheet.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$44.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep01Content.kt$99.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:CloseDayStep23Content.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:ColorRailCard.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:ColorRailCard.kt$5.dp</ID>
+    <ID>NoHardcodedDpRule:EmptyState.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:EmptyState.kt$3.dp</ID>
+    <ID>NoHardcodedDpRule:EmptyState.kt$58.dp</ID>
+    <ID>NoHardcodedDpRule:EmptyState.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:GoldBadge.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:InfoCard.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$46.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$52.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:MissedDayReviewSheet.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$1.5.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$18.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$3.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$32.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$36.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$44.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$54.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:OnboardingScreen.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:PrivacyPolicyScreen.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:PrivacyPolicyScreen.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:PrivacyPolicyScreen.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:PrivacyPolicyScreen.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:PrivacyPolicyScreen.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$1.5.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$110.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$18.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$180.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$32.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$36.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$40.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$48.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$52.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$56.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:ResetDialog.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$18.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$32.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$38.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$5.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$50.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineDetailScreen.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$1.5.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$3.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$4.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$48.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$60.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRow.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:RoutineRowPreviews.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$42.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$72.dp</ID>
+    <ID>NoHardcodedDpRule:SheetCommonComponents.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailFormFields.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailOptionsSection.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailOptionsSection.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailOptionsSection.kt$6.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailOptionsSection.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$50.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSheet.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$1.5.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$22.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$28.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$48.dp</ID>
+    <ID>NoHardcodedDpRule:TaskDetailSubtasksSection.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$0.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$44.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$48.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRow.kt$56.dp</ID>
+    <ID>NoHardcodedDpRule:TaskRowPreviews.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$1.5.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$10.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$18.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$20.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$22.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$32.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$36.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$38.dp</ID>
+    <ID>NoHardcodedDpRule:TodayBanners.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$1.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$12.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$14.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$16.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$2.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$22.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$24.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$40.dp</ID>
+    <ID>NoHardcodedDpRule:TodayFabMenu.kt$8.dp</ID>
+    <ID>NoHardcodedDpRule:WeekPicker.kt$36.dp</ID>
+    <ID>NoHardcodedDpRule:WeekPicker.kt$5.dp</ID>
     <ID>ReturnCount:SnoozeReceiver.kt$SnoozeReceiver$override fun onReceive(context: Context, intent: Intent)</ID>
     <ID>ReturnCount:TimeInputValidator.kt$TimeInputValidator$fun isValid(hhmm: String): Boolean</ID>
     <ID>ReturnCount:TimeInputValidator.kt$TimeInputValidator$fun validationMessageKey(hhmm: String): TimeValidation</ID>
     <ID>ReturnCount:TimeText.kt$fun String.normalizedTimeOrNull(): String?</ID>
+    <ID>SwallowedException:AddTasksBatchUseCaseTest.kt$AddTasksBatchUseCaseTest$e: RuntimeException</ID>
     <ID>TooGenericExceptionThrown:DataExportServiceTest.kt$DataExportServiceTest.&lt;no name provided&gt;$throw RuntimeException("simulated DAO crash")</ID>
     <ID>TooManyFunctions:AchievementEvaluationServiceTest.kt$AchievementEvaluationServiceTest</ID>
+    <ID>TooManyFunctions:AchievementTracker.kt$AchievementTracker</ID>
     <ID>TooManyFunctions:CloseDayUseCaseTest.kt$CloseDayUseCaseTest</ID>
-    <ID>TooManyFunctions:Common.kt$.Common.kt</ID>
     <ID>TooManyFunctions:DataExportServiceTest.kt$DataExportServiceTest</ID>
     <ID>TooManyFunctions:DataImportService.kt$DataImportService</ID>
     <ID>TooManyFunctions:DataImportServiceTest.kt$DataImportServiceTest</ID>
     <ID>TooManyFunctions:GameEngineTest.kt$GameEngineTest</ID>
     <ID>TooManyFunctions:PlanViewModel.kt$PlanViewModel : ViewModel</ID>
-    <ID>TooManyFunctions:ProgressScreen.kt$com.benimgunlerim.ui.progress.ProgressScreen.kt</ID>
-    <ID>TooManyFunctions:SettingsScreen.kt$com.benimgunlerim.ui.settings.SettingsScreen.kt</ID>
     <ID>TooManyFunctions:SettingsViewModel.kt$SettingsViewModel : ViewModel</ID>
     <ID>TooManyFunctions:SettingsViewModelTest.kt$SettingsViewModelTest</ID>
     <ID>TooManyFunctions:TaskDao.kt$TaskDao</ID>
     <ID>TooManyFunctions:TaskRepository.kt$TaskRepository</ID>
     <ID>TooManyFunctions:TaskRepository.kt$TaskRepositoryImpl : TaskRepository</ID>
-    <ID>TooManyFunctions:TodayScreen.kt$com.benimgunlerim.ui.today.TodayScreen.kt</ID>
+    <ID>TooManyFunctions:TodayTaskActions.kt$TodayTaskActions</ID>
     <ID>TooManyFunctions:TodayViewModel.kt$TodayViewModel : ViewModel</ID>
     <ID>TooManyFunctions:TodayViewModelTest.kt$TodayViewModelTest</ID>
     <ID>TooManyFunctions:ToggleTaskUseCaseTest.kt$ToggleTaskUseCaseTest</ID>
     <ID>TooManyFunctions:UserPreferencesRepository.kt$UserPreferencesAccess : UserPreferencesSource</ID>
     <ID>TooManyFunctions:UserPreferencesRepository.kt$UserPreferencesRepository : UserPreferencesAccessUserPreferencesSourceUserPreferencesWriter</ID>
-    <ID>UnusedImports:CelebrationSystem.kt$import androidx.compose.ui.platform.LocalDensity</ID>
-    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimary</ID>
-    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimaryDark</ID>
-    <ID>UnusedImports:Common.kt$import com.benimgunlerim.ui.theme.GpPrimaryLight</ID>
-    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.foundation.layout.ColumnScope</ID>
-    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.material.icons.rounded.Check</ID>
-    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.material.icons.rounded.DeleteOutline</ID>
-    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.ui.text.style.TextDecoration</ID>
-    <ID>UnusedImports:PlanScreen.kt$import com.benimgunlerim.ui.theme.CandySecondary</ID>
-    <ID>UnusedImports:PlanScreen.kt$import java.time.temporal.ChronoUnit</ID>
-    <ID>UnusedImports:ProgressScreen.kt$import androidx.compose.material.icons.rounded.CheckCircle</ID>
-    <ID>UnusedImports:ProgressScreen.kt$import androidx.compose.material.icons.rounded.Lock</ID>
+    <ID>UnusedImports:AchievementBadgeView.kt$import androidx.compose.ui.graphics.Brush</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.foundation.layout.Box</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.foundation.layout.offset</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.foundation.layout.size</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.foundation.shape.CircleShape</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.material3.Surface</ID>
+    <ID>UnusedImports:AppNavigation.kt$import androidx.compose.ui.Alignment</ID>
+    <ID>UnusedImports:AppNavigation.kt$import com.benimgunlerim.ui.theme.CandyPrimary</ID>
+    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.foundation.layout.Column</ID>
+    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.foundation.rememberScrollState</ID>
+    <ID>UnusedImports:PlanScreen.kt$import androidx.compose.foundation.verticalScroll</ID>
+    <ID>UnusedImports:PrivacyPolicyScreen.kt$import com.benimgunlerim.ui.components.core.AppButton</ID>
+    <ID>UnusedImports:PrivacyPolicyScreen.kt$import com.benimgunlerim.ui.components.core.AppButtonVariant</ID>
+    <ID>UnusedImports:ResetDialog.kt$import androidx.compose.material.icons.rounded.SelfImprovement</ID>
     <ID>UnusedImports:RoutineDetailScreen.kt$import androidx.compose.foundation.layout.width</ID>
     <ID>UnusedImports:RoutineDetailScreen.kt$import androidx.compose.material3.TextButton</ID>
     <ID>UnusedImports:RoutineDetailScreen.kt$import com.benimgunlerim.ui.theme.StreakCoral</ID>
-    <ID>UnusedImports:RoutinesScreen.kt$import androidx.compose.foundation.lazy.itemsIndexed</ID>
-    <ID>UnusedImports:RoutinesScreen.kt$import androidx.compose.material3.OutlinedButton</ID>
-    <ID>UnusedImports:SettingsScreen.kt$import com.benimgunlerim.ui.theme.CandyPrimaryDark</ID>
-    <ID>UnusedImports:ShopScreen.kt$import androidx.compose.foundation.clickable</ID>
-    <ID>UnusedImports:ShopScreen.kt$import androidx.compose.ui.unit.sp</ID>
-    <ID>UnusedImports:ShopScreen.kt$import com.benimgunlerim.ui.theme.CandySecondary</ID>
+    <ID>UnusedImports:SaveMissedDaySummaryUseCase.kt$import com.benimgunlerim.data.DailyStateRepository</ID>
     <ID>UnusedImports:ShopViewModel.kt$import com.benimgunlerim.data.UserPreferences</ID>
-    <ID>UnusedImports:TodayScreen.kt$import androidx.compose.foundation.lazy.LazyColumn</ID>
-    <ID>UnusedImports:TodayScreen.kt$import androidx.compose.material3.CircularProgressIndicator</ID>
-    <ID>UnusedImports:TodayScreen.kt$import androidx.compose.ui.unit.sp</ID>
-    <ID>UnusedImports:TodayScreen.kt$import com.benimgunlerim.ui.theme.XpGold</ID>
+    <ID>UnusedImports:TaskRow.kt$import androidx.compose.ui.graphics.Color</ID>
+    <ID>UnusedImports:Theme.kt$import androidx.compose.ui.unit.dp</ID>
+    <ID>UnusedImports:TodayViewModelTest.kt$import com.benimgunlerim.domain.AchievementDef</ID>
     <ID>UnusedImports:ToggleTaskUseCaseTest.kt$import java.time.LocalTime</ID>
     <ID>UnusedImports:ToggleTaskUseCaseTest.kt$import org.junit.Assert.assertEquals</ID>
-    <ID>UnusedParameter:ProgressScreen.kt$totalRoutines: Int</ID>
-    <ID>UnusedParameter:ProgressScreen.kt$totalTasks: Int</ID>
+    <ID>UnusedParameter:AchievementsScreen.kt$onBack: () -&gt; Unit = {}</ID>
+    <ID>UnusedParameter:PlanScreen.kt$onNavigateToToday: () -&gt; Unit = {}</ID>
+    <ID>UnusedParameter:ProgressScreen.kt$onNavigateToAchievements: () -&gt; Unit = {}</ID>
     <ID>UnusedParameter:RoutineDetailScreen.kt$routineId: String</ID>
+    <ID>UnusedParameter:RoutineRow.kt$category: String? = null</ID>
     <ID>UnusedParameter:SettingsViewModelTest.kt$SettingsViewModelTest$json: String? = "{\"version\":1}"</ID>
-    <ID>UnusedParameter:Theme.kt$themeMode: String = "system"</ID>
-    <ID>UnusedPrivateMember:ProgressScreen.kt$@Composable private fun TaskRoutineBalanceCard(taskCount: Int, routineCount: Int)</ID>
-    <ID>UnusedPrivateMember:TodayPreviews.kt$@Preview(showBackground = true, name = "Today Header") @Composable private fun TodayHeaderPreview()</ID>
-    <ID>UnusedPrivateMember:TodayPreviews.kt$@Preview(showBackground = true, name = "Today List Empty") @Composable private fun TodayListEmptyPreview()</ID>
-    <ID>UnusedPrivateMember:TodayPreviews.kt$@Preview(showBackground = true, name = "Today List Mixed") @Composable private fun TodayListMixedPreview()</ID>
-    <ID>UnusedPrivateMember:TodayScreen.kt$@Composable private fun QuietSubLabel(label: String)</ID>
+    <ID>UnusedParameter:ShopScreen.kt$onBack: () -&gt; Unit = {}</ID>
+    <ID>UnusedParameter:TaskRow.kt$priority: Int = 2</ID>
+    <ID>UnusedParameter:TodayScreen.kt$onNavigateToPlan: () -&gt; Unit = {}</ID>
+    <ID>UnusedParameter:TodayScreen.kt$onNavigateToSettings: () -&gt; Unit = {}</ID>
+    <ID>UnusedParameter:TodayScreen.kt$onOpenRoutineDetail: (String) -&gt; Unit = {}</ID>
+    <ID>UnusedPrivateMember:RoutineDetailScreen.kt$@Preview(showBackground = true, name = "Routine Detail Stat") @Composable private fun RoutineDetailStatPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Açık, Boş Durum", showBackground = true) @Composable private fun RoutineRowEmptyLightPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Açık, Dolu/Hedefli Durum", showBackground = true) @Composable private fun RoutineRowFilledLightPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Koyu, Boş Durum", showBackground = true) @Composable private fun RoutineRowEmptyDarkPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Koyu, Dolu/Hedefli Durum", showBackground = true) @Composable private fun RoutineRowFilledDarkPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Açık, Boş Durum", showBackground = true) @Composable private fun TaskRowEmptyLightPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Açık, Dolu Durum", showBackground = true) @Composable private fun TaskRowFilledLightPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Koyu, Boş Durum", showBackground = true) @Composable private fun TaskRowEmptyDarkPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Koyu, Dolu Durum", showBackground = true) @Composable private fun TaskRowFilledDarkPreview()</ID>
     <ID>UnusedPrivateProperty:RewardGrantService.kt$RewardGrantService$private val achievementTracker: AchievementTracker</ID>
-    <ID>UnusedPrivateProperty:TodayScreen.kt$val completedHeavy = completedTotal &gt; 3</ID>
-    <ID>UnusedPrivateProperty:TodayViewModel.kt$TodayViewModel$private val prefsRepository: UserPreferencesRepository</ID>
     <ID>UnusedPrivateProperty:UpdateTaskUseCase.kt$UpdateTaskUseCase$private val dateTimeProvider: DateTimeProvider</ID>
   </CurrentIssues>
 </SmellBaseline>

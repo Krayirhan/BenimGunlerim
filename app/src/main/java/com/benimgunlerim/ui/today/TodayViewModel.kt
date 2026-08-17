@@ -2,13 +2,9 @@ package com.benimgunlerim.ui.today
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.benimgunlerim.analytics.AnalyticsEvent
 import com.benimgunlerim.analytics.AnalyticsTracker
-import com.benimgunlerim.R
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
-import com.benimgunlerim.data.targetDaySet
-import com.benimgunlerim.data.isScheduledFor
 import com.benimgunlerim.data.local.entity.CompletionLogEntity
 import com.benimgunlerim.data.local.entity.DailyStateEntity
 import com.benimgunlerim.data.local.entity.RoutineEntity
@@ -48,12 +44,8 @@ import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
-import java.time.Duration
-import java.time.Instant
 import java.time.LocalDate
-import java.time.ZoneId
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -64,7 +56,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -108,44 +99,38 @@ sealed class TodayUiEffect {
     data class ActionFailed(val messageRes: Int) : TodayUiEffect()
 }
 
-/** Snapshot of a deleted task and its subtasks, kept in memory to power Undo. */
-private data class DeletedTaskSnapshot(
-    val task: TaskEntity,
-    val subTasks: List<SubTaskEntity>,
-)
-
 @HiltViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodayViewModel @Inject constructor(
     private val prefsRepository: UserPreferencesRepository,
-    private val analyticsTracker: AnalyticsTracker,
-    private val achievementTracker: AchievementTracker,
-    private val feedbackManager: FeedbackManager,
-    private val rewardDisplayService: RewardDisplayService,
+    analyticsTracker: AnalyticsTracker,
+    achievementTracker: AchievementTracker,
+    feedbackManager: FeedbackManager,
+    rewardDisplayService: RewardDisplayService,
     private val dateTimeProvider: DateTimeProvider,
-    private val addTaskUseCase: AddTaskUseCase,
-    private val addTasksBatchUseCase: AddTasksBatchUseCase,
-    private val updateTaskTitleUseCase: UpdateTaskTitleUseCase,
-    private val moveTaskToDateUseCase: MoveTaskToDateUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val restoreTaskUseCase: RestoreTaskUseCase,
-    private val setTaskPendingUseCase: SetTaskPendingUseCase,
-    private val observeSubTasksUseCase: ObserveSubTasksUseCase,
-    private val addSubTaskUseCase: AddSubTaskUseCase,
-    private val toggleSubTaskUseCase: ToggleSubTaskUseCase,
-    private val deleteSubTaskUseCase: DeleteSubTaskUseCase,
-    private val toggleTaskUseCase: ToggleTaskUseCase,
-    private val toggleRoutineUseCase: ToggleRoutineUseCase,
-    private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase,
-    private val updateRoutineUseCase: UpdateRoutineUseCase,
-    private val skipRoutineUseCase: SkipRoutineUseCase,
-    private val archiveRoutineUseCase: ArchiveRoutineUseCase,
-    private val closeDayUseCase: CloseDayUseCase,
-    private val carryPendingTasksUseCase: CarryPendingTasksUseCase,
+    addTaskUseCase: AddTaskUseCase,
+    addTasksBatchUseCase: AddTasksBatchUseCase,
+    updateTaskTitleUseCase: UpdateTaskTitleUseCase,
+    moveTaskToDateUseCase: MoveTaskToDateUseCase,
+    updateTaskUseCase: UpdateTaskUseCase,
+    deleteTaskUseCase: DeleteTaskUseCase,
+    restoreTaskUseCase: RestoreTaskUseCase,
+    setTaskPendingUseCase: SetTaskPendingUseCase,
+    observeSubTasksUseCase: ObserveSubTasksUseCase,
+    addSubTaskUseCase: AddSubTaskUseCase,
+    toggleSubTaskUseCase: ToggleSubTaskUseCase,
+    deleteSubTaskUseCase: DeleteSubTaskUseCase,
+    toggleTaskUseCase: ToggleTaskUseCase,
+    toggleRoutineUseCase: ToggleRoutineUseCase,
+    updateRoutineProgressUseCase: UpdateRoutineProgressUseCase,
+    updateRoutineUseCase: UpdateRoutineUseCase,
+    skipRoutineUseCase: SkipRoutineUseCase,
+    archiveRoutineUseCase: ArchiveRoutineUseCase,
+    closeDayUseCase: CloseDayUseCase,
+    carryPendingTasksUseCase: CarryPendingTasksUseCase,
     private val observeDailyStateUseCase: ObserveDailyStateUseCase,
-    private val autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase,
-    private val saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase,
+    autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase,
+    saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase,
     private val taskRepository: com.benimgunlerim.data.TaskRepository,
     private val routineRepository: com.benimgunlerim.data.RoutineRepository,
     private val completionLogRepository: com.benimgunlerim.data.CompletionLogRepository,
@@ -154,9 +139,67 @@ class TodayViewModel @Inject constructor(
 ) : ViewModel() {
     private var taskEntitiesById: Map<String, TaskEntity> = emptyMap()
     private var routineEntitiesById: Map<String, RoutineEntity> = emptyMap()
-    private val deletedTasksById = mutableMapOf<String, DeletedTaskSnapshot>()
     private val _uiEffects = MutableSharedFlow<TodayUiEffect>(extraBufferCapacity = 16)
     val uiEffects = _uiEffects.asSharedFlow()
+
+    private fun isTodayClosed(): Boolean = uiState.value.todayState?.closedAt != null
+
+    private val taskActions = TodayTaskActions(
+        scope = viewModelScope,
+        dateTimeProvider = dateTimeProvider,
+        analyticsTracker = analyticsTracker,
+        feedbackManager = feedbackManager,
+        achievementTracker = achievementTracker,
+        rewardDisplayService = rewardDisplayService,
+        addTaskUseCase = addTaskUseCase,
+        addTasksBatchUseCase = addTasksBatchUseCase,
+        updateTaskTitleUseCase = updateTaskTitleUseCase,
+        moveTaskToDateUseCase = moveTaskToDateUseCase,
+        updateTaskUseCase = updateTaskUseCase,
+        deleteTaskUseCase = deleteTaskUseCase,
+        restoreTaskUseCase = restoreTaskUseCase,
+        setTaskPendingUseCase = setTaskPendingUseCase,
+        observeSubTasksUseCase = observeSubTasksUseCase,
+        addSubTaskUseCase = addSubTaskUseCase,
+        toggleSubTaskUseCase = toggleSubTaskUseCase,
+        deleteSubTaskUseCase = deleteSubTaskUseCase,
+        toggleTaskUseCase = toggleTaskUseCase,
+        taskEntitiesById = { taskEntitiesById },
+        uiStateValue = { uiState.value },
+        isTodayClosed = { isTodayClosed() },
+        emitEffect = { _uiEffects.tryEmit(it) },
+    )
+
+    private val routineActions = TodayRoutineActions(
+        scope = viewModelScope,
+        dateTimeProvider = dateTimeProvider,
+        analyticsTracker = analyticsTracker,
+        feedbackManager = feedbackManager,
+        achievementTracker = achievementTracker,
+        rewardDisplayService = rewardDisplayService,
+        toggleRoutineUseCase = toggleRoutineUseCase,
+        updateRoutineProgressUseCase = updateRoutineProgressUseCase,
+        updateRoutineUseCase = updateRoutineUseCase,
+        skipRoutineUseCase = skipRoutineUseCase,
+        archiveRoutineUseCase = archiveRoutineUseCase,
+        routineEntitiesById = { routineEntitiesById },
+        uiStateValue = { uiState.value },
+        isTodayClosed = { isTodayClosed() },
+    )
+
+    private val dayCloseActions = TodayDayCloseActions(
+        scope = viewModelScope,
+        dateTimeProvider = dateTimeProvider,
+        analyticsTracker = analyticsTracker,
+        feedbackManager = feedbackManager,
+        rewardDisplayService = rewardDisplayService,
+        closeDayUseCase = closeDayUseCase,
+        carryPendingTasksUseCase = carryPendingTasksUseCase,
+        autoCloseMissedDayUseCase = autoCloseMissedDayUseCase,
+        saveMissedDaySummaryUseCase = saveMissedDaySummaryUseCase,
+        uiStateValue = { uiState.value },
+        emitEffect = { _uiEffects.tryEmit(it) },
+    )
 
     /** Tekrar dene — snapshot Flow’unu yeniden bağlar (aynı takvim gününde). */
     private val retrySnapshotTrigger = MutableStateFlow(0)
@@ -185,62 +228,20 @@ class TodayViewModel @Inject constructor(
             .catch { emit(emptyTodaySnapshot() to true) }
 
     // Emits current date, advances at midnight.
-    private val currentDateFlow = flow {
-        while (true) {
-            val now = dateTimeProvider.today()
-            emit(now)
-            val midnight = now.plusDays(1).atStartOfDay(ZoneId.systemDefault())
-            val nowDateTime = Instant.ofEpochMilli(dateTimeProvider.currentTimeMillis())
-                .atZone(ZoneId.systemDefault())
-            val delayMs = Duration.between(nowDateTime, midnight).toMillis()
-            delay(delayMs.coerceAtLeast(0L) + 500L)
-        }
-    }
+    private val currentDateFlow = tickerProvider.dateTicker(dateTimeProvider)
 
     // Fires every minute to re-evaluate canCloseDay.
     private val minuteTickerFlow = tickerProvider.minuteTicker()
 
-    private val missedDayFlow: Flow<MissedDayData?> = currentDateFlow.flatMapLatest { today ->
-        val yesterday = today.minusDays(1)
-        observeDailyStateUseCase(yesterday).flatMapLatest { state ->
-            if (state?.closedAt != null) {
-                kotlinx.coroutines.flow.flowOf(null)
-            } else {
-                combine(
-                    taskRepository.observeByDate(yesterday),
-                    routineRepository.observeActive(),
-                    completionLogRepository.observeByDate(yesterday),
-                ) { tasks, routines, logs ->
-                    val completedTasks = tasks.count { it.completionState == com.benimgunlerim.domain.model.TaskCompletionState.COMPLETED.value }
-                    val pendingTasks = tasks.count { it.completionState == com.benimgunlerim.domain.model.TaskCompletionState.PENDING.value }
-                    val scheduledRoutines = routines.filter { it.isScheduledFor(yesterday.dayOfWeek) }
-                    val completedRoutines = scheduledRoutines.count { r ->
-                        logs.any {
-                            it.entityType == com.benimgunlerim.domain.model.CompletionEntityType.ROUTINE.value &&
-                            it.entityId == r.id &&
-                            it.status == com.benimgunlerim.domain.model.CompletionStatus.COMPLETED.value
-                        }
-                    }
-                    MissedDayData(
-                        date = yesterday,
-                        completedCount = completedTasks + completedRoutines,
-                        totalCount = tasks.size + scheduledRoutines.size,
-                        pendingTaskCount = pendingTasks,
-                    )
-                }
-            }
-        }
-    }
+    private val missedDayFlow: Flow<MissedDayData?> = buildMissedDayFlow(
+        currentDateFlow = currentDateFlow,
+        observeDailyStateUseCase = observeDailyStateUseCase,
+        taskRepository = taskRepository,
+        routineRepository = routineRepository,
+        completionLogRepository = completionLogRepository,
+    )
 
     val gameEvents: Flow<GameEvent> = rewardDisplayService.gameEvents
-
-    init {
-        viewModelScope.launch {
-            achievementTracker.newUnlock.collect { def ->
-                rewardDisplayService.onAchievementUnlocked(def.emoji, def.title)
-            }
-        }
-    }
 
     val uiState: StateFlow<TodayUiState> = combine(
         combine(currentDateFlow, retrySnapshotTrigger) { date, _ -> date }
@@ -255,15 +256,20 @@ class TodayViewModel @Inject constructor(
         val canClose = runCatching { dateTimeProvider.currentTime() >= java.time.LocalTime.parse(summaryTime) }.getOrDefault(false)
         val isLightDay = LightDayMode.isActiveOn(snapshot.gameState.lightDayModeDate, dateTimeProvider.today())
         TodayUiState(
-            tasks = snapshot.tasks.map { it.toUiModel() },
-            routines = snapshot.routines.map { it.toUiModel(snapshot.routineStreaks[it.id] ?: 0) },
+            tasks = snapshot.tasks.map { it.toTodayUiModel() },
+            routines = snapshot.routines.map {
+                it.toTodayUiModel(
+                    currentStreak = snapshot.routineStreaks[it.id] ?: 0,
+                    todayLogs = snapshot.completionLogs,
+                )
+            },
             completionLogs = snapshot.completionLogs,
             completedRoutineIds = snapshot.completedRoutineIds,
             progress = snapshot.progress,
             currentStreak = snapshot.currentStreak,
             gameState = snapshot.gameState,
             todayState = snapshot.todayState,
-            overdueTasks = snapshot.overdueTasks.map { it.toUiModel() },
+            overdueTasks = snapshot.overdueTasks.map { it.toTodayUiModel() },
             isLoading = false,
             missedDay = missedDayData?.date,
             missedDayCompletedCount = missedDayData?.completedCount ?: 0,
@@ -283,17 +289,9 @@ class TodayViewModel @Inject constructor(
         }
     }
 
-    fun addTasksFromBrainDump(taskTitles: List<String>) {
-        viewModelScope.launch {
-            runCatching {
-                addTasksBatchUseCase(titles = taskTitles, date = dateTimeProvider.today(), priority = 1)
-            }.onFailure {
-                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_generic))
-            }
-        }
-    }
+    // ── Task + subtask actions ──────────────────────────────────────────────
 
-    // ── Task actions ─────────────────────────────────────────────────────────
+    fun addTasksFromBrainDump(taskTitles: List<String>) = taskActions.addTasksFromBrainDump(taskTitles)
 
     fun addTask(
         title: String,
@@ -303,77 +301,12 @@ class TodayViewModel @Inject constructor(
         category: String? = null,
         priority: Int = 2,
         reminderTime: String? = null,
-    ) {
-        if (isTodayClosed()) return
-        val cleanTitle = title.trim()
-        if (cleanTitle.isBlank()) return
-        viewModelScope.launch {
-            runCatching {
-                addTaskUseCase(
-                    title = cleanTitle,
-                    date = date,
-                    note = note?.trim()?.takeIf { it.isNotBlank() },
-                    startTime = startTime?.trim()?.takeIf { it.isNotBlank() },
-                    category = category?.trim()?.takeIf { it.isNotBlank() },
-                    priority = priority,
-                    reminderTime = reminderTime?.trim()?.takeIf { it.isNotBlank() },
-                )
-            }.onSuccess {
-                analyticsTracker.track(AnalyticsEvent("task_created"))
-            }.onFailure {
-                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_generic))
-            }
-        }
-    }
+    ) = taskActions.addTask(title, note, date, startTime, category, priority, reminderTime)
 
-    private fun isTodayClosed(): Boolean = uiState.value.todayState?.closedAt != null
-
-    fun toggleTask(task: TaskEntity) {
-        if (isTodayClosed()) return
-        viewModelScope.launch {
-            val wasPending = task.completionState != com.benimgunlerim.domain.model.TaskCompletionState.COMPLETED.value
-            val currentTasks = uiState.value.tasks
-            val completedCountBefore = currentTasks.count { it.isCompleted }
-            val totalTasks = currentTasks.size
-
-            analyticsTracker.track(AnalyticsEvent("task_completed"))
-            feedbackManager.tapMedium()
-            val result = toggleTaskUseCase(task) ?: return@launch
-            rewardDisplayService.onTaskCompleted(
-                taskId = task.id,
-                taskReward = result.taskReward,
-                allTasksBonus = result.allTasksBonus,
-            )
-            if (wasPending) {
-                _uiEffects.tryEmit(TodayUiEffect.TaskCompletedUndo(task.id))
-                achievementTracker.checkFirstTask()
-
-                // Küçük Kutlama: Günün ilk görevi
-                if (completedCountBefore == 0) {
-                    rewardDisplayService.emitMiniBanner("İlk adım tamamlandı. Devamı daha kolay.", "🌱")
-                } else if (completedCountBefore + 1 == totalTasks && totalTasks > 1) {
-                    // Orta Kutlama: Tüm görevler bitti
-                    rewardDisplayService.emitAllTasksCompleted(totalTasks)
-                    achievementTracker.checkListCleared()
-                }
-            }
-        }
-    }
-
-    fun toggleTask(taskId: String) {
-        val task = taskEntitiesById[taskId] ?: return
-        toggleTask(task)
-    }
-
-    fun updateTaskTitle(task: TaskEntity, title: String) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { updateTaskTitleUseCase(task, title) }
-    }
-
-    fun updateTaskTitle(taskId: String, title: String) {
-        val task = taskEntitiesById[taskId] ?: return
-        updateTaskTitle(task, title)
-    }
+    fun toggleTask(task: TaskEntity) = taskActions.toggleTask(task)
+    fun toggleTask(taskId: String) = taskActions.toggleTask(taskId)
+    fun updateTaskTitle(task: TaskEntity, title: String) = taskActions.updateTaskTitle(task, title)
+    fun updateTaskTitle(taskId: String, title: String) = taskActions.updateTaskTitle(taskId, title)
 
     fun updateTask(
         task: TaskEntity,
@@ -384,21 +317,7 @@ class TodayViewModel @Inject constructor(
         category: String?,
         priority: Int,
         reminderTime: String?,
-    ) {
-        if (isTodayClosed()) return
-        viewModelScope.launch {
-            updateTaskUseCase(
-                task,
-                title.trim(),
-                note?.trim()?.takeIf { it.isNotBlank() },
-                date,
-                startTime?.trim()?.takeIf { it.isNotBlank() },
-                category?.trim()?.takeIf { it.isNotBlank() },
-                priority,
-                reminderTime?.trim()?.takeIf { it.isNotBlank() },
-            )
-        }
-    }
+    ) = taskActions.updateTask(task, title, note, date, startTime, category, priority, reminderTime)
 
     fun updateTask(
         taskId: String,
@@ -409,207 +328,43 @@ class TodayViewModel @Inject constructor(
         category: String?,
         priority: Int,
         reminderTime: String?,
-    ) {
-        val task = taskEntitiesById[taskId] ?: return
-        updateTask(task, title, note, date, startTime, category, priority, reminderTime)
-    }
+    ) = taskActions.updateTask(taskId, title, note, date, startTime, category, priority, reminderTime)
 
-    fun moveTaskToTomorrow(task: TaskEntity) {
-        if (isTodayClosed()) return
-        viewModelScope.launch {
-            moveTaskToDateUseCase(task, dateTimeProvider.today().plusDays(1))
-            _uiEffects.tryEmit(TodayUiEffect.TaskMovedTomorrow("task_moved_tomorrow"))
-        }
-    }
+    fun moveTaskToTomorrow(task: TaskEntity) = taskActions.moveTaskToTomorrow(task)
+    fun moveTaskToTomorrow(taskId: String) = taskActions.moveTaskToTomorrow(taskId)
+    fun moveTaskToDate(task: TaskEntity, date: LocalDate) = taskActions.moveTaskToDate(task, date)
+    fun moveTaskToDate(taskId: String, date: LocalDate) = taskActions.moveTaskToDate(taskId, date)
+    fun deleteTask(task: TaskEntity) = taskActions.deleteTask(task)
+    fun deleteTask(taskId: String) = taskActions.deleteTask(taskId)
+    fun restoreTask(task: TaskEntity, subTasks: List<SubTaskEntity> = emptyList()) = taskActions.restoreTask(task, subTasks)
+    fun restoreDeletedTask(taskId: String) = taskActions.restoreDeletedTask(taskId)
+    fun undoTaskToggle(taskId: String) = taskActions.undoTaskToggle(taskId)
+    fun moveAllOverdueTo(date: LocalDate) = taskActions.moveAllOverdueTo(date)
 
-    fun moveTaskToTomorrow(taskId: String) {
-        val task = taskEntitiesById[taskId] ?: return
-        moveTaskToTomorrow(task)
-    }
-
-    fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { moveTaskToDateUseCase(task, date) }
-    }
-
-    fun moveTaskToDate(taskId: String, date: LocalDate) {
-        val task = taskEntitiesById[taskId] ?: return
-        moveTaskToDate(task, date)
-    }
-
-    fun deleteTask(task: TaskEntity) {
-        if (isTodayClosed()) return
-        viewModelScope.launch {
-            runCatching { deleteTaskUseCase(task) }
-                .onSuccess { subTasks ->
-                    deletedTasksById[task.id] = DeletedTaskSnapshot(task, subTasks)
-                    _uiEffects.tryEmit(TodayUiEffect.TaskDeleted(task.id))
-                }
-                .onFailure {
-                    _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_delete_task))
-                }
-        }
-    }
-
-    fun deleteTask(taskId: String) {
-        val task = taskEntitiesById[taskId] ?: return
-        deleteTask(task)
-    }
-
-    fun restoreTask(task: TaskEntity, subTasks: List<SubTaskEntity> = emptyList()) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { restoreTaskUseCase(task, subTasks) }
-    }
-
-    fun restoreDeletedTask(taskId: String) {
-        val deleted = deletedTasksById.remove(taskId) ?: return
-        restoreTask(deleted.task, deleted.subTasks)
-    }
-
-    fun undoTaskToggle(taskId: String) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { setTaskPendingUseCase(taskId) }
-    }
-
-    // ── SubTask actions ─────────────────────────────────────────────────────
-
-    fun subTasksFlow(taskId: String) = observeSubTasksUseCase(taskId)
-
-    fun addSubTask(taskId: String, title: String) {
-        if (isTodayClosed()) return
-        val t = title.trim()
-        if (t.isBlank()) return
-        viewModelScope.launch { addSubTaskUseCase(taskId, t) }
-    }
-
-    fun toggleSubTask(subTask: SubTaskEntity) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { toggleSubTaskUseCase(subTask) }
-    }
-
-    fun deleteSubTask(subTask: SubTaskEntity) {
-        if (isTodayClosed()) return
-        viewModelScope.launch { deleteSubTaskUseCase(subTask) }
-    }
+    fun subTasksFlow(taskId: String) = taskActions.subTasksFlow(taskId)
+    fun addSubTask(taskId: String, title: String) = taskActions.addSubTask(taskId, title)
+    fun toggleSubTask(subTask: SubTaskEntity) = taskActions.toggleSubTask(subTask)
+    fun deleteSubTask(subTask: SubTaskEntity) = taskActions.deleteSubTask(subTask)
 
     // ── Routine actions ──────────────────────────────────────────────────────
 
-    fun toggleRoutine(routine: RoutineEntity, completedToday: Boolean) {
-        toggleRoutine(routine.id, completedToday)
-    }
-
-    fun toggleRoutine(routineId: String, completedToday: Boolean) {
-        if (isTodayClosed()) return
-        val routine = routineEntitiesById[routineId] ?: return
-        viewModelScope.launch {
-            val state = uiState.value
-            val completedRoutinesBefore = state.completedRoutineIds.size
-            val totalRoutines = state.routines.size
-
-            val result = toggleRoutineUseCase(
-                routine = routine,
-                completedToday = completedToday,
-                completedRoutineIds = state.completedRoutineIds,
-                allTodayRoutineIds = state.routines.map { it.id },
-            ) ?: return@launch
-
-            analyticsTracker.track(AnalyticsEvent("routine_completed"))
-            feedbackManager.tapMedium()
-            rewardDisplayService.onRoutineCompleted(
-                routineId = routine.id,
-                grantResult = result.routineReward,
-            )
-
-            if (!completedToday) {
-                achievementTracker.checkFirstRoutine()
-                // Küçük Kutlama: Günün ilk rutini
-                if (completedRoutinesBefore == 0) {
-                    rewardDisplayService.emitMiniBanner("Bugünün ilk rutini tamam. Ritmin başladı.", "🔄")
-                } else if (completedRoutinesBefore + 1 == totalRoutines && totalRoutines > 1) {
-                    // Orta Kutlama: Tüm rutinler bitti
-                    rewardDisplayService.emitAllRoutinesCompleted(state.currentStreak)
-                }
-            }
-
-            // all-routines bonus
-            if (!result.allRoutinesBonus.alreadyGranted) {
-                rewardDisplayService.onDailyBonusEarned(
-                    xp = result.allRoutinesBonus.xpGranted,
-                    gold = result.allRoutinesBonus.goldGranted,
-                )
-            }
-        }
-    }
-
-    fun updateRoutineProgress(routine: RoutineEntity, value: Float, wasCompleted: Boolean) {
-        updateRoutineProgress(routine.id, value, wasCompleted)
-    }
-
-    fun updateRoutineProgress(routineId: String, value: Float, wasCompleted: Boolean) {
-        if (isTodayClosed()) return
-        val routine = routineEntitiesById[routineId] ?: return
-        viewModelScope.launch {
-            val state = uiState.value
-            val result = updateRoutineProgressUseCase(
-                routine = routine,
-                value = value,
-                wasCompleted = wasCompleted,
-                allTodayRoutineIds = state.routines.map { it.id },
-                completedRoutineIds = state.completedRoutineIds,
-            ) ?: return@launch
-
-            analyticsTracker.track(AnalyticsEvent("routine_completed"))
-            feedbackManager.tapMedium()
-            rewardDisplayService.onRoutineCompleted(
-                routineId = routine.id,
-                grantResult = result.routineReward,
-            )
-            // all-routines bonus
-            if (!result.allRoutinesBonus.alreadyGranted) {
-                rewardDisplayService.onDailyBonusEarned(
-                    xp = result.allRoutinesBonus.xpGranted,
-                    gold = result.allRoutinesBonus.goldGranted,
-                )
-            }
-        }
-    }
+    fun toggleRoutine(routine: RoutineEntity, completedToday: Boolean) = routineActions.toggleRoutine(routine, completedToday)
+    fun toggleRoutine(routineId: String, completedToday: Boolean) = routineActions.toggleRoutine(routineId, completedToday)
+    fun updateRoutineProgress(routine: RoutineEntity, value: Float, wasCompleted: Boolean) = routineActions.updateRoutineProgress(routine, value, wasCompleted)
+    fun updateRoutineProgress(routineId: String, value: Float, wasCompleted: Boolean) = routineActions.updateRoutineProgress(routineId, value, wasCompleted)
 
     fun updateRoutine(
         routineId: String,
         name: String,
         targetDays: Set<DayOfWeek>,
         preferredTime: String?,
-    ) {
-        val routine = routineEntitiesById[routineId] ?: return
-        viewModelScope.launch {
-            updateRoutineUseCase(
-                routine = routine,
-                name = name,
-                targetDays = targetDays,
-                preferredTime = preferredTime,
-                targetType = routine.targetType,
-                targetValue = routine.targetValue,
-                targetUnit = routine.targetUnit,
-            )
-        }
-    }
+    ) = routineActions.updateRoutine(routineId, name, targetDays, preferredTime)
 
-    fun skipRoutine(routineId: String) {
-        val routine = routineEntitiesById[routineId] ?: return
-        viewModelScope.launch { skipRoutineUseCase(routine, dateTimeProvider.today()) }
-    }
-
-    fun archiveRoutine(routineId: String) {
-        val routine = routineEntitiesById[routineId] ?: return
-        viewModelScope.launch { archiveRoutineUseCase(routine) }
-    }
+    fun skipRoutine(routineId: String) = routineActions.skipRoutine(routineId)
+    fun archiveRoutine(routineId: String) = routineActions.archiveRoutine(routineId)
 
     // ── Day close ────────────────────────────────────────────────────────────
 
-    /**
-     * Optionally moves overdue pending tasks to tomorrow first, then persists the daily summary with
-     * [carriedTaskCount]. Order is fixed so the summary row always matches what was carried.
-     */
     fun saveDailySummaryWithOptionalCarry(
         note: String,
         mood: Int,
@@ -618,84 +373,15 @@ class TodayViewModel @Inject constructor(
         challenge: String = "",
         tomorrowIntention: String = "",
         carryOverdueToTomorrow: Boolean,
-    ) {
-        viewModelScope.launch {
-            runCatching {
-                val carried = if (carryOverdueToTomorrow) carryPendingTasksUseCase() else 0
-                val state = uiState.value
-                val result = closeDayUseCase(
-                    date = dateTimeProvider.today(),
-                    mood = mood,
-                    note = note.trim(),
-                    completionRate = state.progress,
-                    energy = energy,
-                    bestMoment = bestMoment.trim(),
-                    challenge = challenge.trim(),
-                    tomorrowIntention = tomorrowIntention.trim(),
-                    carriedCount = carried,
-                    streak = state.currentStreak,
-                )
-                analyticsTracker.track(AnalyticsEvent("daily_summary_completed"))
-                feedbackManager.celebrationBurst()
-                if (!result.dayCloseReward.alreadyGranted) {
-                    rewardDisplayService.onDailyBonusEarned(
-                        xp = result.dayCloseReward.xpGranted,
-                        gold = result.dayCloseReward.goldGranted,
-                    )
-                }
-                if (!result.perfectDayReward.alreadyGranted) {
-                    rewardDisplayService.onDailyBonusEarned(
-                        xp = result.perfectDayReward.xpGranted,
-                        gold = result.perfectDayReward.goldGranted,
-                    )
-                }
-                _uiEffects.tryEmit(TodayUiEffect.DaySaved("day_saved"))
-            }.onFailure {
-                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_save_day))
-            }
-        }
-    }
+    ) = dayCloseActions.saveDailySummaryWithOptionalCarry(note, mood, energy, bestMoment, challenge, tomorrowIntention, carryOverdueToTomorrow)
 
-    fun moveAllOverdueTo(date: LocalDate) {
-        if (isTodayClosed()) return
-        viewModelScope.launch {
-            val ids = uiState.value.overdueTasks.map { it.id }
-            var moved = 0
-            ids.forEach { id ->
-                val entity = taskEntitiesById[id] ?: return@forEach
-                moveTaskToDateUseCase(entity, date)
-                moved++
-            }
-            if (moved > 0) {
-                _uiEffects.tryEmit(TodayUiEffect.OverdueTasksMoved(moved))
-            }
-        }
-    }
-
-    fun autoSaveMissedDay(date: LocalDate) {
-        viewModelScope.launch { autoCloseMissedDayUseCase(date) }
-    }
+    fun autoSaveMissedDay(date: LocalDate) = dayCloseActions.autoSaveMissedDay(date)
 
     fun closeMissedDayWithReview(
         date: LocalDate,
         mood: Int,
         carryOverPendingTasks: Boolean,
-    ) {
-        viewModelScope.launch {
-            runCatching {
-                saveMissedDaySummaryUseCase(
-                    date = date,
-                    note = "",
-                    mood = mood,
-                    energy = 3,
-                    carryOverPendingTasks = carryOverPendingTasks,
-                )
-                _uiEffects.tryEmit(TodayUiEffect.DaySaved("missed_day_saved"))
-            }.onFailure {
-                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_save_day))
-            }
-        }
-    }
+    ) = dayCloseActions.closeMissedDayWithReview(date, mood, carryOverPendingTasks)
 
     fun saveMissedDaySummary(
         date: LocalDate,
@@ -705,40 +391,5 @@ class TodayViewModel @Inject constructor(
         bestMoment: String = "",
         challenge: String = "",
         tomorrowIntention: String = "",
-    ) {
-        viewModelScope.launch {
-            runCatching {
-                saveMissedDaySummaryUseCase(date, note, mood, energy, bestMoment, challenge, tomorrowIntention)
-                _uiEffects.tryEmit(TodayUiEffect.DaySaved("day_saved"))
-            }.onFailure {
-                _uiEffects.tryEmit(TodayUiEffect.ActionFailed(R.string.today_error_save_day))
-            }
-        }
-    }
-
-    private fun TaskEntity.toUiModel(): TodayTaskUi = TodayTaskUi(
-        id = id,
-        title = title,
-        note = note,
-        plannedDate = plannedDate,
-        startTime = startTime,
-        category = category,
-        color = color,
-        priority = priority,
-        completionState = completionState,
-        reminderTime = reminderTime,
-    )
-
-    private fun RoutineEntity.toUiModel(currentStreak: Int): TodayRoutineUi = TodayRoutineUi(
-        id = id,
-        name = name,
-        preferredTime = preferredTime,
-        color = color,
-        targetType = targetType,
-        targetValue = targetValue,
-        targetUnit = targetUnit,
-        currentStreak = currentStreak,
-        bestStreak = bestStreak,
-        targetDays = targetDaySet(),
-    )
+    ) = dayCloseActions.saveMissedDaySummary(date, note, mood, energy, bestMoment, challenge, tomorrowIntention)
 }

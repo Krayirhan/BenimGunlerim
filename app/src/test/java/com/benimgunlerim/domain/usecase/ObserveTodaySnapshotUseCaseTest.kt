@@ -47,6 +47,7 @@ class ObserveTodaySnapshotUseCaseTest {
         every { taskRepository.observeByDate(fixedDate) } returns flowOf(emptyList())
         every { routineRepository.observeActive() } returns flowOf(emptyList())
         every { completionLogRepository.observeByDate(fixedDate) } returns flowOf(emptyList())
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         every { dailyStateRepository.observeToday() } returns flowOf(null)
         every { taskRepository.observeOverdue(any()) } returns flowOf(emptyList())
@@ -154,6 +155,7 @@ class ObserveTodaySnapshotUseCaseTest {
         )
         every { routineRepository.observeActive() } returns flowOf(listOf(routine))
         every { completionLogRepository.observeByDate(fixedDate) } returns flowOf(listOf(todayLog))
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(listOf(todayLog, yesterdayLog))
         every { completionLogRepository.observeAll() } returns flowOf(listOf(todayLog, yesterdayLog))
 
         val snapshot = useCase(fixedDate).first()

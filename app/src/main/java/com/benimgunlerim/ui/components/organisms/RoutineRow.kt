@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,6 +46,11 @@ import com.benimgunlerim.ui.theme.AppTokens
 import java.time.DayOfWeek
 import java.time.LocalDate
 
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material3.Surface
+import androidx.compose.foundation.shape.RoundedCornerShape
+
 @Composable
 fun RoutineRow(
     title: String,
@@ -58,6 +64,11 @@ fun RoutineRow(
     targetDaysSummary: String? = null,
     targetDays: Set<DayOfWeek> = emptySet(),
     category: String? = null,
+    targetType: String = "check",
+    targetValue: Int? = null,
+    targetUnit: String? = null,
+    currentValue: Float = 0f,
+    onProgressChange: ((Float) -> Unit)? = null,
     useSurface: Boolean = true,
     onClick: (() -> Unit)? = null,
     onMenuClick: (() -> Unit)? = null,
@@ -146,6 +157,68 @@ fun RoutineRow(
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+
+                if (targetType == "goal" && targetValue != null && targetValue > 1) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        modifier = Modifier.padding(top = 2.dp, bottom = 2.dp),
+                    ) {
+                        if (onProgressChange != null) {
+                            IconButton(
+                                onClick = {
+                                    val next = maxOf(0f, currentValue - 1f)
+                                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+                                    onProgressChange(next)
+                                },
+                                enabled = currentValue > 0f,
+                                modifier = Modifier.size(28.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Remove,
+                                    contentDescription = "Azalt",
+                                    tint = if (currentValue > 0f) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline.copy(alpha = 0.4f),
+                                    modifier = Modifier.size(16.dp),
+                                )
+                            }
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(AppTokens.Radius.sm),
+                            color = if (isCompletedToday) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                            modifier = Modifier.height(24.dp),
+                        ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                            ) {
+                                Text(
+                                    text = "${currentValue.toInt()} / $targetValue ${targetUnit ?: ""}".trim(),
+                                    style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+                                    color = if (isCompletedToday) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
+                        }
+
+                        if (onProgressChange != null) {
+                            IconButton(
+                                onClick = {
+                                    val next = currentValue + 1f
+                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                    onProgressChange(next)
+                                },
+                                modifier = Modifier.size(28.dp),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Add,
+                                    contentDescription = "Artır",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.size(16.dp),
+                                )
+                            }
+                        }
+                    }
+                }
 
                 if (weekHistory.isNotEmpty()) {
                     val history7 = weekHistory.takeLast(7)

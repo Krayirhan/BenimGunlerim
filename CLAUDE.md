@@ -23,9 +23,9 @@ Proje **7 katmanlı modüler mimari**ye geçiş sürecinde.
 | **B** | Core atomlar + gamification atomlar | ✅ TAMAMLANDI |
 | **C** | Moleküller + layout katmanı | ✅ TAMAMLANDI |
 | **D** | Organizmalar (paylaşımlı bloklar) | ✅ TAMAMLANDI |
-| **E** | Ekranların baştan yazılması + Common.kt silme | ✅ TAMAMLANDI |
+| **E** | Ekranların baştan yazılması + Common.kt silme | 🟡 KISMEN TAMAMLANDI |
 
-> Projenin 7 katmanlı mimariye geçiş süreci (Faz A-E) başarıyla tamamlandı (30 Temmuz 2026).
+> Projenin 7 katmanlı mimariye geçişinin iskeleti (Faz A-D) ve `Common.kt`'nin silinmesi tamamlandı (30 Temmuz 2026). Faz E'nin "Demir Kural #5" (ekran dosyaları ≤ 200 satır) maddesi büyük ölçüde sağlandı (17 Ağustos 2026 sprinti): `TodayScreen.kt` (536→133), `TaskDetailSheet.kt` (414→199) ve `CloseDaySheet.kt` (326→137) organizma/alt-bileşen dosyalarına bölündü; `TodayViewModel.kt` (743→397) `TodayTaskActions`/`TodayRoutineActions`/`TodayDayCloseActions` collaborator sınıflarına delege edildi. Tek istisna: `TodayViewModel.kt` hâlâ 200 satırın üzerinde — 22 bağımlılıklı tek bir Hilt sınıfı olduğu için (constructor + 3 collaborator kurulumu + StateFlow birleştirme + delegasyon metotları), daha fazla küçültmek use case'leri bir facade nesnesine toplamak gibi daha büyük bir mimari değişiklik gerektirir; bu bilinçli olarak ertelendi. Yeni bir ekran/organizma yazarken referans almadan önce güncel satır sayısını kontrol edin.
 
 ---
 

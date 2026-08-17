@@ -130,5 +130,9 @@ object AppTokens {
         val fabBottomOffset: Dp = 32.dp
         /** 72dp — Snackbar'ın ekranın alt kenarından offseti */
         val snackbarBottomOffset: Dp = 72.dp
+        /** 68dp — AppTopBar içerik yüksekliği */
+        val topBarHeight: Dp = 68.dp
+        /** 40dp — AppTopBar avatar/bildirim ikon konteyneri çapı */
+        val topBarAvatarDiameter: Dp = 40.dp
     }
 }

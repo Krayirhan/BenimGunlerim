@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -127,27 +128,36 @@ fun RoutinesScreen(
                     AppSurface(radius = AppTokens.Radius.md, padding = AppTokens.Spacing.none) {
                         Column {
                             routines.forEachIndexed { index, routine ->
-                                if (index > 0) AppDivider()
+                                key(routine.id) {
+                                    if (index > 0) AppDivider()
 
-                                val isCompletedToday = routine.last7Days.lastOrNull() == true
-                                val targetSummary = if (routine.targetDays.size == 7) {
-                                    everyDayLabel
-                                } else {
-                                    String.format(daysCountLabel, routine.targetDays.size)
+                                    val isCompletedToday = routine.last7Days.lastOrNull() == true
+                                    val targetSummary = if (routine.targetDays.size == 7) {
+                                        everyDayLabel
+                                    } else {
+                                        String.format(daysCountLabel, routine.targetDays.size)
+                                    }
+
+                                    RoutineRow(
+                                        title = routine.name,
+                                        isCompletedToday = isCompletedToday,
+                                        onToggle = { viewModel.toggleRoutine(routine.id) },
+                                        weekHistory = routine.last7Days,
+                                        targetDays = routine.targetDays,
+                                        streakCount = routine.currentStreak,
+                                        preferredTime = routine.preferredTime,
+                                        targetDaysSummary = targetSummary,
+                                        targetType = routine.targetType,
+                                        targetValue = routine.targetValue,
+                                        targetUnit = routine.targetUnit,
+                                        currentValue = routine.currentValue,
+                                        onProgressChange = { nextValue ->
+                                            viewModel.updateRoutineProgress(routine.id, nextValue)
+                                        },
+                                        useSurface = false,
+                                        onClick = { onOpenRoutineDetail(routine.id) },
+                                    )
                                 }
-
-                                RoutineRow(
-                                    title = routine.name,
-                                    isCompletedToday = isCompletedToday,
-                                    onToggle = { viewModel.toggleRoutine(routine.id) },
-                                    weekHistory = routine.last7Days,
-                                    targetDays = routine.targetDays,
-                                    streakCount = routine.currentStreak,
-                                    preferredTime = routine.preferredTime,
-                                    targetDaysSummary = targetSummary,
-                                    useSurface = false,
-                                    onClick = { onOpenRoutineDetail(routine.id) },
-                                )
                             }
                         }
                     }

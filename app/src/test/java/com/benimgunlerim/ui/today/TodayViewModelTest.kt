@@ -43,10 +43,12 @@ import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
 import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
-import com.benimgunlerim.ui.theme.CandyPrimary
-import com.benimgunlerim.ui.theme.CandySecondary
-import com.benimgunlerim.ui.theme.LevelSky
-import com.benimgunlerim.ui.theme.StreakCoral
+import androidx.compose.ui.graphics.Color
+import com.benimgunlerim.ui.theme.Info
+import com.benimgunlerim.ui.theme.Streak
+import com.benimgunlerim.ui.theme.Success
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -119,6 +121,7 @@ class TodayViewModelTest {
     private val observeTodaySnapshotUseCase: ObserveTodaySnapshotUseCase = mockk()
     private val rewardDisplayService: RewardDisplayService = mockk(relaxed = true)
 
+    private val snapshotFlow = kotlinx.coroutines.flow.MutableStateFlow(emptySnapshot())
     private lateinit var viewModel: TodayViewModel
 
     @Before
@@ -128,8 +131,6 @@ class TodayViewModelTest {
         every { dateTimeProvider.today() } returns fixedDate
         every { dateTimeProvider.currentTimeMillis() } returns 1_000L
         every { dateTimeProvider.currentTime() } returns fixedTime
-
-        every { achievementTracker.newUnlock } returns MutableSharedFlow()
         
         // Setup rewardDisplayService to emit events on demand  
         val gameEventFlow = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
@@ -147,10 +148,15 @@ class TodayViewModelTest {
             gameEventFlow.tryEmit(GameEvent.AchievementUnlocked(emoji = firstArg(), title = secondArg()))
         }
 
-        every { tickerProvider.minuteTicker() } returns flowOf(Unit)
-        every { observeTodaySnapshotUseCase(any()) } returns flowOf(emptySnapshot())
+        every { tickerProvider.minuteTicker() } returns kotlinx.coroutines.flow.MutableStateFlow(Unit)
+        every { tickerProvider.dateTicker(any()) } returns kotlinx.coroutines.flow.MutableStateFlow(fixedDate)
+        every { observeTodaySnapshotUseCase(any()) } returns snapshotFlow
         every { observeDailyStateUseCase(any()) } returns flowOf(null)
+        every { taskRepository.observeByDate(any()) } returns flowOf(emptyList())
+        every { routineRepository.observeActive() } returns flowOf(emptyList())
+        every { completionLogRepository.observeByDate(any()) } returns flowOf(emptyList())
 
+        snapshotFlow.value = emptySnapshot()
         viewModel = createViewModel()
     }
 
@@ -278,53 +284,17 @@ class TodayViewModelTest {
     // ── AchievementUnlocked ───────────────────────────────────────────────────
 
     @Test
-    fun achievementUnlocked_emitsGameEvent() = runTest {
-        val achievementFlow = MutableSharedFlow<AchievementDef>(extraBufferCapacity = 5)
-        every { achievementTracker.newUnlock } returns achievementFlow
+    fun gameEvents_forwardsFromRewardDisplayService() = runTest {
+        val gameEventFlow = MutableSharedFlow<GameEvent>(extraBufferCapacity = 5)
+        every { rewardDisplayService.gameEvents } returns gameEventFlow
 
-        // Re-create viewModel so it subscribes to the new flow
-        val testViewModel = TodayViewModel(
-            prefsRepository,
-            analyticsTracker,
-            achievementTracker,
-            feedbackManager,
-            rewardDisplayService,
-            dateTimeProvider,
-            addTaskUseCase,
-            addTasksBatchUseCase,
-            updateTaskTitleUseCase,
-            moveTaskToDateUseCase,
-            updateTaskUseCase,
-            deleteTaskUseCase,
-            restoreTaskUseCase,
-            setTaskPendingUseCase,
-            observeSubTasksUseCase,
-            addSubTaskUseCase,
-            toggleSubTaskUseCase,
-            deleteSubTaskUseCase,
-            toggleTaskUseCase,
-            toggleRoutineUseCase,
-            updateRoutineProgressUseCase,
-            updateRoutineUseCase,
-            skipRoutineUseCase,
-            archiveRoutineUseCase,
-            closeDayUseCase,
-            carryPendingTasksUseCase,
-            observeDailyStateUseCase,
-            autoCloseMissedDayUseCase,
-            saveMissedDaySummaryUseCase,
-            taskRepository,
-            routineRepository,
-            completionLogRepository,
-            tickerProvider,
-            observeTodaySnapshotUseCase,
-        )
-        advanceUntilIdle() // let init block subscribe
-
+        val testViewModel = createViewModel()
         val events = mutableListOf<GameEvent>()
-        val collectJob = launch { testViewModel.gameEvents.toList(events) }
+        val collectJob = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            testViewModel.gameEvents.toList(events)
+        }
 
-        achievementFlow.emit(AchievementDef("streak_3", "🔥", "Ateş Başladı", "3 gün", 30, 15))
+        gameEventFlow.emit(GameEvent.AchievementUnlocked("streak_3", "🔥", "Ateş Başladı", "3 gün", 30))
         advanceUntilIdle()
 
         assertTrue(events.any { it is GameEvent.AchievementUnlocked && (it as GameEvent.AchievementUnlocked).emoji == "🔥" })
@@ -421,15 +391,19 @@ class TodayViewModelTest {
                 flowOf(emptySnapshot())
             }
         }
-        viewModel = createViewModel()
-        val errorState = viewModel.uiState.first { !it.isLoading }
+        val vm = createViewModel()
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            vm.uiState.collect()
+        }
+        vm.uiState.first { it.snapshotLoadError }
 
-        assertTrue(errorState.snapshotLoadError)
+        assertTrue(vm.uiState.value.snapshotLoadError)
 
-        viewModel.retrySnapshotLoad()
-        val recoveredState = viewModel.uiState.first { !it.isLoading && !it.snapshotLoadError }
+        vm.retrySnapshotLoad()
+        vm.uiState.first { !it.snapshotLoadError }
 
-        assertFalse(recoveredState.snapshotLoadError)
+        assertFalse(vm.uiState.value.snapshotLoadError)
+        job.cancel()
     }
 
     @Test
@@ -442,16 +416,16 @@ class TodayViewModelTest {
             title = "Alt görev",
             createdAt = 1_000L,
         )
-        every { observeTodaySnapshotUseCase(any()) } returns flowOf(
-            emptySnapshot().copy(
-                tasks = listOf(task),
-                routines = listOf(routine),
-                todayState = closedDailyState(),
-            ),
+        snapshotFlow.value = emptySnapshot().copy(
+            tasks = listOf(task),
+            routines = listOf(routine),
+            todayState = closedDailyState(),
         )
-        viewModel = createViewModel()
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.uiState.collect()
+        }
+        viewModel.uiState.first { it.todayState?.closedAt != null }
 
-        viewModel.uiState.first { !it.isLoading }
         viewModel.addTask("Kapalı günde görev")
         viewModel.updateTaskTitle(task, "Yeni başlık")
         viewModel.updateTask(task, "Yeni başlık", null, fixedDate, null, null, 2, null)
@@ -476,35 +450,41 @@ class TodayViewModelTest {
         coVerify(exactly = 0) { setTaskPendingUseCase(any()) }
         coVerify(exactly = 0) { toggleRoutineUseCase(any(), any(), any(), any(), any()) }
         coVerify(exactly = 0) { updateRoutineProgressUseCase(any(), any(), any(), any(), any(), any()) }
+        job.cancel()
     }
 
     @Test
     fun moveAllOverdueTo_emitsMovedCount() = runTest {
         val old1 = pendingTask("old-1").copy(plannedDate = fixedDate.minusDays(2).toString())
         val old2 = pendingTask("old-2").copy(plannedDate = fixedDate.minusDays(1).toString())
-        every { observeTodaySnapshotUseCase(any()) } returns flowOf(
-            emptySnapshot().copy(overdueTasks = listOf(old1, old2)),
+        snapshotFlow.value = emptySnapshot().copy(
+            overdueTasks = listOf(old1, old2),
         )
-        viewModel = createViewModel()
-        viewModel.uiState.first { !it.isLoading }
-        val effect = async {
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.uiState.collect()
+        }
+        viewModel.uiState.first { it.overdueTasks.size == 2 }
+
+        val effectDeferred = async(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.uiEffects.first { it is TodayUiEffect.OverdueTasksMoved } as TodayUiEffect.OverdueTasksMoved
         }
 
         viewModel.moveAllOverdueTo(fixedDate)
         advanceUntilIdle()
 
-        assertEquals(2, effect.await().count)
+        val effect = effectDeferred.await()
+        assertEquals(2, effect.count)
         coVerify { moveTaskToDateUseCase(old1, fixedDate) }
         coVerify { moveTaskToDateUseCase(old2, fixedDate) }
+        job.cancel()
     }
 
     @Test
     fun categoryPalette_matchesTurkishKeywords() {
-        assertEquals(LevelSky, CategoryPalette.colorFor("\u0130\u015f toplant\u0131s\u0131"))
-        assertEquals(CandyPrimary, CategoryPalette.colorFor("Sa\u011fl\u0131k y\u00fcr\u00fcy\u00fc\u015f"))
-        assertEquals(CandySecondary, CategoryPalette.colorFor("Al\u0131\u015fveri\u015f listesi"))
-        assertEquals(StreakCoral, CategoryPalette.colorFor("\u00c7ocuk g\u00fcnl\u00fck notu"))
+        assertEquals(Info, CategoryPalette.colorFor("İş toplantısı"))
+        assertEquals(Success, CategoryPalette.colorFor("Sağlık yürüyüş"))
+        assertEquals(Color(0xFF64748B), CategoryPalette.colorFor("Market listesi"))
+        assertEquals(Streak, CategoryPalette.colorFor("Çocuk parkı"))
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────

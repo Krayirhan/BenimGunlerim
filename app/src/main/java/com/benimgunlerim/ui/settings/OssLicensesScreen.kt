@@ -20,8 +20,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppSurface
 import com.benimgunlerim.ui.theme.AppTokens
 import com.benimgunlerim.ui.theme.BrandPrimary
@@ -59,16 +60,46 @@ private val LIBRARIES = listOf(
         description = "Asynchronous or non-blocking programming in Kotlin.",
     ),
     OpenSourceLibrary(
+        name = "AndroidX Lifecycle (ViewModel & Runtime KTX)",
+        author = "Google LLC",
+        license = "Apache License 2.0",
+        description = "Lifecycle-aware components and Compose ViewModel integration.",
+    ),
+    OpenSourceLibrary(
+        name = "AndroidX Navigation Compose",
+        author = "Google LLC",
+        license = "Apache License 2.0",
+        description = "Navigation framework for Jetpack Compose screens.",
+    ),
+    OpenSourceLibrary(
         name = "Room Persistence Library",
         author = "Google LLC",
         license = "Apache License 2.0",
         description = "Robust SQLite object mapping database library.",
     ),
     OpenSourceLibrary(
+        name = "AndroidX DataStore Preferences",
+        author = "Google LLC",
+        license = "Apache License 2.0",
+        description = "Typed, asynchronous key-value preference storage.",
+    ),
+    OpenSourceLibrary(
+        name = "AndroidX WorkManager",
+        author = "Google LLC",
+        license = "Apache License 2.0",
+        description = "Deferrable, guaranteed background task scheduling.",
+    ),
+    OpenSourceLibrary(
         name = "Dagger Hilt",
         author = "Google LLC",
         license = "Apache License 2.0",
         description = "Dependency injection for Android applications.",
+    ),
+    OpenSourceLibrary(
+        name = "Firebase Crashlytics",
+        author = "Google LLC",
+        license = "Apache License 2.0",
+        description = "Real-time crash reporting (release builds only, opt-in).",
     ),
 )
 
@@ -82,7 +113,7 @@ fun OssLicensesScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = "Açık Kaynak Lisansları",
+                        text = stringResource(R.string.oss_licenses_title),
                         style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     )
                 },
@@ -90,7 +121,7 @@ fun OssLicensesScreen(
                     IconButton(onClick = onNavigateBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Geri",
+                            contentDescription = stringResource(R.string.action_back),
                             tint = BrandPrimary,
                         )
                     }
@@ -105,8 +136,8 @@ fun OssLicensesScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+                .padding(horizontal = AppTokens.Spacing.md, vertical = AppTokens.Spacing.xs),
+            verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sm),
         ) {
             items(LIBRARIES) { lib ->
                 AppSurface(
@@ -115,7 +146,7 @@ fun OssLicensesScreen(
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.xxs),
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),

@@ -12,6 +12,7 @@ data class RoutineCardUi(
     val targetUnit: String?,
     val currentStreak: Int,
     val last7Days: List<Boolean>,
+    val currentValue: Float = 0f,
 )
 
 data class RoutineDetailRoutineUi(

@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 rootProject.name = "BenimGunlerim"
 include(":app")
 include(":benchmark")
+include(":detekt-rules")

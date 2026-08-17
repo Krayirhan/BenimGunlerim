@@ -37,6 +37,7 @@ class RoutinesViewModelTest {
     private val dateTimeProvider: DateTimeProvider = mockk(relaxed = true)
     private val addRoutineUseCase: AddRoutineUseCase = mockk(relaxed = true)
     private val updateRoutineUseCase: UpdateRoutineUseCase = mockk(relaxed = true)
+    private val updateRoutineProgressUseCase: com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase = mockk(relaxed = true)
     private val archiveRoutineUseCase: ArchiveRoutineUseCase = mockk(relaxed = true)
     private val skipRoutineUseCase: SkipRoutineUseCase = mockk(relaxed = true)
     private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase = mockk(relaxed = true)
@@ -49,6 +50,7 @@ class RoutinesViewModelTest {
         Dispatchers.setMain(testDispatcher)
         every { dateTimeProvider.today() } returns java.time.LocalDate.of(2025, 6, 9)
         every { routineRepository.observeActive() } returns flowOf(emptyList())
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         viewModel = RoutinesViewModel(
             routineRepository = routineRepository,
@@ -56,6 +58,7 @@ class RoutinesViewModelTest {
             dateTimeProvider = dateTimeProvider,
             addRoutineUseCase = addRoutineUseCase,
             updateRoutineUseCase = updateRoutineUseCase,
+            updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,
@@ -90,6 +93,7 @@ class RoutinesViewModelTest {
             dateTimeProvider,
             addRoutineUseCase,
             updateRoutineUseCase,
+            updateRoutineProgressUseCase,
             archiveRoutineUseCase,
             skipRoutineUseCase,
             toggleRoutineUseCase,
@@ -118,6 +122,7 @@ class RoutinesViewModelTest {
             note = null,
         )
         every { routineRepository.observeActive() } returns flowOf(listOf(routine))
+        every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(listOf(log))
         every { completionLogRepository.observeAll() } returns flowOf(listOf(log))
         val vm = RoutinesViewModel(
             routineRepository,
@@ -125,6 +130,7 @@ class RoutinesViewModelTest {
             dateTimeProvider,
             addRoutineUseCase,
             updateRoutineUseCase,
+            updateRoutineProgressUseCase,
             archiveRoutineUseCase,
             skipRoutineUseCase,
             toggleRoutineUseCase,
@@ -188,6 +194,7 @@ class RoutinesViewModelTest {
             dateTimeProvider = dateTimeProvider,
             addRoutineUseCase = addRoutineUseCase,
             updateRoutineUseCase = updateRoutineUseCase,
+            updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,
@@ -215,6 +222,7 @@ class RoutinesViewModelTest {
             dateTimeProvider = dateTimeProvider,
             addRoutineUseCase = addRoutineUseCase,
             updateRoutineUseCase = updateRoutineUseCase,
+            updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,

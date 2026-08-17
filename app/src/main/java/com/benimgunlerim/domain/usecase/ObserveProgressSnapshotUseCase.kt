@@ -68,7 +68,7 @@ class ObserveProgressSnapshotUseCase @Inject constructor(
             taskRepository.observeRange(fromDate, today),
             routineRepository.observeActive(),
             dailyStateRepository.observeRecent(limit = 30),
-            completionLogRepository.observeAll(),
+            completionLogRepository.observeBetween(fromDate, today),
             combine(
                 prefsRepository.preferences,
                 achievementTracker.unlockedAchievements,

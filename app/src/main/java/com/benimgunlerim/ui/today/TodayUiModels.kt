@@ -29,4 +29,5 @@ data class TodayRoutineUi(
     val currentStreak: Int,
     val bestStreak: Int,
     val targetDays: Set<DayOfWeek>,
+    val currentValue: Float = 0f,
 )
