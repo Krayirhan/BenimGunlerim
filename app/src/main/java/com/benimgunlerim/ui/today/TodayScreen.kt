@@ -50,6 +50,8 @@ fun TodayScreen(
 
     val menuRoutineId = remember { mutableStateOf<String?>(null) }
     val editingRoutine = remember { mutableStateOf<TodayRoutineUi?>(null) }
+    val archiveRoutineId = remember { mutableStateOf<String?>(null) }
+    val deleteTaskId = remember { mutableStateOf<String?>(null) }
     val snackbarHostState = remember { SnackbarHostState() }
 
     val dayIsClosed = state.todayState?.closedAt != null
@@ -90,26 +92,66 @@ fun TodayScreen(
             null
         },
     ) { contentPadding ->
+        val summaryState = remember(
+            dayIsClosed,
+            isEmptyToday,
+            totalCount,
+            completedCount,
+            userLevel,
+            miniBannerData,
+            state.gameState.celebrationEffectsEnabled,
+            dismissContextualReset,
+        ) {
+            TodayListSummaryState(
+                dayIsClosed = dayIsClosed,
+                isEmptyToday = isEmptyToday,
+                totalCount = totalCount,
+                completedCount = completedCount,
+                userLevel = userLevel,
+                miniBannerData = miniBannerData,
+                celebrationEffectsEnabled = state.gameState.celebrationEffectsEnabled,
+                dismissContextualReset = dismissContextualReset,
+            )
+        }
+        val listCallbacks = remember(onNavigateToRoutines) {
+            TodayListEventCallbacks(
+                onNavigateToRoutines = onNavigateToRoutines,
+                onResetClick = { showResetDialog.value = true },
+                onDismissContextualReset = { dismissContextualReset = true },
+                onMissedDayReviewClick = { showMissedDaySheet.value = true },
+                onAddTaskClick = { showAddTaskSheet.value = true },
+                onOpenRoutineMenu = { menuRoutineId.value = it },
+                onCloseDayClick = { showCloseSheet.value = true },
+                onRequestDeleteTask = { deleteTaskId.value = it },
+            )
+        }
+
         TodayContentList(
             modifier = Modifier.fillMaxSize(),
             contentPadding = contentPadding,
             state = state,
             today = today,
             viewModel = viewModel,
-            dayIsClosed = dayIsClosed,
-            isEmptyToday = isEmptyToday,
-            totalCount = totalCount,
-            completedCount = completedCount,
-            userLevel = userLevel,
-            miniBannerData = miniBannerData,
-            dismissContextualReset = dismissContextualReset,
-            onNavigateToRoutines = onNavigateToRoutines,
-            onResetClick = { showResetDialog.value = true },
-            onDismissContextualReset = { dismissContextualReset = true },
-            onMissedDayReviewClick = { showMissedDaySheet.value = true },
-            onAddTaskClick = { showAddTaskSheet.value = true },
-            onOpenRoutineMenu = { menuRoutineId.value = it },
-            onCloseDayClick = { showCloseSheet.value = true },
+            summaryState = summaryState,
+            callbacks = listCallbacks,
+        )
+    }
+
+    val modalStates = remember {
+        TodayModalStates(
+            showFabMenu = showFabMenu,
+            showResetDialog = showResetDialog,
+            showBrainDumpDialog = showBrainDumpDialog,
+            showAddTaskSheet = showAddTaskSheet,
+            showCloseSheet = showCloseSheet,
+            showMissedDaySheet = showMissedDaySheet,
+            menuRoutineId = menuRoutineId,
+            editingRoutine = editingRoutine,
+            levelUpEvent = levelUpEvent,
+            achievementEvent = achievementEvent,
+            blockCompletionData = blockCompletionData,
+            archiveRoutineId = archiveRoutineId,
+            deleteTaskId = deleteTaskId,
         )
     }
 
@@ -119,16 +161,6 @@ fun TodayScreen(
         viewModel = viewModel,
         completedCount = completedCount,
         totalCount = totalCount,
-        showFabMenu = showFabMenu,
-        showResetDialog = showResetDialog,
-        showBrainDumpDialog = showBrainDumpDialog,
-        showAddTaskSheet = showAddTaskSheet,
-        showCloseSheet = showCloseSheet,
-        showMissedDaySheet = showMissedDaySheet,
-        menuRoutineId = menuRoutineId,
-        editingRoutine = editingRoutine,
-        levelUpEvent = levelUpEvent,
-        achievementEvent = achievementEvent,
-        blockCompletionData = blockCompletionData,
+        modals = modalStates,
     )
 }

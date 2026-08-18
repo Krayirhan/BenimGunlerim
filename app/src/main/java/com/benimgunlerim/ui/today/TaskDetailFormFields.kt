@@ -1,5 +1,3 @@
-@file:Suppress("LongParameterList", "MagicNumber")
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.layout.Arrangement
@@ -28,79 +26,89 @@ import com.benimgunlerim.ui.theme.StreakCoral
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+internal data class TaskDetailFormData(
+    val title: String,
+    val note: String,
+    val plannedDate: LocalDate,
+    val time: String,
+    val timeErrorText: String?,
+    val category: String,
+    val interactionLocked: Boolean,
+)
+
+internal data class TaskDetailFormActions(
+    val onTitleChange: (String) -> Unit,
+    val onNoteChange: (String) -> Unit,
+    val onDatePickerRequest: () -> Unit,
+    val onTimeChange: (String) -> Unit,
+    val onTimePickerRequest: () -> Unit,
+    val onCategoryChange: (String) -> Unit,
+    val onCategoryDone: () -> Unit,
+)
+
+private val FieldCornerRadius = 8.dp
+
 @Composable
 internal fun TaskDetailFormFields(
-    title: String,
-    onTitleChange: (String) -> Unit,
-    note: String,
-    onNoteChange: (String) -> Unit,
-    plannedDate: LocalDate,
+    data: TaskDetailFormData,
     dateFmt: DateTimeFormatter,
-    onDatePickerRequest: () -> Unit,
-    time: String,
-    onTimeChange: (String) -> Unit,
-    timeErrorText: String?,
-    onTimePickerRequest: () -> Unit,
-    category: String,
-    onCategoryChange: (String) -> Unit,
-    onCategoryDone: () -> Unit,
-    interactionLocked: Boolean,
+    actions: TaskDetailFormActions,
 ) {
     Text(stringResource(R.string.today_edit_task_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
     OutlinedTextField(
-        value = title,
-        onValueChange = onTitleChange,
+        value = data.title,
+        onValueChange = actions.onTitleChange,
         label = { Text(stringResource(R.string.today_add_task_name_label)) },
         modifier = Modifier.fillMaxWidth(),
-        enabled = !interactionLocked,
+        enabled = !data.interactionLocked,
         singleLine = true,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     )
     OutlinedTextField(
-        value = note,
-        onValueChange = onNoteChange,
+        value = data.note,
+        onValueChange = actions.onNoteChange,
         label = { Text(stringResource(R.string.today_edit_task_note_label)) },
         modifier = Modifier.fillMaxWidth(),
-        enabled = !interactionLocked,
+        enabled = !data.interactionLocked,
         minLines = 2,
         maxLines = 3,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     )
     SheetSectionHeader(stringResource(R.string.today_detail_section_plan))
     Text(stringResource(R.string.today_edit_task_date_label), style = MaterialTheme.typography.labelLarge)
-    TextButton(onClick = onDatePickerRequest, enabled = !interactionLocked) {
-        Text(plannedDate.format(dateFmt))
+    TextButton(onClick = actions.onDatePickerRequest, enabled = !data.interactionLocked) {
+        Text(data.plannedDate.format(dateFmt))
     }
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         OutlinedTextField(
-            value = time,
-            onValueChange = { onTimeChange(TimeInputValidator.sanitize(it)) },
+            value = data.time,
+            onValueChange = { actions.onTimeChange(TimeInputValidator.sanitize(it)) },
             label = { Text(stringResource(R.string.today_task_plan_time_label)) },
             modifier = Modifier.weight(1f),
-            enabled = !interactionLocked,
+            enabled = !data.interactionLocked,
             singleLine = true,
-            shape = RoundedCornerShape(8.dp),
-            isError = timeErrorText != null,
-            supportingText = { timeErrorText?.let { Text(it, color = StreakCoral) } },
+            shape = RoundedCornerShape(FieldCornerRadius),
+            isError = data.timeErrorText != null,
+            supportingText = { data.timeErrorText?.let { Text(it, color = StreakCoral) } },
             trailingIcon = {
-                IconButton(onClick = onTimePickerRequest, enabled = !interactionLocked) {
+                IconButton(onClick = actions.onTimePickerRequest, enabled = !data.interactionLocked) {
                     Icon(Icons.Outlined.Schedule, contentDescription = stringResource(R.string.today_pick_time_cd))
                 }
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         OutlinedTextField(
-            value = category,
-            onValueChange = onCategoryChange,
+            value = data.category,
+            onValueChange = actions.onCategoryChange,
             label = { Text(stringResource(R.string.today_add_task_category_label)) },
             modifier = Modifier.weight(1f),
-            enabled = !interactionLocked,
+            enabled = !data.interactionLocked,
             singleLine = true,
-            shape = RoundedCornerShape(8.dp),
+            shape = RoundedCornerShape(FieldCornerRadius),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { onCategoryDone() }),
+            keyboardActions = KeyboardActions(onDone = { actions.onCategoryDone() }),
         )
     }
 }

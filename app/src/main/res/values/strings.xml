@@ -26,6 +26,11 @@
     <string name="missed_day_sheet_subtitle">%1$s günü özetin ve tamamlanan adımların</string>
     <string name="missed_day_progress_summary">%1$d / %2$d adım tamamlandı (%3$d%%)</string>
     <string name="missed_day_mood_title">Dün nasıldı?</string>
+    <string name="missed_day_mood_challenging">Zorlayıcı</string>
+    <string name="missed_day_mood_flat">Durgun</string>
+    <string name="missed_day_mood_normal">Normal</string>
+    <string name="missed_day_mood_good">İyi</string>
+    <string name="missed_day_mood_great">Harika</string>
     <string name="missed_day_carry_tasks">Dünden kalan %1$d görevi bugüne aktar</string>
     <string name="missed_day_close_and_continue">Dünü Kapat ve Bugüne Başla</string>
     <string name="missed_day_archive_as_is">Olduğu gibi arşive kaldır</string>
@@ -47,6 +52,15 @@
     <string name="routine_row_details_cd">Rutin detayları</string>
     <string name="today_routine_meta_format">Her gün · %1$d günlük seri</string>
     <string name="today_task_deleted_undo">Görev silindi</string>
+    <string name="today_task_completed_undo_msg">✓ Görev tamamlandı · +10 XP</string>
+    <string name="today_task_toggle_cd">Görevi tamamla</string>
+    <string name="today_task_uncomplete_cd">Tamamlandı olarak işaretlemesini kaldır</string>
+    <string name="today_task_delete_cd">Görevi sil</string>
+    <string name="today_all_tasks_completed_title">Bugünün görevleri tamamlandı 🎉</string>
+    <string name="today_all_tasks_completed_body">%1$d / %2$d görev tamamlandı</string>
+    <string name="today_all_routines_completed_title">Bugünün rutinleri tamamlandı</string>
+    <string name="today_all_routines_completed_body">Ritmini korudun. Seri: %1$d gün</string>
+    <string name="today_xp_bonus_badge">+%1$d XP Bonusu</string>
     <string name="plan_screen_title">Plan</string>
     <string name="plan_overdue_tasks_title">Geciken Görevler</string>
     <string name="plan_move_overdue_to_selected">Seçili Güne Taşı</string>
@@ -88,6 +102,10 @@
     <string name="nav_progress">İstatistik</string>
     <string name="nav_settings">Ayarlar</string>
     <string name="app_name">Benim Günlerim</string>
+    <string name="topbar_plan_subtitle">Günlerini düzenle</string>
+    <string name="topbar_routines_subtitle">Ritmini koru</string>
+    <string name="topbar_progress_subtitle">Gelişimini gör</string>
+    <string name="topbar_settings_subtitle">Deneyimini düzenle</string>
     <string name="today_profile_cd">Profil ve ayarlar</string>
     <string name="today_notifications_cd">Bildirim ayarları</string>
 
@@ -153,6 +171,22 @@
     <string name="shop_category_reports">📊 Rapor Modu</string>
     <string name="shop_category_item_count">%1$d ürün</string>
 
+    <!-- Celebration Modals -->
+    <string name="celebration_action_continue">Devam Et</string>
+    <string name="celebration_level_up_title">Seviye Atladın!</string>
+    <string name="celebration_level_up_subtitle">Seviye %1$d · %2$s</string>
+    <string name="celebration_level_up_body">Bugün küçük adımların birikti.</string>
+    <string name="celebration_xp_bonus_badge">⚡ +%1$d XP Bonusu</string>
+    <string name="celebration_achievement_unlocked_title">Başarım Kazanıldı!</string>
+    <string name="celebration_xp_reward_badge">⚡ +%1$d XP</string>
+    <string name="celebration_achievement_action">Harika</string>
+    <string name="celebration_combined_title">Güzel İlerleme!</string>
+    <string name="celebration_combined_level_body">Seviye %1$d (%2$s) oldun.</string>
+    <string name="celebration_combined_achievement_body">Yeni başarım: %1$s</string>
+    <string name="celebration_combined_xp_badge">⚡ +%1$d XP Kazandın</string>
+    <string name="celebration_block_light_day_body">Bugün kendine alan açtın. Bu da ilerleme.</string>
+    <string name="celebration_block_close_day_action">Günü Kapat</string>
+
     <!-- Ortak aksiyonlar -->
     <string name="action_save">Kaydet</string>
     <string name="action_cancel">İptal</string>
@@ -212,6 +246,9 @@
     <string name="routines_add_cd">Rutin ekle</string>
     <string name="routine_menu_edit">Düzenle</string>
     <string name="routine_menu_skip">Bugün atla</string>
+    <string name="routine_archive_confirm_title">Rutini arşivle?</string>
+    <string name="routine_archive_confirm_body">Bu rutin günlük listeden kaldırılacak. Daha sonra rutinler ekranından yönetebilirsin.</string>
+    <string name="routine_archive_confirm_action">Arşivle</string>
     <string name="routine_sheet_add_title">Yeni Rutin Ekle</string>
     <string name="routine_sheet_edit_title">Rutini Düzenle</string>
     <string name="routine_sheet_name_label">Rutin Adı</string>
@@ -664,6 +701,8 @@
     <string name="reset_pick_task">Bir görev seç</string>
     <string name="reset_light_day">Bugünü hafiflet</string>
     <string name="reset_continue">Devam et</string>
+    <string name="reset_duration_30s">30 saniye</string>
+    <string name="reset_duration_60s">1 dakika</string>
     <string name="reset_contextual_title">Bugün biraz yoğun mu görünüyor?</string>
     <string name="reset_contextual_body">1 dakikalık reset yapıp tek küçük adıma dönebilirsin.</string>
     <string name="reset_contextual_light_body">Bugünü hafiflettik. İstersen kısa bir nefesle devam edebilirsin.</string>
@@ -691,9 +730,23 @@
 
     <!-- FAB Hızlı Eylemler -->
     <string name="quick_actions_title">Bugün ne yapmak istersin?</string>
+    <string name="quick_action_add_task_title">Görev Ekle</string>
+    <string name="quick_action_add_task_subtitle">Bugün için tek seferlik yapılacak iş</string>
+    <string name="quick_action_braindump_subtitle">Aklındakileri dök ve göreve dönüştür</string>
+    <string name="quick_action_reset_subtitle">Zihnini boşalt, nefes al, toparlan</string>
+    <string name="quick_action_light_day_off_subtitle">Bugünü iptal etmiyoruz, hafifletiyoruz</string>
+    <string name="quick_action_light_day_on_subtitle">Normal tempoya geri dön</string>
+    <string name="quick_action_active_badge">Aktif</string>
 
-    <!-- Ayarlar - Sakinleşme -->
-    <string name="settings_calm_section">Sakinleşme ve Destek</string>
-    <string name="settings_show_reset_suggestions">Sakinleşme ve Reset Önerileri</string>
-    <string name="settings_show_reset_suggestions_desc">Yoğun günlerde nefes ve toparlanma önerileri gösterilsin.</string>
+    <!-- Ayarlar - Ek Bölüm Stringleri -->
+    <string name="settings_privacy_policy_title">Gizlilik Politikası</string>
+    <string name="settings_privacy_policy_desc">Veri güvenliği ve gizlilik taahhüdümüz</string>
+    <string name="settings_onboarding_row_title">Başlangıç Rehberi (Onboarding)</string>
+    <string name="settings_onboarding_row_desc">Tanıtım adımlarını ve ilk kurulum akışını incele</string>
+    <string name="settings_oss_licenses_title">Açık kaynak lisansları</string>
+    <string name="settings_oss_licenses_desc">Kullandığımız açık kaynak kütüphaneler</string>
+    <string name="settings_export_desc">Tüm görev, rutin ve ayarları JSON dosyasına aktar</string>
+    <string name="settings_import_desc">Daha önce alınan JSON yedeğini geri yükle</string>
+    <string name="today_missed_day_success_msg">Dünün tüm hedefleri tamamlandı!</string>
+    <string name="today_missed_day_protected_msg">Dünkü emeklerin korundu.</string>
 </resources>

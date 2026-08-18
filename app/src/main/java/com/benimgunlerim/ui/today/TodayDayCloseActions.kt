@@ -14,21 +14,24 @@ import java.time.LocalDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+internal data class TodayDayCloseDependencies(
+    val dateTimeProvider: DateTimeProvider,
+    val analyticsTracker: AnalyticsTracker,
+    val feedbackManager: FeedbackManager,
+    val rewardDisplayService: RewardDisplayService,
+    val closeDayUseCase: CloseDayUseCase,
+    val carryPendingTasksUseCase: CarryPendingTasksUseCase,
+    val autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase,
+    val saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase,
+)
+
 /**
  * Day-close and missed-day actions for [TodayViewModel], extracted so the
  * ViewModel itself stays focused on state assembly.
  */
-@Suppress("LongParameterList")
 internal class TodayDayCloseActions(
     private val scope: CoroutineScope,
-    private val dateTimeProvider: DateTimeProvider,
-    private val analyticsTracker: AnalyticsTracker,
-    private val feedbackManager: FeedbackManager,
-    private val rewardDisplayService: RewardDisplayService,
-    private val closeDayUseCase: CloseDayUseCase,
-    private val carryPendingTasksUseCase: CarryPendingTasksUseCase,
-    private val autoCloseMissedDayUseCase: AutoCloseMissedDayUseCase,
-    private val saveMissedDaySummaryUseCase: SaveMissedDaySummaryUseCase,
+    private val deps: TodayDayCloseDependencies,
     private val uiStateValue: () -> TodayUiState,
     private val emitEffect: (TodayUiEffect) -> Unit,
 ) {
@@ -36,42 +39,32 @@ internal class TodayDayCloseActions(
      * Optionally moves overdue pending tasks to tomorrow first, then persists the daily summary with
      * the carried count. Order is fixed so the summary row always matches what was carried.
      */
-    @Suppress("LongParameterList")
-    fun saveDailySummaryWithOptionalCarry(
-        note: String,
-        mood: Int,
-        energy: Int = 3,
-        bestMoment: String = "",
-        challenge: String = "",
-        tomorrowIntention: String = "",
-        carryOverdueToTomorrow: Boolean,
-    ) {
+    fun saveDailySummaryWithOptionalCarry(draft: CloseDayDraft) {
         scope.launch {
             runCatching {
-                val carried = if (carryOverdueToTomorrow) carryPendingTasksUseCase() else 0
+                val carried = if (draft.carryOverdueTasks) deps.carryPendingTasksUseCase() else 0
                 val state = uiStateValue()
-                val result = closeDayUseCase(
-                    date = dateTimeProvider.today(),
-                    mood = mood,
-                    note = note.trim(),
+                val result = deps.closeDayUseCase(
+                    date = deps.dateTimeProvider.today(),
+                    mood = draft.mood,
+                    note = draft.note.trim(),
                     completionRate = state.progress,
-                    energy = energy,
-                    bestMoment = bestMoment.trim(),
-                    challenge = challenge.trim(),
-                    tomorrowIntention = tomorrowIntention.trim(),
+                    energy = draft.energy,
+                    bestMoment = draft.bestMoment.trim(),
+                    challenge = draft.challenge.trim(),
+                    tomorrowIntention = draft.tomorrowIntention.trim(),
                     carriedCount = carried,
                     streak = state.currentStreak,
                 )
-                analyticsTracker.track(AnalyticsEvent("daily_summary_completed"))
-                feedbackManager.celebrationBurst()
+                deps.analyticsTracker.track(AnalyticsEvent("daily_summary_completed"))
                 if (!result.dayCloseReward.alreadyGranted) {
-                    rewardDisplayService.onDailyBonusEarned(
+                    deps.rewardDisplayService.onDailyBonusEarned(
                         xp = result.dayCloseReward.xpGranted,
                         gold = result.dayCloseReward.goldGranted,
                     )
                 }
                 if (!result.perfectDayReward.alreadyGranted) {
-                    rewardDisplayService.onDailyBonusEarned(
+                    deps.rewardDisplayService.onDailyBonusEarned(
                         xp = result.perfectDayReward.xpGranted,
                         gold = result.perfectDayReward.goldGranted,
                     )
@@ -84,7 +77,7 @@ internal class TodayDayCloseActions(
     }
 
     fun autoSaveMissedDay(date: LocalDate) {
-        scope.launch { autoCloseMissedDayUseCase(date) }
+        scope.launch { deps.autoCloseMissedDayUseCase(date) }
     }
 
     fun closeMissedDayWithReview(
@@ -94,7 +87,7 @@ internal class TodayDayCloseActions(
     ) {
         scope.launch {
             runCatching {
-                saveMissedDaySummaryUseCase(
+                deps.saveMissedDaySummaryUseCase(
                     date = date,
                     note = "",
                     mood = mood,
@@ -108,7 +101,28 @@ internal class TodayDayCloseActions(
         }
     }
 
-    @Suppress("LongParameterList")
+    fun saveMissedDaySummary(
+        date: LocalDate,
+        draft: CloseDayDraft,
+    ) {
+        scope.launch {
+            runCatching {
+                deps.saveMissedDaySummaryUseCase(
+                    date = date,
+                    note = draft.note,
+                    mood = draft.mood,
+                    energy = draft.energy,
+                    bestMoment = draft.bestMoment,
+                    challenge = draft.challenge,
+                    tomorrowIntention = draft.tomorrowIntention,
+                )
+                emitEffect(TodayUiEffect.DaySaved("day_saved"))
+            }.onFailure {
+                emitEffect(TodayUiEffect.ActionFailed(R.string.today_error_save_day))
+            }
+        }
+    }
+
     fun saveMissedDaySummary(
         date: LocalDate,
         note: String,
@@ -118,13 +132,16 @@ internal class TodayDayCloseActions(
         challenge: String = "",
         tomorrowIntention: String = "",
     ) {
-        scope.launch {
-            runCatching {
-                saveMissedDaySummaryUseCase(date, note, mood, energy, bestMoment, challenge, tomorrowIntention)
-                emitEffect(TodayUiEffect.DaySaved("day_saved"))
-            }.onFailure {
-                emitEffect(TodayUiEffect.ActionFailed(R.string.today_error_save_day))
-            }
-        }
+        saveMissedDaySummary(
+            date = date,
+            draft = CloseDayDraft(
+                mood = mood,
+                energy = energy,
+                note = note,
+                bestMoment = bestMoment,
+                challenge = challenge,
+                tomorrowIntention = tomorrowIntention,
+            ),
+        )
     }
 }

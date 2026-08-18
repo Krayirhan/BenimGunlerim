@@ -60,6 +60,8 @@ val WarningBorder      = Color(0xFFF3D6B0)
 val XpGold             = Color(0xFFD97706)
 val XpGoldSoft         = Color(0xFFFEF3C7)
 val XpGoldBorder       = Color(0xFFF7D98B)
+val LevelUpGradientStart = Color(0xFF147A4F)
+val LevelUpGradientEnd   = Color(0xFF0D5C3A)
 
 // ── Streak ────────────────────────────────────────────────────────────────────
 val Streak             = Color(0xFFEA580C)
@@ -247,19 +249,16 @@ private val AppShapes = Shapes(
 // ── Tema giriş noktası ────────────────────────────────────────────────────────
 @Composable
 fun BenimGunlerimTheme(
-    themeMode: String = "system",
+    @Suppress("UNUSED_PARAMETER") themeMode: String = "light",
     content: @Composable () -> Unit,
 ) {
-    val isDark = when (themeMode) {
-        "dark"  -> true
-        "light" -> false
-        else    -> isSystemInDarkTheme()
-    }
+    // Karanlık mod devre dışı bırakıldı — uygulama tutarlı ve temiz açık modda çalışır.
+    val isDark = false
     CompositionLocalProvider(
-        LocalTodayColorTokens provides todayColorTokens(isDark),
+        LocalTodayColorTokens provides todayColorTokens(isDark = false),
     ) {
         MaterialTheme(
-            colorScheme = if (isDark) DarkColors else LightColors,
+            colorScheme = LightColors,
             typography  = AppTypography,
             shapes      = AppShapes,
             content     = content,

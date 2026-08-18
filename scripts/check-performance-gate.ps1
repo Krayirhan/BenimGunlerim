@@ -3,7 +3,9 @@
 
 param(
     [int]$Iterations = 12,
-    [string]$PackageName = "com.benimgunlerim.debug",
+    [ValidateSet("debug", "release")]
+    [string]$BuildVariant = "release",
+    [string]$PackageName = "",
     [string]$ActivityName = "com.benimgunlerim.MainActivity"
 )
 
@@ -16,6 +18,7 @@ Write-Host "`n=== Startup Performance Gate ===" -ForegroundColor Cyan
 Write-Host "`n[1/2] Cold startup threshold kontrolü" -ForegroundColor Yellow
 & "$PSScriptRoot/measure-startup-perf.ps1" `
     -Iterations $Iterations `
+    -BuildVariant $BuildVariant `
     -PackageName $PackageName `
     -ActivityName $ActivityName `
     -StartupMode cold `
@@ -28,6 +31,7 @@ if ($LASTEXITCODE -ne 0) {
 Write-Host "`n[2/2] Warm startup threshold kontrolü" -ForegroundColor Yellow
 & "$PSScriptRoot/measure-startup-perf.ps1" `
     -Iterations $Iterations `
+    -BuildVariant $BuildVariant `
     -PackageName $PackageName `
     -ActivityName $ActivityName `
     -StartupMode warm `

@@ -3,7 +3,9 @@
 
 param(
     [int]$Iterations = 10,
-    [string]$PackageName = "com.benimgunlerim.debug",
+    [ValidateSet("debug", "release")]
+    [string]$BuildVariant = "debug",
+    [string]$PackageName = "",
     [string]$ActivityName = "com.benimgunlerim.MainActivity",
     [ValidateSet("cold", "warm")]
     [string]$StartupMode = "cold",
@@ -24,14 +26,19 @@ if (-not (Test-Path $adb)) {
     throw "adb bulunamadı: $adb"
 }
 
+if ([string]::IsNullOrWhiteSpace($PackageName)) {
+    $PackageName = if ($BuildVariant -eq "release") { "com.benimgunlerim" } else { "com.benimgunlerim.debug" }
+}
+
 $device = & $adb devices | Select-String "`tdevice$" | ForEach-Object { ($_ -split "`t")[0] } | Select-Object -First 1
 if ([string]::IsNullOrWhiteSpace($device)) {
     throw "Bağlı cihaz bulunamadı."
 }
 
 if (-not $SkipInstall) {
-    Write-Host "[setup] installDebug" -ForegroundColor Yellow
-    & .\gradlew.bat :app:installDebug
+    $installTask = ":app:install$($BuildVariant.Substring(0, 1).ToUpperInvariant())$($BuildVariant.Substring(1))"
+    Write-Host "[setup] $installTask" -ForegroundColor Yellow
+    & .\gradlew.bat $installTask
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 

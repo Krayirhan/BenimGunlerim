@@ -1,8 +1,6 @@
 package com.benimgunlerim.ui.today
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import com.benimgunlerim.domain.model.GameEvent
 import com.benimgunlerim.ui.components.calm.BrainDumpDialog
 import com.benimgunlerim.ui.components.calm.ResetDialog
 import com.benimgunlerim.ui.components.gamification.AchievementDialog
@@ -11,13 +9,14 @@ import com.benimgunlerim.ui.components.gamification.LevelUpDialog
 import com.benimgunlerim.ui.components.organisms.AddRoutineSheet
 import com.benimgunlerim.ui.components.organisms.AddTaskSheet
 import com.benimgunlerim.ui.components.organisms.RoutineActionsSheet
+import com.benimgunlerim.ui.components.organisms.RoutineArchiveConfirmDialog
 import java.time.LocalDate
 
 /**
  * Hosts every dialog/bottom-sheet/modal that [TodayScreen] can show, driven by
- * hoisted [MutableState] so this file owns no state of its own.
+ * hoisted [TodayModalStates] so this file owns no state of its own.
  */
-@Suppress("LongParameterList")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 internal fun TodayModalsHost(
     state: TodayUiState,
@@ -25,59 +24,49 @@ internal fun TodayModalsHost(
     viewModel: TodayViewModel,
     completedCount: Int,
     totalCount: Int,
-    showFabMenu: MutableState<Boolean>,
-    showResetDialog: MutableState<Boolean>,
-    showBrainDumpDialog: MutableState<Boolean>,
-    showAddTaskSheet: MutableState<Boolean>,
-    showCloseSheet: MutableState<Boolean>,
-    showMissedDaySheet: MutableState<Boolean>,
-    menuRoutineId: MutableState<String?>,
-    editingRoutine: MutableState<TodayRoutineUi?>,
-    levelUpEvent: MutableState<GameEvent.LevelUp?>,
-    achievementEvent: MutableState<GameEvent.AchievementUnlocked?>,
-    blockCompletionData: MutableState<Triple<String, String, String>?>,
+    modals: TodayModalStates,
 ) {
-    if (showFabMenu.value) {
+    if (modals.showFabMenu.value) {
         TodayFabMenuSheet(
             isLightDayMode = state.isLightDayMode,
-            onDismiss = { showFabMenu.value = false },
+            onDismiss = { modals.showFabMenu.value = false },
             onAddTaskClick = {
-                showFabMenu.value = false
-                showAddTaskSheet.value = true
+                modals.showFabMenu.value = false
+                modals.showAddTaskSheet.value = true
             },
             onBrainDumpClick = {
-                showFabMenu.value = false
-                showBrainDumpDialog.value = true
+                modals.showFabMenu.value = false
+                modals.showBrainDumpDialog.value = true
             },
             onResetClick = {
-                showFabMenu.value = false
-                showResetDialog.value = true
+                modals.showFabMenu.value = false
+                modals.showResetDialog.value = true
             },
             onToggleLightDayClick = {
-                showFabMenu.value = false
+                modals.showFabMenu.value = false
                 viewModel.toggleLightDayMode(!state.isLightDayMode)
             },
         )
     }
 
-    if (showResetDialog.value) {
+    if (modals.showResetDialog.value) {
         ResetDialog(
-            onDismiss = { showResetDialog.value = false },
+            onDismiss = { modals.showResetDialog.value = false },
             onEnableLightDay = { viewModel.toggleLightDayMode(true) },
             onPickTask = { /* user continues to task list */ },
         )
     }
 
-    if (showBrainDumpDialog.value) {
+    if (modals.showBrainDumpDialog.value) {
         BrainDumpDialog(
-            onDismiss = { showBrainDumpDialog.value = false },
+            onDismiss = { modals.showBrainDumpDialog.value = false },
             onAddTasks = { titles -> viewModel.addTasksFromBrainDump(titles) },
         )
     }
 
-    if (showAddTaskSheet.value) {
+    if (modals.showAddTaskSheet.value) {
         AddTaskSheet(
-            onDismiss = { showAddTaskSheet.value = false },
+            onDismiss = { modals.showAddTaskSheet.value = false },
             onSave = { title, _, startTime, category, priority, reminderTime ->
                 viewModel.addTask(title, null, today, startTime, category, priority, reminderTime)
             },
@@ -85,67 +74,86 @@ internal fun TodayModalsHost(
         )
     }
 
-    if (showCloseSheet.value) {
+    if (modals.showCloseSheet.value) {
         CloseSheetModal(
             completedCount = completedCount,
             totalCount = totalCount,
             overdueCount = state.overdueTasks.size,
-            onDismiss = { showCloseSheet.value = false },
-            onSave = { mood, energy, note, bestMoment, challenge, tomorrowIntention, carryTasks ->
-                viewModel.saveDailySummaryWithOptionalCarry(
-                    note = note,
-                    mood = mood,
-                    energy = energy,
-                    bestMoment = bestMoment,
-                    challenge = challenge,
-                    tomorrowIntention = tomorrowIntention,
-                    carryOverdueToTomorrow = carryTasks,
-                )
-                showCloseSheet.value = false
+            onDismiss = { modals.showCloseSheet.value = false },
+            onSave = { draft ->
+                viewModel.saveDailySummaryWithOptionalCarry(draft)
+                modals.showCloseSheet.value = false
             },
         )
     }
 
-    if (showMissedDaySheet.value && state.missedDay != null) {
+    if (modals.showMissedDaySheet.value && state.missedDay != null) {
         val missed = state.missedDay
         MissedDayReviewSheet(
             date = missed,
             completedCount = state.missedDayCompletedCount,
             totalCount = state.missedDayTotalCount,
             pendingTaskCount = state.missedDayPendingTaskCount,
-            onDismiss = { showMissedDaySheet.value = false },
+            onDismiss = { modals.showMissedDaySheet.value = false },
             onCloseAndStart = { mood, carryOver ->
                 viewModel.closeMissedDayWithReview(date = missed, mood = mood, carryOverPendingTasks = carryOver)
-                showMissedDaySheet.value = false
+                modals.showMissedDaySheet.value = false
             },
             onArchiveAsIs = {
                 viewModel.autoSaveMissedDay(missed)
-                showMissedDaySheet.value = false
+                modals.showMissedDaySheet.value = false
             },
         )
     }
 
-    menuRoutineId.value?.let { routineId ->
+    modals.menuRoutineId.value?.let { routineId ->
         RoutineActionsSheet(
-            onDismiss = { menuRoutineId.value = null },
+            onDismiss = { modals.menuRoutineId.value = null },
             onEdit = {
-                menuRoutineId.value = null
-                editingRoutine.value = state.routines.firstOrNull { it.id == routineId }
+                modals.menuRoutineId.value = null
+                modals.editingRoutine.value = state.routines.firstOrNull { it.id == routineId }
             },
             onSkip = {
                 viewModel.skipRoutine(routineId)
-                menuRoutineId.value = null
+                modals.menuRoutineId.value = null
             },
             onDelete = {
-                viewModel.archiveRoutine(routineId)
-                menuRoutineId.value = null
+                modals.archiveRoutineId.value = routineId
+                modals.menuRoutineId.value = null
             },
         )
     }
 
-    editingRoutine.value?.let { routine ->
+    modals.archiveRoutineId.value?.let { routineId ->
+        RoutineArchiveConfirmDialog(
+            onDismiss = { modals.archiveRoutineId.value = null },
+            onConfirm = {
+                viewModel.archiveRoutine(routineId)
+                modals.archiveRoutineId.value = null
+            },
+        )
+    }
+
+    modals.deleteTaskId.value?.let { taskId ->
+        val task = state.tasks.firstOrNull { it.id == taskId }
+            ?: state.overdueTasks.firstOrNull { it.id == taskId }
+        if (task != null) {
+            TaskDeleteConfirmDialog(
+                taskTitle = task.title,
+                onDismiss = { modals.deleteTaskId.value = null },
+                onConfirm = {
+                    viewModel.deleteTask(taskId)
+                    modals.deleteTaskId.value = null
+                },
+            )
+        } else {
+            modals.deleteTaskId.value = null
+        }
+    }
+
+    modals.editingRoutine.value?.let { routine ->
         AddRoutineSheet(
-            onDismiss = { editingRoutine.value = null },
+            onDismiss = { modals.editingRoutine.value = null },
             onSave = { title, targetDays, reminderTime, _, _, _ ->
                 viewModel.updateRoutine(routine.id, title, targetDays, reminderTime)
             },
@@ -156,37 +164,38 @@ internal fun TodayModalsHost(
         )
     }
 
-    levelUpEvent.value?.let { ev ->
+    if (state.gameState.celebrationEffectsEnabled) modals.levelUpEvent.value?.let { ev ->
         LevelUpDialog(
             level = ev.level,
             title = ev.title,
             xpBonus = ev.xpBonus,
-            onDismiss = { levelUpEvent.value = null },
+            onDismiss = { modals.levelUpEvent.value = null },
         )
     }
 
-    achievementEvent.value?.let { ev ->
+    if (state.gameState.celebrationEffectsEnabled) modals.achievementEvent.value?.let { ev ->
         AchievementDialog(
             emoji = ev.emoji,
             title = ev.title,
             description = ev.description,
             xpReward = ev.xpReward,
-            onDismiss = { achievementEvent.value = null },
+            showParticles = true,
+            onDismiss = { modals.achievementEvent.value = null },
         )
     }
 
-    blockCompletionData.value?.let { (title, subtitle, badge) ->
+    if (state.gameState.celebrationEffectsEnabled) modals.blockCompletionData.value?.let { (title, subtitle, badge) ->
         BlockCompletionSheet(
             title = title,
             subtitle = subtitle,
             badgeText = badge,
             isLightDayMode = state.isLightDayMode,
             onCloseDayClick = {
-                blockCompletionData.value = null
-                showCloseSheet.value = true
+                modals.blockCompletionData.value = null
+                modals.showCloseSheet.value = true
             },
-            onContinueClick = { blockCompletionData.value = null },
-            onDismiss = { blockCompletionData.value = null },
+            onContinueClick = { modals.blockCompletionData.value = null },
+            onDismiss = { modals.blockCompletionData.value = null },
         )
     }
 }

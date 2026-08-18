@@ -139,6 +139,7 @@ fun BenimGunlerimApp(
     }
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             if (showBottomBar) {
                 val todayFormattedDate = remember {
@@ -146,13 +147,14 @@ fun BenimGunlerimApp(
                         java.time.format.DateTimeFormatter.ofPattern("d MMMM, EEEE", java.util.Locale("tr")),
                     )
                 }
+                val appName = stringResource(R.string.app_name)
                 val (topBarTitle, topBarSubtitle) = when (currentRoute) {
-                    Destination.Today.route    -> "Benim Günlerim" to todayFormattedDate
-                    Destination.Plan.route     -> "Plan" to "Günlerini düzenle"
-                    Destination.Routines.route -> "Rutinler" to "Ritmini koru"
-                    Destination.Progress.route -> "İstatistik" to "Gelişimini gör"
-                    Destination.Settings.route -> "Ayarlar" to "Deneyimini düzenle"
-                    else                       -> "Benim Günlerim" to null
+                    Destination.Today.route    -> appName to todayFormattedDate
+                    Destination.Plan.route     -> stringResource(R.string.nav_plan) to stringResource(R.string.topbar_plan_subtitle)
+                    Destination.Routines.route -> stringResource(R.string.nav_routines) to stringResource(R.string.topbar_routines_subtitle)
+                    Destination.Progress.route -> stringResource(R.string.nav_progress) to stringResource(R.string.topbar_progress_subtitle)
+                    Destination.Settings.route -> stringResource(R.string.nav_settings) to stringResource(R.string.topbar_settings_subtitle)
+                    else                       -> appName to null
                 }
 
                 AppTopBar(

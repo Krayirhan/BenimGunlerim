@@ -21,9 +21,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.benimgunlerim.R
+import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.components.core.AppButton
 import com.benimgunlerim.ui.components.core.AppButtonVariant
 import com.benimgunlerim.ui.components.core.AppFilterChip
@@ -72,7 +74,9 @@ fun AddTaskSheet(
                 label = { Text(stringResource(R.string.add_task_sheet_title_label)) },
                 isError = isError,
                 singleLine = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(TestTags.AddTaskTitleField),
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.xs)) {

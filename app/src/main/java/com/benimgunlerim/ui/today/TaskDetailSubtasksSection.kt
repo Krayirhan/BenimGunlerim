@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber")
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.background
@@ -46,6 +44,11 @@ import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.ui.theme.CandyPrimary
 import com.benimgunlerim.ui.theme.StreakCoral
 
+private val ItemCornerRadius = 10.dp
+private val InputCornerRadius = 8.dp
+private const val COMPLETED_TEXT_ALPHA = 0.5f
+private const val ACTIVE_TEXT_ALPHA = 1.0f
+
 @Composable
 internal fun TaskDetailSubtasksSection(
     subtasks: List<SubTaskEntity>,
@@ -70,7 +73,7 @@ internal fun TaskDetailSubtasksSection(
         } else {
             subtasks.forEach { st ->
                 Row(
-                    Modifier.fillMaxWidth().clip(RoundedCornerShape(10.dp))
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(ItemCornerRadius))
                         .background(MaterialTheme.colorScheme.surfaceVariant)
                         .padding(horizontal = 10.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -78,8 +81,8 @@ internal fun TaskDetailSubtasksSection(
                 ) {
                     Box(
                         Modifier.size(22.dp).clip(CircleShape)
-                            .background(if (st.isCompleted) CandyPrimary else CandyPrimary.copy(.12f))
-                            .border(1.5.dp, CandyPrimary.copy(if (st.isCompleted) 1f else .4f), CircleShape)
+                            .background(if (st.isCompleted) CandyPrimary else CandyPrimary.copy(alpha = 0.12f))
+                            .border(1.5.dp, CandyPrimary.copy(alpha = if (st.isCompleted) 1f else 0.4f), CircleShape)
                             .semantics { contentDescription = subtaskToggleCd }
                             .clickable(enabled = !interactionLocked) { onToggleSubTask(st) },
                         contentAlignment = Alignment.Center,
@@ -94,7 +97,7 @@ internal fun TaskDetailSubtasksSection(
                         style = MaterialTheme.typography.bodySmall.copy(
                             textDecoration = if (st.isCompleted) TextDecoration.LineThrough else null,
                         ),
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (st.isCompleted) .5f else 1f),
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = if (st.isCompleted) COMPLETED_TEXT_ALPHA else ACTIVE_TEXT_ALPHA),
                     )
                     IconButton(
                         onClick = { onDeleteSubTask(st) },
@@ -123,7 +126,7 @@ internal fun TaskDetailSubtasksSection(
                 modifier = Modifier.weight(1f),
                 enabled = !interactionLocked,
                 singleLine = true,
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(InputCornerRadius),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(
                     onDone = {
@@ -143,7 +146,7 @@ internal fun TaskDetailSubtasksSection(
                     }
                 },
                 enabled = !interactionLocked,
-                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(8.dp)).background(CandyPrimary),
+                modifier = Modifier.size(48.dp).clip(RoundedCornerShape(InputCornerRadius)).background(CandyPrimary),
             ) {
                 Icon(Icons.Rounded.Add, contentDescription = stringResource(R.string.today_subtask_add_cd), tint = Color.White)
             }

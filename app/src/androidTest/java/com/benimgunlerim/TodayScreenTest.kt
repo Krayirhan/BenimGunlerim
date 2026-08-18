@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -80,20 +81,26 @@ class TodayScreenTest {
     }
 
     @Test
-    fun deleting_completed_task_shows_confirmation_dialog() {
+    fun deleting_task_shows_confirmation_dialog() {
         val title = "Tamamlanmis test gorevi"
 
         composeTestRule.onNodeWithTag(TestTags.TodayFab).performClick()
-        composeTestRule.onNodeWithText("Görev adı").performTextInput(title)
+        composeTestRule.onNodeWithText(
+            InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.quick_action_add_task_title),
+        ).performClick()
+        composeTestRule.onNodeWithTag(TestTags.AddTaskTitleField).performTextInput(title)
         composeTestRule.onNodeWithText("Kaydet").performClick()
+        composeTestRule.waitUntil(5_000) {
+            composeTestRule.onAllNodesWithText(title).fetchSemanticsNodes().isNotEmpty()
+        }
 
-        // Mark it completed first.
-        composeTestRule.onNodeWithContentDescription("Tamamlandı olarak işaretle").performClick()
-
-        // Try to delete from overflow menu.
-        composeTestRule.onNodeWithContentDescription("Görev menüsü").performClick()
-        composeTestRule.onNodeWithText("Sil").performClick()
-
-        composeTestRule.onNodeWithText("Tamamlanan görevi sil?").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription(
+                InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.today_task_delete_cd),
+            )
+            .performClick()
+        composeTestRule.onNodeWithText(
+            InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.today_delete_task_title),
+        ).assertIsDisplayed()
     }
 }

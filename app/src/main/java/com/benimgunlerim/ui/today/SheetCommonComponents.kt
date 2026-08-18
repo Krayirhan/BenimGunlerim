@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber")
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.background
@@ -21,6 +19,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
+private const val TILE_BG_ALPHA = 0.10f
+private const val TILE_BORDER_ALPHA = 0.16f
+private val TileHeight = 72.dp
+private val TileCornerRadius = 16.dp
+private val ButtonCornerRadius = 8.dp
+private val ButtonHeight = 42.dp
+
 @Composable
 internal fun SheetSectionHeader(text: String) {
     Text(
@@ -33,7 +38,11 @@ internal fun SheetSectionHeader(text: String) {
 @Composable
 internal fun SummaryTile(value: String, label: String, color: Color, modifier: Modifier) {
     Column(
-        modifier.height(72.dp).clip(RoundedCornerShape(16.dp)).background(color.copy(.10f)).border(1.dp, color.copy(.16f), RoundedCornerShape(16.dp)).padding(10.dp),
+        modifier.height(TileHeight)
+            .clip(RoundedCornerShape(TileCornerRadius))
+            .background(color.copy(alpha = TILE_BG_ALPHA))
+            .border(1.dp, color.copy(alpha = TILE_BORDER_ALPHA), RoundedCornerShape(TileCornerRadius))
+            .padding(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -47,8 +56,11 @@ internal fun OutlinedSmallButton(text: String, modifier: Modifier, enabled: Bool
     TextButton(
         onClick = onClick,
         enabled = enabled,
-        modifier = modifier.height(42.dp).clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.surface).border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp)),
-        shape = RoundedCornerShape(8.dp),
+        modifier = modifier.height(ButtonHeight)
+            .clip(RoundedCornerShape(ButtonCornerRadius))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(ButtonCornerRadius)),
+        shape = RoundedCornerShape(ButtonCornerRadius),
     ) {
         Text(text, maxLines = 1, color = MaterialTheme.colorScheme.onSurface)
     }

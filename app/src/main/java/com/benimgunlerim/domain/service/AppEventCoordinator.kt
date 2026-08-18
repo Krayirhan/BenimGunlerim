@@ -17,11 +17,17 @@ class AppEventCoordinator @Inject constructor(
     private val achievementTracker: AchievementTracker,
     private val rewardDisplayService: RewardDisplayService,
 ) {
+    @Synchronized
     fun start() {
+        if (started) return
+        started = true
         externalScope.launch {
             achievementTracker.newUnlock.collect { def ->
                 rewardDisplayService.onAchievementUnlocked(def)
             }
         }
     }
+
+    @Volatile
+    private var started = false
 }

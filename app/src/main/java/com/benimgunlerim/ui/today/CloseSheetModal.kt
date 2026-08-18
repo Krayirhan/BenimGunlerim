@@ -11,7 +11,7 @@ internal fun CloseSheetModal(
     totalCount: Int,
     overdueCount: Int,
     onDismiss: () -> Unit,
-    onSave: (mood: Int, energy: Int, note: String, bestMoment: String, challenge: String, tomorrowIntention: String, carryTasks: Boolean) -> Unit,
+    onSave: (CloseDayDraft) -> Unit,
 ) {
     ModalBottomSheet(onDismissRequest = onDismiss) {
         CloseDaySheet(

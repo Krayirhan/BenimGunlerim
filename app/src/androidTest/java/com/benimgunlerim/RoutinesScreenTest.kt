@@ -61,7 +61,9 @@ class RoutinesScreenTest {
             .onNodeWithTag(TestTags.RoutinesFab)
             .performClick()
         composeTestRule
-            .onNodeWithText("Yeni rutin")
+            .onNodeWithText(
+                InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.routine_sheet_add_title),
+            )
             .assertIsDisplayed()
     }
 }

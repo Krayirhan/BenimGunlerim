@@ -38,6 +38,7 @@ class MainActivity : ComponentActivity() {
                 BenimGunlerimApp(
                     requestedStartRoute = intent.getStringExtra(NotificationConstants.EXTRA_START_ROUTE),
                     forceOnboardingCompleted = forceOnboardingCompleted,
+                    viewModel = onboardingViewModel,
                 )
             }
         }

@@ -69,17 +69,14 @@ fun AppTopBar(
     onNotificationClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val isDark = MaterialTheme.colorScheme.surface.let {
-        (it.red * 0.299 + it.green * 0.587 + it.blue * 0.114) < 0.5
-    }
-
+    val isDark = false
     val topBarBg = MaterialTheme.colorScheme.surface
-    val dividerColor = if (isDark) DividerDark else Divider
-    val avatarBg = if (isDark) NightPrimaryContainer else BrandPrimarySoft
-    val avatarStroke = if (isDark) SuccessBorderDark else SuccessBorder
-    val avatarIconColor = if (isDark) NightPrimary else BrandPrimary
-    val bellBg = if (isDark) NightSurfaceContainer else SurfaceMuted
-    val bellIconColor = if (isDark) NightMuted else SlateText
+    val dividerColor = Divider
+    val avatarBg = BrandPrimarySoft
+    val avatarStroke = SuccessBorder
+    val avatarIconColor = BrandPrimary
+    val bellBg = SurfaceMuted
+    val bellIconColor = SlateText
     val badgeColor = SemanticError
 
     Surface(

@@ -39,8 +39,13 @@ Planla → Bugün gör → Görevi/rutini tamamla → İlerlemeni fark et → G�
 | Sprint 0 Today davranışları | Kaynak akışı ve unit testlerle doğrulandı |
 | Graphify incremental update | Tamamlandı |
 | Mojibake taraması | Başarılı |
+| Lokal kalite kapısı (`check-local.ps1`) | Başarılı |
+| Release kalite kapısı (`check-release.ps1`) | Başarılı; signed AAB üretildi |
+| App instrumentation | 74 testten 73 başarılı; 1 görev silme Compose idling timeout |
+| Notification smoke matrix | Başarılı; 4 test |
+| Startup performance gate | Başarısız; cold median 6228 ms |
 
-Android Compose instrumentation tarafında `No compose hierarchies found in the app` hatası hâlâ çözülmelidir. Bu, temel davranışların unit testlerle doğrulanmadığı anlamına gelmez; gerçek cihaz/UI kanıtının eksik olduğu anlamına gelir.
+Android Compose instrumentation artık emülatörde çalışıyor. 74 app testinden 73’ü başarılıdır; kalan görev silme smoke testi Compose idling timeout nedeniyle deterministik hale getirilmelidir. Bu, temel davranışların unit testlerle doğrulanmadığı anlamına gelmez; tek bir cihaz akışında kanıt eksikliği anlamına gelir.
 
 ## 4. Sprint Durumu
 

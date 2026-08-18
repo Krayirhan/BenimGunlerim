@@ -11,6 +11,7 @@ object TestTags {
     // ── Today Screen ──────────────────────────────────────────────────────
     const val TodayRoot  = "screen.today.root"
     const val TodayFab   = "screen.today.add_task.button"
+    const val AddTaskTitleField = "screen.add_task.title.field"
     const val TodaySnapshotErrorBanner = "screen.today.snapshot_error.banner"
     const val TodaySwipeHint = "screen.today.swipe_hint.text"
     const val TodayTasksSection = "screen.today.section.tasks"

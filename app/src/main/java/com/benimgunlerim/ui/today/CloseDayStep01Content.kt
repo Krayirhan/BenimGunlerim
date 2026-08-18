@@ -1,5 +1,3 @@
-@file:Suppress("LongParameterList", "MagicNumber")
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.background
@@ -29,6 +27,16 @@ import com.benimgunlerim.ui.theme.CompletedGreen
 import com.benimgunlerim.ui.theme.LevelSky
 import com.benimgunlerim.ui.theme.StreakCoral
 
+private const val PROGRESS_BG_ALPHA = 0.10f
+private const val UNSELECTED_BG_ALPHA = 0.14f
+private const val UNSELECTED_BORDER_ALPHA = 0.20f
+private const val UNSELECTED_ENERGY_ALPHA = 0.12f
+private val ItemHeight = 44.dp
+private val ItemCornerRadius = 10.dp
+private val ProgressBarHeight = 8.dp
+private val ProgressCornerRadius = 99.dp
+private val EnergyLevels = listOf(1, 2, 3, 4, 5)
+
 @Composable
 internal fun CloseDayStep0Summary(completedCount: Int, totalCount: Int, progress: Float, overdueCount: Int) {
     Text(stringResource(R.string.today_close_step0_title), style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.ExtraBold))
@@ -49,8 +57,20 @@ internal fun CloseDayStep0Summary(completedCount: Int, totalCount: Int, progress
             SummaryTile("%${(progress * 100).toInt()}", stringResource(R.string.today_close_step0_success), CompletedGreen, Modifier.weight(1f))
             if (overdueCount > 0) SummaryTile("$overdueCount", stringResource(R.string.today_close_step0_overdue), StreakCoral, Modifier.weight(1f))
         }
-        Box(Modifier.fillMaxWidth().height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary.copy(.10f))) {
-            Box(Modifier.fillMaxWidth(progress.coerceIn(0f, 1f)).height(8.dp).clip(RoundedCornerShape(99.dp)).background(CandySecondary))
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .height(ProgressBarHeight)
+                .clip(RoundedCornerShape(ProgressCornerRadius))
+                .background(CandySecondary.copy(alpha = PROGRESS_BG_ALPHA)),
+        ) {
+            Box(
+                Modifier
+                    .fillMaxWidth(progress.coerceIn(0f, 1f))
+                    .height(ProgressBarHeight)
+                    .clip(RoundedCornerShape(ProgressCornerRadius))
+                    .background(CandySecondary),
+            )
         }
     }
 }
@@ -75,9 +95,9 @@ internal fun CloseDayStep1MoodEnergy(
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             moodColors.forEachIndexed { i, col ->
                 Box(
-                    Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(10.dp))
-                        .background(if (mood == i) col else col.copy(.14f))
-                        .border(1.dp, if (mood == i) col else col.copy(.20f), RoundedCornerShape(10.dp))
+                    Modifier.weight(1f).height(ItemHeight).clip(RoundedCornerShape(ItemCornerRadius))
+                        .background(if (mood == i) col else col.copy(alpha = UNSELECTED_BG_ALPHA))
+                        .border(1.dp, if (mood == i) col else col.copy(alpha = UNSELECTED_BORDER_ALPHA), RoundedCornerShape(ItemCornerRadius))
                         .clickable { onMoodChange(i) },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -89,11 +109,15 @@ internal fun CloseDayStep1MoodEnergy(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(stringResource(R.string.today_close_step1_energy_label), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            listOf(1, 2, 3, 4, 5).forEach { e ->
+            EnergyLevels.forEach { e ->
                 Box(
-                    Modifier.weight(1f).height(44.dp).clip(RoundedCornerShape(10.dp))
-                        .background(if (energy == e) LevelSky else LevelSky.copy(.12f))
-                        .border(1.dp, if (energy == e) LevelSky else LevelSky.copy(.20f), RoundedCornerShape(10.dp))
+                    Modifier.weight(1f).height(ItemHeight).clip(RoundedCornerShape(ItemCornerRadius))
+                        .background(if (energy == e) LevelSky else LevelSky.copy(alpha = UNSELECTED_ENERGY_ALPHA))
+                        .border(
+                            1.dp,
+                            if (energy == e) LevelSky else LevelSky.copy(alpha = UNSELECTED_BORDER_ALPHA),
+                            RoundedCornerShape(ItemCornerRadius),
+                        )
                         .clickable { onEnergyChange(e) },
                     contentAlignment = Alignment.Center,
                 ) {

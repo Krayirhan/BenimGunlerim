@@ -29,7 +29,29 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-@Suppress("LongParameterList")
+internal data class TodayListSummaryState(
+    val dayIsClosed: Boolean,
+    val isEmptyToday: Boolean,
+    val totalCount: Int,
+    val completedCount: Int,
+    val userLevel: Int,
+    val miniBannerData: Pair<String, String>?,
+    val celebrationEffectsEnabled: Boolean,
+    val dismissContextualReset: Boolean,
+)
+
+internal data class TodayListEventCallbacks(
+    val onNavigateToRoutines: () -> Unit,
+    val onResetClick: () -> Unit,
+    val onDismissContextualReset: () -> Unit,
+    val onMissedDayReviewClick: () -> Unit,
+    val onAddTaskClick: () -> Unit,
+    val onOpenRoutineMenu: (String) -> Unit,
+    val onCloseDayClick: () -> Unit,
+    val onRequestDeleteTask: (String) -> Unit,
+)
+
+@Suppress("LongMethod")
 @Composable
 internal fun TodayContentList(
     modifier: Modifier,
@@ -37,29 +59,16 @@ internal fun TodayContentList(
     state: TodayUiState,
     today: LocalDate,
     viewModel: TodayViewModel,
-    dayIsClosed: Boolean,
-    isEmptyToday: Boolean,
-    totalCount: Int,
-    completedCount: Int,
-    userLevel: Int,
-    miniBannerData: Pair<String, String>?,
-    dismissContextualReset: Boolean,
-    onNavigateToRoutines: () -> Unit,
-    onResetClick: () -> Unit,
-    onDismissContextualReset: () -> Unit,
-    onMissedDayReviewClick: () -> Unit,
-    onAddTaskClick: () -> Unit,
-    onOpenRoutineMenu: (String) -> Unit,
-    onCloseDayClick: () -> Unit,
+    summaryState: TodayListSummaryState,
+    callbacks: TodayListEventCallbacks,
 ) {
     LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(contentPadding),
+        modifier = modifier.fillMaxSize(),
+        contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
     ) {
         item(key = "mini_celebration") {
-            miniBannerData?.let { (msg, icon) ->
+            if (summaryState.celebrationEffectsEnabled) summaryState.miniBannerData?.let { (msg, icon) ->
                 com.benimgunlerim.ui.components.gamification.MiniCelebrationBanner(
                     message = msg,
                     icon = icon,
@@ -76,7 +85,7 @@ internal fun TodayContentList(
                     severity = AlertBannerSeverity.Warning,
                     title = stringResource(R.string.today_missed_day_title),
                     actionLabel = stringResource(R.string.today_missed_day_action),
-                    action = onMissedDayReviewClick,
+                    action = callbacks.onMissedDayReviewClick,
                     modifier = Modifier.testTag(TestTags.TodayMissedDayBanner),
                 )
             }
@@ -86,12 +95,12 @@ internal fun TodayContentList(
             item(key = "light_day_banner") {
                 LightDayBanner(onDisableClick = { viewModel.toggleLightDayMode(false) })
             }
-        } else if (!dismissContextualReset && totalCount >= 4 && completedCount == 0) {
+        } else if (!summaryState.dismissContextualReset && summaryState.totalCount >= 4 && summaryState.completedCount == 0) {
             item(key = "contextual_reset") {
                 ContextualResetCard(
                     isLightDayMode = state.isLightDayMode,
-                    onResetClick = onResetClick,
-                    onDismissClick = onDismissContextualReset,
+                    onResetClick = callbacks.onResetClick,
+                    onDismissClick = callbacks.onDismissContextualReset,
                 )
             }
         }
@@ -99,9 +108,9 @@ internal fun TodayContentList(
         item(key = "header_progress_card") {
             HeaderProgressCard(
                 streakCount = state.currentStreak,
-                completedTasks = completedCount,
-                totalTasks = totalCount,
-                level = userLevel,
+                completedTasks = summaryState.completedCount,
+                totalTasks = summaryState.totalCount,
+                level = summaryState.userLevel,
                 xp = state.gameState.totalXp,
                 isLightDayMode = state.isLightDayMode,
             )
@@ -123,13 +132,13 @@ internal fun TodayContentList(
                     TaskListContainer(
                         tasks = state.overdueTasks,
                         onToggleTask = { viewModel.toggleTask(it) },
-                        onDeleteTask = { viewModel.deleteTask(it) },
+                        onDeleteTask = callbacks.onRequestDeleteTask,
                     )
                 }
             }
         }
 
-        if (isEmptyToday) {
+        if (summaryState.isEmptyToday) {
             item(key = "empty_today") {
                 EmptyState(
                     emoji = "✨",
@@ -138,7 +147,7 @@ internal fun TodayContentList(
                     action = {
                         AppButton(
                             text = stringResource(R.string.today_empty_cta),
-                            onClick = onAddTaskClick,
+                            onClick = callbacks.onAddTaskClick,
                         )
                     },
                 )
@@ -150,7 +159,7 @@ internal fun TodayContentList(
                         TaskListContainer(
                             tasks = state.tasks,
                             onToggleTask = { viewModel.toggleTask(it) },
-                            onDeleteTask = { viewModel.deleteTask(it) },
+                            onDeleteTask = callbacks.onRequestDeleteTask,
                         )
                     }
                 }
@@ -162,7 +171,7 @@ internal fun TodayContentList(
                         title = stringResource(R.string.today_routines_title),
                         trailingContent = {
                             TextButton(
-                                onClick = onNavigateToRoutines,
+                                onClick = callbacks.onNavigateToRoutines,
                                 modifier = Modifier.heightIn(min = AppTokens.TouchTarget.min),
                             ) {
                                 Text(
@@ -177,7 +186,7 @@ internal fun TodayContentList(
                             routines = state.routines,
                             completedRoutineIds = state.completedRoutineIds,
                             onToggleRoutine = { id, done -> viewModel.toggleRoutine(id, done) },
-                            onOpenRoutineMenu = onOpenRoutineMenu,
+                            onOpenRoutineMenu = callbacks.onOpenRoutineMenu,
                             onUpdateRoutineProgress = { id, value, wasCompleted ->
                                 viewModel.updateRoutineProgress(id, value, wasCompleted)
                             },
@@ -189,8 +198,8 @@ internal fun TodayContentList(
 
         item(key = "close_day_card") {
             CloseDayCard(
-                isDayClosed = dayIsClosed,
-                onCloseDayClick = onCloseDayClick,
+                isDayClosed = summaryState.dayIsClosed,
+                onCloseDayClick = callbacks.onCloseDayClick,
             )
         }
     }

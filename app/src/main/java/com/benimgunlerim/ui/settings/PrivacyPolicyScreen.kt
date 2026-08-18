@@ -108,7 +108,7 @@ private val PRIVACY_SECTIONS = listOf(
         icon = Icons.Rounded.Email,
         description = "Gizlilikle ilgili her türlü soru veya öneriniz için:",
         bulletPoints = listOf(
-            "E-posta: support@benimgunlerim.app",
+            "E-posta: studioskrayirhan@gmail.com",
         ),
     ),
 )
@@ -117,7 +117,7 @@ private val PRIVACY_SECTIONS = listOf(
 @Composable
 fun PrivacyPolicyScreen(
     onNavigateBack: () -> Unit,
-    webPolicyUrl: String = "https://krayirhan.github.io/BenimGunlerim/privacy.html",
+    webPolicyUrl: String = "https://krayirhan.com/benimgunlerim/privacy",
 ) {
     val context = LocalContext.current
 

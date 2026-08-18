@@ -8,6 +8,7 @@ import com.benimgunlerim.data.local.entity.TaskEntity
 import com.benimgunlerim.domain.AchievementTracker
 import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.FeedbackManager
+import com.benimgunlerim.domain.model.TaskCompletionState
 import com.benimgunlerim.domain.service.RewardDisplayService
 import com.benimgunlerim.domain.usecase.AddSubTaskUseCase
 import com.benimgunlerim.domain.usecase.AddTaskUseCase
@@ -24,6 +25,7 @@ import com.benimgunlerim.domain.usecase.UpdateTaskTitleUseCase
 import com.benimgunlerim.domain.usecase.UpdateTaskUseCase
 import java.time.LocalDate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 /** Snapshot of a deleted task and its subtasks, kept in memory to power Undo. */
@@ -32,43 +34,47 @@ private data class DeletedTaskSnapshot(
     val subTasks: List<SubTaskEntity>,
 )
 
+internal data class TodayTaskDependencies(
+    val dateTimeProvider: DateTimeProvider,
+    val analyticsTracker: AnalyticsTracker,
+    val feedbackManager: FeedbackManager,
+    val achievementTracker: AchievementTracker,
+    val rewardDisplayService: RewardDisplayService,
+    val addTaskUseCase: AddTaskUseCase,
+    val addTasksBatchUseCase: AddTasksBatchUseCase,
+    val updateTaskTitleUseCase: UpdateTaskTitleUseCase,
+    val moveTaskToDateUseCase: MoveTaskToDateUseCase,
+    val updateTaskUseCase: UpdateTaskUseCase,
+    val deleteTaskUseCase: DeleteTaskUseCase,
+    val restoreTaskUseCase: RestoreTaskUseCase,
+    val setTaskPendingUseCase: SetTaskPendingUseCase,
+    val observeSubTasksUseCase: ObserveSubTasksUseCase,
+    val addSubTaskUseCase: AddSubTaskUseCase,
+    val toggleSubTaskUseCase: ToggleSubTaskUseCase,
+    val deleteSubTaskUseCase: DeleteSubTaskUseCase,
+    val toggleTaskUseCase: ToggleTaskUseCase,
+)
+
 /**
  * Task + subtask actions for [TodayViewModel], extracted so the ViewModel itself
  * stays focused on state assembly. Holds no StateFlow of its own — reads current
  * state via [uiStateValue] and [taskEntitiesById], emits one-shot effects via [emitEffect].
  */
-@Suppress("LongParameterList")
 internal class TodayTaskActions(
     private val scope: CoroutineScope,
-    private val dateTimeProvider: DateTimeProvider,
-    private val analyticsTracker: AnalyticsTracker,
-    private val feedbackManager: FeedbackManager,
-    private val achievementTracker: AchievementTracker,
-    private val rewardDisplayService: RewardDisplayService,
-    private val addTaskUseCase: AddTaskUseCase,
-    private val addTasksBatchUseCase: AddTasksBatchUseCase,
-    private val updateTaskTitleUseCase: UpdateTaskTitleUseCase,
-    private val moveTaskToDateUseCase: MoveTaskToDateUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
-    private val restoreTaskUseCase: RestoreTaskUseCase,
-    private val setTaskPendingUseCase: SetTaskPendingUseCase,
-    private val observeSubTasksUseCase: ObserveSubTasksUseCase,
-    private val addSubTaskUseCase: AddSubTaskUseCase,
-    private val toggleSubTaskUseCase: ToggleSubTaskUseCase,
-    private val deleteSubTaskUseCase: DeleteSubTaskUseCase,
-    private val toggleTaskUseCase: ToggleTaskUseCase,
+    private val deps: TodayTaskDependencies,
     private val taskEntitiesById: () -> Map<String, TaskEntity>,
     private val uiStateValue: () -> TodayUiState,
     private val isTodayClosed: () -> Boolean,
     private val emitEffect: (TodayUiEffect) -> Unit,
 ) {
     private val deletedTasksById = mutableMapOf<String, DeletedTaskSnapshot>()
+    private val inFlightTaskIds = mutableSetOf<String>()
 
     fun addTasksFromBrainDump(taskTitles: List<String>) {
         scope.launch {
             runCatching {
-                addTasksBatchUseCase(titles = taskTitles, date = dateTimeProvider.today(), priority = 1)
+                deps.addTasksBatchUseCase(titles = taskTitles, date = deps.dateTimeProvider.today(), priority = 1)
             }.onFailure {
                 emitEffect(TodayUiEffect.ActionFailed(R.string.today_error_generic))
             }
@@ -89,7 +95,7 @@ internal class TodayTaskActions(
         if (cleanTitle.isBlank()) return
         scope.launch {
             runCatching {
-                addTaskUseCase(
+                deps.addTaskUseCase(
                     title = cleanTitle,
                     date = date,
                     note = note?.trim()?.takeIf { it.isNotBlank() },
@@ -99,39 +105,55 @@ internal class TodayTaskActions(
                     reminderTime = reminderTime?.trim()?.takeIf { it.isNotBlank() },
                 )
             }.onSuccess {
-                analyticsTracker.track(AnalyticsEvent("task_created"))
+                deps.analyticsTracker.track(AnalyticsEvent("task_created"))
             }.onFailure {
                 emitEffect(TodayUiEffect.ActionFailed(R.string.today_error_generic))
             }
         }
     }
 
+    fun addTask(draft: TaskEditDraft) {
+        addTask(
+            title = draft.title,
+            note = draft.note,
+            date = draft.date ?: deps.dateTimeProvider.today(),
+            startTime = draft.startTime?.toString(),
+            category = draft.category,
+            priority = draft.priority,
+            reminderTime = draft.reminderTime?.toString(),
+        )
+    }
+
     fun toggleTask(task: TaskEntity) {
         if (isTodayClosed()) return
+        if (!claim(inFlightTaskIds, task.id)) return
         scope.launch {
-            val wasPending = task.completionState != com.benimgunlerim.domain.model.TaskCompletionState.COMPLETED.value
-            val currentTasks = uiStateValue().tasks
-            val completedCountBefore = currentTasks.count { it.isCompleted }
-            val totalTasks = currentTasks.size
+            try {
+                val wasPending = task.completionState != TaskCompletionState.COMPLETED.value
+                val currentTasks = uiStateValue().tasks
+                val completedCountBefore = currentTasks.count { it.isCompleted }
+                val totalTasks = currentTasks.size
 
-            analyticsTracker.track(AnalyticsEvent("task_completed"))
-            feedbackManager.tapMedium()
-            val result = toggleTaskUseCase(task) ?: return@launch
-            rewardDisplayService.onTaskCompleted(
-                taskId = task.id,
-                taskReward = result.taskReward,
-                allTasksBonus = result.allTasksBonus,
-            )
-            if (wasPending) {
-                emitEffect(TodayUiEffect.TaskCompletedUndo(task.id))
-                achievementTracker.checkFirstTask()
+                deps.analyticsTracker.track(AnalyticsEvent("task_completed"))
+                val result = deps.toggleTaskUseCase(task) ?: return@launch
+                deps.rewardDisplayService.onTaskCompleted(
+                    taskId = task.id,
+                    taskReward = result.taskReward,
+                    allTasksBonus = result.allTasksBonus,
+                )
+                if (wasPending) {
+                    emitEffect(TodayUiEffect.TaskCompletedUndo(task.id))
+                    deps.achievementTracker.checkFirstTask()
 
-                if (completedCountBefore == 0) {
-                    rewardDisplayService.emitMiniBanner("İlk adım tamamlandı. Devamı daha kolay.", "🌱")
-                } else if (completedCountBefore + 1 == totalTasks && totalTasks > 1) {
-                    rewardDisplayService.emitAllTasksCompleted(totalTasks)
-                    achievementTracker.checkListCleared()
+                    if (completedCountBefore == 0) {
+                        deps.rewardDisplayService.emitMiniBanner("İlk adım tamamlandı. Devamı daha kolay.", "🌱")
+                    } else if (completedCountBefore + 1 == totalTasks && totalTasks > 1) {
+                        deps.rewardDisplayService.emitAllTasksCompleted(totalTasks)
+                        deps.achievementTracker.checkListCleared()
+                    }
                 }
+            } finally {
+                release(inFlightTaskIds, task.id)
             }
         }
     }
@@ -143,12 +165,28 @@ internal class TodayTaskActions(
 
     fun updateTaskTitle(task: TaskEntity, title: String) {
         if (isTodayClosed()) return
-        scope.launch { updateTaskTitleUseCase(task, title) }
+        scope.launch { deps.updateTaskTitleUseCase(task, title) }
     }
 
     fun updateTaskTitle(taskId: String, title: String) {
         val task = taskEntitiesById()[taskId] ?: return
         updateTaskTitle(task, title)
+    }
+
+    fun updateTask(
+        task: TaskEntity,
+        draft: TaskEditDraft,
+    ) {
+        updateTask(
+            task = task,
+            title = draft.title,
+            note = draft.note,
+            date = draft.date ?: deps.dateTimeProvider.today(),
+            startTime = draft.startTime?.toString(),
+            category = draft.category,
+            priority = draft.priority,
+            reminderTime = draft.reminderTime?.toString(),
+        )
     }
 
     @Suppress("LongParameterList")
@@ -164,7 +202,7 @@ internal class TodayTaskActions(
     ) {
         if (isTodayClosed()) return
         scope.launch {
-            updateTaskUseCase(
+            deps.updateTaskUseCase(
                 task,
                 title.trim(),
                 note?.trim()?.takeIf { it.isNotBlank() },
@@ -195,7 +233,7 @@ internal class TodayTaskActions(
     fun moveTaskToTomorrow(task: TaskEntity) {
         if (isTodayClosed()) return
         scope.launch {
-            moveTaskToDateUseCase(task, dateTimeProvider.today().plusDays(1))
+            deps.moveTaskToDateUseCase(task, deps.dateTimeProvider.today().plusDays(1))
             emitEffect(TodayUiEffect.TaskMovedTomorrow("task_moved_tomorrow"))
         }
     }
@@ -207,7 +245,7 @@ internal class TodayTaskActions(
 
     fun moveTaskToDate(task: TaskEntity, date: LocalDate) {
         if (isTodayClosed()) return
-        scope.launch { moveTaskToDateUseCase(task, date) }
+        scope.launch { deps.moveTaskToDateUseCase(task, date) }
     }
 
     fun moveTaskToDate(taskId: String, date: LocalDate) {
@@ -218,7 +256,7 @@ internal class TodayTaskActions(
     fun deleteTask(task: TaskEntity) {
         if (isTodayClosed()) return
         scope.launch {
-            runCatching { deleteTaskUseCase(task) }
+            runCatching { deps.deleteTaskUseCase(task) }
                 .onSuccess { subTasks ->
                     deletedTasksById[task.id] = DeletedTaskSnapshot(task, subTasks)
                     emitEffect(TodayUiEffect.TaskDeleted(task.id))
@@ -236,7 +274,7 @@ internal class TodayTaskActions(
 
     fun restoreTask(task: TaskEntity, subTasks: List<SubTaskEntity> = emptyList()) {
         if (isTodayClosed()) return
-        scope.launch { restoreTaskUseCase(task, subTasks) }
+        scope.launch { deps.restoreTaskUseCase(task, subTasks) }
     }
 
     fun restoreDeletedTask(taskId: String) {
@@ -246,7 +284,7 @@ internal class TodayTaskActions(
 
     fun undoTaskToggle(taskId: String) {
         if (isTodayClosed()) return
-        scope.launch { setTaskPendingUseCase(taskId) }
+        scope.launch { deps.setTaskPendingUseCase(taskId) }
     }
 
     fun moveAllOverdueTo(date: LocalDate) {
@@ -256,7 +294,7 @@ internal class TodayTaskActions(
             var moved = 0
             ids.forEach { id ->
                 val entity = taskEntitiesById()[id] ?: return@forEach
-                moveTaskToDateUseCase(entity, date)
+                deps.moveTaskToDateUseCase(entity, date)
                 moved++
             }
             if (moved > 0) {
@@ -267,22 +305,28 @@ internal class TodayTaskActions(
 
     // ── SubTask actions ─────────────────────────────────────────────────────
 
-    fun subTasksFlow(taskId: String) = observeSubTasksUseCase(taskId)
+    fun subTasksFlow(taskId: String): Flow<List<SubTaskEntity>> = deps.observeSubTasksUseCase(taskId)
 
     fun addSubTask(taskId: String, title: String) {
         if (isTodayClosed()) return
         val t = title.trim()
         if (t.isBlank()) return
-        scope.launch { addSubTaskUseCase(taskId, t) }
+        scope.launch { deps.addSubTaskUseCase(taskId, t) }
     }
 
     fun toggleSubTask(subTask: SubTaskEntity) {
         if (isTodayClosed()) return
-        scope.launch { toggleSubTaskUseCase(subTask) }
+        scope.launch { deps.toggleSubTaskUseCase(subTask) }
     }
 
     fun deleteSubTask(subTask: SubTaskEntity) {
         if (isTodayClosed()) return
-        scope.launch { deleteSubTaskUseCase(subTask) }
+        scope.launch { deps.deleteSubTaskUseCase(subTask) }
+    }
+
+    private fun claim(ids: MutableSet<String>, id: String): Boolean = synchronized(ids) { ids.add(id) }
+
+    private fun release(ids: MutableSet<String>, id: String) {
+        synchronized(ids) { ids.remove(id) }
     }
 }

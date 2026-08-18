@@ -71,8 +71,8 @@ fun TodayFabMenuSheet(
 
             // 1. Görev Ekle
             QuickActionRow(
-                title = "Görev Ekle",
-                subtitle = "Bugün için tek seferlik yapılacak iş",
+                title = stringResource(R.string.quick_action_add_task_title),
+                subtitle = stringResource(R.string.quick_action_add_task_subtitle),
                 icon = Icons.Rounded.Add,
                 iconTint = BrandPrimary,
                 iconBg = BrandPrimarySoft,
@@ -82,7 +82,7 @@ fun TodayFabMenuSheet(
             // 2. Kafam Dolu (Zihin Boşaltma)
             QuickActionRow(
                 title = stringResource(R.string.braindump_title),
-                subtitle = "Aklındakileri dök ve göreve dönüştür",
+                subtitle = stringResource(R.string.quick_action_braindump_subtitle),
                 icon = Icons.Rounded.Psychology,
                 iconTint = Info,
                 iconBg = InfoSoft,
@@ -92,7 +92,7 @@ fun TodayFabMenuSheet(
             // 3. 1 Dakikalık Reset & Nefes
             QuickActionRow(
                 title = stringResource(R.string.reset_title),
-                subtitle = "Zihnini boşalt, nefes al, toparlan",
+                subtitle = stringResource(R.string.quick_action_reset_subtitle),
                 icon = Icons.Rounded.SelfImprovement,
                 iconTint = BrandPrimary,
                 iconBg = BrandPrimarySoft,
@@ -102,9 +102,13 @@ fun TodayFabMenuSheet(
             // 4. Hafif Gün Modu
             QuickActionRow(
                 title = if (isLightDayMode) stringResource(R.string.light_day_disable_btn) else stringResource(R.string.light_day_title),
-                subtitle = if (isLightDayMode) "Normal tempoya geri dön" else "Bugünü iptal etmiyoruz, hafifletiyoruz",
+                subtitle = if (isLightDayMode) {
+                    stringResource(R.string.quick_action_light_day_on_subtitle)
+                } else {
+                    stringResource(R.string.quick_action_light_day_off_subtitle)
+                },
                 icon = Icons.Rounded.Spa,
-                badge = if (isLightDayMode) "Aktif" else null,
+                badge = if (isLightDayMode) stringResource(R.string.quick_action_active_badge) else null,
                 iconTint = if (isLightDayMode) BrandPrimary else Warning,
                 iconBg = if (isLightDayMode) BrandPrimarySoft else WarningSoft,
                 onClick = onToggleLightDayClick,

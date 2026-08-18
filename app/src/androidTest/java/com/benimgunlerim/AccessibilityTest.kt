@@ -19,6 +19,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.benimgunlerim.ui.TestTags
+import com.benimgunlerim.R
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -55,7 +56,9 @@ class AccessibilityTest {
     @Test
     fun today_fab_has_content_description() {
         composeTestRule
-            .onNodeWithContentDescription("Ekle")
+            .onNodeWithContentDescription(
+                InstrumentationRegistry.getInstrumentation().targetContext.getString(R.string.today_add_task_fab_cd),
+            )
             .assertIsDisplayed()
             .assertHasClickAction()
     }

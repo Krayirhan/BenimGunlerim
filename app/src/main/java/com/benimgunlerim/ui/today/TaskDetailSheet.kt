@@ -1,11 +1,3 @@
-@file:Suppress(
-    "LongParameterList",
-    "LongMethod",
-    "CyclomaticComplexMethod",
-    "MagicNumber",
-    "MaxLineLength",
-)
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +20,7 @@ import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,43 +29,53 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.benimgunlerim.R
 import com.benimgunlerim.data.local.entity.SubTaskEntity
 import com.benimgunlerim.domain.validation.TimeInputValidator
 import com.benimgunlerim.ui.theme.CandyPrimary
+import com.benimgunlerim.ui.theme.AppTokens
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
+private val ActionButtonHeight = AppTokens.Calm.resetButtonHeight
+private val ActionButtonCornerRadius = AppTokens.Radius.sm
+private const val DEFAULT_TIME_HOUR = 9
+private const val TIME_STRING_LENGTH = 5
+private const val TIME_HOUR_START = 0
+private const val TIME_HOUR_END = 2
+private const val TIME_MINUTE_START = 3
+private const val TIME_MINUTE_END = 5
+
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
-@Suppress("LongParameterList", "LongMethod", "CyclomaticComplexMethod")
 internal fun TaskDetailSheet(
     task: TodayTaskUi,
     today: LocalDate,
     subtasks: List<SubTaskEntity>,
     interactionLocked: Boolean,
-    onSave: (String, String?, LocalDate, String?, String?, Int, String?) -> Unit,
-    onMoveTomorrow: () -> Unit,
-    onDelete: () -> Unit,
-    onAddSubTask: (String) -> Unit,
-    onToggleSubTask: (SubTaskEntity) -> Unit,
-    onDeleteSubTask: (SubTaskEntity) -> Unit,
+    callbacks: TaskDetailCallbacks,
 ) {
     var title by remember(task.id) { mutableStateOf(task.title) }
     var note by remember(task.id) { mutableStateOf(task.note ?: "") }
     var time by remember(task.id) { mutableStateOf(task.startTime ?: "") }
     var category by remember(task.id) { mutableStateOf(task.category ?: "") }
-    var priority by remember(task.id) { mutableStateOf(task.priority) }
-    var plannedDate by remember(task.id) { mutableStateOf(runCatching { LocalDate.parse(task.plannedDate) }.getOrElse { today }) }
+    var priority by remember(task.id) { mutableIntStateOf(task.priority) }
+    var plannedDate by remember(task.id) {
+        mutableStateOf(runCatching { LocalDate.parse(task.plannedDate) }.getOrElse { today })
+    }
     var showDeleteConfirm by remember { mutableStateOf(false) }
     var showTimePicker by rememberSaveable { mutableStateOf(false) }
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     var reminderEnabled by remember(task.id) { mutableStateOf(task.reminderTime != null) }
     val scroll = rememberScrollState()
-    val priorityLabels = listOf(stringResource(R.string.today_priority_high), stringResource(R.string.today_priority_normal), stringResource(R.string.today_priority_low))
+    val priorityLabels = listOf(
+        stringResource(R.string.today_priority_high),
+        stringResource(R.string.today_priority_normal),
+        stringResource(R.string.today_priority_low),
+    )
     val timeErrIncomplete = stringResource(R.string.today_time_incomplete)
     val timeErrInvalid = stringResource(R.string.today_time_invalid)
     val timeValidation = TimeInputValidator.validationMessageKey(time)
@@ -82,8 +85,12 @@ internal fun TaskDetailSheet(
         TimeInputValidator.TimeValidation.InvalidFormat, TimeInputValidator.TimeValidation.InvalidClock -> timeErrInvalid
     }
     val timePickerState = rememberTimePickerState(
-        initialHour = time.takeIf { TimeInputValidator.isValid(it) && it.length == 5 }?.substring(0, 2)?.toIntOrNull() ?: 9,
-        initialMinute = time.takeIf { TimeInputValidator.isValid(it) && it.length == 5 }?.substring(3, 5)?.toIntOrNull() ?: 0,
+        initialHour = time.takeIf { TimeInputValidator.isValid(it) && it.length == TIME_STRING_LENGTH }
+            ?.substring(TIME_HOUR_START, TIME_HOUR_END)
+            ?.toIntOrNull() ?: DEFAULT_TIME_HOUR,
+        initialMinute = time.takeIf { TimeInputValidator.isValid(it) && it.length == TIME_STRING_LENGTH }
+            ?.substring(TIME_MINUTE_START, TIME_MINUTE_END)
+            ?.toIntOrNull() ?: 0,
         is24Hour = true,
     )
     val datePickerState = rememberDatePickerState(
@@ -99,33 +106,40 @@ internal fun TaskDetailSheet(
         TaskDeleteConfirmDialog(
             taskTitle = task.title,
             onDismiss = { showDeleteConfirm = false },
-            onConfirm = { showDeleteConfirm = false; onDelete() },
+            onConfirm = {
+                showDeleteConfirm = false
+                callbacks.onDelete()
+            },
         )
     }
 
     Column(
         Modifier
             .verticalScroll(scroll)
-            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .padding(horizontal = AppTokens.Spacing.xl, vertical = AppTokens.Spacing.md)
             .navigationBarsPadding(),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+            verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sm + AppTokens.Spacing.xxs / 2),
     ) {
         TaskDetailFormFields(
-            title = title,
-            onTitleChange = { title = it },
-            note = note,
-            onNoteChange = { note = it },
-            plannedDate = plannedDate,
+            data = TaskDetailFormData(
+                title = title,
+                note = note,
+                plannedDate = plannedDate,
+                time = time,
+                timeErrorText = timeErrorText,
+                category = category,
+                interactionLocked = interactionLocked,
+            ),
             dateFmt = dateFmt,
-            onDatePickerRequest = { showDatePicker = true },
-            time = time,
-            onTimeChange = { time = it },
-            timeErrorText = timeErrorText,
-            onTimePickerRequest = { showTimePicker = true },
-            category = category,
-            onCategoryChange = { category = it },
-            onCategoryDone = { focusManager.clearFocus() },
-            interactionLocked = interactionLocked,
+            actions = TaskDetailFormActions(
+                onTitleChange = { title = it },
+                onNoteChange = { note = it },
+                onDatePickerRequest = { showDatePicker = true },
+                onTimeChange = { time = it },
+                onTimePickerRequest = { showTimePicker = true },
+                onCategoryChange = { category = it },
+                onCategoryDone = { focusManager.clearFocus() },
+            ),
         )
         TaskDetailOptionsSection(
             interactionLocked = interactionLocked,
@@ -139,16 +153,16 @@ internal fun TaskDetailSheet(
         TaskDetailSubtasksSection(
             subtasks = subtasks,
             interactionLocked = interactionLocked,
-            onToggleSubTask = onToggleSubTask,
-            onDeleteSubTask = onDeleteSubTask,
-            onAddSubTask = onAddSubTask,
+            onToggleSubTask = callbacks.onToggleSubTask,
+            onDeleteSubTask = callbacks.onDeleteSubTask,
+            onAddSubTask = callbacks.onAddSubTask,
         )
         val canSave = title.isNotBlank() && TimeInputValidator.isValid(time)
         val startToSave = time.takeIf { it.isNotBlank() }
         val reminderToSave = if (effectiveReminderEnabled && startToSave != null) startToSave else null
         Button(
             onClick = {
-                onSave(
+                callbacks.onSave(
                     title,
                     note.takeIf { it.isNotBlank() },
                     plannedDate,
@@ -159,16 +173,16 @@ internal fun TaskDetailSheet(
                 )
             },
             enabled = canSave && !interactionLocked,
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.fillMaxWidth().height(ActionButtonHeight),
+            shape = RoundedCornerShape(ActionButtonCornerRadius),
             colors = ButtonDefaults.buttonColors(CandyPrimary, Color.White),
         ) { Text(stringResource(R.string.action_save)) }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(AppTokens.Spacing.xs)) {
             OutlinedSmallButton(
                 stringResource(R.string.today_move_tomorrow_btn),
                 Modifier.weight(1f),
                 enabled = !interactionLocked,
-                onClick = onMoveTomorrow,
+                onClick = callbacks.onMoveTomorrow,
             )
             OutlinedSmallButton(
                 stringResource(R.string.today_delete_label),
@@ -176,7 +190,7 @@ internal fun TaskDetailSheet(
                 enabled = !interactionLocked,
             ) { showDeleteConfirm = true }
         }
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(AppTokens.Spacing.sm))
     }
     if (showTimePicker) {
         TaskTimePickerDialog(

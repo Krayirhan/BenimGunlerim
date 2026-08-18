@@ -1,18 +1,21 @@
 package com.benimgunlerim.domain.service
 
 import android.util.Log
+import com.benimgunlerim.data.UserPreferencesSource
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.FeedbackManager
 import com.benimgunlerim.domain.model.GameEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class RewardDisplayService @Inject constructor(
     private val feedbackManager: FeedbackManager,
+    private val preferencesSource: UserPreferencesSource,
 ) {
     private val _gameEvents = MutableSharedFlow<GameEvent>(extraBufferCapacity = 16)
     val gameEvents: Flow<GameEvent> = _gameEvents.asSharedFlow()
@@ -56,6 +59,7 @@ class RewardDisplayService @Inject constructor(
     suspend fun onAchievementUnlocked(
         def: AchievementDef,
     ) {
+        if (!effectsEnabled()) return
         feedbackManager.celebrationBurst()
         _gameEvents.tryEmit(
             GameEvent.AchievementUnlocked(
@@ -72,6 +76,7 @@ class RewardDisplayService @Inject constructor(
         emoji: String,
         title: String,
     ) {
+        if (!effectsEnabled()) return
         feedbackManager.celebrationBurst()
         _gameEvents.tryEmit(
             GameEvent.AchievementUnlocked(
@@ -82,16 +87,19 @@ class RewardDisplayService @Inject constructor(
     }
 
     suspend fun emitMiniBanner(message: String, icon: String = "✨") {
+        if (!effectsEnabled()) return
         feedbackManager.tapLight()
         _gameEvents.tryEmit(GameEvent.MiniBanner(message, icon))
     }
 
     suspend fun emitAllTasksCompleted(totalCount: Int, xpBonus: Int = 25) {
+        if (!effectsEnabled()) return
         feedbackManager.celebrationBurst()
         _gameEvents.tryEmit(GameEvent.AllTasksCompleted(totalCount, xpBonus))
     }
 
     suspend fun emitAllRoutinesCompleted(streak: Int, xpBonus: Int = 30) {
+        if (!effectsEnabled()) return
         feedbackManager.celebrationBurst()
         _gameEvents.tryEmit(GameEvent.AllRoutinesCompleted(streak, xpBonus))
     }
@@ -100,7 +108,7 @@ class RewardDisplayService @Inject constructor(
         xp: Int,
         gold: Int,
     ) {
-        feedbackManager.playSound("reward", REWARD_SOUND_VOLUME)
+        if (effectsEnabled()) feedbackManager.playSound("reward", REWARD_SOUND_VOLUME)
         _gameEvents.tryEmit(GameEvent.RewardEarned(xp, gold))
     }
 
@@ -111,17 +119,20 @@ class RewardDisplayService @Inject constructor(
     ) {
         when (grantResult) {
             is GrantResult.Granted -> {
-                feedbackManager.tapMedium()
+                val effectsEnabled = effectsEnabled()
+                if (effectsEnabled) feedbackManager.tapMedium()
                 _gameEvents.tryEmit(GameEvent.RewardEarned(grantResult.xpGranted, grantResult.goldGranted))
 
-                grantResult.leveledUp?.let { level ->
-                    feedbackManager.levelUpVibration()
-                    _gameEvents.tryEmit(
-                        GameEvent.LevelUp(
-                            level = level.level,
-                            title = level.title,
-                        ),
-                    )
+                if (effectsEnabled) {
+                    grantResult.leveledUp?.let { level ->
+                        feedbackManager.levelUpVibration()
+                        _gameEvents.tryEmit(
+                            GameEvent.LevelUp(
+                                level = level.level,
+                                title = level.title,
+                            ),
+                        )
+                    }
                 }
 
                 Log.d(
@@ -136,4 +147,7 @@ class RewardDisplayService @Inject constructor(
             }
         }
     }
+
+    private suspend fun effectsEnabled(): Boolean =
+        preferencesSource.preferences.first().celebrationEffectsEnabled
 }

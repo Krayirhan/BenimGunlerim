@@ -14,8 +14,20 @@ Write-Host "=== BenimGunlerim Local Quality Check ===" -ForegroundColor Cyan
 
 Write-Host ""
 Write-Host "[0/5] Mojibake scan..." -ForegroundColor Yellow
-$mojibake = Get-ChildItem -Path "app/src" -Recurse -Include "*.kt", "*.xml" |
-    Select-String -Pattern "\u00C3|\u00C2|\u00C4|\u00C5|\uFFFD"
+$mojibakePattern = [regex]::new("\u00C3|\u00C2|\u00C4|\u00C5|\uFFFD")
+$mojibake = foreach ($file in Get-ChildItem -Path "app/src" -Recurse -Include "*.kt", "*.xml") {
+    $lineNumber = 0
+    foreach ($line in [System.IO.File]::ReadAllLines($file.FullName, [System.Text.Encoding]::UTF8)) {
+        $lineNumber++
+        if ($mojibakePattern.IsMatch($line)) {
+            [pscustomobject]@{
+                Filename = $file.Name
+                LineNumber = $lineNumber
+                Line = $line
+            }
+        }
+    }
+}
 if ($mojibake) {
     Write-Host "FAIL: Mojibake (broken encoding) detected:" -ForegroundColor Red
     $mojibake | ForEach-Object { Write-Host "  $($_.Filename):$($_.LineNumber) - $($_.Line.Trim())" }

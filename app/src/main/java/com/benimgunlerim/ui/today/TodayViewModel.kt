@@ -146,24 +146,26 @@ class TodayViewModel @Inject constructor(
 
     private val taskActions = TodayTaskActions(
         scope = viewModelScope,
-        dateTimeProvider = dateTimeProvider,
-        analyticsTracker = analyticsTracker,
-        feedbackManager = feedbackManager,
-        achievementTracker = achievementTracker,
-        rewardDisplayService = rewardDisplayService,
-        addTaskUseCase = addTaskUseCase,
-        addTasksBatchUseCase = addTasksBatchUseCase,
-        updateTaskTitleUseCase = updateTaskTitleUseCase,
-        moveTaskToDateUseCase = moveTaskToDateUseCase,
-        updateTaskUseCase = updateTaskUseCase,
-        deleteTaskUseCase = deleteTaskUseCase,
-        restoreTaskUseCase = restoreTaskUseCase,
-        setTaskPendingUseCase = setTaskPendingUseCase,
-        observeSubTasksUseCase = observeSubTasksUseCase,
-        addSubTaskUseCase = addSubTaskUseCase,
-        toggleSubTaskUseCase = toggleSubTaskUseCase,
-        deleteSubTaskUseCase = deleteSubTaskUseCase,
-        toggleTaskUseCase = toggleTaskUseCase,
+        deps = TodayTaskDependencies(
+            dateTimeProvider = dateTimeProvider,
+            analyticsTracker = analyticsTracker,
+            feedbackManager = feedbackManager,
+            achievementTracker = achievementTracker,
+            rewardDisplayService = rewardDisplayService,
+            addTaskUseCase = addTaskUseCase,
+            addTasksBatchUseCase = addTasksBatchUseCase,
+            updateTaskTitleUseCase = updateTaskTitleUseCase,
+            moveTaskToDateUseCase = moveTaskToDateUseCase,
+            updateTaskUseCase = updateTaskUseCase,
+            deleteTaskUseCase = deleteTaskUseCase,
+            restoreTaskUseCase = restoreTaskUseCase,
+            setTaskPendingUseCase = setTaskPendingUseCase,
+            observeSubTasksUseCase = observeSubTasksUseCase,
+            addSubTaskUseCase = addSubTaskUseCase,
+            toggleSubTaskUseCase = toggleSubTaskUseCase,
+            deleteSubTaskUseCase = deleteSubTaskUseCase,
+            toggleTaskUseCase = toggleTaskUseCase,
+        ),
         taskEntitiesById = { taskEntitiesById },
         uiStateValue = { uiState.value },
         isTodayClosed = { isTodayClosed() },
@@ -172,16 +174,18 @@ class TodayViewModel @Inject constructor(
 
     private val routineActions = TodayRoutineActions(
         scope = viewModelScope,
-        dateTimeProvider = dateTimeProvider,
-        analyticsTracker = analyticsTracker,
-        feedbackManager = feedbackManager,
-        achievementTracker = achievementTracker,
-        rewardDisplayService = rewardDisplayService,
-        toggleRoutineUseCase = toggleRoutineUseCase,
-        updateRoutineProgressUseCase = updateRoutineProgressUseCase,
-        updateRoutineUseCase = updateRoutineUseCase,
-        skipRoutineUseCase = skipRoutineUseCase,
-        archiveRoutineUseCase = archiveRoutineUseCase,
+        deps = TodayRoutineDependencies(
+            dateTimeProvider = dateTimeProvider,
+            analyticsTracker = analyticsTracker,
+            feedbackManager = feedbackManager,
+            achievementTracker = achievementTracker,
+            rewardDisplayService = rewardDisplayService,
+            toggleRoutineUseCase = toggleRoutineUseCase,
+            updateRoutineProgressUseCase = updateRoutineProgressUseCase,
+            updateRoutineUseCase = updateRoutineUseCase,
+            skipRoutineUseCase = skipRoutineUseCase,
+            archiveRoutineUseCase = archiveRoutineUseCase,
+        ),
         routineEntitiesById = { routineEntitiesById },
         uiStateValue = { uiState.value },
         isTodayClosed = { isTodayClosed() },
@@ -189,14 +193,16 @@ class TodayViewModel @Inject constructor(
 
     private val dayCloseActions = TodayDayCloseActions(
         scope = viewModelScope,
-        dateTimeProvider = dateTimeProvider,
-        analyticsTracker = analyticsTracker,
-        feedbackManager = feedbackManager,
-        rewardDisplayService = rewardDisplayService,
-        closeDayUseCase = closeDayUseCase,
-        carryPendingTasksUseCase = carryPendingTasksUseCase,
-        autoCloseMissedDayUseCase = autoCloseMissedDayUseCase,
-        saveMissedDaySummaryUseCase = saveMissedDaySummaryUseCase,
+        deps = TodayDayCloseDependencies(
+            dateTimeProvider = dateTimeProvider,
+            analyticsTracker = analyticsTracker,
+            feedbackManager = feedbackManager,
+            rewardDisplayService = rewardDisplayService,
+            closeDayUseCase = closeDayUseCase,
+            carryPendingTasksUseCase = carryPendingTasksUseCase,
+            autoCloseMissedDayUseCase = autoCloseMissedDayUseCase,
+            saveMissedDaySummaryUseCase = saveMissedDaySummaryUseCase,
+        ),
         uiStateValue = { uiState.value },
         emitEffect = { _uiEffects.tryEmit(it) },
     )
@@ -365,6 +371,9 @@ class TodayViewModel @Inject constructor(
 
     // ── Day close ────────────────────────────────────────────────────────────
 
+    fun saveDailySummaryWithOptionalCarry(draft: CloseDayDraft) =
+        dayCloseActions.saveDailySummaryWithOptionalCarry(draft)
+
     fun saveDailySummaryWithOptionalCarry(
         note: String,
         mood: Int,
@@ -373,7 +382,17 @@ class TodayViewModel @Inject constructor(
         challenge: String = "",
         tomorrowIntention: String = "",
         carryOverdueToTomorrow: Boolean,
-    ) = dayCloseActions.saveDailySummaryWithOptionalCarry(note, mood, energy, bestMoment, challenge, tomorrowIntention, carryOverdueToTomorrow)
+    ) = dayCloseActions.saveDailySummaryWithOptionalCarry(
+        CloseDayDraft(
+            mood = mood,
+            energy = energy,
+            note = note,
+            bestMoment = bestMoment,
+            challenge = challenge,
+            tomorrowIntention = tomorrowIntention,
+            carryOverdueTasks = carryOverdueToTomorrow,
+        ),
+    )
 
     fun autoSaveMissedDay(date: LocalDate) = dayCloseActions.autoSaveMissedDay(date)
 

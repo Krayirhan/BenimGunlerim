@@ -36,7 +36,7 @@ fun SubtleCelebrationParticles(
     }
 
     KonfettiView(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier,
         parties = listOf(party),
     )
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppBadge
 import com.benimgunlerim.ui.components.core.AppBadgeVariant
 import com.benimgunlerim.ui.components.core.AppSurface
@@ -100,7 +102,9 @@ fun TaskRow(
             ) {
                 Icon(
                     imageVector = if (isCompleted) Icons.Rounded.CheckCircle else Icons.Rounded.RadioButtonUnchecked,
-                    contentDescription = if (isCompleted) "Görevi tamamlandı işaretini kaldır" else "Görevi tamamla",
+                    contentDescription = stringResource(
+                        if (isCompleted) R.string.today_task_uncomplete_cd else R.string.today_task_toggle_cd,
+                    ),
                     tint = checkColor,
                     modifier = Modifier
                         .size(24.dp)
@@ -159,7 +163,7 @@ fun TaskRow(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.DeleteOutline,
-                    contentDescription = "Görevi sil",
+                    contentDescription = stringResource(R.string.today_task_delete_cd),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f),
                     modifier = Modifier.size(20.dp),
                 )

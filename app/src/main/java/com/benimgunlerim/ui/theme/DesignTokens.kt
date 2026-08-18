@@ -102,6 +102,8 @@ object AppTokens {
         val xl: Dp = 48.dp
         /** 36dp — dairesel ikon konteyneri (örn. gün kapatma ok butonu) */
         val container: Dp = 36.dp
+        /** 44dp — büyük seçim kartı ikon konteyneri (örn. onboarding ihtiyaç/tempo kartları) */
+        val containerLarge: Dp = 44.dp
     }
 
     // ── Bottom Nav ───────────────────────────────────────────────────────────
@@ -134,5 +136,18 @@ object AppTokens {
         val topBarHeight: Dp = 68.dp
         /** 40dp — AppTopBar avatar/bildirim ikon konteyneri çapı */
         val topBarAvatarDiameter: Dp = 40.dp
+    }
+
+    // ── Calm / Reset ─────────────────────────────────────────────────────────
+    object Calm {
+        val breathingCircleOuter: Dp = 180.dp
+        val breathingCircleInner: Dp = 110.dp
+        val breathingBorder: Dp = 2.dp
+        val resetTitleIcon: Dp = IconSize.lg
+        val resetTitleIconSize: Dp = 18.dp
+        val resetButtonHeight: Dp = 52.dp
+        val resetButtonRadius: Dp = Radius.lg
+        val resetCompletedIcon: Dp = 56.dp
+        val resetCompletedIconSize: Dp = IconSize.lg
     }
 }

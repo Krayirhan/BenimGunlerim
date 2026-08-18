@@ -31,10 +31,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
+import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.components.core.AppButton
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
 import com.benimgunlerim.ui.components.molecules.DynamicCalendarBadge
@@ -85,6 +87,7 @@ fun PlanScreen(
                 onClick = { showAddSheet = true },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.testTag(TestTags.PlanFab),
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
@@ -96,12 +99,14 @@ fun PlanScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding),
+                .testTag(TestTags.PlanRoot),
+            contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
         ) {
             item(key = "week_picker") {
                 WeekPicker(
                     selectedDate = state.selectedDate,
+                    modifier = Modifier.testTag(TestTags.PlanWeekPicker),
                     onDateSelected = { date -> viewModel.selectDate(date) },
                     onPreviousWeek = { viewModel.selectPreviousWeek() },
                     onNextWeek = { viewModel.selectNextWeek() },

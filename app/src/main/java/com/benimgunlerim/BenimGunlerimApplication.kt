@@ -3,8 +3,8 @@ package com.benimgunlerim
 import android.app.Application
 import android.os.StrictMode
 import com.benimgunlerim.analytics.AppCrashHandler
-import com.benimgunlerim.notifications.ReminderBootstrapper
 import com.benimgunlerim.notifications.ensureRoutineNotificationChannel
+import com.benimgunlerim.notifications.ReminderBootstrapper
 import com.benimgunlerim.domain.service.AppEventCoordinator
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject

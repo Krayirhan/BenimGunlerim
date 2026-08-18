@@ -1,5 +1,3 @@
-@file:Suppress("LongParameterList", "MagicNumber")
-
 package com.benimgunlerim.ui.today
 
 import androidx.compose.foundation.background
@@ -33,6 +31,12 @@ import androidx.compose.ui.unit.dp
 import com.benimgunlerim.R
 import com.benimgunlerim.ui.theme.StreakCoral
 
+private const val OVERDUE_BG_ALPHA = 0.10f
+private const val OVERDUE_BORDER_ALPHA = 0.25f
+private const val INACTIVE_CHECK_ALPHA = 0.5f
+private val FieldCornerRadius = 8.dp
+private val OverdueCardCornerRadius = 12.dp
+
 @Composable
 internal fun CloseDayStep2Reflection(
     bestMoment: String,
@@ -56,7 +60,7 @@ internal fun CloseDayStep2Reflection(
         modifier = Modifier.fillMaxWidth(),
         minLines = 2,
         maxLines = 3,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     )
     OutlinedTextField(
@@ -66,7 +70,7 @@ internal fun CloseDayStep2Reflection(
         modifier = Modifier.fillMaxWidth(),
         minLines = 2,
         maxLines = 3,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     )
     OutlinedTextField(
@@ -76,7 +80,7 @@ internal fun CloseDayStep2Reflection(
         modifier = Modifier.fillMaxWidth(),
         minLines = 2,
         maxLines = 3,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onNoteDone() }),
     )
@@ -113,7 +117,7 @@ internal fun CloseDayStep3IntentionAndCarry(
         modifier = Modifier.fillMaxWidth(),
         minLines = 2,
         maxLines = 3,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(FieldCornerRadius),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onIntentionDone() }),
     )
@@ -136,15 +140,20 @@ internal fun CloseDayStep3IntentionAndCarry(
     }
     if (overdueCount > 0) {
         Row(
-            Modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp))
-                .background(if (carryTasks) StreakCoral.copy(.10f) else MaterialTheme.colorScheme.surfaceVariant)
-                .border(1.dp, if (carryTasks) StreakCoral.copy(.25f) else MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+            Modifier.fillMaxWidth().clip(RoundedCornerShape(OverdueCardCornerRadius))
+                .background(if (carryTasks) StreakCoral.copy(alpha = OVERDUE_BG_ALPHA) else MaterialTheme.colorScheme.surfaceVariant)
+                .border(
+                    1.dp,
+                    if (carryTasks) StreakCoral.copy(alpha = OVERDUE_BORDER_ALPHA)
+                    else MaterialTheme.colorScheme.outline,
+                    RoundedCornerShape(OverdueCardCornerRadius),
+                )
                 .clickable(onClick = onCarryTasksToggle)
                 .padding(14.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(Modifier.size(20.dp).clip(RoundedCornerShape(4.dp)).background(if (carryTasks) StreakCoral else MaterialTheme.colorScheme.outline.copy(.5f)), contentAlignment = Alignment.Center) {
+            Box(Modifier.size(20.dp).clip(RoundedCornerShape(4.dp)).background(if (carryTasks) StreakCoral else MaterialTheme.colorScheme.outline.copy(alpha = INACTIVE_CHECK_ALPHA)), contentAlignment = Alignment.Center) {
                 if (carryTasks) Icon(Icons.Rounded.Check, contentDescription = carryCheckboxCd, tint = Color.White, modifier = Modifier.size(14.dp))
             }
             Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {

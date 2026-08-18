@@ -66,11 +66,11 @@ fun MissedDayReviewSheet(
     val formattedDate = remember(date) { date.format(dayFormatter) }
 
     val moodOptions = listOf(
-        Triple(0, "😔", "Zorlayıcı"),
-        Triple(1, "🙁", "Durgun"),
-        Triple(2, "😐", "Normal"),
-        Triple(3, "🙂", "İyi"),
-        Triple(4, "🤩", "Harika"),
+        Triple(0, "😔", stringResource(R.string.missed_day_mood_challenging)),
+        Triple(1, "🙁", stringResource(R.string.missed_day_mood_flat)),
+        Triple(2, "😐", stringResource(R.string.missed_day_mood_normal)),
+        Triple(3, "🙂", stringResource(R.string.missed_day_mood_good)),
+        Triple(4, "🤩", stringResource(R.string.missed_day_mood_great)),
     )
 
     val percent = if (totalCount > 0) ((completedCount.toFloat() / totalCount.toFloat()) * 100).toInt() else 0
@@ -122,7 +122,11 @@ fun MissedDayReviewSheet(
                             color = BrandPrimary,
                         )
                         Text(
-                            text = if (percent >= 100) "Dünün tüm hedefleri tamamlandı!" else "Dünkü emeklerin korundu.",
+                            text = if (percent >= 100) {
+                                stringResource(R.string.today_missed_day_success_msg)
+                            } else {
+                                stringResource(R.string.today_missed_day_protected_msg)
+                            },
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )

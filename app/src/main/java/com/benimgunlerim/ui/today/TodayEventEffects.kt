@@ -25,6 +25,9 @@ internal fun TodayEventEffects(
 ) {
     val undoLabel = stringResource(R.string.action_undo)
     val taskDeletedMsg = stringResource(R.string.today_task_deleted_undo)
+    val taskCompletedUndoMsg = stringResource(R.string.today_task_completed_undo_msg)
+    val allTasksTitle = stringResource(R.string.today_all_tasks_completed_title)
+    val allRoutinesTitle = stringResource(R.string.today_all_routines_completed_title)
     val context = LocalContext.current
 
     LaunchedEffect(viewModel) {
@@ -42,7 +45,7 @@ internal fun TodayEventEffects(
                 }
                 is TodayUiEffect.TaskCompletedUndo -> {
                     val result = snackbarHostState.showSnackbar(
-                        message = "✓ Görev tamamlandı · +10 XP",
+                        message = taskCompletedUndoMsg,
                         actionLabel = undoLabel,
                         duration = SnackbarDuration.Short,
                     )
@@ -68,16 +71,16 @@ internal fun TodayEventEffects(
                 is GameEvent.AchievementUnlocked -> onAchievementUnlocked(event)
                 is GameEvent.AllTasksCompleted -> {
                     onBlockCompletion(
-                        "Bugünün görevleri tamamlandı 🎉",
-                        "${event.totalCount} / ${event.totalCount} görev tamamlandı",
-                        "+${event.xpBonus} XP Bonusu",
+                        allTasksTitle,
+                        context.getString(R.string.today_all_tasks_completed_body, event.totalCount, event.totalCount),
+                        context.getString(R.string.today_xp_bonus_badge, event.xpBonus),
                     )
                 }
                 is GameEvent.AllRoutinesCompleted -> {
                     onBlockCompletion(
-                        "Bugünün rutinleri tamamlandı",
-                        "Ritmini korudun. Seri: ${event.streak} gün",
-                        "+${event.xpBonus} XP Bonusu",
+                        allRoutinesTitle,
+                        context.getString(R.string.today_all_routines_completed_body, event.streak),
+                        context.getString(R.string.today_xp_bonus_badge, event.xpBonus),
                     )
                 }
                 is GameEvent.MiniBanner -> {

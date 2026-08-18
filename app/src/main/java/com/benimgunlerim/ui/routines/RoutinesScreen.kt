@@ -26,8 +26,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
+import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.components.core.AppButton
 import com.benimgunlerim.ui.components.core.AppDivider
 import com.benimgunlerim.ui.components.core.AppSurface
@@ -57,11 +59,13 @@ fun RoutinesScreen(
     val daysCountLabel = stringResource(R.string.routines_days_count)
 
     ScreenScaffold(
+        modifier = Modifier.testTag(TestTags.RoutinesRoot),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showAddSheet = true },
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.testTag(TestTags.RoutinesFab),
             ) {
                 Icon(
                     imageVector = Icons.Rounded.Add,

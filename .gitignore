@@ -3,6 +3,8 @@
 build/
 app/build/
 */build/
+bin/
+*/bin/
 
 # IDE
 .idea/

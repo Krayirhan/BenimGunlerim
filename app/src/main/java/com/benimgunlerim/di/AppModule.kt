@@ -68,7 +68,7 @@ object AppModule {
             // v1-6 pre-release şema olarak "desteklenmiyor" kabul edildi — bkz. Migrations.kt.
             // Uygulama hiç yayınlanmadığı için bu aralıkta gerçek kullanıcı verisi yok;
             // eski bir dev/test cihazında bu şema bulunursa crash yerine sessiz reset olur.
-            .fallbackToDestructiveMigrationFrom(1, 2, 3, 4, 5, 6)
+            .fallbackToDestructiveMigrationFrom(1, 2, 3, 4, 5)
             .build()
 
     @Provides
