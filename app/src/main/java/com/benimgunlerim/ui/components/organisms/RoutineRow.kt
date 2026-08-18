@@ -89,10 +89,11 @@ fun RoutineRow(
 
     // Compute last 7 days day initials and date for habit matrix
     val today = remember { LocalDate.now() }
-    val days7 = remember(today) {
+    val dayShortCodes = turkishDayShortCode()
+    val days7 = remember(today, dayShortCodes) {
         (6 downTo 0).map { offset ->
             val date = today.minusDays(offset.toLong())
-            date to (TurkishDayShortCode[date.dayOfWeek] ?: "")
+            date to (dayShortCodes[date.dayOfWeek] ?: "")
         }
     }
 
@@ -211,7 +212,7 @@ fun RoutineRow(
                             ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Add,
-                                    contentDescription = "Artır",
+                                    contentDescription = stringResource(R.string.routine_row_increment_cd),
                                     tint = MaterialTheme.colorScheme.primary,
                                     modifier = Modifier.size(16.dp),
                                 )

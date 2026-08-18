@@ -114,13 +114,13 @@ fun ProgressScreen(
                         MetricCard(
                             title = stringResource(R.string.progress_balance_routine),
                             value = "${(state.routineHitRate * 100).toInt()}%",
-                            unit = "tamamlandı",
+                            unit = stringResource(R.string.progress_bar_unit_completed),
                             modifier = Modifier.weight(1f),
                         )
                         MetricCard(
                             title = stringResource(R.string.progress_balance_task),
                             value = "${(state.taskHitRate * 100).toInt()}%",
-                            unit = "tamamlandı",
+                            unit = stringResource(R.string.progress_bar_unit_completed),
                             modifier = Modifier.weight(1f),
                         )
                     }
@@ -164,8 +164,8 @@ fun ProgressScreen(
                             state.unlockedAchievements.forEachIndexed { index, achievement ->
                                 if (index > 0) AppDivider()
                                 AchievementRow(
-                                    title = achievement.title,
-                                    description = achievement.description,
+                                    title = stringResource(achievement.titleRes),
+                                    description = stringResource(achievement.descriptionRes),
                                     icon = achievement.emoji,
                                     isUnlocked = true,
                                     progress = 1f,

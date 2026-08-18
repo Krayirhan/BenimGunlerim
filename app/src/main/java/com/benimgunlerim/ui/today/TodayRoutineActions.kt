@@ -1,5 +1,6 @@
 package com.benimgunlerim.ui.today
 
+import com.benimgunlerim.R
 import com.benimgunlerim.analytics.AnalyticsEvent
 import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.data.local.entity.RoutineEntity
@@ -74,7 +75,7 @@ internal class TodayRoutineActions(
                 if (!completedToday) {
                     deps.achievementTracker.checkFirstRoutine()
                     if (completedRoutinesBefore == 0) {
-                        deps.rewardDisplayService.emitMiniBanner("Bugünün ilk rutini tamam. Ritmin başladı.", "🔄")
+                        deps.rewardDisplayService.emitMiniBanner(R.string.today_mini_banner_first_routine, "🔄")
                     } else if (completedRoutinesBefore + 1 == totalRoutines && totalRoutines > 1) {
                         deps.rewardDisplayService.emitAllRoutinesCompleted(state.currentStreak)
                     }

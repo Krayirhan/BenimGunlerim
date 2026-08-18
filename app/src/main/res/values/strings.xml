@@ -761,4 +761,213 @@
     <string name="settings_import_desc">Daha önce alınan JSON yedeğini geri yükle</string>
     <string name="today_missed_day_success_msg">Dünün tüm hedefleri tamamlandı!</string>
     <string name="today_missed_day_protected_msg">Dünkü emeklerin korundu.</string>
+
+    <!-- Rutin gün kısaltmaları (AddRoutineSheet gün seçici chip'leri) -->
+    <string name="routine_day_short_mon">Pt</string>
+    <string name="routine_day_short_tue">Sa</string>
+    <string name="routine_day_short_wed">Ça</string>
+    <string name="routine_day_short_thu">Pe</string>
+    <string name="routine_day_short_fri">Cu</string>
+    <string name="routine_day_short_sat">Ct</string>
+    <string name="routine_day_short_sun">Pa</string>
+    <string name="routine_sheet_category_default">Genel</string>
+
+    <!-- RoutineRow — hedef tipi rutinlerde artır butonu -->
+    <string name="routine_row_increment_cd">Artır</string>
+
+    <!-- ProgressScreen — bar chart birim etiketi -->
+    <string name="progress_bar_unit_completed">tamamlandı</string>
+
+    <!-- StreakBadge -->
+    <string name="streak_badge_format">🔥 Seri %1$d gün</string>
+
+    <!-- AchievementRow -->
+    <string name="achievement_row_unlocked_label">Kazanıldı</string>
+
+    <!-- ShopItemCard -->
+    <string name="shop_item_purchased_label">Satın Alındı</string>
+
+    <!-- Gizlilik Politikası ekranı -->
+    <string name="privacy_web_action_cd">Web Sayfasında Aç</string>
+    <string name="privacy_header_title">Gizliliğiniz Önceliğimizdir</string>
+    <string name="privacy_header_updated">Son Güncelleme: 17 Ağustos 2026</string>
+
+    <string name="privacy_section1_title">Yerel ve Çevrimdışı Depolama</string>
+    <string name="privacy_section1_desc">BenimGünlerim offline-first prensibiyle çalışır. Verileriniz tamamen cihazınızda saklanır.</string>
+    <string name="privacy_section1_bullet1">Görevleriniz, rutinleriniz, günlük notlarınız ve ilerleme kayıtlarınız yalnızca telefonunuzdaki yerel veritabanında tutulur.</string>
+    <string name="privacy_section1_bullet2">Kişisel verileriniz harici herhangi bir sunucuya aktarılmaz veya satılmaz.</string>
+
+    <string name="privacy_section2_title">Anonim Kullanım Ölçümü (Analytics)</string>
+    <string name="privacy_section2_desc">Deneyimi iyileştirmek için isteğe bağlı anonim telemetry kullanılabilir.</string>
+    <string name="privacy_section2_bullet1">Görev başlıkları, rutin içerikleri, notlar veya kimlik bilgileri asla toplanmaz.</string>
+    <string name="privacy_section2_bullet2">Ayarlar menüsünden dilediğiniz zaman anonim ölçümü kapatabilirsiniz.</string>
+
+    <string name="privacy_section3_title">Hata Raporlama</string>
+    <string name="privacy_section3_desc">Uygulama çökme/hata kayıtları tamamen cihazınızda tutulur.</string>
+    <string name="privacy_section3_bullet1">Hiçbir çökme raporu veya teknik log sunuculara ya da üçüncü taraflara gönderilmez.</string>
+
+    <string name="privacy_section4_title">Yedekleme ve Veri Taşınabilirliği</string>
+    <string name="privacy_section4_desc">Verileriniz üzerinde tam taşınabilirlik hakkınız vardır.</string>
+    <string name="privacy_section4_bullet1">İstediğiniz an tüm verilerinizi JSON formatında cihazınıza dışa aktarabilirsiniz.</string>
+    <string name="privacy_section4_bullet2">Daha önce aldığınız JSON yedeğini kolayca içe aktararak geri yükleyebilirsiniz.</string>
+
+    <string name="privacy_section5_title">İzinler ve Kullanım Amaçları</string>
+    <string name="privacy_section5_desc">Uygulamanın ihtiyaç duyduğu izinler ve gerekçeleri:</string>
+    <string name="privacy_section5_bullet1">Bildirim İzni (POST_NOTIFICATIONS): Rutin ve gün sonu hatırlatıcılarını göstermek için kullanılır.</string>
+    <string name="privacy_section5_bullet2">Tam Zamanlı Alarm (SCHEDULE_EXACT_ALARM): Hatırlatıcıların tam zamanında tetiklenmesini sağlar.</string>
+
+    <string name="privacy_section6_title">Veri Silme ve Kullanıcı Hakları</string>
+    <string name="privacy_section6_desc">Verileriniz sizin kontrolünüzdedir.</string>
+    <string name="privacy_section6_bullet1">Ayarlar ekranındaki \'Tüm verileri temizle\' seçeneği ile tüm verilerinizi anında sıfırlayabilirsiniz.</string>
+    <string name="privacy_section6_bullet2">Uygulamayı kaldırdığınızda cihazdaki tüm veriler otomatik olarak tamamen silinir.</string>
+
+    <string name="privacy_section7_title">İletişim ve Destek</string>
+    <string name="privacy_section7_desc">Gizlilikle ilgili her türlü soru veya öneriniz için:</string>
+    <string name="privacy_section7_bullet1">E-posta: studioskrayirhan@gmail.com</string>
+
+    <!-- Bugün — mini kutlama banner mesajları (RewardDisplayService.emitMiniBanner) -->
+    <string name="today_mini_banner_first_routine">Bugünün ilk rutini tamam. Ritmin başladı.</string>
+    <string name="today_mini_banner_first_task">İlk adım tamamlandı. Devamı daha kolay.</string>
+
+    <!-- Dükkan — ürün kataloğu -->
+    <string name="shop_item_badge_minimal_name">Minimal Çerçeve</string>
+    <string name="shop_item_badge_minimal_desc">Başarım kartlarında sade çizgi çerçeve</string>
+    <string name="shop_item_badge_gold_name">Altın Çerçeve</string>
+    <string name="shop_item_badge_gold_desc">Başarım kartlarında altın çerçeve</string>
+    <string name="shop_item_badge_crystal_name">Kristal Çerçeve</string>
+    <string name="shop_item_badge_crystal_desc">Işıl ışıl kristal çerçeve</string>
+    <string name="shop_item_celebrate_sparkle_name">Işıltı Flaşı</string>
+    <string name="shop_item_celebrate_sparkle_desc">Görev bitince zarif ışık efekti</string>
+    <string name="shop_item_celebrate_stars_name">Yıldız Patlaması</string>
+    <string name="shop_item_celebrate_stars_desc">Görev bitince yıldız animasyonu</string>
+    <string name="shop_item_celebrate_confetti_name">Konfeti Yağmuru</string>
+    <string name="shop_item_celebrate_confetti_desc">Görev bitince tam konfeti yağmuru</string>
+    <string name="shop_item_accent_ocean_name">Okyanus Mavisi</string>
+    <string name="shop_item_accent_ocean_desc">Rutin kartları için okyanus tonları</string>
+    <string name="shop_item_accent_forest_name">Orman Yeşili</string>
+    <string name="shop_item_accent_forest_desc">Derin yeşil rutin kartları</string>
+    <string name="shop_item_accent_sunset_name">Gün Batımı</string>
+    <string name="shop_item_accent_sunset_desc">Sıcak turuncu-pembe rutin kartları</string>
+    <string name="shop_item_accent_aurora_name">Kuzey Işıkları</string>
+    <string name="shop_item_accent_aurora_desc">Neon mavi-mor efekt</string>
+    <string name="shop_item_report_minimal_name">Minimal Rapor</string>
+    <string name="shop_item_report_minimal_desc">Haftalık özetini sade göster</string>
+    <string name="shop_item_report_detailed_name">Detaylı Rapor</string>
+    <string name="shop_item_report_detailed_desc">Haftalık raporda grafik ve geniş analiz</string>
+
+    <!-- Dükkan — mesajlar (ShopMessage, henüz UI'da render edilmiyor ama string kaynağı hazır) -->
+    <string name="shop_msg_daily_gift_already_claimed">Günlük hediye zaten alındı.</string>
+    <string name="shop_msg_daily_gift_claimed">+25 🪙 Günlük hediye alındı!</string>
+    <string name="shop_msg_already_owned">Bu ürüne zaten sahipsin.</string>
+    <string name="shop_msg_item_purchased_format">%1$s satın alındı! ✨</string>
+    <string name="shop_msg_insufficient_gold">Yeterli altın yok 😢</string>
+
+    <!-- Başarım tanımları (AchievementTracker.ALL_ACHIEVEMENTS) -->
+    <string name="achievement_first_task_title">İlk Adım</string>
+    <string name="achievement_first_task_desc">İlk görevini tamamla</string>
+    <string name="achievement_first_routine_title">İlk Rutin</string>
+    <string name="achievement_first_routine_desc">İlk rutinini tamamla</string>
+    <string name="achievement_first_plan_title">Başlangıç Planı</string>
+    <string name="achievement_first_plan_desc">İlk görevini oluştur</string>
+    <string name="achievement_streak_3_title">3 Günlük Ritim</string>
+    <string name="achievement_streak_3_desc">3 günlük seri</string>
+    <string name="achievement_streak_7_title">7 Günlük Ritim</string>
+    <string name="achievement_streak_7_desc">Bir hafta boyunca ritmini koru</string>
+    <string name="achievement_streak_14_title">14 Günlük Ritim</string>
+    <string name="achievement_streak_14_desc">14 günlük seri</string>
+    <string name="achievement_streak_30_title">30 Günlük Yolculuk</string>
+    <string name="achievement_streak_30_desc">30 günlük güçlü seri</string>
+    <string name="achievement_tasks_10_title">Görev Avcısı</string>
+    <string name="achievement_tasks_10_desc">10 görev tamamla</string>
+    <string name="achievement_tasks_25_title">Küçük Adımlar</string>
+    <string name="achievement_tasks_25_desc">Toplam 25 görev tamamla</string>
+    <string name="achievement_tasks_50_title">Verimli</string>
+    <string name="achievement_tasks_50_desc">50 görev tamamla</string>
+    <string name="achievement_tasks_100_title">Görev Ustası</string>
+    <string name="achievement_tasks_100_desc">100 görev tamamla</string>
+    <string name="achievement_tasks_500_title">Görev Kralı</string>
+    <string name="achievement_tasks_500_desc">500 görev tamamla</string>
+    <string name="achievement_routines_10_title">Alışkanlık Başlangıcı</string>
+    <string name="achievement_routines_10_desc">10 rutin tamamla</string>
+    <string name="achievement_routines_50_title">Rutin Ustası</string>
+    <string name="achievement_routines_50_desc">50 rutin tamamla</string>
+    <string name="achievement_routines_100_title">Disiplin İkonu</string>
+    <string name="achievement_routines_100_desc">100 rutin tamamla</string>
+    <string name="achievement_perfect_1_title">Mükemmel Gün</string>
+    <string name="achievement_perfect_1_desc">İlk %100 gün</string>
+    <string name="achievement_list_cleared_title">Liste Temizlendi</string>
+    <string name="achievement_list_cleared_desc">Bir günde tüm görevlerini tamamla</string>
+    <string name="achievement_perfect_5_title">Altın Hafta</string>
+    <string name="achievement_perfect_5_desc">5 mükemmel gün</string>
+    <string name="achievement_perfect_20_title">Kusursuz</string>
+    <string name="achievement_perfect_20_desc">20 mükemmel gün</string>
+    <string name="achievement_calm_deep_breath_title">Derin Nefes</string>
+    <string name="achievement_calm_deep_breath_desc">İlk nefes egzersizini tamamla</string>
+    <string name="achievement_calm_short_pause_title">Kısa Duraklama</string>
+    <string name="achievement_calm_short_pause_desc">3 kez 1 dakikalık reset yap</string>
+    <string name="achievement_calm_light_day_title">Bugünü Hafiflettin</string>
+    <string name="achievement_calm_light_day_desc">İlk kez Hafif Gün Modu\'nu kullan</string>
+    <string name="achievement_calm_brain_dump_title">Kafamı Boşalttım</string>
+    <string name="achievement_calm_brain_dump_desc">İlk Brain Dump notunu göreve dönüştür</string>
+    <string name="achievement_calm_gentle_close_title">Nazik Kapanış</string>
+    <string name="achievement_calm_gentle_close_desc">Günü kapatmadan önce nefes egzersizi yap</string>
+    <string name="achievement_level_5_title">Yükselen Yıldız</string>
+    <string name="achievement_level_5_desc">Seviye 5\'e ulaş</string>
+    <string name="achievement_level_10_title">Gün Mimarı</string>
+    <string name="achievement_level_10_desc">Seviye 10\'a ulaş</string>
+    <string name="achievement_level_20_title">Ay Yolcusu</string>
+    <string name="achievement_level_20_desc">Seviye 20\'ye ulaş</string>
+    <string name="achievement_gold_100_title">Biriktirici</string>
+    <string name="achievement_gold_100_desc">100 altın topla</string>
+    <string name="achievement_gold_500_title">Zengin</string>
+    <string name="achievement_gold_500_desc">500 altın topla</string>
+    <string name="achievement_gold_1000_title">Banker</string>
+    <string name="achievement_gold_1000_desc">1000 altın topla</string>
+    <string name="achievement_close_1_title">Günü Kapattın</string>
+    <string name="achievement_close_1_desc">İlk gün sonu kapanışını tamamla</string>
+    <string name="achievement_close_10_title">Günlükçü</string>
+    <string name="achievement_close_10_desc">10 gün kapat</string>
+    <string name="achievement_close_30_title">Kronikçi</string>
+    <string name="achievement_close_30_desc">30 gün kapat</string>
+    <string name="achievement_companion_happy_title">Mutlu Dost</string>
+    <string name="achievement_companion_happy_desc">Mutluluk 90\'a ulaşsın</string>
+    <string name="achievement_early_task_title">Erken Kuş</string>
+    <string name="achievement_early_task_desc">Sabah 8\'den önce görev tamamla</string>
+    <string name="achievement_first_buy_title">İlk Alışveriş</string>
+    <string name="achievement_first_buy_desc">Dükkandan bir şey al</string>
+    <string name="achievement_mood_5_happy_title">Pozitif Ruh</string>
+    <string name="achievement_mood_5_happy_desc">5 kez \'harika\' seç</string>
+
+    <!-- GameEngine — seviye unvanları -->
+    <string name="game_level_title_1">Başlayan</string>
+    <string name="game_level_title_2">Gelişimci</string>
+    <string name="game_level_title_3">İstikrarlı</string>
+    <string name="game_level_title_4">Ritmini Bulan</string>
+    <string name="game_level_title_5">Gün Ustası</string>
+    <string name="game_level_title_6">Dengeli</string>
+    <string name="game_level_title_7">Kararlı</string>
+    <string name="game_level_title_8">Yolunda</string>
+    <string name="game_level_title_9">Güçlü Ritim</string>
+    <string name="game_level_title_10">Gün Mimarı</string>
+    <string name="game_level_title_efsane">Efsane</string>
+    <string name="game_level_title_gun_tanrisi">Gün Tanrısı</string>
+
+    <!-- GameEngine — companionMessage (şu an gerçek çağıran yok, altyapı hazır bekletiliyor) -->
+    <string name="companion_msg_full_progress_1">Bugün efsaneydin! 🎉</string>
+    <string name="companion_msg_full_progress_2">Mükemmel gün! Her şeyi bitirdin! 🏆</string>
+    <string name="companion_msg_full_progress_3">Sen bir kahraman! ⭐</string>
+    <string name="companion_msg_ecstatic_1">Harika gidiyorsun! 🥳</string>
+    <string name="companion_msg_ecstatic_2">Seninle çok mutluyum! 💜</string>
+    <string name="companion_msg_ecstatic_3">Birlikte her şeyi başarırız! ✨</string>
+    <string name="companion_msg_happy_1">Güzel gidiyor! 💪</string>
+    <string name="companion_msg_happy_2">Devam et, iyi yoldasın! 🌟</string>
+    <string name="companion_msg_happy_3">Birlikte yapabiliriz! 😊</string>
+    <string name="companion_msg_streak_format">Harika bir seri! %1$d gün! 🔥</string>
+    <string name="companion_msg_half_progress_1">Yarıyı geçtin! 💫</string>
+    <string name="companion_msg_half_progress_2">Güzel ilerliyorsun! 🌈</string>
+    <string name="companion_msg_small_progress_1">Güzel başlangıç! 🌱</string>
+    <string name="companion_msg_small_progress_2">Her adım önemli! 🌸</string>
+    <string name="companion_msg_zero_progress_1">Hadi maceraya başlayalım! ✨</string>
+    <string name="companion_msg_zero_progress_2">Yeni bir gün, yeni fırsatlar! 🌅</string>
+    <string name="companion_msg_zero_progress_3">Bugün ne yapacağız? 🤔</string>
 </resources>

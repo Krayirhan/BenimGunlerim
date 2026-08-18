@@ -1,6 +1,7 @@
 package com.benimgunlerim.ui.today
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.ui.components.calm.BrainDumpDialog
 import com.benimgunlerim.ui.components.calm.ResetDialog
 import com.benimgunlerim.ui.components.gamification.AchievementDialog
@@ -167,7 +168,7 @@ internal fun TodayModalsHost(
     if (state.gameState.celebrationEffectsEnabled) modals.levelUpEvent.value?.let { ev ->
         LevelUpDialog(
             level = ev.level,
-            title = ev.title,
+            title = stringResource(ev.titleRes),
             xpBonus = ev.xpBonus,
             onDismiss = { modals.levelUpEvent.value = null },
         )
@@ -176,8 +177,8 @@ internal fun TodayModalsHost(
     if (state.gameState.celebrationEffectsEnabled) modals.achievementEvent.value?.let { ev ->
         AchievementDialog(
             emoji = ev.emoji,
-            title = ev.title,
-            description = ev.description,
+            title = stringResource(ev.titleRes),
+            description = stringResource(ev.descriptionRes),
             xpReward = ev.xpReward,
             showParticles = true,
             onDismiss = { modals.achievementEvent.value = null },

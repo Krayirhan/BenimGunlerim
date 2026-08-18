@@ -65,9 +65,10 @@ fun AddRoutineSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
+    val defaultCategory = stringResource(R.string.routine_sheet_category_default)
     var title by rememberSaveable { mutableStateOf(initialTitle) }
     var selectedDays by rememberSaveable { mutableStateOf(initialDays) }
-    var category by rememberSaveable { mutableStateOf("Genel") }
+    var category by rememberSaveable { mutableStateOf(defaultCategory) }
     var reminderTime by rememberSaveable { mutableStateOf(initialReminderTime.orEmpty()) }
     var isGoalRoutine by rememberSaveable { mutableStateOf(false) }
     var targetValueText by rememberSaveable { mutableStateOf("") }
@@ -141,6 +142,7 @@ fun AddRoutineSheet(
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                val dayShortCodes = turkishDayShortCode()
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -148,7 +150,7 @@ fun AddRoutineSheet(
                 ) {
                     DayOfWeek.entries.forEach { day ->
                         val isSelected = selectedDays.contains(day)
-                        val shortLabel = TurkishDayShortCode.getValue(day)
+                        val shortLabel = dayShortCodes.getValue(day)
                         AppFilterChip(
                             label = shortLabel,
                             selected = isSelected,
@@ -253,7 +255,7 @@ fun AddRoutineSheet(
                             }
                             val targetCount = if (isGoalRoutine) targetValueText.toIntOrNull() else null
                             val unit = if (isGoalRoutine) targetUnit.ifBlank { null } else null
-                            onSave(title, selectedDays, reminderToSave, category.ifBlank { "Genel" }, targetCount, unit)
+                            onSave(title, selectedDays, reminderToSave, category.ifBlank { defaultCategory }, targetCount, unit)
                             onDismiss()
                         }
                     },

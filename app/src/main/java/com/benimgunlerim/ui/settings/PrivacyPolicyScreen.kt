@@ -29,8 +29,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppSurface
 import com.benimgunlerim.ui.components.layout.DetailScreenScaffold
 import com.benimgunlerim.ui.theme.AppTokens
@@ -43,66 +45,68 @@ data class PrivacySection(
     val bulletPoints: List<String> = emptyList(),
 )
 
-private val PRIVACY_SECTIONS = listOf(
+@Suppress("LongMethod")
+@Composable
+private fun privacySections(): List<PrivacySection> = listOf(
     PrivacySection(
-        title = "Yerel ve Çevrimdışı Depolama",
+        title = stringResource(R.string.privacy_section1_title),
         icon = Icons.Rounded.Lock,
-        description = "BenimGünlerim offline-first prensibiyle çalışır. Verileriniz tamamen cihazınızda saklanır.",
+        description = stringResource(R.string.privacy_section1_desc),
         bulletPoints = listOf(
-            "Görevleriniz, rutinleriniz, günlük notlarınız ve ilerleme kayıtlarınız yalnızca telefonunuzdaki yerel veritabanında tutulur.",
-            "Kişisel verileriniz harici herhangi bir sunucuya aktarılmaz veya satılmaz.",
+            stringResource(R.string.privacy_section1_bullet1),
+            stringResource(R.string.privacy_section1_bullet2),
         ),
     ),
     PrivacySection(
-        title = "Anonim Kullanım Ölçümü (Analytics)",
+        title = stringResource(R.string.privacy_section2_title),
         icon = Icons.Rounded.Analytics,
-        description = "Deneyimi iyileştirmek için isteğe bağlı anonim telemetry kullanılabilir.",
+        description = stringResource(R.string.privacy_section2_desc),
         bulletPoints = listOf(
-            "Görev başlıkları, rutin içerikleri, notlar veya kimlik bilgileri asla toplanmaz.",
-            "Ayarlar menüsünden dilediğiniz zaman anonim ölçümü kapatabilirsiniz.",
+            stringResource(R.string.privacy_section2_bullet1),
+            stringResource(R.string.privacy_section2_bullet2),
         ),
     ),
     PrivacySection(
-        title = "Hata Raporlama",
+        title = stringResource(R.string.privacy_section3_title),
         icon = Icons.Rounded.BugReport,
-        description = "Uygulama çökme/hata kayıtları tamamen cihazınızda tutulur.",
+        description = stringResource(R.string.privacy_section3_desc),
         bulletPoints = listOf(
-            "Hiçbir çökme raporu veya teknik log sunuculara ya da üçüncü taraflara gönderilmez.",
+            stringResource(R.string.privacy_section3_bullet1),
         ),
     ),
     PrivacySection(
-        title = "Yedekleme ve Veri Taşınabilirliği",
+        title = stringResource(R.string.privacy_section4_title),
         icon = Icons.Rounded.CloudDownload,
-        description = "Verileriniz üzerinde tam taşınabilirlik hakkınız vardır.",
+        description = stringResource(R.string.privacy_section4_desc),
         bulletPoints = listOf(
-            "İstediğiniz an tüm verilerinizi JSON formatında cihazınıza dışa aktarabilirsiniz.",
-            "Daha önce aldığınız JSON yedeğini kolayca içe aktararak geri yükleyebilirsiniz.",
+            stringResource(R.string.privacy_section4_bullet1),
+            stringResource(R.string.privacy_section4_bullet2),
         ),
     ),
     PrivacySection(
-        title = "İzinler ve Kullanım Amaçları",
+        title = stringResource(R.string.privacy_section5_title),
         icon = Icons.Rounded.NotificationsActive,
-        description = "Uygulamanın ihtiyaç duyduğu izinler ve gerekçeleri:",
+        description = stringResource(R.string.privacy_section5_desc),
         bulletPoints = listOf(
-            "Bildirim İzni (POST_NOTIFICATIONS): Rutin ve gün sonu hatırlatıcılarını göstermek için kullanılır.",
-            "Tam Zamanlı Alarm (SCHEDULE_EXACT_ALARM): Hatırlatıcıların tam zamanında tetiklenmesini sağlar.",
+            stringResource(R.string.privacy_section5_bullet1),
+            stringResource(R.string.privacy_section5_bullet2),
         ),
     ),
     PrivacySection(
-        title = "Veri Silme ve Kullanıcı Hakları",
+        title = stringResource(R.string.privacy_section6_title),
         icon = Icons.Rounded.DeleteForever,
-        description = "Verileriniz sizin kontrolünüzdedir.",
+        description = stringResource(R.string.privacy_section6_desc),
         bulletPoints = listOf(
-            "Ayarlar ekranındaki 'Tüm verileri temizle' seçeneği ile tüm verilerinizi anında sıfırlayabilirsiniz.",
-            "Uygulamayı kaldırdığınızda cihazdaki tüm veriler otomatik olarak tamamen silinir.",
+            stringResource(R.string.privacy_section6_bullet1),
+            stringResource(R.string.privacy_section6_bullet2),
         ),
     ),
     PrivacySection(
-        title = "İletişim ve Destek",
+        title = stringResource(R.string.privacy_section7_title),
         icon = Icons.Rounded.Email,
-        description = "Gizlilikle ilgili her türlü soru veya öneriniz için:",
+        description = stringResource(R.string.privacy_section7_desc),
         bulletPoints = listOf(
-            "E-posta: studioskrayirhan@gmail.com",
+            stringResource(R.string.privacy_section7_bullet1),
         ),
     ),
 )
@@ -115,7 +119,7 @@ fun PrivacyPolicyScreen(
     val context = LocalContext.current
 
     DetailScreenScaffold(
-        title = "Gizlilik Politikası",
+        title = stringResource(R.string.settings_privacy_policy_title),
         onBack = onNavigateBack,
         actions = {
             IconButton(
@@ -128,12 +132,13 @@ fun PrivacyPolicyScreen(
             ) {
                 Icon(
                     imageVector = Icons.Rounded.OpenInBrowser,
-                    contentDescription = "Web Sayfasında Aç",
+                    contentDescription = stringResource(R.string.privacy_web_action_cd),
                     tint = BrandPrimary,
                 )
             }
         },
     ) { padding ->
+        val sections = privacySections()
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -142,7 +147,7 @@ fun PrivacyPolicyScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item { PrivacyHeaderCard() }
-            items(PRIVACY_SECTIONS) { section -> PrivacySectionCard(section) }
+            items(sections) { section -> PrivacySectionCard(section) }
         }
     }
 }
@@ -165,12 +170,12 @@ private fun PrivacyHeaderCard() {
             )
             Column {
                 Text(
-                    text = "Gizliliğiniz Önceliğimizdir",
+                    text = stringResource(R.string.privacy_header_title),
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
-                    text = "Son Güncelleme: 17 Ağustos 2026",
+                    text = stringResource(R.string.privacy_header_updated),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

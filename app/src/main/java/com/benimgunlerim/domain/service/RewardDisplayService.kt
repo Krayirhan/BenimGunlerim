@@ -1,6 +1,7 @@
 package com.benimgunlerim.domain.service
 
 import android.util.Log
+import androidx.annotation.StringRes
 import com.benimgunlerim.data.UserPreferencesSource
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.FeedbackManager
@@ -65,31 +66,17 @@ class RewardDisplayService @Inject constructor(
             GameEvent.AchievementUnlocked(
                 id = def.id,
                 emoji = def.emoji,
-                title = def.title,
-                description = def.description,
+                titleRes = def.titleRes,
+                descriptionRes = def.descriptionRes,
                 xpReward = def.xpReward,
             ),
         )
     }
 
-    suspend fun onAchievementUnlocked(
-        emoji: String,
-        title: String,
-    ) {
-        if (!effectsEnabled()) return
-        feedbackManager.celebrationBurst()
-        _gameEvents.tryEmit(
-            GameEvent.AchievementUnlocked(
-                emoji = emoji,
-                title = title,
-            ),
-        )
-    }
-
-    suspend fun emitMiniBanner(message: String, icon: String = "✨") {
+    suspend fun emitMiniBanner(@StringRes messageRes: Int, icon: String = "✨") {
         if (!effectsEnabled()) return
         feedbackManager.tapLight()
-        _gameEvents.tryEmit(GameEvent.MiniBanner(message, icon))
+        _gameEvents.tryEmit(GameEvent.MiniBanner(messageRes, icon))
     }
 
     suspend fun emitAllTasksCompleted(totalCount: Int, xpBonus: Int = 25) {
@@ -129,7 +116,7 @@ class RewardDisplayService @Inject constructor(
                         _gameEvents.tryEmit(
                             GameEvent.LevelUp(
                                 level = level.level,
-                                title = level.title,
+                                titleRes = level.titleRes,
                             ),
                         )
                     }

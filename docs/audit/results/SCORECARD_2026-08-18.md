@@ -1,26 +1,38 @@
 # Güncel Puan Tablosu — 2026-08-18
 
-> Bu bir **yeniden puanlama** raporudur, baştan yapılan bir full audit değildir (bkz. `docs/audit/99_INCREMENTAL_REAUDIT_PROMPT.md` §12: "doğru soru eski riskleri kapatıp kapatmadığını doğrulamaktır"). Baz alınan puan tablosu `CURRENT_AUDIT_2026-08-17.md`'dir. Puanlar, aynı gün içinde altı ayrı doğrulama turunda (1: cihaz kanıtı, 2: scaffold fix + detekt temizliği, 3: themeMode ölü kod temizliği, 4: Product/UX açık madde doğrulaması, 5: Product/UX P1 kapanışları, 6: P2 kapanışları + gerçek cihazda keşfedilen landscape bug'ı) toplanan **gerçek kanıtlara** göre güncellenmiştir. Puanlama standardı `00_MASTER_AUDIT_PROMPT.md`'deki 0-10 ölçeğidir.
+> Bu bir **yeniden puanlama** raporudur, baştan yapılan bir full audit değildir (bkz. `docs/audit/99_INCREMENTAL_REAUDIT_PROMPT.md` §12: "doğru soru eski riskleri kapatıp kapatmadığını doğrulamaktır"). Baz alınan puan tablosu `CURRENT_AUDIT_2026-08-17.md`'dir. Puanlar, aynı gün içinde yedi ayrı doğrulama turunda (1: cihaz kanıtı, 2: scaffold fix + detekt temizliği, 3: themeMode ölü kod temizliği, 4: Product/UX açık madde doğrulaması, 5: Product/UX P1 kapanışları, 6: P2 kapanışları + gerçek cihazda keşfedilen landscape bug'ı, 7: proje geneli hardcoded string temizliği) toplanan **gerçek kanıtlara** göre güncellenmiştir. Puanlama standardı `00_MASTER_AUDIT_PROMPT.md`'deki 0-10 ölçeğidir.
 
 ## Genel Puan
 
-**7,5 / 10** (gün başı: 7,1 → cihaz doğrulaması: 7,2 → scaffold+detekt fix: 7,3 → themeMode temizliği: 7,4 → Product/UX P1 kapanışları: 7,4 → P2 kapanışları + landscape fix: **7,5**, ham ortalama: 7,44 → 7,48)
+**7,5 / 10** (gün başı: 7,1 → cihaz doğrulaması: 7,2 → scaffold+detekt fix: 7,3 → themeMode temizliği: 7,4 → Product/UX P1 kapanışları: 7,4 → P2 kapanışları + landscape fix: 7,5 → hardcoded string temizliği: **7,5**, ham ortalama: 7,48 → 7,52)
 
 ## Puan Değişim Tablosu
 
-| Alan | 2026-08-17 | Tur 1 | Tur 2 | Tur 3 | Tur 5 | Tur 6 | Toplam Δ | Değişim Gerekçesi |
-|---|---:|---:|---:|---:|---:|---:|---:|---|
-| **Product / UX** | 7,1 | 7,1 | 7,3 | 7,3 | 7,9 | **8,0** | **+0,9** | (Tur 5) 3 P1 kapandı. (Tur 6) Emülatörde 1.5x font + landscape gerçek testi yapıldı; landscape'te FAB'ın uyarı bannerının "Değerlendir" butonunu kapladığı **gerçek bir bug** bulundu ve düzeltildi — bu, otomatik smoke testlerin yakalayamayacağı türden bir bulgu, tam da "manuel responsive kanıtı yok" açığının kapatılması demek. |
-| **Frontend / Compose** | 7,2 | 7,2 | 7,9 | 8,0 | 8,1 | **8,3** | **+1,1** | (Tur 5) Sabit yükseklik giderildi. (Tur 6) `WeekPicker` 36dp→48dp dokunma hedefi, 3 mood string setindeki casing tutarsızlığı giderildi, ve yeni `AppFab`/`isCompactHeight()` — compact-height (landscape) için Material'ın kendi önerdiği `SmallFloatingActionButton` desenini merkezi hale getiren, 3 ekranda (Today/Plan/Routines) tekrar kullanılan bir bileşen — eklendi. |
-| State / ViewModel | 7,4 | 7,4 | 7,4 | 7,5 | 7,5 | 7,5 | +0,1 | Değişmedi |
-| Data / Database | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 0,0 | Değişmedi |
-| Backend / Sync readiness | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 0,0 | Değişmedi |
-| Security / Privacy | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 0,0 | Değişmedi |
-| Performance | 6,2 | 7,8 | 7,8 | 7,8 | 7,8 | 7,8 | +1,6 | Değişmedi |
-| Testing / QA | 7,4 | 7,7 | 7,7 | 7,7 | 7,7 | 7,7 | +0,3 | Tur 6 sonrası tekrar koşuldu (74/74) — regresyon yok |
-| Monetization / Release | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 0,0 | Değişmedi |
+| Alan | 2026-08-17 | Tur 1 | Tur 2 | Tur 3 | Tur 5 | Tur 6 | Tur 7 | Toplam Δ | Değişim Gerekçesi |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| **Product / UX** | 7,1 | 7,1 | 7,3 | 7,3 | 7,9 | 8,0 | 8,0 | +0,9 | Değişmedi bu turda |
+| **Frontend / Compose** | 7,2 | 7,2 | 7,9 | 8,0 | 8,1 | 8,3 | **8,6** | **+1,4** | (Tur 7) Demir Kural #3 (hardcoded string yasağı) proje genelinde büyük ölçüde kapandı — ~157 string 3 katmanda (UI/ViewModel/domain) temizlendi. `PrivacyPolicyScreen`, `ShopViewModel` kataloğu, `AchievementTracker` (37 başarım), `GameEngine` (12 seviye unvanı) dahil. 10 değil 8,6 çünkü `OnboardingScreen.kt` gibi büyük dosyalarda hardcoded dp/renk (string değil) hâlâ var — kapsam dışı bırakıldı. |
+| **State / ViewModel** | 7,4 | 7,4 | 7,4 | 7,5 | 7,5 | 7,5 | **7,6** | **+0,2** | (Tur 7) `ShopViewModel.purchaseMessage` sealed `ShopMessage` tipine kavuştu (önceden hardcoded String, ayrıca "urune" yazım hatası vardı — düzeltildi); `SettingsViewModel.backupInfo` ölü alan olduğu tespit edilip kaldırıldı; `GameEvent.MiniBanner`/`LevelUp`/`AchievementUnlocked` artık resource-id taşıyor, yerel Context bağımlılığı olmadan doğru katmanda çözülüyor. |
+| Data / Database | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 0,0 | Değişmedi |
+| Backend / Sync readiness | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 0,0 | Değişmedi |
+| Security / Privacy | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 0,0 | Değişmedi |
+| Performance | 6,2 | 7,8 | 7,8 | 7,8 | 7,8 | 7,8 | 7,8 | +1,6 | Değişmedi |
+| Testing / QA | 7,4 | 7,7 | 7,7 | 7,7 | 7,7 | 7,7 | 7,7 | +0,3 | Tur 7 sonrası tekrar koşuldu; bir flaky "No compose hierarchies found" hatası (emülatör yorgunluğu, kod regresyonu değil) tekrar koşulup 74/74 doğrulandı |
+| Monetization / Release | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 0,0 | Değişmedi |
 
-**Aritmetik ortalama:** (8,0+8,3+7,5+8,0+7,0+7,5+7,8+7,7+5,5) / 9 = **7,48** → raporlanan genel puan **7,5 / 10**
+**Aritmetik ortalama:** (8,0+8,6+7,6+8,0+7,0+7,5+7,8+7,7+5,5) / 9 = **7,52** → raporlanan genel puan **7,5 / 10**
+
+## Tur 7 — Proje Geneli Hardcoded String Temizliği
+
+Kullanıcının açık onayıyla en geniş kapsam seçildi (UI + ViewModel + Domain, ~157 string). Üç aşamada yapıldı, her aşama sonrası tam doğrulama zinciri koşuldu:
+
+- **Aşama 1 (UI, ~40 string, düşük risk):** `RoutineDayCodes`, `RoutineRow`, `ProgressScreen`, `StreakBadge`, `AchievementRow`, `ShopItemCard`, `PrivacyPolicyScreen` (7 bölüm × başlık/açıklama/madde — bu dosya `@Composable private fun privacySections()` olarak yeniden yapılandırıldı çünkü eskisi bir top-level `val` idi ve `stringResource()` çağıramıyordu), `AddRoutineSheet`'teki "Genel" varsayılanı.
+- **Aşama 2 (ViewModel/Actions, ~27 string, orta risk — mimari değişiklik):** `GameEvent.MiniBanner` artık `@StringRes Int` taşıyor, `TodayEventEffects.kt`'nin zaten kullandığı `context.getString()` deseniyle çözülüyor. `ShopViewModel`: 10 ürünlük katalog `nameRes`/`descriptionRes`'e taşındı; `purchaseMessage: String?` → `ShopMessage` sealed class. **Yol boyunca 2 ölü kod/hata bulundu:** `SettingsViewModel.backupInfo` hiçbir yerde render edilmiyordu (silindi); `ShopViewModel`'de `"Bu urune zaten sahipsin."` yazım hatası vardı (düzeltildi: "ürüne"), ayrıca `purchaseMessage`/`clearMessage()`'ın kendisi de UI'da hiç tüketilmiyor (bilinçli olarak silinmedi, doğru mimariyle bırakıldı).
+- **Aşama 3 (Domain, ~90 string, en yüksek risk):** `AchievementTracker`'daki 37 başarım tanımının tamamı `@StringRes` alanlara taşındı. `GameEngine`'deki 12 seviye unvanı + `companionMessage()` motivasyon cümle havuzları resource-id tabanlı hale getirildi (`companionMessage()`'ın üretimde hiç çağıranı olmadığı ortaya çıktı — yine silinmedi, ileride bağlanmaya hazır bırakıldı). `GameEvent.LevelUp`/`AchievementUnlocked` artık `titleRes`/`descriptionRes` taşıyor, `TodayModalsHost.kt`'de (zaten Composable) `stringResource()` ile çözülüyor.
+
+**Doğrulama sırasında yakalanan flaky test:** `connectedDebugAndroidTest` bir turda 2 testte "No compose hierarchies found in the app" hatası verdi. Uygulamayı elle başlatıp ekran görüntüsü aldım — çökme yok, tüm string'ler (seviye unvanı "Gelişimci" dahil) doğru render oluyordu. Testleri tekrar koşturdum: 74/74 geçti. Sonuç: emülatörün uzun oturum sonrası yorgunluğu, kod regresyonu değil.
+
+**Kapsam dışı bırakılan (bilinçli):** `CategoryPalette.kt`'deki kategori-renk eşleme anahtarları (kullanıcıya gösterilmiyor, veri anahtarı — Demir Kural #3 kapsamına girmiyor) ve `@Preview` dosyalarındaki örnek veriler (hiç son kullanıcıya gösterilmiyor, endüstri standart pratiği).
 
 ## Tur 6 — P2 Kapanışları + Gerçek Cihazda Keşfedilen Landscape Bug'ı
 
@@ -83,7 +95,7 @@ Tur 4'te "açık" olarak teyit edilen 3 maddeden (form alanları, arşiv geri al
 
 1. Billing/IAP — bilinçli erteleme, ürün kararı bekliyor.
 2. Play Console / accessibility / OEM notification dış kanıtı — kod değil, doğrulama eksikliği.
-3. (P1, kod değil) Proje genelinde hardcoded string temizliği tamamlanmadı (`OnboardingScreen.kt` 834 satır dahil) — Demir Kural #3 ihlali hâlâ yaygın.
+3. (P2, kod değil kritik) `OnboardingScreen.kt` (834 satır) gibi büyük dosyalarda hardcoded dp/renk (string değil — string'ler Tur 7'de temizlendi) hâlâ var, Demir Kural #1/#2 kapsamında.
 
 ## Kapsam ve Güvenilirlik Notu
 

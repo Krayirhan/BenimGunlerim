@@ -1,5 +1,8 @@
 package com.benimgunlerim.domain
 
+import androidx.annotation.StringRes
+import com.benimgunlerim.R
+
 /**
  * Oyunlaştırma motoru — XP, seviye, altın hesaplamaları.
  * REDESIGN.md Bölüm 3'teki tablolara göre tasarlandı.
@@ -40,46 +43,46 @@ object GameEngine {
 
     data class LevelInfo(
         val level: Int,
-        val title: String,
+        @StringRes val titleRes: Int,
         val currentXp: Int,
         val xpForNextLevel: Int,
         val totalXp: Int,
     )
 
     private val levelThresholds = listOf(
-        100 to "Başlayan",       // Seviye 1 (0-99 XP)
-        100 to "Gelişimci",      // Seviye 2 (100-199 XP)
-        100 to "İstikrarlı",     // Seviye 3 (200-299 XP)
-        100 to "Ritmini Bulan",  // Seviye 4 (300-399 XP)
-        100 to "Gün Ustası",     // Seviye 5 (400-499 XP)
-        100 to "Dengeli",        // Seviye 6 (500-599 XP)
-        100 to "Kararlı",        // Seviye 7 (600-699 XP)
-        100 to "Yolunda",        // Seviye 8 (700-799 XP)
-        100 to "Güçlü Ritim",    // Seviye 9 (800-899 XP)
-        100 to "Gün Mimarı",     // Seviye 10 (900-999 XP)
-        200 to "Gün Mimarı",     // Seviye 11
-        200 to "Efsane",         // Seviye 12+
+        100 to R.string.game_level_title_1,       // Seviye 1 (0-99 XP)
+        100 to R.string.game_level_title_2,       // Seviye 2 (100-199 XP)
+        100 to R.string.game_level_title_3,       // Seviye 3 (200-299 XP)
+        100 to R.string.game_level_title_4,       // Seviye 4 (300-399 XP)
+        100 to R.string.game_level_title_5,       // Seviye 5 (400-499 XP)
+        100 to R.string.game_level_title_6,       // Seviye 6 (500-599 XP)
+        100 to R.string.game_level_title_7,       // Seviye 7 (600-699 XP)
+        100 to R.string.game_level_title_8,       // Seviye 8 (700-799 XP)
+        100 to R.string.game_level_title_9,       // Seviye 9 (800-899 XP)
+        100 to R.string.game_level_title_10,      // Seviye 10 (900-999 XP)
+        200 to R.string.game_level_title_10,      // Seviye 11
+        200 to R.string.game_level_title_efsane,  // Seviye 12+
     )
 
     fun calculateLevel(totalXp: Int): LevelInfo {
         var remaining = totalXp
         var level = 1
-        var title = "Başlayan"
+        var titleRes = R.string.game_level_title_1
 
         for ((threshold, t) in levelThresholds) {
             if (remaining < threshold) {
-                return LevelInfo(level, title, remaining, threshold, totalXp)
+                return LevelInfo(level, titleRes, remaining, threshold, totalXp)
             }
             remaining -= threshold
             level++
-            title = t
+            titleRes = t
         }
         // Level 30+: her seviye 2000 XP
         val extraLevels = remaining / 2000
         val leftover = remaining % 2000
         return LevelInfo(
             level = level + extraLevels,
-            title = "Gün Tanrısı",
+            titleRes = R.string.game_level_title_gun_tanrisi,
             currentXp = leftover,
             xpForNextLevel = 2000,
             totalXp = totalXp,
@@ -103,19 +106,63 @@ object GameEngine {
         else     -> "🐱"
     }
 
+    /** [CompanionMessage.Simple] tek bir string kaynağı taşır; [CompanionMessage.Streak] ise
+     * seri sayısıyla birlikte format string'i taşır (%1$d placeholder). Henüz gerçek bir UI
+     * çağıranı yok — string kaynağı hazır bekletiliyor. */
+    sealed class CompanionMessage {
+        data class Simple(@StringRes val textRes: Int) : CompanionMessage()
+        data class Streak(@StringRes val formatRes: Int, val streak: Int) : CompanionMessage()
+    }
+
     fun companionMessage(
         mood: String,
         streak: Int,
         progress: Float,
         random: RandomProvider = SystemRandomProvider(),
-    ): String = when {
-        progress >= 1f     -> random.pickFrom(listOf("Bugün efsaneydin! 🎉", "Mükemmel gün! Her şeyi bitirdin! 🏆", "Sen bir kahraman! ⭐"))
-        mood == "ecstatic" -> random.pickFrom(listOf("Harika gidiyorsun! 🥳", "Seninle çok mutluyum! 💜", "Birlikte her şeyi başarırız! ✨"))
-        mood == "happy"    -> random.pickFrom(listOf("Güzel gidiyor! 💪", "Devam et, iyi yoldasın! 🌟", "Birlikte yapabiliriz! 😊"))
-        streak >= 7        -> "Harika bir seri! $streak gün! 🔥"
-        progress >= 0.5f   -> random.pickFrom(listOf("Yarıyı geçtin! 💫", "Güzel ilerliyorsun! 🌈"))
-        progress > 0f           -> random.pickFrom(listOf("Güzel başlangıç! 🌱", "Her adım önemli! 🌸"))
-        else                    -> random.pickFrom(listOf("Hadi maceraya başlayalım! ✨", "Yeni bir gün, yeni fırsatlar! 🌅", "Bugün ne yapacağız? 🤔"))
+    ): CompanionMessage = when {
+        progress >= 1f -> CompanionMessage.Simple(
+            random.pickFrom(
+                listOf(
+                    R.string.companion_msg_full_progress_1,
+                    R.string.companion_msg_full_progress_2,
+                    R.string.companion_msg_full_progress_3,
+                ),
+            ),
+        )
+        mood == "ecstatic" -> CompanionMessage.Simple(
+            random.pickFrom(
+                listOf(
+                    R.string.companion_msg_ecstatic_1,
+                    R.string.companion_msg_ecstatic_2,
+                    R.string.companion_msg_ecstatic_3,
+                ),
+            ),
+        )
+        mood == "happy" -> CompanionMessage.Simple(
+            random.pickFrom(
+                listOf(
+                    R.string.companion_msg_happy_1,
+                    R.string.companion_msg_happy_2,
+                    R.string.companion_msg_happy_3,
+                ),
+            ),
+        )
+        streak >= 7 -> CompanionMessage.Streak(R.string.companion_msg_streak_format, streak)
+        progress >= 0.5f -> CompanionMessage.Simple(
+            random.pickFrom(listOf(R.string.companion_msg_half_progress_1, R.string.companion_msg_half_progress_2)),
+        )
+        progress > 0f -> CompanionMessage.Simple(
+            random.pickFrom(listOf(R.string.companion_msg_small_progress_1, R.string.companion_msg_small_progress_2)),
+        )
+        else -> CompanionMessage.Simple(
+            random.pickFrom(
+                listOf(
+                    R.string.companion_msg_zero_progress_1,
+                    R.string.companion_msg_zero_progress_2,
+                    R.string.companion_msg_zero_progress_3,
+                ),
+            ),
+        )
     }
 
     fun xpForTask(priority: Int): Int = when (priority) {

@@ -1,5 +1,6 @@
 package com.benimgunlerim.domain.service
 
+import com.benimgunlerim.R
 import com.benimgunlerim.domain.AchievementDef
 import com.benimgunlerim.domain.AchievementTracker
 import io.mockk.coVerify
@@ -29,7 +30,7 @@ class AppEventCoordinatorTest {
         coordinator.start()
         testScheduler.runCurrent()
 
-        val def = AchievementDef("first_task", "🌱", "İlk Adım", "İlk görevini tamamla", 25, 10)
+        val def = AchievementDef("first_task", "🌱", R.string.achievement_first_task_title, R.string.achievement_first_task_desc, 25, 10)
         unlockFlow.emit(def)
         testScheduler.runCurrent()
 

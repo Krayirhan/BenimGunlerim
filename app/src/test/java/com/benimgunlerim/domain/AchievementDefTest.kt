@@ -17,9 +17,9 @@ class AchievementDefTest {
     fun allAchievements_haveNonBlankFields() {
         ALL_ACHIEVEMENTS.forEach { def ->
             assertTrue("id must not be blank: $def", def.id.isNotBlank())
-            assertTrue("title must not be blank: $def", def.title.isNotBlank())
+            assertTrue("titleRes must be a valid resource id: $def", def.titleRes != 0)
             assertTrue("emoji must not be blank: $def", def.emoji.isNotBlank())
-            assertTrue("description must not be blank: $def", def.description.isNotBlank())
+            assertTrue("descriptionRes must be a valid resource id: $def", def.descriptionRes != 0)
         }
     }
 

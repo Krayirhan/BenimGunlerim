@@ -1,5 +1,6 @@
 package com.benimgunlerim.domain.service
 
+import com.benimgunlerim.R
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesSource
 import com.benimgunlerim.domain.AchievementDef
@@ -23,7 +24,7 @@ class RewardDisplayServiceTest {
         val service = RewardDisplayService(feedbackManager, preferencesSource)
 
         service.onAchievementUnlocked(sampleAchievement)
-        service.emitMiniBanner("test")
+        service.emitMiniBanner(R.string.today_mini_banner_first_task)
         service.emitAllTasksCompleted(totalCount = 2)
 
         verify(exactly = 0) { feedbackManager.celebrationBurst() }
@@ -53,8 +54,8 @@ class RewardDisplayServiceTest {
         val sampleAchievement = AchievementDef(
             id = "test",
             emoji = "*",
-            title = "Test",
-            description = "Test achievement",
+            titleRes = R.string.achievement_first_task_title,
+            descriptionRes = R.string.achievement_first_task_desc,
         )
     }
 }

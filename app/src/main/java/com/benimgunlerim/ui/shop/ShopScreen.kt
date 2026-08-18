@@ -59,8 +59,8 @@ fun ShopScreen(
                 state.items.forEach { item ->
                     val isOwned = item.id in state.ownedItemIds
                     ShopItemCard(
-                        title = item.name,
-                        description = item.description,
+                        title = stringResource(item.nameRes),
+                        description = stringResource(item.descriptionRes),
                         priceGold = item.cost,
                         isPurchased = isOwned,
                         onPurchaseClick = { viewModel.purchaseItem(item) },

@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.theme.AppTokens
 import com.benimgunlerim.ui.theme.Streak
 import com.benimgunlerim.ui.theme.StreakSoft
@@ -24,7 +26,7 @@ fun StreakBadge(streak: Int, modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "🔥 Seri $streak gün",
+            text = stringResource(R.string.streak_badge_format, streak),
             style = MaterialTheme.typography.labelMedium,
             color = Streak,
         )

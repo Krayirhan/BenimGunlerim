@@ -84,7 +84,7 @@ internal fun TodayEventEffects(
                     )
                 }
                 is GameEvent.MiniBanner -> {
-                    onMiniBanner(event.message to event.icon)
+                    onMiniBanner(context.getString(event.messageRes) to event.icon)
                     kotlinx.coroutines.delay(2800)
                     onMiniBanner(null)
                 }

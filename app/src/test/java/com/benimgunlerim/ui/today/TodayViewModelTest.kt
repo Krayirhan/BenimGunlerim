@@ -1,5 +1,6 @@
 package com.benimgunlerim.ui.today
 
+import com.benimgunlerim.R
 import com.benimgunlerim.analytics.AnalyticsTracker
 import com.benimgunlerim.data.UserPreferences
 import com.benimgunlerim.data.UserPreferencesRepository
@@ -140,14 +141,10 @@ class TodayViewModelTest {
             if (taskReward is GrantResult.Granted) {
                 gameEventFlow.tryEmit(GameEvent.RewardEarned(taskReward.xpGranted, taskReward.goldGranted))
                 taskReward.leveledUp?.let {
-                    gameEventFlow.tryEmit(GameEvent.LevelUp(it.level, it.title))
+                    gameEventFlow.tryEmit(GameEvent.LevelUp(it.level, it.titleRes))
                 }
             }
         }
-        coEvery { rewardDisplayService.onAchievementUnlocked(any<String>(), any<String>()) } coAnswers {
-            gameEventFlow.tryEmit(GameEvent.AchievementUnlocked(emoji = firstArg(), title = secondArg()))
-        }
-
         every { tickerProvider.minuteTicker() } returns kotlinx.coroutines.flow.MutableStateFlow(Unit)
         every { tickerProvider.dateTicker(any()) } returns kotlinx.coroutines.flow.MutableStateFlow(fixedDate)
         every { observeTodaySnapshotUseCase(any()) } returns snapshotFlow
@@ -236,7 +233,13 @@ class TodayViewModelTest {
             taskReward = GrantResult.Granted(
                 xpGranted = 20,
                 goldGranted = 5,
-                leveledUp = GameEngine.LevelInfo(level = 3, title = "Kahraman", currentXp = 70, xpForNextLevel = 150, totalXp = 70),
+                leveledUp = GameEngine.LevelInfo(
+                    level = 3,
+                    titleRes = R.string.game_level_title_3,
+                    currentXp = 70,
+                    xpForNextLevel = 150,
+                    totalXp = 70,
+                ),
             ),
             allTasksBonus = GrantResult.AlreadyGranted,
         )
@@ -294,7 +297,15 @@ class TodayViewModelTest {
             testViewModel.gameEvents.toList(events)
         }
 
-        gameEventFlow.emit(GameEvent.AchievementUnlocked("streak_3", "🔥", "Ateş Başladı", "3 gün", 30))
+        gameEventFlow.emit(
+            GameEvent.AchievementUnlocked(
+                id = "streak_3",
+                emoji = "🔥",
+                titleRes = R.string.achievement_streak_3_title,
+                descriptionRes = R.string.achievement_streak_3_desc,
+                xpReward = 30,
+            ),
+        )
         advanceUntilIdle()
 
         assertTrue(events.any { it is GameEvent.AchievementUnlocked && (it as GameEvent.AchievementUnlocked).emoji == "🔥" })

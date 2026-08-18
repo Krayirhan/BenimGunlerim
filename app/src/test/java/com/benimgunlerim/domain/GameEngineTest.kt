@@ -1,5 +1,6 @@
 package com.benimgunlerim.domain
 
+import com.benimgunlerim.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -161,49 +162,49 @@ class GameEngineTest {
     fun companionMessage_fullProgress_returnsCelebrationMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 1f, random = fixed)
-        assertEquals("Bugün efsaneydin! 🎉", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_full_progress_1), msg)
     }
 
     @Test
     fun companionMessage_ecstaticMood_returnsEcstaticMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("ecstatic", streak = 0, progress = 0f, random = fixed)
-        assertEquals("Harika gidiyorsun! 🥳", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_ecstatic_1), msg)
     }
 
     @Test
     fun companionMessage_happyMood_returnsHappyMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("happy", streak = 0, progress = 0f, random = fixed)
-        assertEquals("Güzel gidiyor! 💪", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_happy_1), msg)
     }
 
     @Test
     fun companionMessage_longStreak_returnsStreakMessage() {
         val msg = GameEngine.companionMessage("neutral", streak = 7, progress = 0f)
         assertNotNull(msg)
-        assertTrue(msg.contains("7"))
+        assertEquals(GameEngine.CompanionMessage.Streak(R.string.companion_msg_streak_format, 7), msg)
     }
 
     @Test
     fun companionMessage_halfProgress_returnsHalfwayMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0.5f, random = fixed)
-        assertEquals("Yarıyı geçtin! 💫", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_half_progress_1), msg)
     }
 
     @Test
     fun companionMessage_smallProgress_returnsStarterMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0.1f, random = fixed)
-        assertEquals("Güzel başlangıç! 🌱", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_small_progress_1), msg)
     }
 
     @Test
     fun companionMessage_zeroProgress_returnsMotivationMessage() {
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("neutral", streak = 0, progress = 0f, random = fixed)
-        assertEquals("Hadi maceraya başlayalım! ✨", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_zero_progress_1), msg)
     }
 
     @Test
@@ -220,7 +221,7 @@ class GameEngineTest {
         // progress >= 1f branch should fire before mood check
         val fixed = FixedIndexRandomProvider(0)
         val msg = GameEngine.companionMessage("sad", streak = 0, progress = 1f, random = fixed)
-        assertEquals("Bugün efsaneydin! 🎉", msg)
+        assertEquals(GameEngine.CompanionMessage.Simple(R.string.companion_msg_full_progress_1), msg)
     }
 
     // ── clampHappiness boundaries ─────────────────────────────────────────

@@ -9,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppBadge
 import com.benimgunlerim.ui.components.core.AppBadgeVariant
 import com.benimgunlerim.ui.components.core.AppSurface
@@ -59,7 +61,7 @@ fun AchievementRow(
                     )
                     if (isUnlocked) {
                         AppBadge(
-                            text = unlockedDate ?: "Kazanıldı",
+                            text = unlockedDate ?: stringResource(R.string.achievement_row_unlocked_label),
                             variant = AppBadgeVariant.Success,
                         )
                     } else {

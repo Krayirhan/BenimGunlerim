@@ -146,7 +146,7 @@ internal class TodayTaskActions(
                     deps.achievementTracker.checkFirstTask()
 
                     if (completedCountBefore == 0) {
-                        deps.rewardDisplayService.emitMiniBanner("İlk adım tamamlandı. Devamı daha kolay.", "🌱")
+                        deps.rewardDisplayService.emitMiniBanner(R.string.today_mini_banner_first_task, "🌱")
                     } else if (completedCountBefore + 1 == totalTasks && totalTasks > 1) {
                         deps.rewardDisplayService.emitAllTasksCompleted(totalTasks)
                         deps.achievementTracker.checkListCleared()

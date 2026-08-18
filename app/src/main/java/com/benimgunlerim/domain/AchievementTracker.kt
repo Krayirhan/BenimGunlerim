@@ -1,5 +1,7 @@
 package com.benimgunlerim.domain
 
+import androidx.annotation.StringRes
+import com.benimgunlerim.R
 import com.benimgunlerim.data.local.AchievementDao
 import com.benimgunlerim.data.local.entity.AchievementEntity
 import javax.inject.Inject
@@ -12,63 +14,63 @@ import kotlinx.coroutines.flow.map
 data class AchievementDef(
     val id: String,
     val emoji: String,
-    val title: String,
-    val description: String,
+    @StringRes val titleRes: Int,
+    @StringRes val descriptionRes: Int,
     val xpReward: Int = 50,
     val goldReward: Int = 20,
 )
 
 val ALL_ACHIEVEMENTS = listOf(
     // First step milestones
-    AchievementDef("first_task", "🌱", "İlk Adım", "İlk görevini tamamla", 25, 10),
-    AchievementDef("first_routine", "🔄", "İlk Rutin", "İlk rutinini tamamla", 25, 10),
-    AchievementDef("first_plan", "📝", "Başlangıç Planı", "İlk görevini oluştur", 20, 10),
+    AchievementDef("first_task", "🌱", R.string.achievement_first_task_title, R.string.achievement_first_task_desc, 25, 10),
+    AchievementDef("first_routine", "🔄", R.string.achievement_first_routine_title, R.string.achievement_first_routine_desc, 25, 10),
+    AchievementDef("first_plan", "📝", R.string.achievement_first_plan_title, R.string.achievement_first_plan_desc, 20, 10),
     // Streak milestones
-    AchievementDef("streak_3", "🔥", "3 Günlük Ritim", "3 günlük seri", 30, 15),
-    AchievementDef("streak_7", "⚡", "7 Günlük Ritim", "Bir hafta boyunca ritmini koru", 50, 30),
-    AchievementDef("streak_14", "💪", "14 Günlük Ritim", "14 günlük seri", 100, 50),
-    AchievementDef("streak_30", "⭐", "30 Günlük Yolculuk", "30 günlük güçlü seri", 200, 100),
+    AchievementDef("streak_3", "🔥", R.string.achievement_streak_3_title, R.string.achievement_streak_3_desc, 30, 15),
+    AchievementDef("streak_7", "⚡", R.string.achievement_streak_7_title, R.string.achievement_streak_7_desc, 50, 30),
+    AchievementDef("streak_14", "💪", R.string.achievement_streak_14_title, R.string.achievement_streak_14_desc, 100, 50),
+    AchievementDef("streak_30", "⭐", R.string.achievement_streak_30_title, R.string.achievement_streak_30_desc, 200, 100),
     // Task milestones
-    AchievementDef("tasks_10", "📋", "Görev Avcısı", "10 görev tamamla", 30, 15),
-    AchievementDef("tasks_25", "✨", "Küçük Adımlar", "Toplam 25 görev tamamla", 50, 25),
-    AchievementDef("tasks_50", "📝", "Verimli", "50 görev tamamla", 80, 40),
-    AchievementDef("tasks_100", "🏆", "Görev Ustası", "100 görev tamamla", 150, 75),
-    AchievementDef("tasks_500", "👑", "Görev Kralı", "500 görev tamamla", 300, 150),
+    AchievementDef("tasks_10", "📋", R.string.achievement_tasks_10_title, R.string.achievement_tasks_10_desc, 30, 15),
+    AchievementDef("tasks_25", "✨", R.string.achievement_tasks_25_title, R.string.achievement_tasks_25_desc, 50, 25),
+    AchievementDef("tasks_50", "📝", R.string.achievement_tasks_50_title, R.string.achievement_tasks_50_desc, 80, 40),
+    AchievementDef("tasks_100", "🏆", R.string.achievement_tasks_100_title, R.string.achievement_tasks_100_desc, 150, 75),
+    AchievementDef("tasks_500", "👑", R.string.achievement_tasks_500_title, R.string.achievement_tasks_500_desc, 300, 150),
     // Routine milestones
-    AchievementDef("routines_10", "🔄", "Alışkanlık Başlangıcı", "10 rutin tamamla", 30, 15),
-    AchievementDef("routines_50", "💎", "Rutin Ustası", "50 rutin tamamla", 80, 40),
-    AchievementDef("routines_100", "🌟", "Disiplin İkonu", "100 rutin tamamla", 150, 75),
+    AchievementDef("routines_10", "🔄", R.string.achievement_routines_10_title, R.string.achievement_routines_10_desc, 30, 15),
+    AchievementDef("routines_50", "💎", R.string.achievement_routines_50_title, R.string.achievement_routines_50_desc, 80, 40),
+    AchievementDef("routines_100", "🌟", R.string.achievement_routines_100_title, R.string.achievement_routines_100_desc, 150, 75),
     // Perfect day & List clear
-    AchievementDef("perfect_1", "✨", "Mükemmel Gün", "İlk %100 gün", 50, 25),
-    AchievementDef("list_cleared", "🧹", "Liste Temizlendi", "Bir günde tüm görevlerini tamamla", 40, 20),
-    AchievementDef("perfect_5", "🌈", "Altın Hafta", "5 mükemmel gün", 100, 50),
-    AchievementDef("perfect_20", "🎯", "Kusursuz", "20 mükemmel gün", 200, 100),
+    AchievementDef("perfect_1", "✨", R.string.achievement_perfect_1_title, R.string.achievement_perfect_1_desc, 50, 25),
+    AchievementDef("list_cleared", "🧹", R.string.achievement_list_cleared_title, R.string.achievement_list_cleared_desc, 40, 20),
+    AchievementDef("perfect_5", "🌈", R.string.achievement_perfect_5_title, R.string.achievement_perfect_5_desc, 100, 50),
+    AchievementDef("perfect_20", "🎯", R.string.achievement_perfect_20_title, R.string.achievement_perfect_20_desc, 200, 100),
     // Calmness & Mental Health
-    AchievementDef("calm_deep_breath", "🫁", "Derin Nefes", "İlk nefes egzersizini tamamla", 25, 10),
-    AchievementDef("calm_short_pause", "🧘", "Kısa Duraklama", "3 kez 1 dakikalık reset yap", 40, 20),
-    AchievementDef("calm_light_day", "🌿", "Bugünü Hafiflettin", "İlk kez Hafif Gün Modu'nu kullan", 30, 15),
-    AchievementDef("calm_brain_dump", "💡", "Kafamı Boşalttım", "İlk Brain Dump notunu göreve dönüştür", 25, 10),
-    AchievementDef("calm_gentle_close", "🌙", "Nazik Kapanış", "Günü kapatmadan önce nefes egzersizi yap", 35, 15),
+    AchievementDef("calm_deep_breath", "🫁", R.string.achievement_calm_deep_breath_title, R.string.achievement_calm_deep_breath_desc, 25, 10),
+    AchievementDef("calm_short_pause", "🧘", R.string.achievement_calm_short_pause_title, R.string.achievement_calm_short_pause_desc, 40, 20),
+    AchievementDef("calm_light_day", "🌿", R.string.achievement_calm_light_day_title, R.string.achievement_calm_light_day_desc, 30, 15),
+    AchievementDef("calm_brain_dump", "💡", R.string.achievement_calm_brain_dump_title, R.string.achievement_calm_brain_dump_desc, 25, 10),
+    AchievementDef("calm_gentle_close", "🌙", R.string.achievement_calm_gentle_close_title, R.string.achievement_calm_gentle_close_desc, 35, 15),
     // Level milestones
-    AchievementDef("level_5", "⚡", "Yükselen Yıldız", "Seviye 5'e ulaş", 50, 25),
-    AchievementDef("level_10", "🚀", "Gün Mimarı", "Seviye 10'a ulaş", 100, 50),
-    AchievementDef("level_20", "🌙", "Ay Yolcusu", "Seviye 20'ye ulaş", 200, 100),
+    AchievementDef("level_5", "⚡", R.string.achievement_level_5_title, R.string.achievement_level_5_desc, 50, 25),
+    AchievementDef("level_10", "🚀", R.string.achievement_level_10_title, R.string.achievement_level_10_desc, 100, 50),
+    AchievementDef("level_20", "🌙", R.string.achievement_level_20_title, R.string.achievement_level_20_desc, 200, 100),
     // Gold milestones
-    AchievementDef("gold_100", "🪙", "Biriktirici", "100 altın topla", 30, 0),
-    AchievementDef("gold_500", "💰", "Zengin", "500 altın topla", 80, 0),
-    AchievementDef("gold_1000", "🏦", "Banker", "1000 altın topla", 150, 0),
+    AchievementDef("gold_100", "🪙", R.string.achievement_gold_100_title, R.string.achievement_gold_100_desc, 30, 0),
+    AchievementDef("gold_500", "💰", R.string.achievement_gold_500_title, R.string.achievement_gold_500_desc, 80, 0),
+    AchievementDef("gold_1000", "🏦", R.string.achievement_gold_1000_title, R.string.achievement_gold_1000_desc, 150, 0),
     // Day close
-    AchievementDef("close_1", "🌙", "Günü Kapattın", "İlk gün sonu kapanışını tamamla", 25, 10),
-    AchievementDef("close_10", "📖", "Günlükçü", "10 gün kapat", 60, 30),
-    AchievementDef("close_30", "📚", "Kronikçi", "30 gün kapat", 150, 75),
+    AchievementDef("close_1", "🌙", R.string.achievement_close_1_title, R.string.achievement_close_1_desc, 25, 10),
+    AchievementDef("close_10", "📖", R.string.achievement_close_10_title, R.string.achievement_close_10_desc, 60, 30),
+    AchievementDef("close_30", "📚", R.string.achievement_close_30_title, R.string.achievement_close_30_desc, 150, 75),
     // Companion
-    AchievementDef("companion_happy", "❤️", "Mutlu Dost", "Mutluluk 90'a ulaşsın", 50, 25),
+    AchievementDef("companion_happy", "❤️", R.string.achievement_companion_happy_title, R.string.achievement_companion_happy_desc, 50, 25),
     // Early riser
-    AchievementDef("early_task", "🌅", "Erken Kuş", "Sabah 8'den önce görev tamamla", 40, 20),
+    AchievementDef("early_task", "🌅", R.string.achievement_early_task_title, R.string.achievement_early_task_desc, 40, 20),
     // Shop
-    AchievementDef("first_buy", "🛍️", "İlk Alışveriş", "Dükkandan bir şey al", 30, 0),
+    AchievementDef("first_buy", "🛍️", R.string.achievement_first_buy_title, R.string.achievement_first_buy_desc, 30, 0),
     // Mood
-    AchievementDef("mood_5_happy", "😄", "Pozitif Ruh", "5 kez 'harika' seç", 50, 25),
+    AchievementDef("mood_5_happy", "😄", R.string.achievement_mood_5_happy_title, R.string.achievement_mood_5_happy_desc, 50, 25),
 )
 
 private val achievementMap = ALL_ACHIEVEMENTS.associateBy { it.id }

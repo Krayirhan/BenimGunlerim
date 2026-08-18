@@ -58,8 +58,8 @@ fun AchievementsScreen(
                 val lockedLabel = stringResource(R.string.achievements_status_locked)
                 state.achievements.forEach { item ->
                     AchievementRow(
-                        title = item.def.title,
-                        description = item.def.description,
+                        title = stringResource(item.def.titleRes),
+                        description = stringResource(item.def.descriptionRes),
                         icon = item.def.emoji,
                         isUnlocked = item.isUnlocked,
                         progress = if (item.isUnlocked) 1f else 0f,

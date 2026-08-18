@@ -87,7 +87,7 @@ class ShopViewModelTest {
         advanceUntilIdle()
 
         val message = viewModel.uiState.value.purchaseMessage
-        assertEquals("+25 🪙 Günlük hediye alındı!", message)
+        assertEquals(ShopMessage.DailyGiftClaimed, message)
         job.cancel()
     }
 
@@ -103,7 +103,7 @@ class ShopViewModelTest {
         vm.claimDailyReward()
         advanceUntilIdle()
 
-        assertEquals("Günlük hediye zaten alındı.", vm.uiState.value.purchaseMessage)
+        assertEquals(ShopMessage.DailyGiftAlreadyClaimed, vm.uiState.value.purchaseMessage)
         coVerify(exactly = 0) { prefsRepository.claimDailyReward(any(), any()) }
         job.cancel()
     }
@@ -122,7 +122,7 @@ class ShopViewModelTest {
         advanceUntilIdle()
 
         val message = viewModel.uiState.value.purchaseMessage
-        assertEquals("${item.name} satın alındı! ✨", message)
+        assertEquals(ShopMessage.ItemPurchased(item.nameRes), message)
         job.cancel()
     }
 
@@ -149,12 +149,7 @@ class ShopViewModelTest {
         advanceUntilIdle()
 
         val message = viewModel.uiState.value.purchaseMessage
-        assert(message != null && message.isNotBlank()) {
-            "Expected failure message but got: $message"
-        }
-        assert(message != "${item.name} satın alındı! ✨") {
-            "Expected failure message but got success message"
-        }
+        assertEquals(ShopMessage.InsufficientGold, message)
         job.cancel()
     }
 
@@ -182,7 +177,7 @@ class ShopViewModelTest {
         vm.purchaseItem(item)
         advanceUntilIdle()
 
-        assertEquals("Bu urune zaten sahipsin.", vm.uiState.value.purchaseMessage)
+        assertEquals(ShopMessage.AlreadyOwned, vm.uiState.value.purchaseMessage)
         coVerify(exactly = 0) { prefsRepository.purchaseItem(any(), any()) }
         job.cancel()
     }

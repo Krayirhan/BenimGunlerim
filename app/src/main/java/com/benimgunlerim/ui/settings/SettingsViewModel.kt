@@ -51,7 +51,6 @@ class SettingsViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = UserPreferences(),
     )
-        val backupInfo: String = "Yedekleme: Görevler, rutinler, günlük özetler ve ayarlar Android bulut yedeğine dahil edilir. Gizlilik politikasını inceleyin."
 
     fun setNotificationMode(mode: String) {
         viewModelScope.launch {

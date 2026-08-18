@@ -10,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.core.AppBadge
 import com.benimgunlerim.ui.components.core.AppBadgeVariant
 import com.benimgunlerim.ui.components.core.AppButton
@@ -69,7 +71,7 @@ fun ShopItemCard(
 
             if (isPurchased) {
                 AppBadge(
-                    text = "Satın Alındı",
+                    text = stringResource(R.string.shop_item_purchased_label),
                     variant = AppBadgeVariant.Success,
                 )
             } else {
