@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -20,6 +18,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.benimgunlerim.R
 import com.benimgunlerim.ui.TestTags
+import com.benimgunlerim.ui.components.layout.AppFab
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
 import com.benimgunlerim.ui.theme.BrandPrimary
 
@@ -76,17 +75,14 @@ fun TodayScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = if (!dayIsClosed) {
             {
-                FloatingActionButton(
+                AppFab(
                     onClick = { showFabMenu.value = true },
+                    icon = Icons.Rounded.Add,
+                    contentDescription = stringResource(R.string.today_add_task_fab_cd),
+                    modifier = Modifier.testTag(TestTags.TodayFab),
                     containerColor = BrandPrimary,
                     contentColor = Color.White,
-                    modifier = Modifier.testTag(TestTags.TodayFab),
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.today_add_task_fab_cd),
-                    )
-                }
+                )
             }
         } else {
             null

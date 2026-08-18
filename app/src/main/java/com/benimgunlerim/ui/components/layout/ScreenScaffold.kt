@@ -27,6 +27,10 @@ fun ScreenScaffold(
 ) {
     val density = LocalDensity.current
     var fabHeightPx by remember { mutableIntStateOf(0) }
+    val compactHeight = isCompactHeight()
+    // Compact yükseklikte (telefon landscape) FAB'ı içeriğe daha yakın tutuyoruz —
+    // dar dikey alanda üst içerikle çakışma riskini azaltır.
+    val fabBottomOffset = if (compactHeight) AppTokens.Spacing.xs else AppTokens.Layout.fabBottomOffset
 
     // FAB'ın ölçülen gerçek yüksekliğine dayanır (ilk frame için varsayılan boyut) —
     // böylece font ölçeği veya ekran yönünden bağımsız olarak içerik hep FAB'ın üstünde kalır.
@@ -36,7 +40,7 @@ fun ScreenScaffold(
         } else {
             AppTokens.Layout.fabDefaultSize
         }
-        effectiveFab + AppTokens.Layout.fabBottomOffset + AppTokens.Spacing.lg
+        effectiveFab + fabBottomOffset + AppTokens.Spacing.lg
     } else {
         AppTokens.Spacing.xl
     }
@@ -77,7 +81,7 @@ fun ScreenScaffold(
                     .align(Alignment.BottomEnd)
                     .padding(
                         end = AppTokens.Spacing.screenHorizontal,
-                        bottom = AppTokens.Layout.fabBottomOffset,
+                        bottom = fabBottomOffset,
                     )
                     .onSizeChanged { fabHeightPx = it.height },
             ) {

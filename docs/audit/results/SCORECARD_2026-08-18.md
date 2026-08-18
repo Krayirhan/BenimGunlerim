@@ -1,26 +1,38 @@
 # Güncel Puan Tablosu — 2026-08-18
 
-> Bu bir **yeniden puanlama** raporudur, baştan yapılan bir full audit değildir (bkz. `docs/audit/99_INCREMENTAL_REAUDIT_PROMPT.md` §12: "doğru soru eski riskleri kapatıp kapatmadığını doğrulamaktır"). Baz alınan puan tablosu `CURRENT_AUDIT_2026-08-17.md`'dir. Puanlar, aynı gün içinde beş ayrı doğrulama turunda (1: cihaz kanıtı, 2: scaffold fix + detekt temizliği, 3: themeMode ölü kod temizliği, 4: Product/UX açık madde doğrulaması, 5: Product/UX P1 kapanışları) toplanan **gerçek kanıtlara** göre güncellenmiştir. Puanlama standardı `00_MASTER_AUDIT_PROMPT.md`'deki 0-10 ölçeğidir.
+> Bu bir **yeniden puanlama** raporudur, baştan yapılan bir full audit değildir (bkz. `docs/audit/99_INCREMENTAL_REAUDIT_PROMPT.md` §12: "doğru soru eski riskleri kapatıp kapatmadığını doğrulamaktır"). Baz alınan puan tablosu `CURRENT_AUDIT_2026-08-17.md`'dir. Puanlar, aynı gün içinde altı ayrı doğrulama turunda (1: cihaz kanıtı, 2: scaffold fix + detekt temizliği, 3: themeMode ölü kod temizliği, 4: Product/UX açık madde doğrulaması, 5: Product/UX P1 kapanışları, 6: P2 kapanışları + gerçek cihazda keşfedilen landscape bug'ı) toplanan **gerçek kanıtlara** göre güncellenmiştir. Puanlama standardı `00_MASTER_AUDIT_PROMPT.md`'deki 0-10 ölçeğidir.
 
 ## Genel Puan
 
-**7,4 / 10** (gün başı: 7,1 → cihaz doğrulaması: 7,2 → scaffold+detekt fix: 7,3 → themeMode temizliği: 7,4 → Product/UX P1 kapanışları: **7,4**, ham ortalama yükseldi: 7,37 → 7,44)
+**7,5 / 10** (gün başı: 7,1 → cihaz doğrulaması: 7,2 → scaffold+detekt fix: 7,3 → themeMode temizliği: 7,4 → Product/UX P1 kapanışları: 7,4 → P2 kapanışları + landscape fix: **7,5**, ham ortalama: 7,44 → 7,48)
 
 ## Puan Değişim Tablosu
 
-| Alan | 2026-08-17 | Tur 1 | Tur 2 | Tur 3 | Tur 5 | Toplam Δ | Değişim Gerekçesi |
-|---|---:|---:|---:|---:|---:|---:|---|
-| **Product / UX** | 7,1 | 7,1 | 7,3 | 7,3 | **7,9** | **+0,8** | (Tur 2) Achievements/Shop geri butonu. (Tur 5) 3 gerçek P1 kapandı: `AddTaskSheet` artık saat/kategori/hatırlatıcı topluyor, `AddRoutineSheet` artık kategori/hatırlatıcı/hedef-tipi topluyor (ve `RoutineEntity.category` alanı DB'de vardı ama repository katmanı hiç kullanmıyordu — o da bağlandı), arşivlenmiş rutinler artık geri yüklenebiliyor. |
-| **Frontend / Compose** | 7,2 | 7,2 | 7,9 | 8,0 | **8,1** | **+0,9** | (Tur 3) themeMode/preview temizliği. (Tur 5) `RoutineDetailScreen`'deki son sabit-yükseklik ihlali (`Button.height(50.dp)`) `AppButton`'a taşındı, Demir Kural #7 artık bu dosyada tam sağlanıyor. |
-| State / ViewModel | 7,4 | 7,4 | 7,4 | 7,5 | 7,5 | +0,1 | Değişmedi |
-| Data / Database | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 0,0 | `RoutineDao.observeArchived()` + `RoutineRepository.unarchive()` eklendi ama bu zaten var olan şemaya (isArchived, category) erişim katmanı ekliyor, yeni migration gerekmedi — tavan puanı etkilemedi |
-| Backend / Sync readiness | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 0,0 | Değişmedi |
-| Security / Privacy | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 0,0 | Değişmedi |
-| Performance | 6,2 | 7,8 | 7,8 | 7,8 | 7,8 | +1,6 | Değişmedi |
-| Testing / QA | 7,4 | 7,7 | 7,7 | 7,7 | 7,7 | +0,3 | Tur 5 sonrası tekrar koşuldu (74/74) — bu turda yeni bir instrumentation testi bir regresyonu gerçekten yakaladı (bkz. aşağıda), sonra düzeltilip tekrar 74/74 oldu |
-| Monetization / Release | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 0,0 | Değişmedi |
+| Alan | 2026-08-17 | Tur 1 | Tur 2 | Tur 3 | Tur 5 | Tur 6 | Toplam Δ | Değişim Gerekçesi |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| **Product / UX** | 7,1 | 7,1 | 7,3 | 7,3 | 7,9 | **8,0** | **+0,9** | (Tur 5) 3 P1 kapandı. (Tur 6) Emülatörde 1.5x font + landscape gerçek testi yapıldı; landscape'te FAB'ın uyarı bannerının "Değerlendir" butonunu kapladığı **gerçek bir bug** bulundu ve düzeltildi — bu, otomatik smoke testlerin yakalayamayacağı türden bir bulgu, tam da "manuel responsive kanıtı yok" açığının kapatılması demek. |
+| **Frontend / Compose** | 7,2 | 7,2 | 7,9 | 8,0 | 8,1 | **8,3** | **+1,1** | (Tur 5) Sabit yükseklik giderildi. (Tur 6) `WeekPicker` 36dp→48dp dokunma hedefi, 3 mood string setindeki casing tutarsızlığı giderildi, ve yeni `AppFab`/`isCompactHeight()` — compact-height (landscape) için Material'ın kendi önerdiği `SmallFloatingActionButton` desenini merkezi hale getiren, 3 ekranda (Today/Plan/Routines) tekrar kullanılan bir bileşen — eklendi. |
+| State / ViewModel | 7,4 | 7,4 | 7,4 | 7,5 | 7,5 | 7,5 | +0,1 | Değişmedi |
+| Data / Database | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 8,0 | 0,0 | Değişmedi |
+| Backend / Sync readiness | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 7,0 | 0,0 | Değişmedi |
+| Security / Privacy | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 7,5 | 0,0 | Değişmedi |
+| Performance | 6,2 | 7,8 | 7,8 | 7,8 | 7,8 | 7,8 | +1,6 | Değişmedi |
+| Testing / QA | 7,4 | 7,7 | 7,7 | 7,7 | 7,7 | 7,7 | +0,3 | Tur 6 sonrası tekrar koşuldu (74/74) — regresyon yok |
+| Monetization / Release | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 5,5 | 0,0 | Değişmedi |
 
-**Aritmetik ortalama:** (7,9+8,1+7,5+8,0+7,0+7,5+7,8+7,7+5,5) / 9 = **7,44** → raporlanan genel puan **7,4 / 10** (görünen rakam aynı kaldı, ham ortalama 7,37'den 7,44'e çıktı)
+**Aritmetik ortalama:** (8,0+8,3+7,5+8,0+7,0+7,5+7,8+7,7+5,5) / 9 = **7,48** → raporlanan genel puan **7,5 / 10**
+
+## Tur 6 — P2 Kapanışları + Gerçek Cihazda Keşfedilen Landscape Bug'ı
+
+**P2 (polish) maddeleri:**
+- `WeekPicker.kt` prev/next hafta ikon butonları 36dp'den `AppTokens.TouchTarget.min` (48dp)'ye çıkarıldı.
+- `progress_mood_very_bad` string'i "Çok Kötü" → "Çok kötü" — artık `progress_mood_*`, `today_mood_*`, `today_close_step1_mood_*` üç seti de casing açısından tutarlı.
+
+**Manuel accessibility/responsive kanıtı — bu kez gerçekten toplandı:** Bağlı emülatörde `adb shell settings put system font_scale 1.5` ile büyük font, `user_rotation`/`accelerometer_rotation` ile landscape zorlandı, gerçek ekran görüntüleri alındı.
+- **1.5x font ölçeği: sorun yok.** İlk bakışta "İlk Görevi Ekle" butonu bottom nav'ın arkasında kalmış gibi görünse de, scroll edilince tamamen erişilebilir olduğu doğrulandı — yanlış alarmdı, düzeltme gerekmedi.
+- **Landscape modda gerçek bug bulundu ve düzeltildi:** Today ekranında FAB (`+` butonu), kısa dikey alanda (~427dp) uyarı bannerının "Değerlendir" aksiyon butonunun üzerine biniyordu. Kök neden: `ScreenScaffold`'daki FAB her zaman sabit 32dp alt-offset ile köşeye yerleşiyor; landscape'te içerik alanı o kadar kısalıyor ki bu sabit konum ilk ekranda üst içerikle çakışıyor. **Düzeltme:** yeni `isCompactHeight()` yardımcı fonksiyonu (`LocalConfiguration.screenHeightDp < 480`) + yeni `AppFab` bileşeni — compact yükseklikte Material'ın kendi önerdiği `SmallFloatingActionButton`'a düşüyor, `ScreenScaffold` da compact yükseklikte alt-offset'i azaltıyor. 3 ekranda (Today, Plan, Routines) uygulandı, aynı emülatörde tekrar test edilip düzeltmenin çalıştığı görsel olarak doğrulandı.
+
+Bu, sohbette önerdiğim "manuel kanıt gerektirir, otomatikleştirilemez" iddiasının tam da neden doğru olduğunu gösteren bir örnek: gerçek cihaz testi, kod okuyarak asla bulunamayacak bir bug ortaya çıkardı.
 
 ## Tur 4 — Product/UX Açık Madde Doğrulaması (kod kanıtıyla, puan değişmedi)
 

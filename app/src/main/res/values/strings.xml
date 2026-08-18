@@ -361,7 +361,7 @@
     <string name="progress_mood_good">İyi</string>
     <string name="progress_mood_normal">Normal</string>
     <string name="progress_mood_bad">Kötü</string>
-    <string name="progress_mood_very_bad">Çok Kötü</string>
+    <string name="progress_mood_very_bad">Çok kötü</string>
     <string name="progress_mood_unknown">?</string>
     <string name="progress_energy_label">Enerji</string>
     <string name="progress_perf_title">Görev ve rutin performansı</string>

@@ -93,7 +93,7 @@ fun WeekPicker(
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         onPreviousWeek()
                     },
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(AppTokens.TouchTarget.min),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowLeft,
@@ -107,7 +107,7 @@ fun WeekPicker(
                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                         onNextWeek()
                     },
-                    modifier = Modifier.size(36.dp),
+                    modifier = Modifier.size(AppTokens.TouchTarget.min),
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.KeyboardArrowRight,

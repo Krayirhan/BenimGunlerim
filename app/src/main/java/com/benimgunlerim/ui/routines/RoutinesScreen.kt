@@ -12,8 +12,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,6 +33,7 @@ import com.benimgunlerim.ui.components.core.AppButton
 import com.benimgunlerim.ui.components.core.AppButtonVariant
 import com.benimgunlerim.ui.components.core.AppDivider
 import com.benimgunlerim.ui.components.core.AppSurface
+import com.benimgunlerim.ui.components.layout.AppFab
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
 import com.benimgunlerim.ui.components.molecules.EmptyState
 import com.benimgunlerim.ui.components.molecules.ProgressBar
@@ -64,17 +63,12 @@ fun RoutinesScreen(
     ScreenScaffold(
         modifier = Modifier.testTag(TestTags.RoutinesRoot),
         floatingActionButton = {
-            FloatingActionButton(
+            AppFab(
                 onClick = { showAddSheet = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.routines_add_cd),
                 modifier = Modifier.testTag(TestTags.RoutinesFab),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(R.string.routines_add_cd),
-                )
-            }
+            )
         },
     ) { contentPadding ->
         Column(

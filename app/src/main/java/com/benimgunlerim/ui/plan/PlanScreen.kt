@@ -13,8 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -38,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
 import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.components.core.AppButton
+import com.benimgunlerim.ui.components.layout.AppFab
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
 import com.benimgunlerim.ui.components.molecules.DynamicCalendarBadge
 import com.benimgunlerim.ui.components.molecules.EmptyState
@@ -83,17 +82,12 @@ fun PlanScreen(
     ScreenScaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
-            FloatingActionButton(
+            AppFab(
                 onClick = { showAddSheet = true },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.plan_add_task_fab_cd),
                 modifier = Modifier.testTag(TestTags.PlanFab),
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Add,
-                    contentDescription = stringResource(R.string.plan_add_task_fab_cd),
-                )
-            }
+            )
         },
     ) { contentPadding ->
         LazyColumn(
