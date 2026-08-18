@@ -176,7 +176,6 @@ open class DataExportService @Inject constructor(
         put("notificationMode", notificationMode)
         put("dailySummaryTime", dailySummaryTime)
         put("analyticsEnabled", analyticsEnabled)
-        put("themeMode", themeMode)
         put("totalXp", totalXp)
         put("gold", gold)
         put("happiness", happiness)

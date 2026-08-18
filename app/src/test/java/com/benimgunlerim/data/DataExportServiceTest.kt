@@ -295,7 +295,6 @@ class DataExportServiceTest {
     @Test
     fun exportToJson_preferencesHasExpectedSettings() = runTest {
         val customPrefs = UserPreferences(
-            themeMode = "dark",
             totalXp = 500,
             gold = 120,
             companionType = "dog",
@@ -304,7 +303,6 @@ class DataExportServiceTest {
         )
         val json = makeService(prefs = customPrefs).exportToJson()
         val prefs = JSONObject(json!!).getJSONObject("preferences")
-        assertEquals("dark", prefs.getString("themeMode"))
         assertEquals(500, prefs.getInt("totalXp"))
         assertEquals(120, prefs.getInt("gold"))
         assertEquals("dog", prefs.getString("companionType"))

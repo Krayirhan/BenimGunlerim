@@ -6,8 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.SystemBarStyle
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.ui.onboarding.OnboardingViewModel
 import com.benimgunlerim.ui.navigation.BenimGunlerimApp
@@ -31,10 +29,9 @@ class MainActivity : ComponentActivity() {
         )
         setContent {
             val onboardingViewModel: OnboardingViewModel = hiltViewModel()
-            val preferences by onboardingViewModel.preferences.collectAsState()
             val forceOnboardingCompleted = BuildConfig.DEBUG &&
                 intent.getBooleanExtra(EXTRA_FORCE_ONBOARDING_COMPLETED, false)
-            BenimGunlerimTheme(themeMode = preferences.themeMode) {
+            BenimGunlerimTheme {
                 BenimGunlerimApp(
                     requestedStartRoute = intent.getStringExtra(NotificationConstants.EXTRA_START_ROUTE),
                     forceOnboardingCompleted = forceOnboardingCompleted,

@@ -216,11 +216,9 @@ private val AppShapes = Shapes(
 // ── Tema giriş noktası ────────────────────────────────────────────────────────
 @Composable
 fun BenimGunlerimTheme(
-    @Suppress("UNUSED_PARAMETER") themeMode: String = "light",
     content: @Composable () -> Unit,
 ) {
     // Karanlık mod devre dışı bırakıldı — uygulama tutarlı ve temiz açık modda çalışır.
-    val isDark = false
     CompositionLocalProvider(
         LocalTodayColorTokens provides todayColorTokens(isDark = false),
     ) {

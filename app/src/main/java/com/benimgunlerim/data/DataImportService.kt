@@ -197,7 +197,6 @@ class DataImportService @Inject constructor(
         notificationMode = optString("notificationMode", "light"),
         dailySummaryTime = optString("dailySummaryTime", "21:00"),
         analyticsEnabled = optBoolean("analyticsEnabled", true),
-        themeMode = optString("themeMode", "system"),
         totalXp = optInt("totalXp", 0),
         gold = optInt("gold", 0),
         happiness = optInt("happiness", 0),
@@ -404,7 +403,6 @@ class DataImportService @Inject constructor(
         preferences?.let { prefs ->
             prefs.selectedGoalProfile.requireMaxLength("preferences.selectedGoalProfile", MAX_SHORT_TEXT_LENGTH)
             prefs.notificationMode.requireMaxLength("preferences.notificationMode", MAX_SHORT_TEXT_LENGTH)
-            prefs.themeMode.requireMaxLength("preferences.themeMode", MAX_SHORT_TEXT_LENGTH)
             prefs.companionType.requireMaxLength("preferences.companionType", MAX_SHORT_TEXT_LENGTH)
             prefs.companionName.requireMaxLength("preferences.companionName", MAX_SHORT_TEXT_LENGTH)
             prefs.ownedItems.requireMaxLength("preferences.ownedItems", MAX_LONG_TEXT_LENGTH)

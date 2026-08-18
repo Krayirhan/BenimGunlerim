@@ -79,10 +79,6 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { preferencesRepository.setAnalyticsEnabled(enabled) }
     }
 
-    fun setThemeMode(mode: String) {
-        viewModelScope.launch { preferencesRepository.setThemeMode(mode) }
-    }
-
     fun setCelebrationEffectsEnabled(enabled: Boolean) {
         viewModelScope.launch { preferencesRepository.setCelebrationEffectsEnabled(enabled) }
     }

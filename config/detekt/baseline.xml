@@ -567,14 +567,10 @@
     <ID>UnusedParameter:TodayScreen.kt$onNavigateToSettings: () -&gt; Unit = {}</ID>
     <ID>UnusedParameter:TodayScreen.kt$onOpenRoutineDetail: (String) -&gt; Unit = {}</ID>
     <ID>UnusedPrivateMember:RoutineDetailScreen.kt$@Preview(showBackground = true, name = "Routine Detail Stat") @Composable private fun RoutineDetailStatPreview()</ID>
-    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Açık, Boş Durum", showBackground = true) @Composable private fun RoutineRowEmptyLightPreview()</ID>
-    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Açık, Dolu/Hedefli Durum", showBackground = true) @Composable private fun RoutineRowFilledLightPreview()</ID>
-    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Koyu, Boş Durum", showBackground = true) @Composable private fun RoutineRowEmptyDarkPreview()</ID>
-    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Koyu, Dolu/Hedefli Durum", showBackground = true) @Composable private fun RoutineRowFilledDarkPreview()</ID>
-    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Açık, Boş Durum", showBackground = true) @Composable private fun TaskRowEmptyLightPreview()</ID>
-    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Açık, Dolu Durum", showBackground = true) @Composable private fun TaskRowFilledLightPreview()</ID>
-    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Koyu, Boş Durum", showBackground = true) @Composable private fun TaskRowEmptyDarkPreview()</ID>
-    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Koyu, Dolu Durum", showBackground = true) @Composable private fun TaskRowFilledDarkPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Boş Durum", showBackground = true) @Composable private fun RoutineRowEmptyPreview()</ID>
+    <ID>UnusedPrivateMember:RoutineRowPreviews.kt$@Preview(name = "RoutineRow — Dolu/Hedefli Durum", showBackground = true) @Composable private fun RoutineRowFilledPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Boş Durum", showBackground = true) @Composable private fun TaskRowEmptyPreview()</ID>
+    <ID>UnusedPrivateMember:TaskRowPreviews.kt$@Preview(name = "TaskRow — Dolu Durum", showBackground = true) @Composable private fun TaskRowFilledPreview()</ID>
     <ID>UnusedPrivateProperty:RewardGrantService.kt$RewardGrantService$private val achievementTracker: AchievementTracker</ID>
     <ID>UnusedPrivateProperty:UpdateTaskUseCase.kt$UpdateTaskUseCase$private val dateTimeProvider: DateTimeProvider</ID>
   </CurrentIssues>

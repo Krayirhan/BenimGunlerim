@@ -21,7 +21,6 @@ data class UserPreferences(
     val notificationMode: String = "light",
     val dailySummaryTime: String = "21:00",
     val analyticsEnabled: Boolean = true,
-    val themeMode: String = "system",
     // Game state
     val totalXp: Int = 0,
     val gold: Int = 0,
@@ -65,7 +64,6 @@ interface UserPreferencesAccess : UserPreferencesSource {
     suspend fun setNotificationMode(mode: String)
     suspend fun setDailySummaryTime(time: String)
     suspend fun setAnalyticsEnabled(enabled: Boolean)
-    suspend fun setThemeMode(mode: String)
     suspend fun resetOnboarding()
     suspend fun setMorningPlannerEnabled(enabled: Boolean)
     suspend fun setMorningPlannerTime(time: String)
@@ -87,7 +85,6 @@ class UserPreferencesRepository @Inject constructor(
         val notificationMode = stringPreferencesKey("notification_mode")
         val dailySummaryTime = stringPreferencesKey("daily_summary_time")
         val analyticsEnabled = booleanPreferencesKey("analytics_enabled")
-        val themeMode = stringPreferencesKey("theme_mode")
         val totalXp = intPreferencesKey("total_xp")
         val gold = intPreferencesKey("gold")
         val happiness = intPreferencesKey("happiness")
@@ -117,7 +114,6 @@ class UserPreferencesRepository @Inject constructor(
             notificationMode = prefs[Keys.notificationMode] ?: "light",
             dailySummaryTime = prefs[Keys.dailySummaryTime] ?: "21:00",
             analyticsEnabled = prefs[Keys.analyticsEnabled] ?: true,
-            themeMode = prefs[Keys.themeMode] ?: "system",
             totalXp = prefs[Keys.totalXp] ?: 0,
             gold = prefs[Keys.gold] ?: 0,
             happiness = prefs[Keys.happiness] ?: 0,
@@ -163,12 +159,6 @@ class UserPreferencesRepository @Inject constructor(
     override suspend fun setAnalyticsEnabled(enabled: Boolean) {
         context.userPreferencesDataStore.edit { prefs ->
             prefs[Keys.analyticsEnabled] = enabled
-        }
-    }
-
-    override suspend fun setThemeMode(mode: String) {
-        context.userPreferencesDataStore.edit { prefs ->
-            prefs[Keys.themeMode] = mode
         }
     }
 
@@ -359,7 +349,6 @@ class UserPreferencesRepository @Inject constructor(
             prefs[Keys.notificationMode] = preferences.notificationMode
             prefs[Keys.dailySummaryTime] = preferences.dailySummaryTime
             prefs[Keys.analyticsEnabled] = preferences.analyticsEnabled
-            prefs[Keys.themeMode] = preferences.themeMode
             prefs[Keys.totalXp] = preferences.totalXp
             prefs[Keys.gold] = preferences.gold
             prefs[Keys.happiness] = preferences.happiness

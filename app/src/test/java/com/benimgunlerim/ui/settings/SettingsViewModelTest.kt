@@ -66,7 +66,6 @@ class SettingsViewModelTest {
         override val preferences: Flow<UserPreferences> = flowOf(prefs)
         var notificationMode: String? = null
         var analyticsEnabled: Boolean? = null
-        var themeMode: String? = null
         var onboardingReset = false
         var morningPlannerEnabled: Boolean? = null
         var morningPlannerTime: String? = null
@@ -80,7 +79,6 @@ class SettingsViewModelTest {
         override suspend fun setNotificationMode(mode: String) { notificationMode = mode }
         override suspend fun setDailySummaryTime(time: String) { dailySummaryTime = time }
         override suspend fun setAnalyticsEnabled(enabled: Boolean) { analyticsEnabled = enabled }
-        override suspend fun setThemeMode(mode: String) { themeMode = mode }
         override suspend fun resetOnboarding() { onboardingReset = true }
         override suspend fun setMorningPlannerEnabled(enabled: Boolean) { morningPlannerEnabled = enabled }
         override suspend fun setMorningPlannerTime(time: String) { morningPlannerTime = time }
@@ -422,17 +420,6 @@ class SettingsViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(false, prefs.analyticsEnabled)
-    }
-
-    @Test
-    fun setThemeMode_delegatesToPreferencesRepository() = runTest {
-        val prefs = FakePrefs()
-        val vm = makeViewModel(prefs = prefs)
-
-        vm.setThemeMode("dark")
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals("dark", prefs.themeMode)
     }
 
     @Test
