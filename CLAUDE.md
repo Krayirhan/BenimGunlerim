@@ -19,12 +19,14 @@ Proje **7 katmanlı modüler mimari**ye geçiş sürecinde.
 
 | Faz | Ne | Durum |
 |-----|-----|-------|
-| **A** | Token sistemi + tema (karanlık mod) | ✅ TAMAMLANDI |
+| **A** | Token sistemi + tema | ✅ TAMAMLANDI (açık mod) — karanlık mod token'ları kodda mevcut ama özellik bilinçli olarak kapalı, bkz. not aşağıda |
 | **B** | Core atomlar + gamification atomlar | ✅ TAMAMLANDI |
 | **C** | Moleküller + layout katmanı | ✅ TAMAMLANDI |
 | **D** | Organizmalar (paylaşımlı bloklar) | ✅ TAMAMLANDI |
 | **E** | Ekranların baştan yazılması + Common.kt silme | 🟡 KISMEN TAMAMLANDI |
 
+> **Karanlık mod — bilinçli olarak kapalı (2026-08-18 itibarıyla sabitlendi).** `Theme.kt`'deki `BenimGunlerimTheme` her zaman `LightColors` kullanır; `themeMode` parametresi kasıtlı olarak yok sayılır (`@Suppress("UNUSED_PARAMETER")`). Bu bir eksik değil, ürün kararıdır — uygulama tutarlı ve tek bir açık temada çalışır. `UserPreferencesRepository.themeMode` alanı (DataStore + export/import) hâlâ "system/light/dark" değerini saklıyor ama hiçbir yerde render'a etki etmiyor; bu alanı kaldırmak ayrı, daha geniş kapsamlı bir karar olarak bilinçli şekilde ertelendi. Yeni kod yazarken karanlık mod için ayrı bir renk şeması/dal eklemeyin — `LightColors` tek kaynak.
+>
 > Projenin 7 katmanlı mimariye geçişinin iskeleti (Faz A-D) ve `Common.kt`'nin silinmesi tamamlandı (30 Temmuz 2026). Faz E'nin "Demir Kural #5" (ekran dosyaları ≤ 200 satır) maddesi büyük ölçüde sağlandı (17 Ağustos 2026 sprinti): `TodayScreen.kt` (536→133), `TaskDetailSheet.kt` (414→199) ve `CloseDaySheet.kt` (326→137) organizma/alt-bileşen dosyalarına bölündü; `TodayViewModel.kt` (743→397) `TodayTaskActions`/`TodayRoutineActions`/`TodayDayCloseActions` collaborator sınıflarına delege edildi. Tek istisna: `TodayViewModel.kt` hâlâ 200 satırın üzerinde — 22 bağımlılıklı tek bir Hilt sınıfı olduğu için (constructor + 3 collaborator kurulumu + StateFlow birleştirme + delegasyon metotları), daha fazla küçültmek use case'leri bir facade nesnesine toplamak gibi daha büyük bir mimari değişiklik gerektirir; bu bilinçli olarak ertelendi. Yeni bir ekran/organizma yazarken referans almadan önce güncel satır sayısını kontrol edin.
 
 ---
