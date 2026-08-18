@@ -41,15 +41,9 @@ import com.benimgunlerim.ui.theme.AppTokens
 import com.benimgunlerim.ui.theme.BrandPrimary
 import com.benimgunlerim.ui.theme.BrandPrimarySoft
 import com.benimgunlerim.ui.theme.Divider
-import com.benimgunlerim.ui.theme.DividerDark
-import com.benimgunlerim.ui.theme.NightMuted
-import com.benimgunlerim.ui.theme.NightPrimary
-import com.benimgunlerim.ui.theme.NightPrimaryContainer
-import com.benimgunlerim.ui.theme.NightSurfaceContainer
 import com.benimgunlerim.ui.theme.SemanticError
 import com.benimgunlerim.ui.theme.SlateText
 import com.benimgunlerim.ui.theme.SuccessBorder
-import com.benimgunlerim.ui.theme.SuccessBorderDark
 import com.benimgunlerim.ui.theme.SurfaceMuted
 
 /**
@@ -69,7 +63,6 @@ fun AppTopBar(
     onNotificationClick: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
-    val isDark = false
     val topBarBg = MaterialTheme.colorScheme.surface
     val dividerColor = Divider
     val avatarBg = BrandPrimarySoft

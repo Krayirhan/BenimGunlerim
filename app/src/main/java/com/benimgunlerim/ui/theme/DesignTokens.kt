@@ -136,6 +136,8 @@ object AppTokens {
         val topBarHeight: Dp = 68.dp
         /** 40dp — AppTopBar avatar/bildirim ikon konteyneri çapı */
         val topBarAvatarDiameter: Dp = 40.dp
+        /** 56dp — Material FAB varsayılan boyutu; ilk frame'de gerçek ölçüm gelmeden önce kullanılır */
+        val fabDefaultSize: Dp = 56.dp
     }
 
     // ── Calm / Reset ─────────────────────────────────────────────────────────

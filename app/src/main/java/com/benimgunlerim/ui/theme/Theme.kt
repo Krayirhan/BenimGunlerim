@@ -1,12 +1,10 @@
 @file:Suppress("SpellCheckingInspection")
 package com.benimgunlerim.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -185,37 +183,6 @@ private val LightColors = lightColorScheme(
     onError              = Color.White,
     errorContainer       = ErrorSoft,
     onErrorContainer     = SemanticError,
-)
-
-// ── Koyu renk şeması ─────────────────────────────────────────────────────────
-private val DarkColors = darkColorScheme(
-    primary              = Color(0xFF7DDDA5),
-    onPrimary            = Color(0xFF003922),
-    primaryContainer     = Color(0xFF0F3D2A),
-    onPrimaryContainer   = Color(0xFF8EDBB0),
-    secondary            = Color(0xFF93C5FD),
-    onSecondary          = Color(0xFF00344F),
-    secondaryContainer   = Color(0xFF1D4D6A),
-    onSecondaryContainer = Color(0xFFB0D9FD),
-    tertiary             = Color(0xFFFBBF24),
-    onTertiary           = Color(0xFF462A00),
-    tertiaryContainer    = Color(0xFF633D00),
-    onTertiaryContainer  = Color(0xFFFDBC73),
-    background           = Color(0xFF0F1512),
-    surface              = Color(0xFF161E19),
-    surfaceVariant       = Color(0xFF253128),
-    surfaceContainer     = Color(0xFF1E2921),
-    surfaceContainerHigh = Color(0xFF253128),
-    surfaceContainerLow  = Color(0xFF18221B),
-    onBackground         = Color(0xFFE2E8E4),
-    onSurface            = Color(0xFFE2E8E4),
-    onSurfaceVariant     = Color(0xFFB7C2BB),
-    outline              = Color(0xFF72807A),
-    outlineVariant       = Color(0xFF3E4A40),
-    error                = Color(0xFFFCA5A5),
-    onError              = Color(0xFF690005),
-    errorContainer       = Color(0xFF5C1414),
-    onErrorContainer     = Color(0xFFFCA5A5),
 )
 
 // ── Tipografi ─────────────────────────────────────────────────────────────────

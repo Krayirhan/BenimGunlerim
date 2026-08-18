@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
-import com.benimgunlerim.ui.components.layout.ScreenScaffold
+import com.benimgunlerim.ui.components.layout.DetailScreenScaffold
 import com.benimgunlerim.ui.components.molecules.SectionBlock
 import com.benimgunlerim.ui.components.molecules.StatPill
 import com.benimgunlerim.ui.components.organisms.AchievementRow
@@ -28,12 +28,16 @@ fun AchievementsScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    ScreenScaffold { contentPadding ->
+    DetailScreenScaffold(
+        title = stringResource(R.string.progress_achievements_title),
+        onBack = onBack,
+    ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
+                .padding(contentPadding)
+                .padding(horizontal = AppTokens.Spacing.screenHorizontal, vertical = AppTokens.Spacing.md),
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
         ) {
             SectionBlock(title = stringResource(R.string.achievements_summary_title)) {

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Analytics
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.CloudDownload
@@ -21,14 +20,10 @@ import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material.icons.rounded.NotificationsActive
 import androidx.compose.material.icons.rounded.OpenInBrowser
 import androidx.compose.material.icons.rounded.Security
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,9 +31,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.benimgunlerim.ui.components.core.AppButton
-import com.benimgunlerim.ui.components.core.AppButtonVariant
 import com.benimgunlerim.ui.components.core.AppSurface
+import com.benimgunlerim.ui.components.layout.DetailScreenScaffold
 import com.benimgunlerim.ui.theme.AppTokens
 import com.benimgunlerim.ui.theme.BrandPrimary
 
@@ -113,7 +107,6 @@ private val PRIVACY_SECTIONS = listOf(
     ),
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrivacyPolicyScreen(
     onNavigateBack: () -> Unit,
@@ -121,44 +114,24 @@ fun PrivacyPolicyScreen(
 ) {
     val context = LocalContext.current
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Gizlilik Politikası",
-                        style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onNavigateBack) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = "Geri",
-                            tint = BrandPrimary,
-                        )
+    DetailScreenScaffold(
+        title = "Gizlilik Politikası",
+        onBack = onNavigateBack,
+        actions = {
+            IconButton(
+                onClick = {
+                    runCatching {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webPolicyUrl))
+                        context.startActivity(intent)
                     }
                 },
-                actions = {
-                    IconButton(
-                        onClick = {
-                            runCatching {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(webPolicyUrl))
-                                context.startActivity(intent)
-                            }
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.OpenInBrowser,
-                            contentDescription = "Web Sayfasında Aç",
-                            tint = BrandPrimary,
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
-            )
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.OpenInBrowser,
+                    contentDescription = "Web Sayfasında Aç",
+                    tint = BrandPrimary,
+                )
+            }
         },
     ) { padding ->
         LazyColumn(
@@ -168,80 +141,85 @@ fun PrivacyPolicyScreen(
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item {
-                AppSurface(
-                    radius = AppTokens.Radius.md,
-                    padding = AppTokens.Spacing.cardInner,
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Security,
-                            contentDescription = null,
-                            tint = BrandPrimary,
-                        )
-                        Column {
-                            Text(
-                                text = "Gizliliğiniz Önceliğimizdir",
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
-                            Text(
-                                text = "Son Güncelleme: 17 Ağustos 2026",
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                }
-            }
+            item { PrivacyHeaderCard() }
+            items(PRIVACY_SECTIONS) { section -> PrivacySectionCard(section) }
+        }
+    }
+}
 
-            items(PRIVACY_SECTIONS) { section ->
-                AppSurface(
-                    radius = AppTokens.Radius.md,
-                    padding = AppTokens.Spacing.cardInner,
+@Composable
+private fun PrivacyHeaderCard() {
+    AppSurface(
+        radius = AppTokens.Radius.md,
+        padding = AppTokens.Spacing.cardInner,
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Security,
+                contentDescription = null,
+                tint = BrandPrimary,
+            )
+            Column {
+                Text(
+                    text = "Gizliliğiniz Önceliğimizdir",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    text = "Son Güncelleme: 17 Ağustos 2026",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PrivacySectionCard(section: PrivacySection) {
+    AppSurface(
+        radius = AppTokens.Radius.md,
+        padding = AppTokens.Spacing.cardInner,
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Icon(
+                    imageVector = section.icon,
+                    contentDescription = null,
+                    tint = BrandPrimary,
+                )
+                Text(
+                    text = section.title,
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
+            Text(
+                text = section.description,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            if (section.bulletPoints.isNotEmpty()) {
+                Column(
+                    modifier = Modifier.padding(start = 8.dp, top = 4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        ) {
-                            Icon(
-                                imageVector = section.icon,
-                                contentDescription = null,
-                                tint = BrandPrimary,
-                            )
-                            Text(
-                                text = section.title,
-                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
-                        }
+                    section.bulletPoints.forEach { bullet ->
                         Text(
-                            text = section.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            text = "• $bullet",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.9f),
                         )
-                        if (section.bulletPoints.isNotEmpty()) {
-                            Column(
-                                modifier = Modifier.padding(start = 8.dp, top = 4.dp),
-                                verticalArrangement = Arrangement.spacedBy(4.dp),
-                            ) {
-                                section.bulletPoints.forEach { bullet ->
-                                    Text(
-                                        text = "• $bullet",
-                                        style = MaterialTheme.typography.bodySmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.9f),
-                                    )
-                                }
-                            }
-                        }
                     }
                 }
             }

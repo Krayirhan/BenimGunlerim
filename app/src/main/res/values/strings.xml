@@ -170,6 +170,8 @@
     <string name="shop_category_accents">🎨 Renk Aksentler</string>
     <string name="shop_category_reports">📊 Rapor Modu</string>
     <string name="shop_category_item_count">%1$d ürün</string>
+    <string name="shop_daily_gift_info">Her gün dükkanı ziyaret et ve bedava altın kazan!</string>
+    <string name="shop_products_section_title">Mağaza Ürünleri</string>
 
     <!-- Celebration Modals -->
     <string name="celebration_action_continue">Devam Et</string>

@@ -16,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.benimgunlerim.ui.theme.AppTokens
 
 @Composable
@@ -29,11 +28,14 @@ fun ScreenScaffold(
     val density = LocalDensity.current
     var fabHeightPx by remember { mutableIntStateOf(0) }
 
-    // FAB'ın ölçülen gerçek yüksekliğine dayanır (ilk frame için 56dp varsayılan) —
+    // FAB'ın ölçülen gerçek yüksekliğine dayanır (ilk frame için varsayılan boyut) —
     // böylece font ölçeği veya ekran yönünden bağımsız olarak içerik hep FAB'ın üstünde kalır.
-    val measuredFab = with(density) { fabHeightPx.toDp() }
     val fabClearance: Dp = if (floatingActionButton != null) {
-        val effectiveFab = if (measuredFab > 0.dp) measuredFab else 56.dp
+        val effectiveFab = if (fabHeightPx > 0) {
+            with(density) { fabHeightPx.toDp() }
+        } else {
+            AppTokens.Layout.fabDefaultSize
+        }
         effectiveFab + AppTokens.Layout.fabBottomOffset + AppTokens.Spacing.lg
     } else {
         AppTokens.Spacing.xl

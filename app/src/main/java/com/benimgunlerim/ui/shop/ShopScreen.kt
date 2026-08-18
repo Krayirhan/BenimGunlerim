@@ -8,17 +8,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.benimgunlerim.R
 import com.benimgunlerim.ui.components.gamification.GoldBadge
-import com.benimgunlerim.ui.components.layout.ScreenScaffold
+import com.benimgunlerim.ui.components.layout.DetailScreenScaffold
 import com.benimgunlerim.ui.components.molecules.InfoCard
 import com.benimgunlerim.ui.components.molecules.SectionBlock
 import com.benimgunlerim.ui.components.organisms.ShopItemCard
@@ -31,33 +30,32 @@ fun ShopScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    ScreenScaffold { contentPadding ->
+    DetailScreenScaffold(
+        title = stringResource(R.string.shop_title),
+        onBack = onBack,
+    ) { contentPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(contentPadding),
+                .padding(contentPadding)
+                .padding(horizontal = AppTokens.Spacing.screenHorizontal, vertical = AppTokens.Spacing.md),
             verticalArrangement = Arrangement.spacedBy(AppTokens.Spacing.sectionGap),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    text = "Dükkan",
-                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
                 GoldBadge(gold = state.gold)
             }
 
             InfoCard(
-                title = "Günlük Hediye",
-                body = "Her gün dükkanı ziyaret et ve bedava altın kazan!",
+                title = stringResource(R.string.shop_daily_gift_title),
+                body = stringResource(R.string.shop_daily_gift_info),
             )
 
-            SectionBlock(title = "Mağaza Ürünleri") {
+            SectionBlock(title = stringResource(R.string.shop_products_section_title)) {
                 state.items.forEach { item ->
                     val isOwned = item.id in state.ownedItemIds
                     ShopItemCard(
