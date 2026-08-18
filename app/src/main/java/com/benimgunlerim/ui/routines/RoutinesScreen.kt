@@ -29,8 +29,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.benimgunlerim.R
+import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.ui.TestTags
 import com.benimgunlerim.ui.components.core.AppButton
+import com.benimgunlerim.ui.components.core.AppButtonVariant
 import com.benimgunlerim.ui.components.core.AppDivider
 import com.benimgunlerim.ui.components.core.AppSurface
 import com.benimgunlerim.ui.components.layout.ScreenScaffold
@@ -47,6 +49,7 @@ fun RoutinesScreen(
     onOpenRoutineDetail: (String) -> Unit = {},
 ) {
     val routines by viewModel.routines.collectAsState()
+    val archivedRoutines by viewModel.archivedRoutines.collectAsState()
     var showAddSheet by remember { mutableStateOf(false) }
 
     val completedTodayCount = remember(routines) {
@@ -166,6 +169,39 @@ fun RoutinesScreen(
                         }
                     }
                 }
+
+                if (archivedRoutines.isNotEmpty()) {
+                    SectionBlock(title = stringResource(R.string.routines_archived_section_title)) {
+                        AppSurface(radius = AppTokens.Radius.md, padding = AppTokens.Spacing.none) {
+                            Column {
+                                archivedRoutines.forEachIndexed { index, archived ->
+                                    key(archived.id) {
+                                        if (index > 0) AppDivider()
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(AppTokens.Spacing.cardInner),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically,
+                                        ) {
+                                            Text(
+                                                text = archived.name,
+                                                style = MaterialTheme.typography.bodyMedium,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                modifier = Modifier.weight(1f),
+                                            )
+                                            AppButton(
+                                                text = stringResource(R.string.routines_unarchive_action),
+                                                onClick = { viewModel.unarchiveRoutine(archived.id) },
+                                                variant = AppButtonVariant.Ghost,
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -174,7 +210,15 @@ fun RoutinesScreen(
         AddRoutineSheet(
             onDismiss = { showAddSheet = false },
             onSave = { title, targetDays, reminderTime, category, targetCount, unit ->
-                viewModel.addRoutine(title, targetDays, reminderTime)
+                viewModel.addRoutine(
+                    name = title,
+                    targetDays = targetDays,
+                    preferredTime = reminderTime,
+                    targetType = if (targetCount != null) RoutineTargetType.GOAL.value else RoutineTargetType.CHECK.value,
+                    targetValue = targetCount,
+                    targetUnit = unit,
+                    category = category,
+                )
             },
         )
     }

@@ -15,6 +15,11 @@ data class RoutineCardUi(
     val currentValue: Float = 0f,
 )
 
+data class ArchivedRoutineUi(
+    val id: String,
+    val name: String,
+)
+
 data class RoutineDetailRoutineUi(
     val id: String,
     val name: String,

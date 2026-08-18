@@ -37,6 +37,7 @@ class RoutineRepository @Inject constructor(
         targetType: String = "check",
         targetValue: Int? = null,
         targetUnit: String? = null,
+        category: String? = null,
     ): RoutineEntity {
         val now = dateTimeProvider.currentTimeMillis()
         val routine = RoutineEntity(
@@ -52,6 +53,7 @@ class RoutineRepository @Inject constructor(
             targetType = targetType,
             targetValue = targetValue?.takeIf { it > 0 },
             targetUnit = targetUnit?.takeIf { it.isNotBlank() },
+            category = category?.takeIf { it.isNotBlank() },
         )
         routineDao.insert(routine)
         return routine
@@ -59,6 +61,7 @@ class RoutineRepository @Inject constructor(
 
     // ── Update ───────────────────────────────────────────────────────────────
 
+    @Suppress("LongParameterList")
     suspend fun update(
         routine: RoutineEntity,
         name: String,
@@ -67,6 +70,7 @@ class RoutineRepository @Inject constructor(
         targetType: String = routine.targetType,
         targetValue: Int? = routine.targetValue,
         targetUnit: String? = routine.targetUnit,
+        category: String? = routine.category,
     ): RoutineEntity {
         val cleanName = name.trim()
         if (cleanName.isBlank() || targetDays.isEmpty()) return routine
@@ -77,6 +81,7 @@ class RoutineRepository @Inject constructor(
             targetType = targetType,
             targetValue = targetValue?.takeIf { it > 0 },
             targetUnit = targetUnit?.takeIf { it.isNotBlank() },
+            category = category?.takeIf { it.isNotBlank() },
             updatedAt = dateTimeProvider.currentTimeMillis(),
         )
         routineDao.update(updated)
@@ -88,6 +93,14 @@ class RoutineRepository @Inject constructor(
         routineDao.update(archived)
         return archived
     }
+
+    suspend fun unarchive(routine: RoutineEntity): RoutineEntity {
+        val restored = routine.copy(isArchived = false, updatedAt = dateTimeProvider.currentTimeMillis())
+        routineDao.update(restored)
+        return restored
+    }
+
+    fun observeArchived(): Flow<List<RoutineEntity>> = routineDao.observeArchived()
 
     // ── Completion log helpers ────────────────────────────────────────────────
 

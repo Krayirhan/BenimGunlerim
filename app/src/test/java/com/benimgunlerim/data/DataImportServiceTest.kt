@@ -50,6 +50,7 @@ class DataImportServiceTest {
     private class FakeRoutineDao : RoutineDao {
         val records = mutableListOf<RoutineEntity>()
         override fun observeActive(): Flow<List<RoutineEntity>> = flowOf(records.filter { !it.isArchived })
+        override fun observeArchived(): Flow<List<RoutineEntity>> = flowOf(records.filter { it.isArchived })
         override suspend fun getActiveWithReminder(): List<RoutineEntity> = records.filter { !it.isArchived && it.preferredTime != null }
         override suspend fun count(): Int = records.size
         override suspend fun insert(routine: RoutineEntity) { records.add(routine) }

@@ -47,6 +47,7 @@ class DataExportServiceTest {
     private class StubRoutineDao(private val records: List<RoutineEntity>) : RoutineDao {
         override suspend fun getAll() = records
         override fun observeActive(): Flow<List<RoutineEntity>> = error("stub")
+        override fun observeArchived(): Flow<List<RoutineEntity>> = error("stub")
         override suspend fun getActiveWithReminder(): List<RoutineEntity> = error("stub")
         override suspend fun count(): Int = records.size
         override suspend fun insert(routine: RoutineEntity) = error("stub")

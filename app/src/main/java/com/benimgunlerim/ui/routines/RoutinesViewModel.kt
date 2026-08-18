@@ -16,6 +16,7 @@ import com.benimgunlerim.domain.model.RoutineTargetType
 import com.benimgunlerim.domain.usecase.AddRoutineUseCase
 import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
+import com.benimgunlerim.domain.usecase.UnarchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.UpdateRoutineUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.DayOfWeek
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
@@ -38,6 +40,7 @@ class RoutinesViewModel @Inject constructor(
     private val updateRoutineUseCase: UpdateRoutineUseCase,
     private val updateRoutineProgressUseCase: UpdateRoutineProgressUseCase,
     private val archiveRoutineUseCase: ArchiveRoutineUseCase,
+    private val unarchiveRoutineUseCase: UnarchiveRoutineUseCase,
     private val skipRoutineUseCase: SkipRoutineUseCase,
     private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase,
     private val analyticsTracker: AnalyticsTracker,
@@ -97,10 +100,11 @@ class RoutinesViewModel @Inject constructor(
         targetType: String = RoutineTargetType.CHECK.value,
         targetValue: Int? = null,
         targetUnit: String? = null,
+        category: String? = null,
     ) {
         if (name.isBlank()) return
         viewModelScope.launch {
-            addRoutineUseCase(name, targetDays, preferredTime, targetType, targetValue, targetUnit)
+            addRoutineUseCase(name, targetDays, preferredTime, targetType, targetValue, targetUnit, category)
             analyticsTracker.track(
                 AnalyticsEvent(
                     name = "routine_created",
@@ -133,6 +137,20 @@ class RoutinesViewModel @Inject constructor(
     fun archiveRoutine(routineId: String) {
         val routine = routineEntitiesById.value[routineId] ?: return
         viewModelScope.launch { archiveRoutineUseCase(routine) }
+    }
+
+    private val archivedRoutineEntitiesById = MutableStateFlow<Map<String, RoutineEntity>>(emptyMap())
+
+    val archivedRoutines: StateFlow<List<ArchivedRoutineUi>> = routineRepository.observeArchived()
+        .map { archived ->
+            archivedRoutineEntitiesById.value = archived.associateBy { it.id }
+            archived.map { ArchivedRoutineUi(id = it.id, name = it.name) }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    fun unarchiveRoutine(routineId: String) {
+        val routine = archivedRoutineEntitiesById.value[routineId] ?: return
+        viewModelScope.launch { unarchiveRoutineUseCase(routine) }
     }
 
     fun skipRoutine(routineId: String) {

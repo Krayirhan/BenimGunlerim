@@ -13,6 +13,9 @@ interface RoutineDao {
     @Query("SELECT * FROM routines WHERE isArchived = 0 ORDER BY createdAt ASC")
     fun observeActive(): Flow<List<RoutineEntity>>
 
+    @Query("SELECT * FROM routines WHERE isArchived = 1 ORDER BY updatedAt DESC")
+    fun observeArchived(): Flow<List<RoutineEntity>>
+
     @Query("SELECT * FROM routines WHERE isArchived = 0 AND preferredTime IS NOT NULL")
     suspend fun getActiveWithReminder(): List<RoutineEntity>
 

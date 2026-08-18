@@ -17,8 +17,9 @@ class AddRoutineUseCase @Inject constructor(
         targetType: String = RoutineTargetType.CHECK.value,
         targetValue: Int? = null,
         targetUnit: String? = null,
+        category: String? = null,
     ) {
-        val routine = routineRepository.add(name, targetDays, preferredTime, targetType, targetValue, targetUnit)
+        val routine = routineRepository.add(name, targetDays, preferredTime, targetType, targetValue, targetUnit, category)
         routineReminderScheduler.schedule(routine)
     }
 }

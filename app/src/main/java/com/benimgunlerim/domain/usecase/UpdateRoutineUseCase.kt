@@ -10,6 +10,7 @@ class UpdateRoutineUseCase @Inject constructor(
     private val routineRepository: RoutineRepository,
     private val routineReminderScheduler: RoutineReminderSchedulerContract,
 ) {
+    @Suppress("LongParameterList")
     suspend operator fun invoke(
         routine: RoutineEntity,
         name: String,
@@ -18,8 +19,9 @@ class UpdateRoutineUseCase @Inject constructor(
         targetType: String = routine.targetType,
         targetValue: Int? = routine.targetValue,
         targetUnit: String? = routine.targetUnit,
+        category: String? = routine.category,
     ) {
-        val updated = routineRepository.update(routine, name, targetDays, preferredTime, targetType, targetValue, targetUnit)
+        val updated = routineRepository.update(routine, name, targetDays, preferredTime, targetType, targetValue, targetUnit, category)
         routineReminderScheduler.cancel(routine)
         routineReminderScheduler.schedule(updated)
     }

@@ -255,6 +255,16 @@
     <string name="routine_sheet_edit_title">Rutini Düzenle</string>
     <string name="routine_sheet_name_label">Rutin Adı</string>
     <string name="routine_sheet_repeat_days_label">Tekrar Günleri</string>
+    <string name="routine_sheet_category_label">Kategori</string>
+    <string name="routine_sheet_reminder_time_label">Hatırlatıcı Saati (isteğe bağlı)</string>
+    <string name="routine_sheet_goal_switch_label">Hedefli rutin</string>
+    <string name="routine_sheet_goal_switch_desc_on">Her gün belirli bir sayı/miktara ulaşman istenir.</string>
+    <string name="routine_sheet_goal_switch_desc_off">Basitçe işaretleyerek tamamlanır.</string>
+    <string name="routine_sheet_target_value_label">Hedef Değer</string>
+    <string name="routine_sheet_target_unit_label">Birim</string>
+    <string name="routines_archived_section_title">Arşivlenmiş Rutinler</string>
+    <string name="routines_unarchive_action">Geri Yükle</string>
+    <string name="routines_unarchive_cd">%1$s rutinini arşivden geri yükle</string>
     <string name="routines_header_title">Rutinler</string>
     <string name="routines_header_subtitle">Her gün tekrar eden alışkanlıklarını burada yönet.</string>
     <string name="routines_active_count">Aktif %1$d</string>

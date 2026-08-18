@@ -125,6 +125,7 @@ class SettingsViewModelTest {
 
     private inner class FakeRoutineDao : RoutineDao {
         override fun observeActive(): Flow<List<RoutineEntity>> = flowOf(emptyList())
+        override fun observeArchived(): Flow<List<RoutineEntity>> = flowOf(emptyList())
         override suspend fun getActiveWithReminder(): List<RoutineEntity> = emptyList()
         override suspend fun count(): Int = 0
         override suspend fun insert(routine: RoutineEntity) = Unit

@@ -9,6 +9,7 @@ import com.benimgunlerim.domain.DateTimeProvider
 import com.benimgunlerim.domain.usecase.AddRoutineUseCase
 import com.benimgunlerim.domain.usecase.ArchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.SkipRoutineUseCase
+import com.benimgunlerim.domain.usecase.UnarchiveRoutineUseCase
 import com.benimgunlerim.domain.usecase.UpdateRoutineUseCase
 import io.mockk.coVerify
 import io.mockk.every
@@ -39,6 +40,7 @@ class RoutinesViewModelTest {
     private val updateRoutineUseCase: UpdateRoutineUseCase = mockk(relaxed = true)
     private val updateRoutineProgressUseCase: com.benimgunlerim.domain.usecase.UpdateRoutineProgressUseCase = mockk(relaxed = true)
     private val archiveRoutineUseCase: ArchiveRoutineUseCase = mockk(relaxed = true)
+    private val unarchiveRoutineUseCase: UnarchiveRoutineUseCase = mockk(relaxed = true)
     private val skipRoutineUseCase: SkipRoutineUseCase = mockk(relaxed = true)
     private val toggleRoutineUseCase: com.benimgunlerim.domain.usecase.ToggleRoutineUseCase = mockk(relaxed = true)
     private val analyticsTracker: AnalyticsTracker = mockk(relaxed = true)
@@ -50,6 +52,7 @@ class RoutinesViewModelTest {
         Dispatchers.setMain(testDispatcher)
         every { dateTimeProvider.today() } returns java.time.LocalDate.of(2025, 6, 9)
         every { routineRepository.observeActive() } returns flowOf(emptyList())
+        every { routineRepository.observeArchived() } returns flowOf(emptyList())
         every { completionLogRepository.observeBetween(any(), any()) } returns flowOf(emptyList())
         every { completionLogRepository.observeAll() } returns flowOf(emptyList())
         viewModel = RoutinesViewModel(
@@ -60,6 +63,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
+            unarchiveRoutineUseCase = unarchiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,
@@ -95,6 +99,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase,
             updateRoutineProgressUseCase,
             archiveRoutineUseCase,
+            unarchiveRoutineUseCase,
             skipRoutineUseCase,
             toggleRoutineUseCase,
             analyticsTracker,
@@ -132,6 +137,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase,
             updateRoutineProgressUseCase,
             archiveRoutineUseCase,
+            unarchiveRoutineUseCase,
             skipRoutineUseCase,
             toggleRoutineUseCase,
             analyticsTracker,
@@ -196,6 +202,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
+            unarchiveRoutineUseCase = unarchiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,
@@ -224,6 +231,7 @@ class RoutinesViewModelTest {
             updateRoutineUseCase = updateRoutineUseCase,
             updateRoutineProgressUseCase = updateRoutineProgressUseCase,
             archiveRoutineUseCase = archiveRoutineUseCase,
+            unarchiveRoutineUseCase = unarchiveRoutineUseCase,
             skipRoutineUseCase = skipRoutineUseCase,
             toggleRoutineUseCase = toggleRoutineUseCase,
             analyticsTracker = analyticsTracker,

@@ -22,8 +22,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Archive
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +36,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import com.benimgunlerim.ui.components.core.AppButton
+import com.benimgunlerim.ui.components.core.AppButtonVariant
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -261,17 +261,12 @@ private fun RoutineScheduledDaysCard(scheduledDays: Set<java.time.DayOfWeek>) {
 @Composable
 private fun RoutineActionsSection(onSkipToday: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Button(
+        AppButton(
+            text = stringResource(R.string.routine_detail_skip_today),
             onClick = onSkipToday,
-            modifier = Modifier.fillMaxWidth().height(50.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = MaterialTheme.colorScheme.onSurface,
-            ),
-        ) {
-            Text(stringResource(R.string.routine_detail_skip_today))
-        }
+            modifier = Modifier.fillMaxWidth(),
+            variant = AppButtonVariant.Secondary,
+        )
         Spacer(Modifier.height(4.dp))
     }
 }
